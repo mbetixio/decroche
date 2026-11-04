@@ -1,0 +1,29 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    secret: '%env(APP_SECRET)%'
+    # Behind a tunnel or a reverse proxy: trust its forwarded host and scheme (empty by default).
+    trusted_proxies: '%env(default::TRUSTED_PROXIES)%'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
+
+    # Note that the session will be started ONLY if you read or write from it.
+    # Un nom de cookie propre à Sparring : les cookies de 127.0.0.1 ne distinguent pas les ports,
+    # un autre projet Symfony en local écraserait sinon la session (et déconnecterait).
+    session:
+        name: SPARRING_SESSION
+    csrf_protection: true
+
+    #esi: true
+    #fragments: true
+
+# En production (Docker), les sessions vivent dans le volume persistant : un redéploiement ne déconnecte personne.
+when@prod:
+    framework:
+        session:
+            handler_id: session.handler.native_file
+            save_path: '%env(default:sessions_dir:SESSION_SAVE_PATH)%'
+
+when@test:
+    framework:
+        test: true
+        session:
+            storage_factory_id: session.storage.factory.mock_file
