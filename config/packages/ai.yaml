@@ -1,0 +1,2 @@
+# Le modèle se règle avec AI_BASE_URL / AI_API_KEY / AI_MODEL / AI_HEADERS : voir App\Ai\Brain.
+ai: ~
