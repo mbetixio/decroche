@@ -8,17 +8,20 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^3.3",
+        "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.7",
         "mcp/sdk": "^0.9",
         "nyholm/psr7": "^1.8",
         "symfony/ai-agent": "^1.0@beta",
         "symfony/ai-bundle": "^1.0@beta",
         "symfony/ai-generic-platform": "^1.0@beta",
+        "symfony/asset-mapper": "8.1.*",
         "symfony/console": "8.1.*",
         "symfony/css-selector": "8.1.*",
         "symfony/dom-crawler": "8.1.*",
         "symfony/dotenv": "8.1.*",
         "symfony/flex": "^2",
+        "symfony/form": "8.1.*",
         "symfony/framework-bundle": "8.1.*",
         "symfony/mcp-bundle": "^1.0@beta",
         "symfony/monolog-bundle": "^4.1",
@@ -26,9 +29,11 @@
         "symfony/runtime": "8.1.*",
         "symfony/security-bundle": "8.1.*",
         "symfony/serializer": "8.1.*",
+        "symfony/stimulus-bundle": "^3.7",
         "symfony/translation": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
         "symfony/uid": "8.1.*",
+        "symfony/ux-twig-component": "^3.7",
         "symfony/validator": "8.1.*",
         "symfony/yaml": "8.1.*",
         "twig/extra-bundle": "^3.29"
@@ -68,7 +73,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
@@ -87,6 +93,7 @@
         }
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan": "^2.3",
         "phpstan/phpstan-doctrine": "^2.0.28",
