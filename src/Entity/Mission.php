@@ -1,71 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Repository\MissionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Une mission donnée par un manager : tant d'appels (d'une situation précise, ou de n'importe laquelle) avec au moins
- * telle note, avant telle date, pour un commercial ou pour toute l'équipe.
+ * A goal a manager sets: so many calls (of one situation, or of any) scored at least so much, before a date, for one
+ * member or for the whole team.
  */
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: MissionRepository::class)]
 class Mission
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     public private(set) ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-    public private(set) \DateTimeImmutable $createdAt;
+    #[ORM\Column]
+    public private(set) int $calls;
+
+    #[ORM\Column]
+    public private(set) int $target;
 
     public function __construct(
-        #[ORM\ManyToOne]
-        #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-        public private(set) Workspace $workspace,
-        /** Le commercial visé ; null : toute l'équipe. */
+        /** The member it is for; null: the whole team. */
         #[ORM\ManyToOne]
         #[ORM\JoinColumn(onDelete: 'CASCADE')]
-        public private(set) ?Seller $assignee,
-        /** La situation à jouer (une clé du catalogue de l'espace) ; null : n'importe laquelle. */
+        public private(set) ?Member $assignee,
+        /** The situation to play (a key of the company's catalogue); null: any. */
         #[ORM\Column(length: 40, nullable: true)]
         public private(set) ?string $situation,
-        #[ORM\Column]
-        public private(set) int $calls,
-        #[ORM\Column]
-        public private(set) int $target,
+        int $calls,
+        int $target,
         #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
-        public private(set) ?\DateTimeImmutable $dueAt = null,
+        public private(set) ?\DateTimeImmutable $dueAt,
         #[ORM\Column(length: 200)]
-        public private(set) string $note = '',
+        public private(set) string $note,
         #[ORM\ManyToOne]
         #[ORM\JoinColumn(onDelete: 'SET NULL')]
-        public private(set) ?Seller $createdBy = null,
-        ?\DateTimeImmutable $now = null,
+        public private(set) ?Member $createdBy,
+        #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+        public private(set) \DateTimeImmutable $createdAt,
     ) {
         $this->calls = max(1, min(20, $calls));
         $this->target = max(0, min(100, $target));
-        $this->createdAt = $now ?? new \DateTimeImmutable();
     }
 
-    public function concerns(Seller $seller): bool
+    public function concerns(Member $member): bool
     {
-        return $seller->workspace === $this->workspace && (null === $this->assignee || $this->assignee === $seller);
+        return null === $this->assignee || $this->assignee === $member;
     }
 
     /**
-     * Les appels qui comptent pour la mission : terminés, notés au moins à la cible, joués depuis qu'elle existe (et
-     * avant son échéance), sur la bonne situation ; les reprises d'un moment ne comptent pas.
+     * The calls that count: debriefed, scored at least the target, played since the mission exists (and before its
+     * due date), on the right situation. Replays of a moment do not count.
      *
-     * @param list<Training> $trainings ceux du commercial
+     * @param iterable<Call> $calls the member's
      */
-    public function progress(array $trainings): int
+    public function progress(iterable $calls): int
     {
         $due = $this->dueAt?->setTime(23, 59, 59);
         $count = 0;
-        foreach ($trainings as $t) {
-            if (Training::DONE === $t->status && null === $t->replayOf && null !== $t->score && $t->score >= $this->target
-                && $t->startedAt >= $this->createdAt && (null === $due || $t->startedAt <= $due)
-                && (null === $this->situation || $t->scenario->situation === $this->situation)) {
+        foreach ($calls as $call) {
+            if ($call->isDone() && !$call->isReplay() && ($call->score ?? -1) >= $this->target
+                && $call->startedAt >= $this->createdAt && (null === $due || $call->startedAt <= $due)
+                && (null === $this->situation || $call->scenario->situation()?->key === $this->situation)) {
                 ++$count;
             }
         }
@@ -73,7 +74,7 @@ class Mission
         return min($count, $this->calls);
     }
 
-    public function overdue(\DateTimeImmutable $now): bool
+    public function isOverdue(\DateTimeImmutable $now): bool
     {
         return null !== $this->dueAt && $now > $this->dueAt->setTime(23, 59, 59);
     }

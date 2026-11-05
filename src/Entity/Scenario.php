@@ -1,163 +1,199 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Enum\BriefSection;
+use App\Enum\Difficulty;
+use App\Enum\MeetingType;
+use App\Model\Persona;
+use App\Model\Situation;
+use App\Repository\ScenarioRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Une mise en situation : ce que le commercial sait (le contexte, l'objectif, le persona) et le brief caché du persona,
- * qui ne quitte jamais le serveur avant le débrief.
+ * A practice meeting: what the seller knows (the context, the goal, the persona) and the persona's hidden brief,
+ * which never leaves the server before the debrief. Either written for the library, prepared from a real prospect, or
+ * drawn as a surprise call from one of the company's situations.
  */
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ScenarioRepository::class)]
 class Scenario
 {
-    public const CATEGORIES = [
-        'decouverte' => 'Rendez-vous de découverte',
-        'objection' => 'Traitement d\'objections',
-        'negociation' => 'Négociation',
-        'mecontent' => 'Client mécontent',
-        'presse' => 'Prospect pressé',
-        'closing' => 'Closing',
-    ];
-
-    public const DIFFICULTIES = [1 => 'Accessible', 2 => 'Exigeant', 3 => 'Coriace'];
-
-    /** Les rubriques du brief caché, dans l'ordre où le débrief les dévoile. */
-    public const BRIEF = [
-        'budget' => 'Budget réel',
-        'pain' => 'Vraie douleur',
-        'decision' => 'Décideur et processus',
-        'objections' => 'Objections',
-        'yes' => 'Ce qui le ferait dire oui',
-        'secret' => 'Ce qu\'il ne dit pas d\'emblée',
-    ];
-
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     public private(set) ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     public private(set) \DateTimeImmutable $createdAt;
 
+    /** Archived scenarios leave the library but keep their calls. */
     #[ORM\Column]
     public bool $active = true;
 
-    /** L'espace de la société à qui appartient le scénario. */
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    public ?Workspace $workspace = null;
+    /** @var array<string, mixed>|null the situation drawn for a surprise call (a snapshot: the catalogue may change) */
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $situation = null;
 
-    /** La situation tirée au hasard (une clé des situations de l'espace) ; null pour un scénario de la bibliothèque. */
-    #[ORM\Column(length: 30, nullable: true)]
-    public ?string $situation = null;
-
-    /** Ce que le commercial a sous les yeux avant l'appel : l'annonce, le message du formulaire, le mail du client… */
+    /** What the seller has in front of them before the call: the job ad, the form message, the client's email… */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $material = null;
 
-    /** @var list<string>|null Les objectifs vérifiables de l'appel, que le débrief déclare atteints ou non. */
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    public ?array $objectives = null;
+    /** @var list<string> checkable objectives that the debrief declares reached or not */
+    #[ORM\Column(type: Types::JSON)]
+    private array $objectives = [];
+
+    /** @var array<string, mixed> */
+    #[ORM\Column(type: Types::JSON)]
+    private array $persona;
+
+    /** @var array<string, string> what the persona knows and hides, by {@see BriefSection}, plus their side of the story ("setup") */
+    #[ORM\Column(type: Types::JSON)]
+    private array $brief;
 
     /**
-     * @param array{name: string, role: string, company: string, personality: string, gender?: string, tone?: string} $persona
-     * @param array<string, string>                                                    $brief   rubrique de self::BRIEF => ce que le persona sait et cache
+     * @param array<string, string> $brief
      */
     public function __construct(
         #[ORM\Column(length: 160)]
         public string $title,
-        #[ORM\Column(length: 30)]
-        public string $category,
-        #[ORM\Column]
-        public int $difficulty,
+        #[ORM\Column(enumType: MeetingType::class, length: 30)]
+        public MeetingType $type,
+        #[ORM\Column(enumType: Difficulty::class)]
+        public Difficulty $difficulty,
+        /** The longest the meeting may last. */
         #[ORM\Column]
         public int $minutes,
-        /** Ce que le commercial sait en entrant : qui, pourquoi ce rendez-vous. */
+        /** What the seller knows going in: who, why this meeting. */
         #[ORM\Column(type: Types::TEXT)]
         public string $context,
-        /** Ce qu'il doit obtenir pour que le rendez-vous soit réussi. */
+        /** What they must obtain for the meeting to be a success. */
         #[ORM\Column(type: Types::TEXT)]
         public string $goal,
-        #[ORM\Column(type: Types::JSON)]
-        public array $persona,
-        /** La première phrase du persona, qui ouvre la session. */
+        Persona $persona,
+        /** The persona's first line, which opens the call. */
         #[ORM\Column(type: Types::TEXT)]
         public string $opening,
-        #[ORM\Column(type: Types::JSON)]
-        public array $brief,
+        array $brief,
         #[ORM\ManyToOne]
         #[ORM\JoinColumn(onDelete: 'SET NULL')]
-        public private(set) ?Seller $author = null,
+        public private(set) ?Member $author = null,
+        ?\DateTimeImmutable $now = null,
     ) {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->workspace = $author?->workspace;
+        $this->persona = $persona->toArray();
+        $this->setBrief($brief);
+        $this->createdAt = $now ?? new \DateTimeImmutable();
+    }
+
+    public function persona(): Persona
+    {
+        return Persona::fromArray($this->persona);
+    }
+
+    public function setPersona(Persona $persona): void
+    {
+        $this->persona = $persona->toArray();
     }
 
     /**
-     * Un scénario ne sort jamais de l'espace de sa société. Ceux de la bibliothèque (écrits par un manager, ou fournis)
-     * sont à toute l'équipe ; celui qu'un commercial a tiré d'une fiche prospect reste à lui et aux managers.
+     * @param array<string, string> $brief
      */
-    public function visibleTo(Seller $seller): bool
+    public function setBrief(array $brief): void
     {
-        if (null === $this->workspace || $this->workspace !== $seller->workspace) {
-            return false;
-        }
-
-        return null === $this->author || $this->author->isManager() || $seller->isManager() || $this->author === $seller;
+        $this->brief = array_filter(array_map('trim', $brief), static fn (string $v): bool => '' !== $v);
     }
 
-    public function editableBy(Seller $seller): bool
+    public function brief(BriefSection $section): string
     {
-        return $this->visibleTo($seller) && ($seller->isManager() || (null !== $this->author && $this->author === $seller));
+        return $this->brief[$section->value] ?? '';
     }
 
     /**
-     * @return array{label: string, emoji: string, family: string, direction: string, material: string, pitch: string, objectives: list<string>}|null
+     * The persona's side of the story: what they know of the seller's company, what they are doing when the phone
+     * rings, their mood. Hidden like the rest of the brief.
      */
-    public function situationInfo(): ?array
+    public function setup(): string
     {
-        return $this->workspace?->situation($this->situation) ?? \App\Game\Situations::get($this->situation);
+        return $this->brief['setup'] ?? '';
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function briefArray(): array
+    {
+        return $this->brief;
+    }
+
+    public function situation(): ?Situation
+    {
+        return null === $this->situation ? null : Situation::fromArray((string) ($this->situation['key'] ?? ''), $this->situation);
+    }
+
+    public function setSituation(?Situation $situation): void
+    {
+        $this->situation = $situation?->toArray();
+    }
+
+    public function isSurpriseCall(): bool
+    {
+        return null !== $this->situation;
     }
 
     /**
      * @return list<string>
      */
-    public function objectiveList(): array
+    public function objectives(): array
     {
-        return array_values(array_filter($this->objectives ?? [], static fn (string $o): bool => '' !== trim($o)));
-    }
-
-    public function categoryLabel(): string
-    {
-        return self::CATEGORIES[$this->category] ?? $this->category;
-    }
-
-    public function difficultyLabel(): string
-    {
-        return self::DIFFICULTIES[$this->difficulty] ?? '';
+        return $this->objectives;
     }
 
     /**
-     * Ce que le commercial et son IA ont le droit de voir.
+     * @param list<string> $objectives
+     */
+    public function setObjectives(array $objectives): void
+    {
+        $this->objectives = \array_slice(Situation::strings($objectives), 0, 4);
+    }
+
+    /**
+     * A library scenario (written by a manager) belongs to the whole team; one a seller prepared from a prospect, or
+     * a surprise call drawn for them, stays theirs and their managers'.
+     */
+    public function visibleTo(Member $member): bool
+    {
+        return null === $this->author || $this->author->isManager() || $member->isManager() || $this->author === $member;
+    }
+
+    public function editableBy(Member $member): bool
+    {
+        return $member->isManager() || (null !== $this->author && $this->author === $member);
+    }
+
+    /**
+     * What the seller (and their AI, over MCP) may see: never the brief.
      *
      * @return array<string, mixed>
      */
-    public function public(): array
+    public function publicView(): array
     {
+        $persona = $this->persona();
+        $situation = $this->situation();
+
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'category' => $this->categoryLabel(),
-            'difficulty' => $this->difficultyLabel(),
+            'type' => $this->type->label(),
+            'difficulty' => $this->difficulty->label(),
             'minutes' => $this->minutes,
             'context' => $this->context,
             'goal' => $this->goal,
-            'persona' => $this->persona,
-        ] + (null !== $this->situation ? [
-            'situation' => $this->situationInfo()['label'] ?? $this->situation,
-            'call' => 'entrant' === ($this->situationInfo()['direction'] ?? '') ? 'Le client vous appelle' : 'Vous appelez',
+            'persona' => ['name' => $persona->name, 'role' => $persona->role, 'company' => $persona->company],
+        ] + (null !== $situation ? [
+            'situation' => $situation->label,
+            'call' => $situation->direction->label(),
             'material' => $this->material,
-            'objectives' => $this->objectiveList(),
+            'objectives' => $this->objectives,
         ] : []);
     }
 }

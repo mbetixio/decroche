@@ -1,0 +1,197 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Entity;
+
+use App\Model\Criterion;
+use App\Model\Situation;
+use App\Repository\CompanyRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * The company this Sparring instance trains: who it is, what it sells (its offer sheet, drafted from its website then
+ * corrected), its typical clients, the call situations its sellers run into, and its scorecard. There is one per
+ * instance; the onboarding fills it in on first boot.
+ */
+#[ORM\Entity(repositoryClass: CompanyRepository::class)]
+class Company
+{
+    /** The onboarding steps, in order; the company remembers the furthest one reached. */
+    public const array STEPS = ['welcome', 'account', 'company', 'analysis', 'offer', 'situations', 'scorecard', 'team', 'done'];
+
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column]
+    public private(set) ?int $id = null;
+
+    #[ORM\Column(length: 120)]
+    public string $name = '';
+
+    /** The company's website, read by the analysis. */
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $website = null;
+
+    /** What the company says about itself, on top of its website. */
+    #[ORM\Column(type: Types::TEXT)]
+    public string $about = '';
+
+    /** The offer sheet: what personas know, what the coach checks, what sellers must know. */
+    #[ORM\Column(type: Types::TEXT)]
+    public string $offer = '';
+
+    /** @var list<string> typical client sectors, drawn at random to dress up situations */
+    #[ORM\Column(type: Types::JSON)]
+    public private(set) array $sectors = [];
+
+    /** @var array<string, array<string, mixed>> the call situations, by key (see {@see Situation}) */
+    #[ORM\Column(type: Types::JSON)]
+    private array $situations = [];
+
+    /** @var array<string, array{label: string, hint: string}>|null the scorecard (null: Sparring's own) */
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $criteria = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    public ?\DateTimeImmutable $analyzedAt = null;
+
+    /** The furthest onboarding step reached. */
+    #[ORM\Column(length: 20)]
+    public private(set) string $step = 'welcome';
+
+    /** When the onboarding was completed; until then, the instance only shows the onboarding. */
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    public private(set) ?\DateTimeImmutable $onboardedAt = null;
+
+    /**
+     * "d'Etixio", "de Paie Express": the name after "l'offre", "l'équipe".
+     */
+    public function of(): string
+    {
+        return (preg_match('/^[aeiouyhàâéèêëîïôöùûü]/iu', $this->name) ? 'd\'' : 'de ').$this->name;
+    }
+
+    /**
+     * @param list<string> $sectors
+     */
+    public function setSectors(array $sectors): void
+    {
+        $this->sectors = Situation::strings($sectors, 30);
+    }
+
+    /**
+     * @return array<string, Situation>
+     */
+    public function situations(): array
+    {
+        $list = [];
+        foreach ($this->situations as $key => $data) {
+            if (null !== $situation = Situation::fromArray((string) $key, $data)) {
+                $list[$situation->key] = $situation;
+            }
+        }
+
+        return $list;
+    }
+
+    public function situation(?string $key): ?Situation
+    {
+        return null === $key ? null : ($this->situations()[$key] ?? null);
+    }
+
+    /**
+     * Replaces the catalogue, keys made unique.
+     *
+     * @param iterable<Situation> $situations
+     */
+    public function setSituations(iterable $situations): void
+    {
+        $this->situations = [];
+        foreach ($situations as $situation) {
+            $key = $situation->key;
+            while (isset($this->situations[$key])) {
+                $key .= '_';
+            }
+            $this->situations[$key] = ['key' => $key] + $situation->toArray();
+        }
+    }
+
+    /**
+     * Adds the situations the catalogue lacks, without touching the ones already there.
+     *
+     * @param iterable<Situation> $situations
+     */
+    public function addMissingSituations(iterable $situations): void
+    {
+        foreach ($situations as $situation) {
+            $this->situations[$situation->key] ??= $situation->toArray();
+        }
+    }
+
+    /**
+     * The criteria the coach grades on: the company's own, or Sparring's.
+     *
+     * @return array<string, Criterion>
+     */
+    public function scorecard(): array
+    {
+        if (null === $this->criteria || \count($this->criteria) < 2) {
+            return Criterion::defaults();
+        }
+        $list = [];
+        foreach ($this->criteria as $key => $c) {
+            $list[$key] = new Criterion($key, $c['label'], $c['hint']);
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param list<Criterion> $criteria two to eight; fewer brings back Sparring's own scorecard
+     */
+    public function setScorecard(array $criteria): void
+    {
+        $grid = [];
+        foreach (\array_slice($criteria, 0, 8) as $criterion) {
+            $grid[$criterion->key] = $criterion->toArray();
+        }
+        $this->criteria = \count($grid) >= 2 ? $grid : null;
+    }
+
+    public function hasOwnScorecard(): bool
+    {
+        return null !== $this->criteria;
+    }
+
+    /**
+     * Ready to play: the offer sheet and the situations exist.
+     */
+    public function isReady(): bool
+    {
+        return '' !== trim($this->offer) && [] !== $this->situations;
+    }
+
+    public function isOnboarded(): bool
+    {
+        return null !== $this->onboardedAt;
+    }
+
+    /**
+     * Records that the onboarding reached this step (it never goes back).
+     */
+    public function reach(string $step): void
+    {
+        $index = array_search($step, self::STEPS, true);
+        if (false === $index) {
+            throw new \InvalidArgumentException(\sprintf('Unknown onboarding step "%s".', $step));
+        }
+        if ($index > (int) array_search($this->step, self::STEPS, true)) {
+            $this->step = $step;
+        }
+    }
+
+    public function completeOnboarding(\DateTimeImmutable $now): void
+    {
+        $this->step = 'done';
+        $this->onboardedAt = $now;
+    }
+}
