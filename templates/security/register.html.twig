@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block title %}Créer l'espace de ma société{% endblock %}
+{% block body %}
+<div style="max-width:480px;margin:50px auto" class="stack">
+  <div class="logo" style="font-size:24px;justify-content:center"><b>S</b> Sparring</div>
+  <form method="post" class="card stack">
+    <h2>Créer l'espace de ma société</h2>
+    <p class="small muted">Vous en serez le manager. Ensuite, Sparring lit votre site et écrit la fiche de votre offre et les situations d'appel de vos commerciaux ; vous corrigez, puis vous invitez votre équipe.</p>
+    {% if error %}<div class="flash error">{{ error }}</div>{% endif %}
+    <div class="cols2">
+      <div><label for="c">Société</label><input id="c" name="company" value="{{ values.company ?? '' }}" required autofocus></div>
+      <div><label for="w">Site web</label><input id="w" name="website" value="{{ values.website ?? '' }}" placeholder="exemple.fr"></div>
+    </div>
+    <div><label for="n">Votre nom</label><input id="n" name="name" value="{{ values.name ?? '' }}" required></div>
+    <div><label for="e">E-mail professionnel</label><input id="e" type="email" name="email" value="{{ values.email ?? '' }}" required autocomplete="email"></div>
+    <div><label for="p">Mot de passe (8 caractères au moins)</label><input id="p" type="password" name="password" required minlength="8" autocomplete="new-password"></div>
+    <input type="hidden" name="_token" value="{{ csrf_token('register') }}">
+    <button class="btn primary">Créer l'espace</button>
+    <p class="small muted">Déjà un compte ? <a href="{{ path('login') }}">Connectez-vous</a>.</p>
+  </form>
+</div>
+{% endblock %}

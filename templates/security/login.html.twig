@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block title %}Connexion{% endblock %}
+{% block body %}
+<div style="max-width:420px;margin:60px auto" class="stack">
+  <div class="logo" style="font-size:24px;justify-content:center"><b>S</b> Sparring</div>
+  <p class="muted" style="text-align:center">Vos commerciaux s'entraînent au téléphone contre des clients simulés, taillés pour votre offre.</p>
+  <form method="post" class="card stack">
+    {% if error %}<div class="flash error">Identifiants incorrects.</div>{% endif %}
+    <div><label for="u">E-mail</label><input id="u" type="email" name="_username" value="{{ last }}" required autofocus autocomplete="email"></div>
+    <div><label for="p">Mot de passe</label><input id="p" type="password" name="_password" required autocomplete="current-password"></div>
+    <label class="row" style="font-weight:400"><input type="checkbox" name="_remember_me" checked style="width:auto"> Rester connecté</label>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    <button class="btn primary">Se connecter</button>
+    <p class="small muted">Votre société n'a pas encore d'espace ? <a href="{{ path('register') }}">Créez-le</a>. Un collègue vous a invité ? Ouvrez le lien qu'il vous a envoyé.</p>
+  </form>
+</div>
+{% endblock %}

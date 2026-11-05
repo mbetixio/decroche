@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% import '_macros.html.twig' as m %}
+{% block title %}{{ s.title }}{% endblock %}
+{% block body %}
+<div class="head">
+  <div>
+    <div class="row" style="margin-bottom:8px"><span class="tag brand">{{ s.categoryLabel }}</span><span class="tag">{{ s.difficultyLabel }}</span><span class="tag">⏱ {{ s.minutes }} min</span>{% if not s.active %}<span class="tag bad">Archivé</span>{% endif %}{% if s.author %}<span class="tag">par {{ s.author.name }}</span>{% endif %}</div>
+    <h1>{{ s.title }}</h1>
+  </div>
+  <div class="row">
+    {% if s.editableBy(app.user) %}
+      <a class="btn" href="{{ path('scenario_edit', {id: s.id}) }}">Modifier</a>
+      <form method="post" action="{{ path('scenario_archive', {id: s.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('archive' ~ s.id) }}"><button class="btn ghost">{{ s.active ? 'Archiver' : 'Désarchiver' }}</button></form>
+    {% endif %}
+    {% if s.active %}<form method="post" action="{{ path('scenario_start', {id: s.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('start' ~ s.id) }}"><button class="btn primary">S'entraîner maintenant →</button></form>{% endif %}
+  </div>
+</div>
+<div class="cols2">
+  <div class="stack">
+    <div class="card"><h2>Le contexte</h2><p>{{ s.context }}</p></div>
+    <div class="card"><h2>Votre objectif</h2><p>{{ s.goal }}</p></div>
+    <div class="card"><h2>Ce qui vous attend</h2><p class="muted">{{ s.persona.name }} a un brief caché : son budget réel, sa vraie douleur, qui décide, ses objections, ce qui le ferait dire oui, et une information qu'il ne donne pas d'emblée. Il ne lâche chaque rubrique que si vous posez la bonne question. Le débrief vous dira ce que vous avez découvert et ce qui vous a échappé.</p></div>
+  </div>
+  <div class="stack">
+    <div class="card">
+      <h2>Votre interlocuteur</h2>
+      <div class="persona" style="margin-bottom:10px"><span class="avatar">{{ s.persona.name|split(' ')|map(w => w|first)|slice(0, 2)|join|upper }}</span><div><b>{{ s.persona.name }}</b><div class="small muted">{{ s.persona.role }}</div></div></div>
+      <p class="small"><b>Entreprise :</b> {{ s.persona.company }}</p>
+      <p class="small"><b>Personnalité :</b> {{ s.persona.personality }}</p>
+    </div>
+    {% if sessions %}
+    <div class="card"><h2>Mes sessions sur ce scénario</h2><table>
+      {% for t in sessions %}<tr><td>{{ t.startedAt|date('d/m H:i') }}</td><td>{{ m.status(t) }}</td><td>{{ m.score(t.score) }}</td><td style="text-align:right"><a href="{{ path('training', {id: t.id}) }}">Ouvrir</a></td></tr>{% endfor %}
+    </table></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

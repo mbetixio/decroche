@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mon profil{% endblock %}
+{% block body %}
+<div class="head"><div><h1>Mon profil</h1><p class="muted">Qui vous êtes chez {{ space.name }} : vos appels s'y adaptent (les offres que vous vendez, vos clients, votre niveau), et le coach aussi.</p></div></div>
+{% if not space.ready %}<div class="flash">Votre manager prépare encore l'espace de {{ space.name }} (la fiche d'offre et les situations). Présentez-vous en attendant : vous pourrez jouer dès qu'il aura fini.</div>{% endif %}
+<form method="post" class="card stack" style="max-width:760px">
+  <input type="hidden" name="_token" value="{{ csrf_token('me') }}">
+  <div><label for="n">Nom</label><input id="n" name="name" value="{{ me.name }}" required></div>
+  <div><label for="p">Qui je suis</label>
+    <textarea id="p" name="profile" rows="8" placeholder="Ex. : Commercial depuis 3 ans, d'abord en agence web. Je m'occupe surtout des PME et ETI du Grand Ouest, sur les équipes dédiées et la TMA. À l'aise en découverte, moins sur la négociation et les objections prix. J'aimerais progresser sur les appels à froid.">{{ me.profile }}</textarea>
+    <p class="small muted">Votre rôle et votre expérience, ce que vous vendez surtout, à quels clients, vos points forts et ce que vous voulez travailler.</p></div>
+  <div><button class="btn primary">Enregistrer</button></div>
+</form>
+{% endblock %}

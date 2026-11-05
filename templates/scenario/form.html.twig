@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ s ? 'Modifier' : 'Nouveau scénario' }}{% endblock %}
+{% block body %}
+<div class="head"><h1>{{ s ? 'Modifier « ' ~ s.title ~ ' »' : 'Écrire un scénario' }}</h1>{% if s %}<a class="btn ghost" href="{{ path('scenario', {id: s.id}) }}">Annuler</a>{% endif %}</div>
+{% if error %}<div class="flash error">{{ error }}</div>{% endif %}
+<form method="post" class="stack">
+  <input type="hidden" name="_token" value="{{ csrf_token('scenario') }}">
+  <div class="card">
+    <h2>Ce que le commercial sait</h2>
+    <div class="field"><label>Titre</label><input name="title" value="{{ v.title ?? '' }}" required></div>
+    <div class="field cols3">
+      <div><label>Type de rendez-vous</label><select name="category">{% for k, l in constant('App\\Entity\\Scenario::CATEGORIES') %}<option value="{{ k }}" {{ (v.category ?? '') == k ? 'selected' }}>{{ l }}</option>{% endfor %}</select></div>
+      <div><label>Difficulté</label><select name="difficulty">{% for k, l in constant('App\\Entity\\Scenario::DIFFICULTIES') %}<option value="{{ k }}" {{ (v.difficulty ?? 2) == k ? 'selected' }}>{{ l }}</option>{% endfor %}</select></div>
+      <div><label>Durée maximale (minutes)</label><input type="number" name="minutes" min="3" max="60" value="{{ v.minutes ?? 10 }}"></div>
+    </div>
+    <div class="field"><label>Contexte (ce que le commercial sait en arrivant)</label><textarea name="context" rows="3">{{ v.context ?? '' }}</textarea></div>
+    <div class="field"><label>Objectif (ce qu'il doit obtenir)</label><textarea name="goal" rows="2">{{ v.goal ?? '' }}</textarea></div>
+  </div>
+  <div class="card">
+    <h2>Le persona</h2>
+    <div class="field cols3">
+      <div><label>Nom</label><input name="persona[name]" value="{{ v.persona.name ?? '' }}" required></div>
+      <div><label>Fonction</label><input name="persona[role]" value="{{ v.persona.role ?? '' }}"></div>
+      <div><label>Entreprise</label><input name="persona[company]" value="{{ v.persona.company ?? '' }}"></div>
+    </div>
+    <div class="field"><label>Personnalité en rendez-vous</label><textarea name="persona[personality]" rows="2">{{ v.persona.personality ?? '' }}</textarea></div>
+    <div class="field"><label>Sa première phrase</label><textarea name="opening" rows="2" required>{{ v.opening ?? '' }}</textarea></div>
+  </div>
+  <div class="card">
+    <h2>🔒 Le brief caché</h2>
+    <p class="small muted" style="margin-bottom:10px">Jamais montré au commercial ni à son IA avant le débrief. Le persona ne lâche une rubrique que si on lui pose la bonne question.</p>
+    {% for k, l in constant('App\\Entity\\Scenario::BRIEF') %}
+      <div class="field"><label>{{ l }}</label><textarea name="brief[{{ k }}]" rows="2" {{ k == 'pain' ? 'required' }}>{{ v.brief[k] ?? '' }}</textarea></div>
+    {% endfor %}
+  </div>
+  <div><button class="btn primary">Enregistrer</button></div>
+</form>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %}Bibliothèque{% endblock %}
+{% block body %}
+<div class="head">
+  <div>
+    <h1>📚 La bibliothèque</h1>
+    <p class="muted">Les rendez-vous écrits par les managers, à rejouer quand on veut travailler une situation précise.</p>
+  </div>
+  <div class="row">
+    {% if is_granted('ROLE_MANAGER') %}<a class="btn" href="{{ path('scenario_new') }}">+ Écrire un scénario</a>{% endif %}
+    <a class="btn dark" href="{{ path('scenario_generate') }}">✨ Depuis une fiche prospect</a>
+  </div>
+</div>
+<div class="row" style="margin-bottom:14px">
+  <a class="btn {{ category == '' ? 'dark' }}" href="{{ path('library') }}">Tous</a>
+  {% for key, label in constant('App\\Entity\\Scenario::CATEGORIES') %}<a class="btn {{ category == key ? 'dark' }}" href="{{ path('library', {type: key}) }}">{{ label }}</a>{% endfor %}
+</div>
+<div class="grid">
+  {% for s in scenarios %}{% include '_scenario_card.html.twig' %}{% else %}<div class="card empty">Aucun scénario dans cette catégorie.</div>{% endfor %}
+</div>
+{% endblock %}

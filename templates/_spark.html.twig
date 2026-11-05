@@ -1,0 +1,13 @@
+{# La courbe des notes : scores, liste de {score, date, title}. #}
+{% if scores|length >= 2 %}
+{% set w = 600 %}{% set h = 120 %}{% set n = scores|length %}
+{% set pts = [] %}{% for p in scores %}{% set pts = pts|merge([((loop.index0 / (n - 1) * (w - 20) + 10)|round(1)) ~ ',' ~ ((h - 10 - p.score / 100 * (h - 20))|round(1))]) %}{% endfor %}
+<svg class="spark" viewBox="0 0 {{ w }} {{ h }}" preserveAspectRatio="none" role="img" aria-label="Évolution des notes">
+  <line x1="0" x2="{{ w }}" y1="{{ h - 10 - 0.7 * (h - 20) }}" y2="{{ h - 10 - 0.7 * (h - 20) }}" stroke="var(--good)" stroke-dasharray="4 4" opacity=".5"/>
+  <polyline fill="none" stroke="var(--brand)" stroke-width="3" stroke-linejoin="round" points="{{ pts|join(' ') }}" vector-effect="non-scaling-stroke"/>
+  {% for p in scores %}{% set xy = pts[loop.index0]|split(',') %}<circle cx="{{ xy[0] }}" cy="{{ xy[1] }}" r="4" fill="var(--brand)"><title>{{ p.date }} · {{ p.title }} : {{ p.score }}/100</title></circle>{% endfor %}
+</svg>
+<div class="row between small muted"><span>{{ scores|first.date }}</span><span>pointillés : 70/100</span><span>{{ scores|last.date }}</span></div>
+{% else %}
+<p class="muted small">La courbe apparaît à partir de deux sessions débriefées.</p>
+{% endif %}

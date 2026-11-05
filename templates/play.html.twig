@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+{% import '_macros.html.twig' as m %}
+{% block title %}Jouer{% endblock %}
+{% block body %}
+{% set lv = stats.level %}
+{% if current %}
+  <div class="card row between" style="margin-bottom:20px;border-color:var(--brand)">
+    <div><span class="tag brand">{{ current.live ? '📞 Appel en cours' : 'Appel à analyser' }}</span> <b style="margin-left:6px">{{ current.scenario.title }}</b></div>
+    <a class="btn primary" href="{{ path('training', {id: current.id}) }}">{{ current.live ? 'Reprendre' : 'Voir l\'analyse' }} →</a>
+  </div>
+{% endif %}
+
+<section class="play-hero">
+  <div class="level-card">
+    <div class="row between"><span class="tag brand">Niveau {{ lv.number }}</span>{% if stats.streak %}<span class="tag warn">🔥 {{ stats.streak }} jour{{ stats.streak > 1 ? 's' }} d'affilée</span>{% endif %}</div>
+    <h1 style="margin:10px 0 4px">{{ lv.name }}</h1>
+    <p class="muted small">{{ lv.xp }} XP{% if lv.to %} · encore {{ lv.to - lv.xp }} XP pour passer {{ lv.next }}{% endif %}</p>
+    <div class="bar" style="margin-top:10px;height:10px"><i style="width: {{ lv.pct }}%"></i></div>
+    <div class="mini-kpis">
+      <div><b>{{ stats.done }}</b><span>appels</span></div>
+      <div><b>{{ m.score(stats.average) }}</b><span>moyenne</span></div>
+      <div><b>{{ stats.goals }}</b><span>objectifs atteints</span></div>
+    </div>
+  </div>
+  <div class="call-card">
+    <p class="small" style="opacity:.8;text-transform:uppercase;letter-spacing:.08em">Prêt ?</p>
+    <h2 style="font-size:26px;margin:6px 0 10px">Une situation vous attend.</h2>
+    <p style="opacity:.85">Une annonce repérée, un client furieux, une demande de prix, un suivi de projet… Vous ne savez pas laquelle avant de lancer : comme dans la vraie vie.</p>
+    <button class="btn big" id="new-call">📞 Nouvel appel</button>
+    <p class="small" style="opacity:.7;margin-top:8px">Difficulté adaptée à votre niveau.</p>
+  </div>
+</section>
+
+{% if missions %}
+<h2 style="margin-top:28px">🎯 Mes missions</h2>
+<div class="grid">
+  {% for row in missions %}{% set mi = row.mission %}{% set sit = mi.situation ? situations[mi.situation] ?? null : null %}
+  <div class="card mission-card {{ row.complete ? 'complete' }}">
+    <div class="row between"><b>{{ mi.calls }} appel{{ mi.calls > 1 ? 's' }} {{ sit ? sit.emoji ~ ' ' ~ sit.label : 'au choix' }}</b>{% if row.complete %}<span class="tag good">✓ Réussie</span>{% elseif row.overdue %}<span class="tag bad">En retard</span>{% elseif mi.dueAt %}<span class="tag">avant le {{ mi.dueAt|date('d/m') }}</span>{% endif %}</div>
+    <p class="small muted" style="margin-top:4px">Note de {{ mi.target }} ou plus{{ mi.createdBy ? ' · de la part de ' ~ mi.createdBy.name }}</p>
+    {% if mi.note %}<p class="small" style="margin-top:4px">« {{ mi.note }} »</p>{% endif %}
+    <div class="bar" style="margin-top:10px"><i style="width: {{ (row.done / mi.calls * 100)|round }}%"></i></div>
+    <div class="row between" style="margin-top:8px"><span class="small">{{ row.done }} / {{ mi.calls }}</span>{% if not row.complete %}<button class="btn small mission-play" data-type="{{ mi.situation }}">📞 Jouer</button>{% endif %}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<h2 style="margin-top:28px">Ce qui peut tomber</h2>
+<div class="situations">
+  {% for key, sit in situations %}<span class="sit" title="{{ sit.family }}">{{ sit.emoji }} {{ sit.label }}</span>{% endfor %}
+</div>
+
+{% if recent %}
+<h2 style="margin-top:28px">Mes derniers appels</h2>
+<div class="card table-wrap"><table>
+  <tr><th>Date</th><th>Situation</th><th>Résultat</th><th>Note</th><th></th></tr>
+  {% for t in recent %}{% set sit = t.scenario.situationInfo %}
+  <tr>
+    <td class="small">{{ t.startedAt|date('d/m H:i') }}</td>
+    <td>{{ sit ? sit.emoji ~ ' ' }}{{ t.scenario.title }}<div class="small muted">{{ sit ? sit.label : t.scenario.categoryLabel }}</div></td>
+    <td class="small">{% if t.status == 'done' %}{{ m.goal(t.debrief.goal_reached ?? null) }} {{ t.debrief.result ?? '' }}{% else %}{{ m.status(t) }}{% endif %}</td>
+    <td>{{ m.score(t.score) }}</td>
+    <td style="text-align:right"><a href="{{ path('training', {id: t.id}) }}">Ouvrir</a></td>
+  </tr>{% endfor %}
+</table></div>
+{% endif %}
+
+<div id="dialing" class="dialing" hidden>
+  <div class="phone">📞</div>
+  <p id="dial-text">On tire une situation au hasard…</p>
+  <p class="small" style="opacity:.7">Une dizaine de secondes.</p>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const btn = document.getElementById('new-call'), dialing = document.getElementById('dialing'), text = document.getElementById('dial-text');
+const steps = ['On tire une situation au hasard…', 'On choisit l\'entreprise…', 'On réveille votre interlocuteur…', 'On lui écrit son brief caché…', 'On prépare votre fiche…'];
+const call = async (type = '') => {
+  btn.disabled = true; dialing.hidden = false; let i = 0;
+  const timer = setInterval(() => { i = Math.min(i + 1, steps.length - 1); text.textContent = steps[i]; }, 2500);
+  try {
+    const r = await fetch({{ path('call_new')|json_encode|raw }} + (type ? '?type=' + encodeURIComponent(type) : ''), { method: 'POST', headers: { 'Accept': 'application/json', 'X-CSRF-Token': {{ csrf_token('call')|json_encode|raw }} } });
+    const data = await r.json();
+    if (data.url) { window.location = data.url; return; }
+    alert(data.error || 'Erreur');
+  } catch (e) { alert('La situation n\'a pas pu être préparée : réessayez.'); }
+  clearInterval(timer); dialing.hidden = true; btn.disabled = false;
+};
+btn.addEventListener('click', () => call());
+// Une mission : la situation qu'elle demande, ou la surprise si elle n'en demande pas.
+document.querySelectorAll('.mission-play').forEach(b => b.addEventListener('click', () => call(b.dataset.type)));
+</script>
+{% endblock %}

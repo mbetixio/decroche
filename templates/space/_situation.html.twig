@@ -1,0 +1,14 @@
+{# Une situation d'appel, modifiable : name est le préfixe des champs (situations[clé]). #}
+<div class="stack" style="gap:10px;margin-top:10px">
+  <div class="cols2">
+    <div><label>Titre</label><input name="{{ name }}[label]" value="{{ sit.label }}"></div>
+    <div class="cols2"><div><label>Emoji</label><input name="{{ name }}[emoji]" value="{{ sit.emoji }}" maxlength="4"></div>
+      <div><label>Sens</label><select name="{{ name }}[direction]"><option value="sortant" {{ sit.direction == 'sortant' ? 'selected' }}>Vous appelez</option><option value="entrant" {{ sit.direction == 'entrant' ? 'selected' }}>On vous appelle</option></select></div></div>
+  </div>
+  <div class="cols2">
+    <div><label>Famille</label><select name="{{ name }}[family]">{% for k, l in families %}<option value="{{ k }}" {{ sit.family == k ? 'selected' }}>{{ l }}</option>{% endfor %}</select></div>
+    <div><label>Ce que le commercial a sous les yeux</label><input name="{{ name }}[material]" value="{{ sit.material }}" placeholder="Le message du formulaire, la fiche client…"></div>
+  </div>
+  <div><label>La situation (qui est en face, ce qu'il veut, ce qui coince, ce qui se cache)</label><textarea name="{{ name }}[pitch]" rows="3">{{ sit.pitch }}</textarea></div>
+  <div><label>Les objectifs de l'appel (un par ligne)</label><textarea name="{{ name }}[objectives]" rows="3">{{ sit.objectives|join("\n") }}</textarea></div>
+</div>

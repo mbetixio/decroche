@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Sparring{% endblock %} · Sparring</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e2552d'/><text x='16' y='22' font-size='17' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'>S</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>{% include '_style.css.twig' %}</style>
+</head>
+<body>
+{% set route = app.request.attributes.get('_route') %}
+{% if app.user %}
+<header class="top"><div class="wrap">
+  <a class="logo" href="{{ path('home') }}"><b>S</b> Sparring</a>
+  <nav class="nav">
+    <a href="{{ path('home') }}" class="{{ route in ['home', 'call', 'training'] ? 'on' }}">📞 Jouer</a>
+    <a href="{{ path('library') }}" class="{{ route in ['library', 'scenario'] ? 'on' }}">Bibliothèque</a>
+    <a href="{{ path('offer') }}" class="{{ route == 'offer' ? 'on' }}">L'offre</a>
+    <a href="{{ path('progress') }}" class="{{ route == 'progress' ? 'on' }}">Ma progression</a>
+    {% if is_granted('ROLE_MANAGER') %}<a href="{{ path('team') }}" class="{{ route in ['team', 'team_seller'] ? 'on' }}">Équipe</a>{% endif %}
+    <a href="{{ path('scenario_generate') }}" class="{{ route == 'scenario_generate' ? 'on' }}">Préparer un rendez-vous</a>
+    {% if is_granted('ROLE_MANAGER') %}<a href="{{ path('space') }}" class="{{ route == 'space' ? 'on' }}">⚙️ Mon espace</a>{% endif %}
+  </nav>
+  <div class="who">
+    <a href="{{ path('account') }}" class="row" style="text-decoration:none"><span class="avatar">{{ app.user.initials }}</span><span>{{ app.user.name }}{% if app.user.workspace %}<span class="small muted" style="display:block;line-height:1.1">{{ app.user.workspace.name }}{% if app.user.manager %} · manager{% endif %}</span>{% endif %}</span></a>
+    <a href="{{ path('me') }}" class="btn ghost small" title="Qui je suis">Mon profil</a>
+    <a href="{{ path('logout') }}" class="btn ghost small">Déconnexion</a>
+  </div>
+</div></header>
+{% endif %}
+<main class="wrap">
+  {% for type, messages in app.flashes %}{% for message in messages %}<div class="flash {{ type == 'error' ? 'error' }}">{{ message }}</div>{% endfor %}{% endfor %}
+  {% block body %}{% endblock %}
+</main>
+{% block scripts %}{% endblock %}
+</body>
+</html>

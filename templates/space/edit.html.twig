@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+{% block title %}L'espace {{ space.of }}{% endblock %}
+{% block body %}
+<div class="head"><div><h1>L'espace {{ space.of }}</h1><p class="muted">Ce que Sparring sait de votre société : vos interlocuteurs simulés le connaissent, le coach s'en sert pour juger, les situations d'appel en découlent.</p></div>
+  {% if space.ready %}<div class="row"><a class="btn" href="{{ path('team') }}">Inviter l'équipe</a><a class="btn primary" href="{{ path('home') }}">📞 Jouer</a></div>{% endif %}</div>
+
+<form method="post" action="{{ path('space_analyze') }}" class="card stack analyze">
+  <h2>1 · Votre société</h2>
+  <input type="hidden" name="_token" value="{{ csrf_token('space') }}">
+  <div class="cols2">
+    <div><label>Site web</label><input name="website" value="{{ space.website }}" placeholder="exemple.fr"></div>
+    <div class="small muted" style="align-self:end">La page d'accueil et les pages qui parlent de votre offre (services, tarifs, références…) sont lues.</div>
+  </div>
+  <div><label>Ce que vous faites, en vos mots</label><textarea name="about" rows="4" placeholder="Qui vous êtes, ce que vous vendez, à qui, comment vous travaillez, ce qui vous distingue, les objections que vos commerciaux entendent le plus…">{{ space.about }}</textarea></div>
+  <div class="row"><button class="btn {{ space.ready ? '' : 'primary' }}">{{ space.analyzedAt ? '🔄 Refaire l\'analyse' : '🔍 Analyser mon offre' }}</button><span class="small muted">{{ space.analyzedAt ? 'Dernière analyse le ' ~ space.analyzedAt|date('d/m/Y à H:i') ~ '. La refaire remplace la fiche et les situations.' : 'Une à deux minutes.' }}</span></div>
+</form>
+
+{% if space.offer or space.situations %}
+<form method="post" class="stack" style="margin-top:20px">
+  <input type="hidden" name="_token" value="{{ csrf_token('space') }}">
+  <input type="hidden" name="website" value="{{ space.website }}"><input type="hidden" name="about" value="{{ space.about }}">
+  <div class="card stack">
+    <h2>2 · La fiche de votre offre</h2>
+    <p class="small muted">Relisez et corrigez : ce qui n'y est pas ne doit pas être promis (le coach le pénalise), les objections classiques nourrissent vos interlocuteurs simulés.</p>
+    <div><label>Nom de la société</label><input name="name" value="{{ space.name }}" required></div>
+    <textarea name="offer" rows="22" style="font-size:14px;line-height:1.55">{{ space.offer }}</textarea>
+    <div><label>Vos clients types (un par ligne)</label><textarea name="sectors" rows="5">{{ space.sectors|join("\n") }}</textarea><p class="small muted">Les situations s'habillent au hasard de ces secteurs.</p></div>
+  </div>
+
+  <div class="card stack">
+    <div class="row between"><h2 style="margin:0">3 · Les situations d'appel ({{ space.situations|length }})</h2><button class="btn ghost" form="situations-again">🔄 Les réécrire depuis la fiche</button></div>
+    <p class="small muted">Chaque appel en tire une au hasard. Corrigez, retirez celles qui ne vous ressemblent pas, ajoutez les vôtres.</p>
+    {% for key, sit in space.situations %}
+    <details class="sit-edit">
+      <summary>{{ sit.emoji }} <b>{{ sit.label }}</b> <span class="tag">{{ families[sit.family] ?? sit.family }}</span> <span class="tag">{{ sit.direction == 'entrant' ? 'on vous appelle' : 'vous appelez' }}</span></summary>
+      {% include 'space/_situation.html.twig' with {name: 'situations[' ~ key ~ ']', sit: sit} %}
+      <label class="row small" style="font-weight:400;margin-top:6px"><input type="checkbox" name="situations[{{ key }}][remove]" value="1" style="width:auto"> Retirer cette situation</label>
+    </details>
+    {% endfor %}
+    <details class="sit-edit"><summary>➕ <b>Ajouter une situation</b></summary>
+      {% include 'space/_situation.html.twig' with {name: 'situations[_new]', sit: {label: '', emoji: '📞', family: 'prospection', direction: 'sortant', material: '', pitch: '', objectives: []}} %}
+    </details>
+  </div>
+  <div class="card stack">
+    <h2>4 · Votre grille de notation</h2>
+    <p class="small muted">Les critères sur lesquels le coach note chaque appel (de 2 à 8), avec ce que vous attendez. Par défaut, la grille de Sparring ; adaptez-la à votre méthode de vente. Videz un titre pour retirer un critère.</p>
+    {% for key, c in space.scorecard %}
+      <div class="cols2 crit-edit"><input name="criteria[{{ key }}][label]" value="{{ c.label }}" placeholder="Critère"><input name="criteria[{{ key }}][hint]" value="{{ c.hint }}" placeholder="Ce que le coach attend"></div>
+    {% endfor %}
+    {% set free = 8 - space.scorecard|length %}
+    {% for i in 1..2 %}{% if i <= free %}
+      <div class="cols2 crit-edit"><input name="criteria[nouveau_{{ i }}][label]" placeholder="➕ Un critère à ajouter (ex. « Qualification BANT »)"><input name="criteria[nouveau_{{ i }}][hint]" placeholder="Ce que le coach attend"></div>
+    {% endif %}{% endfor %}
+  </div>
+  <div><button class="btn primary">Enregistrer l'espace</button></div>
+</form>
+<form method="post" action="{{ path('space_situations') }}" id="situations-again" class="analyze" onsubmit="return confirm('Réécrire toutes les situations depuis la fiche ? Vos corrections de situations seront remplacées.')"><input type="hidden" name="_token" value="{{ csrf_token('space') }}"></form>
+{% endif %}
+
+<div id="busy" hidden style="position:fixed;inset:0;background:#18202bdd;color:#fff;display:none;place-items:center;font-size:18px;z-index:50"><div style="text-align:center">🔍 Sparring lit votre site et écrit votre fiche…<br><span class="small" style="opacity:.8">une à deux minutes : ne fermez pas la page</span></div></div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll('form.analyze').forEach(f => f.addEventListener('submit', () => { const b = document.getElementById('busy'); b.hidden = false; b.style.display = 'grid'; }));
+</script>
+{% endblock %}

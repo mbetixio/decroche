@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% import '_macros.html.twig' as m %}
+{% set s = t.scenario %}{% set sit = s.situationInfo %}
+{% block title %}{{ s.title }}{% endblock %}
+{% block body %}
+{% if not t.live %}<div class="head">
+  <div>
+    <div class="row" style="margin-bottom:8px">{% if sit %}<span class="tag brand">{{ sit.emoji }} {{ sit.label }}</span>{% else %}<span class="tag brand">{{ s.categoryLabel }}</span>{% endif %}<span class="tag">{{ s.difficultyLabel }}</span>{{ m.status(t) }}{% if t.replayOf %}<a class="tag" href="{{ path('training', {id: t.replayOf.id}) }}">↺ Reprise de l'appel du {{ t.replayOf.startedAt|date('d/m H:i') }}</a>{% endif %}{% if not mine %}<span class="tag">{{ t.seller.name }}</span>{% endif %}<span class="tag">{{ t.startedAt|date('d/m/Y H:i') }}</span></div>
+    <h1>{{ s.title }}</h1>
+  </div>
+  {% if not t.live %}<div class="row">{% if mine and sit %}<form method="post" action="{{ path('call_new') }}" class="new-call"><input type="hidden" name="_token" value="{{ csrf_token('call') }}"><button class="btn primary">📞 Nouvel appel</button></form>{% elseif mine and s.active %}<form method="post" action="{{ path('scenario_start', {id: s.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('start' ~ s.id) }}"><button class="btn">Rejouer ce scénario</button></form>{% endif %}<a class="btn ghost" href="{{ path('home') }}">Accueil</a></div>{% endif %}
+</div>{% endif %}
+
+{% if t.live %}
+{% include 'training/_call.html.twig' %}
+{% elseif t.status == 'debriefing' %}
+<div class="card empty stack" style="max-width:560px;margin:0 auto">
+  <h2>{{ t.endedBy == 'clock' ? '⏰ Le temps est écoulé' : (t.endedBy == 'persona' ? '🚪 ' ~ s.persona.name ~ ' a mis fin au rendez-vous' : 'Rendez-vous terminé') }}</h2>
+  {% if mine %}
+  <form method="post" action="{{ path('training_finish', {id: t.id}) }}" id="finish"><input type="hidden" name="_token" value="{{ csrf_token('training' ~ t.id) }}"><button class="btn primary">Obtenir mon débrief</button></form>
+  {% else %}<p>Le débrief n'a pas encore été demandé.</p>{% endif %}
+</div>
+{% include 'training/_transcript.html.twig' %}
+{% else %}
+{% include '_debrief.html.twig' with {xp: mine ? xp : null} %}
+{% include 'training/_transcript.html.twig' %}
+{% endif %}
+<div id="busy" hidden style="position:fixed;inset:0;background:#0d1219ee;color:#fff;display:grid;place-items:center;font-size:18px;z-index:50"><div style="text-align:center">📝 Le coach analyse {{ sit ? 'votre appel' : 'votre rendez-vous' }}…<br><span class="small" style="opacity:.8">environ 20 secondes</span></div></div>
+{% endblock %}
+{% block scripts %}
+<script>
+const busy = document.getElementById('busy'); busy.hidden = true; busy.style.display = 'none';
+document.querySelectorAll('#finish').forEach(f => f.addEventListener('submit', () => { busy.style.display = 'grid'; }));
+document.querySelectorAll('.new-call').forEach(f => f.addEventListener('submit', () => { busy.querySelector('div').innerHTML = '📞 On tire une nouvelle situation…'; busy.style.display = 'grid'; }));
+{% if t.live %}{% include 'training/_call.js.twig' %}
+{% endif %}
+</script>
+{% endblock %}

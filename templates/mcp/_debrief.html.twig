@@ -1,0 +1,1 @@
+{% if t.status in ['done', 'abandoned'] %}{% include '_debrief.html.twig' with {standalone: true} %}{% else %}<p class="loading">La session n°{{ t.id }} est encore en cours : terminez-la avec end_sparring.</p>{% endif %}

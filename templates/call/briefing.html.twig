@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ s.title }}{% endblock %}
+{% set sit = s.situationInfo %}
+{% block body %}
+<div class="head">
+  <div>
+    <div class="row" style="margin-bottom:8px">
+      {% if sit %}<span class="tag brand">{{ sit.emoji }} {{ sit.label }}</span><span class="tag">{{ sit.direction == 'entrant' ? '📲 On vous appelle' : '📞 Vous appelez' }}</span>{% endif %}
+      <span class="tag">{{ ['●○○', '●●○', '●●●'][s.difficulty - 1] ?? '' }} {{ s.difficultyLabel }}</span><span class="tag">⏱ {{ s.minutes }} min max</span>
+    </div>
+    <h1>{{ s.title }}</h1>
+  </div>
+</div>
+<div class="cols2">
+  <div class="stack">
+    <div class="card"><h2>La situation</h2><p>{{ s.context }}</p></div>
+    {% if s.material %}<div><h2>{{ sit ? sit.material : 'Le document' }}</h2><div class="doc">{{ s.material }}</div></div>{% endif %}
+  </div>
+  <div class="stack">
+    <div class="card">
+      <h2>{{ sit and sit.direction == 'entrant' ? 'Qui vous appelle' : 'Qui vous appelez' }}</h2>
+      <div class="persona" style="margin-bottom:8px"><span class="avatar">{{ s.persona.name|split(' ')|map(w => w|first)|slice(0, 2)|join|upper }}</span><div><b>{{ s.persona.name }}</b><div class="small muted">{{ s.persona.role }}</div></div></div>
+      <p class="small muted">{{ s.persona.company }}</p>
+    </div>
+    <div class="card">
+      <h2>🎯 Vos objectifs</h2>
+      <p class="small muted" style="margin-bottom:10px">{{ s.goal }}</p>
+      <ol class="objectives">{% for o in s.objectiveList %}<li><span class="tag">{{ loop.index }}</span><span>{{ o }}</span></li>{% endfor %}</ol>
+    </div>
+    <div class="card" style="background:var(--brand-soft);border-color:transparent">
+      <p class="small">Votre interlocuteur a un <b>brief caché</b> : budget, vraie douleur, décideur, objections, ce qui le ferait dire oui, et un secret. À vous de le faire parler. À la fin, raccrochez : l'appel est analysé.</p>
+      <form method="post" action="{{ path('scenario_start', {id: s.id}) }}" style="margin-top:14px"><input type="hidden" name="_token" value="{{ csrf_token('start' ~ s.id) }}"><button class="btn big" style="margin:0;width:100%;justify-content:center">{{ sit and sit.direction == 'entrant' ? '📲 Décrocher' : '📞 Lancer l\'appel' }}</button></form>
+    </div>
+    <form method="post" action="{{ path('call_new') }}" id="other"><input type="hidden" name="_token" value="{{ csrf_token('call') }}"><button class="btn ghost" style="width:100%;justify-content:center">🎲 Une autre situation</button></form>
+  </div>
+</div>
+<div id="dialing" class="dialing" hidden><div class="phone">🎲</div><p>On tire une autre situation…</p></div>
+{% endblock %}
+{% block scripts %}<script>document.getElementById('other').addEventListener('submit', () => { document.getElementById('dialing').hidden = false; });</script>{% endblock %}

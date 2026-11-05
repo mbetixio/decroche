@@ -1,0 +1,10 @@
+<article class="card scenario-card">
+  <div class="row"><span class="tag brand">{{ s.categoryLabel }}</span><span class="tag">{{ ['●○○', '●●○', '●●●'][s.difficulty - 1] ?? '' }} {{ s.difficultyLabel }}</span><span class="tag">⏱ {{ s.minutes }} min</span>{% if not s.active %}<span class="tag bad">Archivé</span>{% endif %}</div>
+  <h3 style="font-size:17px"><a href="{{ path('scenario', {id: s.id}) }}" style="text-decoration:none">{{ s.title }}</a></h3>
+  <div class="persona"><span class="avatar">{{ s.persona.name|split(' ')|map(w => w|first)|slice(0, 2)|join|upper }}</span><div><b>{{ s.persona.name }}</b><div class="small muted">{{ s.persona.role }} · {{ s.persona.company }}</div></div></div>
+  <p class="small muted grow">{{ s.context|u.truncate(170, '…', false) }}</p>
+  <div class="row between">
+    <a class="btn" href="{{ path('scenario', {id: s.id}) }}">Voir</a>
+    {% if s.active %}<form method="post" action="{{ path('scenario_start', {id: s.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('start' ~ s.id) }}"><button class="btn primary">S'entraîner →</button></form>{% endif %}
+  </div>
+</article>
