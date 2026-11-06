@@ -1,0 +1,159 @@
+# The common canvas of call situations, that the analysis of a company adapts to its business, and the random
+# dressing of a surprise call (company sizes, cities).
+sizes:
+  - 'une start-up de 15 personnes'
+  - 'une PME de 40 salariés'
+  - 'une PME de 120 salariés'
+  - 'une ETI de 400 salariés'
+  - 'un groupe de 2 000 salariés'
+  - 'une scale-up de 80 personnes'
+cities:
+  - Lyon
+  - Nantes
+  - Lille
+  - Bordeaux
+  - Toulouse
+  - Marseille
+  - Rennes
+  - Strasbourg
+  - Grenoble
+  - Paris
+  - Montpellier
+  - Annecy
+  - Nice
+  - Clermont-Ferrand
+  - Rouen
+  - Dijon
+situations:
+  demande_prix:
+    label: 'Demande de prix sur le site'
+    emoji: 💶
+    family: prospection
+    direction: sortant
+    material: 'Le message du formulaire'
+    pitch: "Un prospect a demandé un prix via le site, en quelques lignes. Le commercial le rappelle : il veut juste un chiffre, alors que le bon prix dépend de son besoin, qu'il faut découvrir."
+    objectives:
+      - 'Comprendre le besoin derrière la demande'
+      - 'Ne pas lâcher de prix au hasard'
+      - 'Obtenir le rendez-vous suivant'
+  signal:
+    label: 'Appel à froid sur un signal'
+    emoji: 📡
+    family: prospection
+    direction: sortant
+    material: 'Le signal repéré'
+    pitch: "Le commercial a repéré un signal d'achat (une annonce de recrutement, une levée de fonds, un nouveau dirigeant, un article, une ouverture de site…) et appelle à froid. L'interlocuteur ne l'attend pas, il a d'autres priorités."
+    objectives:
+      - "Passer le barrage et capter l'attention"
+      - 'Faire émerger un besoin réel'
+      - 'Obtenir un rendez-vous'
+  recommandation:
+    label: 'Recommandé par un client'
+    emoji: 🤝
+    family: prospection
+    direction: sortant
+    material: 'Le mot du client qui recommande'
+    pitch: "Un client satisfait a recommandé le commercial à une connaissance. L'appel commence bien, mais la personne a ses propres priorités et un fournisseur en place."
+    objectives:
+      - 'Utiliser la recommandation sans en abuser'
+      - 'Découvrir la situation actuelle'
+      - 'Obtenir un rendez-vous'
+  entrant:
+    label: 'Un prospect appelle'
+    emoji: 📲
+    family: prospection
+    direction: entrant
+    material: "Ce que l'on sait du prospect"
+    pitch: 'Un prospect appelle de lui-même : il a un besoin, compare plusieurs offres et veut aller vite. Il pose beaucoup de questions et en dit peu.'
+    objectives:
+      - 'Reprendre la main par les questions'
+      - 'Qualifier budget, délai et décideur'
+      - 'Fixer la prochaine étape'
+  concurrent:
+    label: 'Le concurrent moins cher'
+    emoji: ⚔️
+    family: negociation
+    direction: entrant
+    material: 'La proposition envoyée'
+    pitch: "Le prospect a reçu une offre concurrente moins chère et le fait savoir. Il hésite, mais il a des raisons de préférer la société, qu'il ne dit pas d'emblée."
+    objectives:
+      - 'Comprendre ce que le prix cache'
+      - 'Défendre la valeur sans brader'
+      - "Garder l'affaire en vie"
+  relance_devis:
+    label: "Relance d'une proposition sans réponse"
+    emoji: ⏳
+    family: negociation
+    direction: sortant
+    material: 'La proposition envoyée'
+    pitch: 'Une proposition a été envoyée il y a trois semaines, sans nouvelles depuis. Le silence a une raison cachée : un concurrent, un budget gelé, un décideur qui a changé, une crainte non exprimée.'
+    objectives:
+      - 'Comprendre la raison du silence'
+      - "Traiter l'objection réelle"
+      - 'Obtenir une date de décision'
+  renouvellement:
+    label: 'Renouvellement avec demande de remise'
+    emoji: 🔁
+    family: negociation
+    direction: entrant
+    material: 'Le contrat en cours'
+    pitch: "Le contrat d'un client arrive à échéance. Les achats appellent : ils veulent une remise importante, sinon ils consultent. Ils ont des raisons de rester."
+    objectives:
+      - 'Défendre la valeur avant de parler prix'
+      - "N'accorder aucune concession sans contrepartie"
+      - 'Sécuriser le renouvellement'
+  client_mecontent:
+    label: 'Client mécontent'
+    emoji: 😠
+    family: client
+    direction: entrant
+    material: 'Le mail du client'
+    pitch: "Un client appelle, énervé : un problème de qualité, de délai ou de service. Il menace d'arrêter. Le vrai problème est parfois ailleurs que ce qu'il dit."
+    objectives:
+      - 'Laisser vider le sac et reformuler'
+      - 'Trouver la cause réelle'
+      - "Repartir avec un plan d'action accepté"
+  suivi:
+    label: 'Suivi client : tout va bien ?'
+    emoji: 🩺
+    family: client
+    direction: sortant
+    material: 'La fiche client'
+    pitch: 'Le commercial appelle un client pour faire le point. Tout « va bien », mais un irritant couve, et le client ne le dira que si on creuse.'
+    objectives:
+      - 'Faire dire ce qui ne va pas'
+      - 'Mesurer le risque'
+      - "Convenir d'une action"
+  nouveaux_besoins:
+    label: 'Suivi commercial : de nouveaux besoins ?'
+    emoji: 🌱
+    family: client
+    direction: sortant
+    material: 'La fiche client'
+    pitch: 'Le commercial appelle un client satisfait pour détecter de nouveaux besoins. Le client ne pense pas à la société pour ses autres sujets, mais une opportunité existe si on pose les bonnes questions.'
+    objectives:
+      - 'Détecter un nouveau besoin'
+      - 'Identifier qui le porte'
+      - 'Obtenir un rendez-vous sur ce sujet'
+  resiliation:
+    label: 'Le client veut arrêter'
+    emoji: 🚪
+    family: client
+    direction: entrant
+    material: "Le mail d'annonce du client"
+    pitch: "Un client annonce qu'il veut réduire ou arrêter. La vraie raison est parfois différente de celle qu'il donne, et une alternative acceptable pour les deux existe."
+    objectives:
+      - 'Comprendre la vraie raison'
+      - 'Proposer une alternative'
+      - 'Garder la relation et une porte ouverte'
+  nouveau_decideur:
+    label: 'Un nouveau décideur chez le client'
+    emoji: 🆕
+    family: client
+    direction: sortant
+    material: "L'annonce de sa nomination"
+    pitch: "Un nouveau dirigeant arrive chez un client et remet tous les fournisseurs en question. Il ne connaît pas l'historique et veut faire ses preuves."
+    objectives:
+      - 'Se présenter et comprendre ses priorités'
+      - "Montrer la valeur apportée jusqu'ici"
+      - 'Obtenir un rendez-vous de revue'

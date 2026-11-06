@@ -1,7 +1,7 @@
-# La bibliothèque de départ, chargée par « bin/console app:install ». Le brief est caché au commercial : le persona ne le
-# lâche que si on lui pose les bonnes questions, et le débrief le dévoile.
+# The example library (written for Etixio's sellers), loaded with the example company. The brief stays hidden from
+# the seller: the persona only gives it away to the right questions, and the debrief reveals it.
 - title: 'Le DAF pressé qui veut un prix'
-  category: presse
+  type: presse
   difficulty: 2
   minutes: 8
   context: "Vous avez décroché 20 minutes avec le directeur administratif et financier d'un éditeur de logiciel de paie (180 personnes), après un premier échange avec son DSI. Il vous reçoit entre deux réunions et a prévenu qu'il « n'a pas beaucoup de temps »."
@@ -17,7 +17,7 @@
     secret: "Le freelance qui part est le seul à connaître le moteur de calcul de paie : il faut organiser une passation avant mars, sinon tout s'arrête."
 
 - title: 'La DSI sceptique : « les équipes externalisées, ça ne marche pas »'
-  category: objection
+  type: objection
   difficulty: 3
   minutes: 12
   context: "La directrice des systèmes d'information d'un groupe de distribution régional a accepté le rendez-vous sur recommandation d'un ancien client d'Etixio. Elle a déjà vécu un échec avec une société de services offshore il y a deux ans."
@@ -33,7 +33,7 @@
     secret: "L'échec précédent venait surtout de son propre manque de disponibilité pour cadrer ; elle le sait mais ne l'avouera qu'à quelqu'un qui l'écoute vraiment."
 
 - title: 'Le client mécontent : livraison en retard'
-  category: mecontent
+  type: mecontent
   difficulty: 2
   minutes: 10
   context: "Le directeur produit d'une start-up de la santé, client d'Etixio depuis un an (une équipe dédiée de quatre personnes), a demandé à vous voir « en urgence » après le retard de la dernière livraison. Le renouvellement du contrat est dans deux mois."
@@ -49,7 +49,7 @@
     secret: "Une partie du retard vient de spécifications changées trois fois par son propre équipe ; il le sait, et il appréciera qu'on le dise avec tact plutôt que de tout accepter."
 
 - title: 'Négociation : « baissez de 20 % ou on arrête »'
-  category: negociation
+  type: negociation
   difficulty: 3
   minutes: 12
   context: "Vous avez remis une proposition pour une équipe dédiée de cinq personnes (développeurs, QA, chef de projet) à un éditeur de logiciel de logistique, à 52 000 € par mois. La directrice des achats vous rappelle pour « finaliser »."
@@ -65,7 +65,7 @@
     secret: "Son objectif annuel est mesuré sur le pourcentage de remise obtenu, pas sur le montant : une remise affichée sur une durée plus longue l'arrange."
 
 - title: 'Objection : « on a déjà une équipe interne »'
-  category: objection
+  type: objection
   difficulty: 2
   minutes: 10
   context: "Le directeur technique d'une fintech vous reçoit après avoir téléchargé un livre blanc d'Etixio sur les équipes dédiées. Il a 25 développeurs en interne et l'a dit dès l'appel de prise de rendez-vous."
@@ -81,7 +81,7 @@
     secret: "Son CEO lui a demandé de livrer la nouvelle offre de crédit instantané en six mois, ce qui est impossible avec l'équipe actuelle."
 
 - title: 'Découverte : CTO à temps partagé pour une PME sans direction technique'
-  category: decouverte
+  type: decouverte
   difficulty: 1
   minutes: 12
   context: "La fondatrice d'une PME de e-commerce (bijoux, 35 salariés) vous contacte via LinkedIn : son agence web « ne répond plus » et elle ne sait pas si son site est en danger. Elle n'a personne de technique en interne."
@@ -97,7 +97,7 @@
     secret: "Elle envisage de lever des fonds l'an prochain et sait qu'un investisseur posera des questions sur la technique ; un CTO à temps partagé l'aiderait à préparer la due diligence."
 
 - title: 'Closing : le dirigeant qui hésite à signer'
-  category: closing
+  type: closing
   difficulty: 2
   minutes: 8
   context: "Après trois rendez-vous et une proposition validée par l'équipe technique, le directeur général d'une société de services immobiliers repousse la signature d'une équipe dédiée de trois développeurs. Vous avez obtenu un dernier appel."
