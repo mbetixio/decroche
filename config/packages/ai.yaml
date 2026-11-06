@@ -1,2 +1,26 @@
-# Le modèle se règle avec AI_BASE_URL / AI_API_KEY / AI_MODEL / AI_HEADERS : voir App\Ai\Brain.
-ai: ~
+# The language model: any OpenAI-compatible API (DeepSeek through OpenCode Go, OpenAI, Mistral, OpenRouter,
+# Hugging Face, a local Ollama…), declared as a Symfony AI "generic" platform. See .env for AI_*.
+ai:
+    platform:
+        generic:
+            sparring:
+                base_url: '%env(AI_BASE_URL)%'
+                api_key: '%env(AI_API_KEY)%'
+                http_client: 'ai.http_client'
+                model_catalog: 'Symfony\AI\Platform\Bridge\Generic\FallbackModelCatalog'
+                supports_embeddings: false
+                completions_path: '%env(AI_COMPLETIONS_PATH)%'
+
+framework:
+    http_client:
+        scoped_clients:
+            # The model's HTTP client: its extra headers (AI_HEADERS, a JSON object) and generous time limits, since a
+            # long answer may take a while.
+            ai.http_client:
+                base_uri: '%env(AI_BASE_URL)%'
+                headers: '%env(json:AI_HEADERS)%'
+                timeout: 600
+                max_duration: 900
+
+services:
+    Symfony\AI\Platform\Bridge\Generic\FallbackModelCatalog: ~
