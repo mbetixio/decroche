@@ -10,7 +10,8 @@ use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 
 /**
- * What every template may need: the company, and a short duration in minutes and seconds.
+ * What every template may need: the company, dates in its working language, and a short duration in minutes and
+ * seconds.
  */
 final readonly class AppExtension
 {
@@ -29,5 +30,23 @@ final readonly class AppExtension
     public function mmss(int $seconds): string
     {
         return \sprintf('%02d:%02d', intdiv(max(0, $seconds), 60), max(0, $seconds) % 60);
+    }
+
+    /**
+     * A day, as written in the company's language ("14/11/2026", "November 14, 2026").
+     */
+    #[AsTwigFilter('day')]
+    public function day(?\DateTimeInterface $date): string
+    {
+        return null !== $date ? $date->format($this->companies->get()->language->dateFormat()) : '—';
+    }
+
+    /**
+     * A day and a time.
+     */
+    #[AsTwigFilter('moment')]
+    public function moment(?\DateTimeInterface $date): string
+    {
+        return null !== $date ? $this->day($date).' · '.$date->format('H:i') : '—';
     }
 }

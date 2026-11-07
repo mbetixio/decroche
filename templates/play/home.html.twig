@@ -1,0 +1,102 @@
+{# Home: the level, the big "new call" button, the missions, what may come up, the last calls. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'nav.play'|trans }}{% endblock %}
+{% block body %}
+{% set level = stats.level %}
+<header class="page-head">
+    <div>
+        <div class="eyebrow">{{ 'play.hello'|trans({'%name%': app.user.name|split(' ')|first}) }}</div>
+        <h1>{{ 'play.title'|trans }}</h1>
+    </div>
+</header>
+
+{% if current %}
+    <div class="card row between" style="margin-bottom:20px;border-color:var(--brand)">
+        <div class="row"><span class="badge brand"><twig:Icon name="phone" />{{ (current.isLive ? 'play.current.live' : 'play.current.debrief')|trans }}</span><b>{{ current.scenario.title }}</b></div>
+        <a class="btn primary" href="{{ path('call_show', {id: current.id}) }}">{{ (current.isLive ? 'play.current.resume' : 'play.current.see')|trans }}<twig:Icon name="arrow-right" /></a>
+    </div>
+{% endif %}
+
+<section class="play-hero">
+    <div class="card hero pad-l call-cta" data-controller="draw">
+        <span class="badge glass"><twig:Icon name="sparkles" />{{ 'play.ready'|trans }}</span>
+        <h2>{{ 'play.cta_title'|trans }}</h2>
+        <p>{{ 'play.cta_text'|trans }}</p>
+        <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit" style="margin-top:22px">
+            <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
+            <button class="btn white lg"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button>
+        </form>
+        <p class="tiny" style="color:rgb(255 255 255 / .7);margin-top:10px">{{ 'play.adapted'|trans }}</p>
+        <p class="small" data-draw-target="error" data-fallback="{{ 'play.draw_failed'|trans }}" style="color:#ffe1d6;margin-top:8px" hidden></p>
+    </div>
+    <div class="card pad-l row" style="--gap:22px;align-items:center">
+        <div class="level-ring" style="--pct: {{ level.percent }}"><div><div><b>{{ level.number }}</b><div class="tiny faint">{{ 'play.level'|trans }}</div></div></div></div>
+        <div class="stack" style="--gap:6px">
+            <h2>{{ level.name|trans }}</h2>
+            <p class="small muted">{{ level.xp }} XP{% if level.to %} · {{ 'play.to_next'|trans({'%xp%': level.to - level.xp, '%level%': level.next|trans}) }}{% endif %}</p>
+            <div class="chips" style="margin-top:6px">
+                {% if stats.streak %}<span class="badge warn"><twig:Icon name="flame" />{{ 'play.streak'|trans({'%count%': stats.streak}) }}</span>{% endif %}
+                <span class="badge">{{ 'play.calls'|trans({'%count%': stats.done}) }}</span>
+                {% if stats.average is not null %}<span class="badge accent">{{ 'play.average'|trans }} {{ stats.average }}</span>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if missions %}
+    <section style="margin-top:30px" data-controller="draw">
+        <div class="card-head"><h2><twig:Icon name="target" />{{ 'play.missions'|trans }}</h2></div>
+        <div class="grid">
+            {% for row in missions %}
+                {% set mission = row.mission %}
+                {% set situation = mission.situation ? situations[mission.situation] ?? null : null %}
+                <div class="card stack" style="--gap:8px">
+                    <div class="row between">
+                        <b>{{ 'play.mission_calls'|trans({'%count%': mission.calls, '%situation%': situation ? situation.emoji ~ ' ' ~ situation.label : 'play.any_situation'|trans}) }}</b>
+                        {% if row.complete %}<span class="badge good"><twig:Icon name="check" />{{ 'play.mission_done'|trans }}</span>{% elseif row.overdue %}<span class="badge bad">{{ 'play.mission_late'|trans }}</span>{% elseif mission.dueAt %}<span class="badge">{{ 'play.mission_due'|trans({'%date%': mission.dueAt|day}) }}</span>{% endif %}
+                    </div>
+                    <p class="small muted">{{ 'play.mission_target'|trans({'%score%': mission.target}) }}{% if mission.createdBy %} · {{ 'play.mission_from'|trans({'%name%': mission.createdBy.name}) }}{% endif %}</p>
+                    {% if mission.note %}<p class="small">“{{ mission.note }}”</p>{% endif %}
+                    <div class="bar {{ row.complete ? 'good' }}"><i style="width: {{ min(100, (row.done / mission.calls * 100)|round) }}%"></i></div>
+                    <div class="row between">
+                        <span class="small">{{ row.done }} / {{ mission.calls }}</span>
+                        {% if not row.complete %}
+                            <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit">
+                                <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
+                                <button class="btn sm" name="situation" value="{{ mission.situation }}"><twig:Icon name="phone" />{{ 'play.play'|trans }}</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+
+<div class="cols-main" style="margin-top:30px">
+    <section class="card flush">
+        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="clock" />{{ 'play.recent'|trans }}</h2>{% if recent %}<a class="btn ghost sm" href="{{ path('call_history') }}">{{ 'action.see_all'|trans }}</a>{% endif %}</div>
+        {% if recent %}
+            <div class="list" style="margin-top:8px">
+                {% for call in recent %}
+                    {% set situation = call.scenario.situation %}
+                    <a class="list-item" href="{{ path('call_show', {id: call.id}) }}">
+                        <span class="emoji">{{ situation ? situation.emoji : '📘' }}</span>
+                        <span style="flex:1;min-width:0"><b>{{ call.scenario.title }}</b><span class="small muted" style="display:block">{{ call.startedAt|moment }} · {{ call.scenario.persona.name }}</span></span>
+                        {% if call.score is not null %}<twig:Score :value="call.score" />{% else %}<twig:Status :call="call" />{% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <twig:Empty icon="phone" :title="'play.no_calls'|trans" :text="'play.no_calls_text'|trans" />
+        {% endif %}
+    </section>
+    <section class="card">
+        <div class="card-head"><h2><twig:Icon name="sparkles" />{{ 'play.may_come_up'|trans }}</h2></div>
+        <div class="chips">
+            {% for situation in situations %}<span class="chip">{{ situation.emoji }} {{ situation.label }}</span>{% endfor %}
+        </div>
+    </section>
+</div>
+{{ include('play/_draw_overlay.html.twig') }}
+{% endblock %}
