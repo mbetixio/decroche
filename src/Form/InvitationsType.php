@@ -22,7 +22,7 @@ final class InvitationsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('emails', TextareaType::class, ['label' => 'form.invite_emails', 'required' => false, 'help' => 'form.invite_emails_help', 'attr' => ['rows' => 4, 'placeholder' => "alex@example.com\ncamille@example.com"]])
+            ->add('emails', TextareaType::class, ['label' => 'form.invite_emails', 'required' => false, 'empty_data' => '', 'help' => 'form.invite_emails_help', 'attr' => ['rows' => 4, 'placeholder' => "alex@example.com\ncamille@example.com"]])
             ->add('role', EnumType::class, ['class' => MemberRole::class, 'label' => 'form.role', 'expanded' => true]);
     }
 

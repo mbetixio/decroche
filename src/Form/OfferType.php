@@ -21,7 +21,7 @@ final class OfferType extends AbstractType
     {
         $builder
             ->add('offer', TextareaType::class, ['label' => 'form.offer', 'help' => 'form.offer_help', 'attr' => ['rows' => 22, 'class' => 'offer-editor']])
-            ->add('sectors', TextareaType::class, ['label' => 'form.sectors', 'required' => false, 'help' => 'form.sectors_help', 'attr' => ['rows' => 5]]);
+            ->add('sectors', TextareaType::class, ['label' => 'form.sectors', 'required' => false, 'empty_data' => '', 'help' => 'form.sectors_help', 'attr' => ['rows' => 5]]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

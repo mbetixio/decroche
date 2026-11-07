@@ -28,7 +28,8 @@ final class SituationData
 
     public CallDirection $direction = CallDirection::Outgoing;
 
-    #[Assert\Length(max: 120)]
+    /** What the seller has in front of them: a short description of the document ("the website form: name, company, message"). */
+    #[Assert\Length(max: 600)]
     public string $material = '';
 
     #[Assert\NotBlank(groups: ['kept']), Assert\Length(min: 20, max: 2000, groups: ['kept'])]

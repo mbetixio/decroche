@@ -33,7 +33,7 @@ final class SituationType extends AbstractType
             ->add('label', TextType::class, ['label' => 'form.situation.label'])
             ->add('family', EnumType::class, ['class' => SituationFamily::class, 'label' => 'form.situation.family'])
             ->add('direction', EnumType::class, ['class' => CallDirection::class, 'label' => 'form.situation.direction'])
-            ->add('material', TextType::class, ['label' => 'form.situation.material', 'required' => false])
+            ->add('material', TextareaType::class, ['label' => 'form.situation.material', 'required' => false, 'empty_data' => '', 'attr' => ['rows' => 2]])
             ->add('pitch', TextareaType::class, ['label' => 'form.situation.pitch', 'attr' => ['rows' => 3]])
             ->add('objectives', TextareaType::class, ['label' => 'form.situation.objectives', 'help' => 'form.one_per_line', 'attr' => ['rows' => 3]]);
     }

@@ -23,7 +23,7 @@ final class CompanyType extends AbstractType
         $builder
             ->add('name', TextType::class, ['label' => 'form.company_name', 'attr' => ['autocomplete' => 'organization', 'autofocus' => true]])
             ->add('website', TextType::class, ['label' => 'form.website', 'required' => false, 'help' => 'form.website_help', 'attr' => ['placeholder' => 'example.com', 'inputmode' => 'url']])
-            ->add('about', TextareaType::class, ['label' => 'form.about', 'required' => false, 'help' => 'form.about_help', 'attr' => ['rows' => 5, 'placeholder' => 'form.about_placeholder']]);
+            ->add('about', TextareaType::class, ['label' => 'form.about', 'required' => false, 'empty_data' => '', 'help' => 'form.about_help', 'attr' => ['rows' => 5, 'placeholder' => 'form.about_placeholder']]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
