@@ -70,6 +70,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
 html { -webkit-text-size-adjust: 100%; }
+[hidden] { display: none !important; }
 body {
     font: 15px/1.55 var(--font);
     color: var(--ink);
@@ -459,3 +460,14 @@ a.list-item:hover { background: var(--surface-2); border-radius: 12px; }
 .cs-sheet { position: fixed; top: 0; right: 0; bottom: 0; width: min(420px, 100%); background: var(--surface); color: var(--ink); z-index: 55; padding: 22px; overflow-y: auto; border-left: 1px solid var(--line); }
 .cs-sheet[hidden] { display: none; }
 @media (max-width: 900px) { .cs-sheet { box-shadow: var(--shadow-l); } }
+
+/* ---------------------------------------------------------------- Sign-in pages, filters */
+
+.auth { min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; background: var(--gradient); }
+.auth-card { width: min(440px, 100%); box-shadow: var(--shadow-l); }
+a.chip { text-decoration: none; }
+a.chip:hover { border-color: var(--ink-3); }
+.chip[aria-current='true'] { background: var(--brand-soft); color: var(--brand-strong); border-color: transparent; font-weight: 600; }
+.chip.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+details > summary.btn { list-style: none; width: fit-content; }
+details > summary.btn::-webkit-details-marker { display: none; }

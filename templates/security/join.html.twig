@@ -1,0 +1,14 @@
+{% extends 'security/_layout.html.twig' %}
+{% block title %}{{ 'security.join'|trans }}{% endblock %}
+{% block content %}
+{% if invitation %}
+    <div><h1 style="font-size:26px">{{ 'security.join_title'|trans({'%company%': company().name}) }}</h1><p class="muted">{{ 'security.join_lead'|trans({'%email%': invitation.email, '%name%': invitation.invitedBy ? invitation.invitedBy.name : company().name}) }}</p></div>
+    {{ form_start(form, {attr: {class: 'form'}}) }}
+        {{ form_rest(form) }}
+        <button class="btn primary lg block">{{ 'security.join_submit'|trans }}</button>
+    {{ form_end(form) }}
+{% else %}
+    <twig:Empty icon="mail" :title="'security.join_invalid'|trans" :text="'security.join_invalid_text'|trans" />
+    <a class="btn block" href="{{ path('login') }}">{{ 'security.login'|trans }}</a>
+{% endif %}
+{% endblock %}

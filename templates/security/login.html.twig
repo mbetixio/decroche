@@ -1,0 +1,14 @@
+{% extends 'security/_layout.html.twig' %}
+{% block title %}{{ 'security.login'|trans }}{% endblock %}
+{% block content %}
+<div><h1 style="font-size:26px">{{ 'security.login_title'|trans }}</h1><p class="muted">{{ 'security.login_lead'|trans }}</p></div>
+{% if error %}<div class="flash error" style="position:static"><twig:Icon name="alert" /><span>{{ error.messageKey|trans(error.messageData, 'security') }}</span></div>{% endif %}
+<form method="post" action="{{ path('login') }}" class="form">
+    <div class="field"><label for="email">{{ 'form.email'|trans }}</label><input id="email" type="email" name="_username" value="{{ last }}" autocomplete="email" required autofocus></div>
+    <div class="field"><label for="password">{{ 'form.password'|trans }}</label><input id="password" type="password" name="_password" autocomplete="current-password" required></div>
+    <label class="check small"><input type="checkbox" name="_remember_me" checked> <span>{{ 'security.remember'|trans }}</span></label>
+    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+    <button class="btn primary lg block">{{ 'security.login'|trans }}</button>
+</form>
+<p class="tiny faint">{{ 'security.lost'|trans }}</p>
+{% endblock %}
