@@ -1,0 +1,43 @@
+{# The debrief MCP app's shell: the stylesheet inlined, and JSON-RPC with the host (Claude, ChatGPT…) over
+   postMessage. It shows the HTML of the "debrief" tool's result as soon as the host passes it on. #}
+<!doctype html>
+<html lang="{{ app.request.locale|default('en') }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sparring debrief</title>
+<style>
+{{ source('@styles/app.css') }}
+body { background: var(--bg); padding: 10px; }
+.waiting { padding: 40px; text-align: center; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div id="app"><p class="waiting">{{ 'call.analysing'|trans }}</p></div>
+<script>
+const root = document.getElementById('app');
+let nextId = 0;
+const pending = new Map();
+const post = (msg) => window.parent.postMessage(msg, '*');
+const rpc = (method, params) => new Promise((resolve, reject) => { const id = ++nextId; pending.set(id, { resolve, reject }); post({ jsonrpc: '2.0', id, method, params }); });
+const notify = (method, params) => post({ jsonrpc: '2.0', method, params });
+const reportSize = () => notify('ui/notifications/size-changed', { width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight });
+new ResizeObserver(reportSize).observe(document.body);
+const show = (result) => {
+  const html = result?.structuredContent?.html;
+  if (html) { root.innerHTML = html; } else { root.innerHTML = '<p class="waiting"></p>'; root.firstChild.textContent = result?.content?.[0]?.text ?? 'The debrief could not be found.'; }
+  reportSize();
+};
+window.addEventListener('message', (event) => {
+  let msg = event.data;
+  if (typeof msg === 'string') { try { msg = JSON.parse(msg); } catch { return; } }
+  if (!msg || typeof msg !== 'object') return;
+  if (msg.id !== undefined && pending.has(msg.id)) { const { resolve, reject } = pending.get(msg.id); pending.delete(msg.id); msg.error ? reject(msg.error) : resolve(msg.result); }
+  else if (msg.method === 'ui/notifications/tool-result') { show(msg.params); }
+});
+rpc('ui/initialize', { appInfo: { name: 'Sparring', version: '1.0.0' }, appCapabilities: {}, protocolVersion: '2026-01-26' })
+  .then(() => notify('ui/notifications/initialized', {}))
+  .catch(() => {});
+</script>
+</body>
+</html>

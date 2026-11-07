@@ -1,0 +1,6 @@
+{# The debrief fragment the MCP app shows (rendered by the bundle into the tool result). #}
+{% if call.isLive %}
+    <twig:Empty icon="phone" :title="'debrief.pending'|trans" />
+{% else %}
+    {{ include('call/_debrief.html.twig', {standalone: true, mine: false}) }}
+{% endif %}

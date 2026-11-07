@@ -1,6 +1,9 @@
 twig:
     file_name_pattern: '*.twig'
     form_themes: ['form/theme.html.twig']
+    # The stylesheet, inlined into the MCP app (which runs in the host's sandboxed iframe).
+    paths:
+        '%kernel.project_dir%/assets/styles': styles
 
 when@test:
     twig:
