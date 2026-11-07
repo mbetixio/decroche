@@ -1,0 +1,3 @@
+# Validation messages given as keys by Sparring's constraints.
+'account.error.wrong_password': 'Ce n''est pas votre mot de passe actuel.'
+'company.error.invalid_website': 'Cette adresse ne ressemble pas à un site web.'
