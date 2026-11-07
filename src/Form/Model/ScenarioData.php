@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Form\Model;
 
 use App\Entity\Scenario;
-use App\Model\Persona;
 use App\Enum\BriefSection;
 use App\Enum\Difficulty;
 use App\Enum\MeetingType;
+use App\Model\Persona;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

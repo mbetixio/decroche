@@ -60,7 +60,7 @@ final class SituationCanvas
      */
     private function data(Language $language): array
     {
-        /** @var array{sizes: list<string>, cities: list<string>, situations: array<string, array<mixed>>} */
+        /* @var array{sizes: list<string>, cities: list<string>, situations: array<string, array<mixed>>} */
         return $this->data[$language->value] ??= Yaml::parseFile(\sprintf('%s/%s/situations.yaml', $this->directory, $language->value));
     }
 }

@@ -6,8 +6,8 @@ namespace App\Entity;
 
 use App\Enum\Language;
 use App\Model\Criterion;
-use App\Onboarding\OnboardingStep;
 use App\Model\Situation;
+use App\Onboarding\OnboardingStep;
 use App\Repository\CompanyRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

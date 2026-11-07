@@ -16,12 +16,12 @@ use App\Enum\ObjectiveStatus;
 final readonly class Debrief
 {
     /**
-     * @param array<string, array{label: string, score: int, comment: string}>                     $criteria   by scorecard key, graded 0 to 10
-     * @param list<array{objective: string, status: ObjectiveStatus, evidence: string}>            $objectives
-     * @param list<array{section: BriefSection, what: string, how: string}>                        $missed     what was not found, and the question that would have
-     * @param list<array{quote: string, why: string}>                                              $best
-     * @param list<array{quote: string, why: string, better: string}>                              $worst
-     * @param list<string>                                                                         $tips
+     * @param array<string, array{label: string, score: int, comment: string}>          $criteria   by scorecard key, graded 0 to 10
+     * @param list<array{objective: string, status: ObjectiveStatus, evidence: string}> $objectives
+     * @param list<array{section: BriefSection, what: string, how: string}>             $missed     what was not found, and the question that would have
+     * @param list<array{quote: string, why: string}>                                   $best
+     * @param list<array{quote: string, why: string, better: string}>                   $worst
+     * @param list<string>                                                              $tips
      */
     public function __construct(
         public array $criteria,

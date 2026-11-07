@@ -27,7 +27,7 @@ final readonly class DebriefBuilder
     }
 
     /**
-     * @param array<mixed>            $data      the model's JSON
+     * @param array<mixed>             $data      the model's JSON
      * @param array<string, Criterion> $scorecard
      *
      * @return array{debrief: Debrief, score: int, discovered: list<BriefSection>}
@@ -150,7 +150,6 @@ final readonly class DebriefBuilder
 
         return false;
     }
-
 
     private static function text(mixed $value): string
     {

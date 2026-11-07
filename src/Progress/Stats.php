@@ -10,8 +10,8 @@ namespace App\Progress;
 final readonly class Stats
 {
     /**
-     * @param array<string, array{label: string, average: ?float}>                                        $criteria    the average of each criterion
-     * @param list<array{id: ?int, score: int, date: string, title: string}>                                 $scores      the last 20 debriefed calls, oldest first
+     * @param array<string, array{label: string, average: ?float}>                                         $criteria    the average of each criterion
+     * @param list<array{id: ?int, score: int, date: string, title: string}>                               $scores      the last 20 debriefed calls, oldest first
      * @param list<array{key: string, label: string, emoji: string, calls: int, average: int, goals: int}> $bySituation
      */
     public function __construct(

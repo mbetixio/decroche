@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Call\Speech;
 
 use App\Ai\Data;
+
 /**
  * A call in figures: how the seller talked, measured on the transcript (not on the audio).
  */

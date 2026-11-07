@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Call;
 
 use App\Entity\Call;
+use App\Repository\CompanyRepository;
 use App\Voice\Prosody;
 use App\Voice\SpeechSynthesizer;
 use App\Voice\Synthesis;
 use App\Voice\VoiceCasting;
-use App\Repository\CompanyRepository;
 
 /**
  * One exchange of a call on the phone screen, as a stream of events: each sentence of the persona's reply leaves as
