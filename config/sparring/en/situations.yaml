@@ -1,0 +1,159 @@
+# The common canvas of call situations, that the analysis of a company adapts to its business, and the random
+# dressing of a surprise call (company sizes, cities).
+sizes:
+  - 'a 15-person startup'
+  - 'a 40-employee small business'
+  - 'a 120-employee small business'
+  - 'a 400-employee mid-sized company'
+  - 'a group of 2,000 employees'
+  - 'an 80-person scale-up'
+cities:
+  - Lyon
+  - Nantes
+  - Lille
+  - Bordeaux
+  - Toulouse
+  - Marseille
+  - Rennes
+  - Strasbourg
+  - Grenoble
+  - Paris
+  - Montpellier
+  - Annecy
+  - Nice
+  - Clermont-Ferrand
+  - Rouen
+  - Dijon
+situations:
+  price_request:
+    label: 'Price request on the website'
+    emoji: 💶
+    family: prospecting
+    direction: outgoing
+    material: 'The form message'
+    pitch: "A prospect requested a price through the website, in a few lines. The salesperson calls back: they just want a number, when the right price depends on their need, which has to be uncovered."
+    objectives:
+      - 'Understand the need behind the request'
+      - "Don't throw out a random price"
+      - 'Get the next meeting'
+  signal_cold_call:
+    label: 'Cold call on a signal'
+    emoji: 📡
+    family: prospecting
+    direction: outgoing
+    material: 'The signal spotted'
+    pitch: "The salesperson spotted a buying signal (a job posting, a funding round, a new executive, an article, a site opening…) and calls cold. The person on the other end isn't expecting it and has other priorities."
+    objectives:
+      - 'Get past the gatekeeper and grab attention'
+      - 'Bring a real need to the surface'
+      - 'Get a meeting'
+  referral:
+    label: 'Referred by a client'
+    emoji: 🤝
+    family: prospecting
+    direction: outgoing
+    material: 'The word from the client who refers'
+    pitch: "A satisfied client referred the salesperson to an acquaintance. The call starts well, but the person has their own priorities and an incumbent supplier."
+    objectives:
+      - 'Use the referral without overplaying it'
+      - 'Find out the current situation'
+      - 'Get a meeting'
+  inbound_prospect:
+    label: 'A prospect calls'
+    emoji: 📲
+    family: prospecting
+    direction: incoming
+    material: 'What we know about the prospect'
+    pitch: 'A prospect calls on their own: they have a need, are comparing several offers and want to move fast. They ask a lot of questions and say little.'
+    objectives:
+      - 'Take back control through questions'
+      - 'Qualify budget, timeline and decision-maker'
+      - 'Set the next step'
+  cheaper_competitor:
+    label: 'The cheaper competitor'
+    emoji: ⚔️
+    family: negotiation
+    direction: incoming
+    material: 'The proposal sent'
+    pitch: "The prospect received a cheaper competing offer and lets it be known. They're hesitating, but they have reasons to prefer the company, which they don't say upfront."
+    objectives:
+      - 'Understand what the price is hiding'
+      - 'Defend the value without slashing the price'
+      - 'Keep the deal alive'
+  quote_follow_up:
+    label: 'Following up on a proposal with no response'
+    emoji: ⏳
+    family: negotiation
+    direction: outgoing
+    material: 'The proposal sent'
+    pitch: 'A proposal was sent three weeks ago, with no news since. The silence has a hidden reason: a competitor, a frozen budget, a decision-maker who changed, an unspoken fear.'
+    objectives:
+      - 'Understand the reason for the silence'
+      - 'Handle the real objection'
+      - 'Get a decision date'
+  renewal_discount:
+    label: 'Renewal with a discount request'
+    emoji: 🔁
+    family: negotiation
+    direction: incoming
+    material: 'The current contract'
+    pitch: "A client's contract is coming up for renewal. Procurement calls: they want a significant discount, otherwise they'll look elsewhere. They have reasons to stay."
+    objectives:
+      - 'Defend the value before talking price'
+      - 'Grant no concession without something in return'
+      - 'Secure the renewal'
+  unhappy_client:
+    label: 'Unhappy client'
+    emoji: 😠
+    family: client
+    direction: incoming
+    material: "The client's email"
+    pitch: "A client calls, furious: a quality, delivery or service problem. They're threatening to leave. The real problem is sometimes elsewhere than what they say."
+    objectives:
+      - 'Let them vent and paraphrase'
+      - 'Find the real cause'
+      - 'Leave with an agreed action plan'
+  check_in:
+    label: 'Client follow-up: is everything okay?'
+    emoji: 🩺
+    family: client
+    direction: outgoing
+    material: 'The client record'
+    pitch: 'The salesperson calls a client to check in. Everything "is fine," but a gripe is simmering, and the client will only mention it if you dig.'
+    objectives:
+      - 'Get them to say what is not going well'
+      - 'Gauge the risk'
+      - 'Agree on an action'
+  new_needs:
+    label: 'Sales follow-up: any new needs?'
+    emoji: 🌱
+    family: client
+    direction: outgoing
+    material: 'The client record'
+    pitch: "The salesperson calls a satisfied client to uncover new needs. The client doesn't think of the company for their other matters, but an opportunity exists if you ask the right questions."
+    objectives:
+      - 'Uncover a new need'
+      - 'Identify who owns it'
+      - 'Get a meeting on that topic'
+  client_wants_to_stop:
+    label: 'The client wants to stop'
+    emoji: 🚪
+    family: client
+    direction: incoming
+    material: "The client's notice email"
+    pitch: "A client announces they want to reduce or stop. The real reason is sometimes different from the one they give, and an alternative acceptable to both exists."
+    objectives:
+      - 'Understand the real reason'
+      - 'Propose an alternative'
+      - 'Keep the relationship and a door open'
+  new_decision_maker:
+    label: 'A new decision-maker at the client'
+    emoji: 🆕
+    family: client
+    direction: outgoing
+    material: 'The announcement of their appointment'
+    pitch: "A new executive arrives at a client and questions all the suppliers. They don't know the history and want to prove themselves."
+    objectives:
+      - 'Introduce yourself and understand their priorities'
+      - 'Show the value delivered so far'
+      - 'Get a review meeting'

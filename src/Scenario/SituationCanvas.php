@@ -4,32 +4,33 @@ declare(strict_types=1);
 
 namespace App\Scenario;
 
+use App\Enum\Language;
 use App\Model\Situation;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * The common canvas (config/sparring/situations.yaml): the call situations nearly every B2B sales team meets, which
- * the analysis of a company adapts to its business, and the random dressing of a surprise call.
+ * The common canvas (config/sparring/{language}/situations.yaml): the call situations nearly every B2B sales team
+ * meets, which the analysis of a company adapts to its business, and the random dressing of a surprise call.
  */
 final class SituationCanvas
 {
-    /** @var array{sizes: list<string>, cities: list<string>, situations: array<string, array<mixed>>}|null */
-    private ?array $data = null;
+    /** @var array<string, array{sizes: list<string>, cities: list<string>, situations: array<string, array<mixed>>}> by language */
+    private array $data = [];
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%/config/sparring/situations.yaml')]
-        private readonly string $file,
+        #[Autowire('%kernel.project_dir%/config/sparring')]
+        private readonly string $directory,
     ) {
     }
 
     /**
      * @return array<string, Situation>
      */
-    public function situations(): array
+    public function situations(Language $language): array
     {
         $list = [];
-        foreach ($this->data()['situations'] as $key => $data) {
+        foreach ($this->data($language)['situations'] as $key => $data) {
             if (null !== $situation = Situation::fromArray($key, $data)) {
                 $list[$situation->key] = $situation;
             }
@@ -39,27 +40,27 @@ final class SituationCanvas
     }
 
     /**
-     * @return non-empty-list<string> company sizes ("une PME de 40 salariés"…)
+     * @return non-empty-list<string> company sizes ("a 40-person SME"…)
      */
-    public function sizes(): array
+    public function sizes(Language $language): array
     {
-        return $this->data()['sizes'] ?: ['une PME de 40 salariés'];
+        return $this->data($language)['sizes'] ?: ['a 40-person SME'];
     }
 
     /**
      * @return non-empty-list<string>
      */
-    public function cities(): array
+    public function cities(Language $language): array
     {
-        return $this->data()['cities'] ?: ['Paris'];
+        return $this->data($language)['cities'] ?: ['Paris'];
     }
 
     /**
      * @return array{sizes: list<string>, cities: list<string>, situations: array<string, array<mixed>>}
      */
-    private function data(): array
+    private function data(Language $language): array
     {
         /** @var array{sizes: list<string>, cities: list<string>, situations: array<string, array<mixed>>} */
-        return $this->data ??= Yaml::parseFile($this->file);
+        return $this->data[$language->value] ??= Yaml::parseFile(\sprintf('%s/%s/situations.yaml', $this->directory, $language->value));
     }
 }

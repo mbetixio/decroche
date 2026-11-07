@@ -88,8 +88,8 @@ situations:
   annonce:
     label: 'Annonce de recrutement repérée'
     emoji: 📰
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: "L'annonce"
     pitch: "Le commercial a repéré une offre d'emploi (développeur senior, lead dev, DevOps, data…) publiée depuis des semaines par une entreprise, et l'appelle à froid pour proposer un renfort offshore (staffing ou équipe dédiée à Madagascar ou Maurice). Le matériel est le texte de l'annonce. Le persona décroche sans attendre l'appel : recruteur, CTO, ou standard qui fait barrage. Il veut un CDI en interne, se méfie de l'offshore, mais le poste est impossible à pourvoir et un projet prend du retard."
     objectives:
@@ -99,8 +99,8 @@ situations:
   formulaire_prix:
     label: 'Demande de tarifs sur le site'
     emoji: 💬
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: 'Le message reçu via le formulaire'
     pitch: "Un prospect a demandé le catalogue de prix sur le site d'Etixio (souvent en quelques lignes : « combien pour deux développeurs React ? »). Le catalogue lui a été envoyé par e-mail, et le commercial l'appelle comme prévu. Le persona compare plusieurs prestataires (ESN française, freelances, nearshore), veut un chiffre et un délai, et son vrai besoin est différent de ce qu'il a écrit."
     objectives:
@@ -110,8 +110,8 @@ situations:
   vibe_coding:
     label: 'Une appli « vibe codée » qui craque'
     emoji: 🧩
-    family: prospection
-    direction: entrant
+    family: prospecting
+    direction: incoming
     material: 'Le message laissé via le site'
     pitch: "Le fondateur d'une jeune entreprise a construit son produit lui-même avec Lovable ou Bolt (ou un assistant de code). Il a des clients, mais l'appli plante, la sécurité l'inquiète, il ne sait pas la faire évoluer. Il appelle Etixio après avoir lu la page sur la reprise d'applications « vibe codées ». Il a peu de budget et un ego en jeu."
     objectives:
@@ -121,8 +121,8 @@ situations:
   poc_ia:
     label: 'Un POC IA bloqué avant la production'
     emoji: 🤖
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: "La fiche d'inscription au diagnostic IA"
     pitch: "Une entreprise a demandé le diagnostic IA gratuit d'Etixio : elle a un prototype (un assistant RAG sur ses documents, un agent, de l'extraction de documents) qui marche en démo mais qu'elle n'ose pas mettre en production (droits d'accès, coûts des modèles, qualité des réponses, données sensibles). Le commercial rappelle pour préparer le diagnostic."
     objectives:
@@ -132,8 +132,8 @@ situations:
   levee_fonds:
     label: 'Une start-up vient de lever des fonds'
     emoji: 🚀
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: "L'article de presse"
     pitch: "Le commercial a lu qu'une start-up vient de lever des fonds et doit doubler son équipe produit. Il appelle son fondateur ou son CTO à froid pour proposer une équipe dédiée offshore, voire un CTO as a Service. Le persona est sollicité par vingt prestataires depuis l'annonce et a des a priori sur l'offshore."
     objectives:
@@ -143,8 +143,8 @@ situations:
   nouveau_dsi:
     label: "Un nouveau DSI vient d'arriver"
     emoji: 🆕
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: "L'annonce de nomination"
     pitch: "Un DSI ou CTO vient d'être nommé (annonce LinkedIn). Le commercial l'appelle. Le persona fait son état des lieux, hérite d'applications mal maintenues et d'une dette technique, veut montrer vite des résultats sans se faire imposer de prestataire. Un audit technique ou une équipe dédiée peuvent l'aider."
     objectives:
@@ -154,8 +154,8 @@ situations:
   barrage:
     label: 'Le standard fait barrage'
     emoji: 🚧
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: 'La fiche du prospect visé'
     pitch: "Le commercial appelle pour joindre le DSI, le CTO ou le dirigeant d'une entreprise ciblée (un signal repéré : recrutement, croissance, projet annoncé). Il tombe sur l'accueil ou l'assistante de direction, dont le métier est de filtrer les démarchages : elle est aimable mais ferme, connaît l'agenda et les sujets du moment, et ne passe personne sans une vraie raison. Ruser ou mentir la braque ; la respecter et en faire une alliée ouvre la porte. Le persona est cette personne au standard, pas le décideur."
     objectives:
@@ -165,8 +165,8 @@ situations:
   recommandation:
     label: 'Appel sur recommandation'
     emoji: 🤝
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: 'Le message du client qui recommande'
     pitch: "Un client satisfait d'Etixio (il a une équipe dédiée à Madagascar) a recommandé le commercial à une connaissance, dirigeant ou CTO d'une autre entreprise. Le commercial l'appelle. Le persona est bienveillant mais n'a pas de besoin immédiat, ou le croit, et n'a jamais travaillé avec de l'offshore."
     objectives:
@@ -176,8 +176,8 @@ situations:
   salon:
     label: "Rappel d'un contact de salon"
     emoji: 🎪
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: 'La carte de visite et la note prise au salon'
     pitch: "Le commercial a échangé deux minutes avec ce contact sur un salon (VivaTech, un salon IA, un salon de l'e-commerce…) et a pris une note. Il le rappelle. Le persona se souvient vaguement de lui."
     objectives:
@@ -187,8 +187,8 @@ situations:
   quebec:
     label: 'Une PME québécoise en pénurie de développeurs'
     emoji: 🍁
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: 'La fiche du prospect'
     pitch: "Une entreprise du Québec (ou de Belgique, de Suisse) peine à recruter des développeurs. Le commercial l'appelle pour proposer une équipe francophone et bilingue depuis l'île Maurice. Le décalage horaire est plus grand qu'avec la France, le persona s'en inquiète, ainsi que de la facturation et du droit applicable."
     objectives:
@@ -198,8 +198,8 @@ situations:
   tma:
     label: 'Une application métier sans mainteneur'
     emoji: 🛠️
-    family: prospection
-    direction: entrant
+    family: prospecting
+    direction: incoming
     material: 'Le mail reçu'
     pitch: "Une entreprise appelle Etixio : son application métier (Symfony, .NET, Odoo…) n'a plus de mainteneur (le prestataire a fermé, le freelance est parti), les correctifs s'accumulent. Le besoin évident est une TMA ; le persona veut d'abord un prix au forfait pour « juste corriger les bugs »."
     objectives:
@@ -209,8 +209,8 @@ situations:
   depart_cto:
     label: 'PME sans direction technique'
     emoji: 🧭
-    family: prospection
-    direction: entrant
+    family: prospecting
+    direction: incoming
     material: 'Le message laissé au standard'
     pitch: "Le dirigeant d'une PME rappelle Etixio : son CTO ou son unique développeur vient de partir, ou son agence ne répond plus, et il n'a plus personne de technique. Il est inquiet et peu technique. L'offre pertinente est un CTO as a Service (1 à 4 jours par semaine, ou quelques jours par mois), éventuellement suivi d'une équipe."
     objectives:
@@ -220,8 +220,8 @@ situations:
   due_diligence:
     label: 'Un fonds demande un audit technique'
     emoji: 🔍
-    family: prospection
-    direction: entrant
+    family: prospecting
+    direction: incoming
     material: "Le mail du fonds d'investissement"
     pitch: "Un associé d'un fonds d'investissement contacte Etixio : il veut un audit technique de la société qu'il s'apprête à racheter, avec un calendrier serré. Il veut un prix et une date ; les enjeux réels (ce qu'il craint, la confidentialité, l'après-rachat où un CTO as a Service servirait) sont à découvrir. L'audit Etixio n'inclut pas de test d'intrusion."
     objectives:
@@ -231,8 +231,8 @@ situations:
   echaude_offshore:
     label: "Un prospect échaudé par l'offshore"
     emoji: 🔥
-    family: negociation
-    direction: sortant
+    family: negotiation
+    direction: outgoing
     material: 'Le compte rendu du premier échange'
     pitch: "Lors d'un premier contact, le prospect a dit qu'il avait déjà essayé l'offshore (en Inde, ou une plateforme low-cost) et que ça avait été un désastre : qualité, communication, turnover, juniors facturés en seniors. Le commercial le rappelle comme convenu. Une partie de l'échec venait de son propre cadrage."
     objectives:
@@ -242,8 +242,8 @@ situations:
   concurrent:
     label: 'Le prospect compare avec moins cher ou plus proche'
     emoji: ⚖️
-    family: negociation
-    direction: sortant
+    family: negotiation
+    direction: outgoing
     material: 'Le compte rendu du dernier échange'
     pitch: "Après un premier rendez-vous, le prospect annonce qu'il a une offre moins chère ou plus proche : freelances, nearshore au Maroc ou en Tunisie, ou ESN française avec des développeurs sur place. Le commercial le rappelle. Le prospect a des doutes sur l'autre offre qu'il ne dit pas."
     objectives:
@@ -253,8 +253,8 @@ situations:
   forfait_regie:
     label: 'Il veut un prix ferme pour un projet flou'
     emoji: 📐
-    family: negociation
-    direction: sortant
+    family: negotiation
+    direction: outgoing
     material: 'Le cahier des charges reçu'
     pitch: 'Le prospect a envoyé un cahier des charges flou pour une plateforme qui prendra un an, et exige un prix ferme au forfait. Le bon montage chez Etixio est un forfait de cadrage ou de prototype, puis un projet en régie. Le persona craint de signer un chèque en blanc.'
     objectives:
@@ -264,8 +264,8 @@ situations:
   urgence:
     label: 'Il lui faut des développeurs la semaine prochaine'
     emoji: ⏱️
-    family: negociation
-    direction: entrant
+    family: negotiation
+    direction: incoming
     material: 'Le message reçu'
     pitch: "Un prospect appelle en urgence : il lui faut trois développeurs « lundi » pour tenir une échéance. Etixio démarre généralement en 4 à 8 semaines (le client voit et valide les profils). Le commercial doit être honnête sur le délai sans perdre l'affaire, et trouver ce qui peut se faire tout de suite."
     objectives:
@@ -276,7 +276,7 @@ situations:
     label: 'Client mécontent'
     emoji: 😤
     family: client
-    direction: entrant
+    direction: incoming
     material: "Le mail du client et l'état du projet"
     pitch: "Un client d'Etixio (une équipe dédiée travaille pour lui à Madagascar ou à Maurice depuis des mois) appelle, énervé : retard de livraison, bug en production, développeur qui part, réponses lentes à cause du décalage horaire, facture contestée… Le matériel est son mail et une note sur l'état du projet. Une partie du problème vient peut-être de son côté."
     objectives:
@@ -287,7 +287,7 @@ situations:
     label: "Le développeur clé de l'équipe s'en va"
     emoji: 👋
     family: client
-    direction: entrant
+    direction: incoming
     material: 'Le mail du client'
     pitch: "Un client apprend que le développeur le plus impliqué de son équipe dédiée Etixio quitte l'entreprise. Il appelle, inquiet pour la continuité et agacé (« c'est exactement ce qu'on craignait avec l'offshore »). Etixio répond par la documentation, une passation encadrée et un remplacement organisé, sans remplacement gratuit garanti."
     objectives:
@@ -298,7 +298,7 @@ situations:
     label: 'Appel de suivi de projet'
     emoji: 📋
     family: client
-    direction: sortant
+    direction: outgoing
     material: 'La fiche projet'
     pitch: "Le commercial appelle un client pour un point de suivi : « est-ce que tout va bien ? ». Le client répond d'abord que tout va bien, mais il y a un irritant non dit (communication, décalage horaire, qualité, un développeur, la vitesse, la facturation) qui pourrait le faire partir."
     objectives:
@@ -309,7 +309,7 @@ situations:
     label: 'Suivi commercial : de nouveaux besoins ?'
     emoji: 🌱
     family: client
-    direction: sortant
+    direction: outgoing
     material: 'La fiche client'
     pitch: 'Le commercial appelle un client satisfait (équipe dédiée, TMA ou forfait terminé) pour prendre des nouvelles et détecter de nouveaux besoins. Le client ne pense pas à Etixio pour ses autres sujets (un agent IA, un POC à industrialiser, un audit, un CTO qui part, une autre équipe produit…), mais une opportunité existe si on pose les bonnes questions.'
     objectives:
@@ -320,7 +320,7 @@ situations:
     label: 'Le client veut réduire ou arrêter'
     emoji: 🚪
     family: client
-    direction: entrant
+    direction: incoming
     material: "Le mail d'annonce du client"
     pitch: "Un client annonce qu'il veut réduire son équipe dédiée ou arrêter (budget, internalisation, changement de stratégie, l'IA qui « remplacerait des développeurs »). La vraie raison est parfois différente, et il existe une alternative acceptable pour les deux (équipe réduite, TMA, CTO as a Service)."
     objectives:
@@ -330,8 +330,8 @@ situations:
   relance_devis:
     label: "Relance d'une proposition sans réponse"
     emoji: ⏳
-    family: negociation
-    direction: sortant
+    family: negotiation
+    direction: outgoing
     material: 'La proposition envoyée'
     pitch: "Une proposition (équipe dédiée, projet en régie, CTO as a Service) a été envoyée il y a trois semaines après la visio avec le CTO, sans nouvelles depuis. Le commercial relance. Le silence a une raison cachée : un concurrent, un budget gelé, un décideur qui a changé, une crainte sur l'offshore non exprimée."
     objectives:
@@ -341,8 +341,8 @@ situations:
   renouvellement:
     label: 'Renouvellement avec demande de remise'
     emoji: 🔁
-    family: negociation
-    direction: entrant
+    family: negotiation
+    direction: incoming
     material: 'Le contrat en cours'
     pitch: "L'équipe dédiée d'un client arrive au terme de sa période. Les achats ou la direction financière appellent : ils veulent une remise importante, sinon ils consultent (nearshore, autre offshore). Ils ont une vraie marge de manœuvre et des raisons de rester (l'équipe connaît le produit)."
     objectives:

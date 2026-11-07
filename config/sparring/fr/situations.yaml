@@ -28,8 +28,8 @@ situations:
   demande_prix:
     label: 'Demande de prix sur le site'
     emoji: 💶
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: 'Le message du formulaire'
     pitch: "Un prospect a demandé un prix via le site, en quelques lignes. Le commercial le rappelle : il veut juste un chiffre, alors que le bon prix dépend de son besoin, qu'il faut découvrir."
     objectives:
@@ -39,8 +39,8 @@ situations:
   signal:
     label: 'Appel à froid sur un signal'
     emoji: 📡
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: 'Le signal repéré'
     pitch: "Le commercial a repéré un signal d'achat (une annonce de recrutement, une levée de fonds, un nouveau dirigeant, un article, une ouverture de site…) et appelle à froid. L'interlocuteur ne l'attend pas, il a d'autres priorités."
     objectives:
@@ -50,8 +50,8 @@ situations:
   recommandation:
     label: 'Recommandé par un client'
     emoji: 🤝
-    family: prospection
-    direction: sortant
+    family: prospecting
+    direction: outgoing
     material: 'Le mot du client qui recommande'
     pitch: "Un client satisfait a recommandé le commercial à une connaissance. L'appel commence bien, mais la personne a ses propres priorités et un fournisseur en place."
     objectives:
@@ -61,8 +61,8 @@ situations:
   entrant:
     label: 'Un prospect appelle'
     emoji: 📲
-    family: prospection
-    direction: entrant
+    family: prospecting
+    direction: incoming
     material: "Ce que l'on sait du prospect"
     pitch: 'Un prospect appelle de lui-même : il a un besoin, compare plusieurs offres et veut aller vite. Il pose beaucoup de questions et en dit peu.'
     objectives:
@@ -72,8 +72,8 @@ situations:
   concurrent:
     label: 'Le concurrent moins cher'
     emoji: ⚔️
-    family: negociation
-    direction: entrant
+    family: negotiation
+    direction: incoming
     material: 'La proposition envoyée'
     pitch: "Le prospect a reçu une offre concurrente moins chère et le fait savoir. Il hésite, mais il a des raisons de préférer la société, qu'il ne dit pas d'emblée."
     objectives:
@@ -83,8 +83,8 @@ situations:
   relance_devis:
     label: "Relance d'une proposition sans réponse"
     emoji: ⏳
-    family: negociation
-    direction: sortant
+    family: negotiation
+    direction: outgoing
     material: 'La proposition envoyée'
     pitch: 'Une proposition a été envoyée il y a trois semaines, sans nouvelles depuis. Le silence a une raison cachée : un concurrent, un budget gelé, un décideur qui a changé, une crainte non exprimée.'
     objectives:
@@ -94,8 +94,8 @@ situations:
   renouvellement:
     label: 'Renouvellement avec demande de remise'
     emoji: 🔁
-    family: negociation
-    direction: entrant
+    family: negotiation
+    direction: incoming
     material: 'Le contrat en cours'
     pitch: "Le contrat d'un client arrive à échéance. Les achats appellent : ils veulent une remise importante, sinon ils consultent. Ils ont des raisons de rester."
     objectives:
@@ -106,7 +106,7 @@ situations:
     label: 'Client mécontent'
     emoji: 😠
     family: client
-    direction: entrant
+    direction: incoming
     material: 'Le mail du client'
     pitch: "Un client appelle, énervé : un problème de qualité, de délai ou de service. Il menace d'arrêter. Le vrai problème est parfois ailleurs que ce qu'il dit."
     objectives:
@@ -117,7 +117,7 @@ situations:
     label: 'Suivi client : tout va bien ?'
     emoji: 🩺
     family: client
-    direction: sortant
+    direction: outgoing
     material: 'La fiche client'
     pitch: 'Le commercial appelle un client pour faire le point. Tout « va bien », mais un irritant couve, et le client ne le dira que si on creuse.'
     objectives:
@@ -128,7 +128,7 @@ situations:
     label: 'Suivi commercial : de nouveaux besoins ?'
     emoji: 🌱
     family: client
-    direction: sortant
+    direction: outgoing
     material: 'La fiche client'
     pitch: 'Le commercial appelle un client satisfait pour détecter de nouveaux besoins. Le client ne pense pas à la société pour ses autres sujets, mais une opportunité existe si on pose les bonnes questions.'
     objectives:
@@ -139,7 +139,7 @@ situations:
     label: 'Le client veut arrêter'
     emoji: 🚪
     family: client
-    direction: entrant
+    direction: incoming
     material: "Le mail d'annonce du client"
     pitch: "Un client annonce qu'il veut réduire ou arrêter. La vraie raison est parfois différente de celle qu'il donne, et une alternative acceptable pour les deux existe."
     objectives:
@@ -150,7 +150,7 @@ situations:
     label: 'Un nouveau décideur chez le client'
     emoji: 🆕
     family: client
-    direction: sortant
+    direction: outgoing
     material: "L'annonce de sa nomination"
     pitch: "Un nouveau dirigeant arrive chez un client et remet tous les fournisseurs en question. Il ne connaît pas l'historique et veut faire ses preuves."
     objectives:

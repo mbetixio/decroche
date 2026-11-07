@@ -1,7 +1,7 @@
 # The example library (written for Etixio's sellers), loaded with the example company. The brief stays hidden from
 # the seller: the persona only gives it away to the right questions, and the debrief reveals it.
 - title: 'Le DAF pressé qui veut un prix'
-  type: presse
+  type: rushed
   difficulty: 2
   minutes: 8
   context: "Vous avez décroché 20 minutes avec le directeur administratif et financier d'un éditeur de logiciel de paie (180 personnes), après un premier échange avec son DSI. Il vous reçoit entre deux réunions et a prévenu qu'il « n'a pas beaucoup de temps »."
@@ -33,7 +33,7 @@
     secret: "L'échec précédent venait surtout de son propre manque de disponibilité pour cadrer ; elle le sait mais ne l'avouera qu'à quelqu'un qui l'écoute vraiment."
 
 - title: 'Le client mécontent : livraison en retard'
-  type: mecontent
+  type: unhappy_client
   difficulty: 2
   minutes: 10
   context: "Le directeur produit d'une start-up de la santé, client d'Etixio depuis un an (une équipe dédiée de quatre personnes), a demandé à vous voir « en urgence » après le retard de la dernière livraison. Le renouvellement du contrat est dans deux mois."
@@ -49,7 +49,7 @@
     secret: "Une partie du retard vient de spécifications changées trois fois par son propre équipe ; il le sait, et il appréciera qu'on le dise avec tact plutôt que de tout accepter."
 
 - title: 'Négociation : « baissez de 20 % ou on arrête »'
-  type: negociation
+  type: negotiation
   difficulty: 3
   minutes: 12
   context: "Vous avez remis une proposition pour une équipe dédiée de cinq personnes (développeurs, QA, chef de projet) à un éditeur de logiciel de logistique, à 52 000 € par mois. La directrice des achats vous rappelle pour « finaliser »."
@@ -81,7 +81,7 @@
     secret: "Son CEO lui a demandé de livrer la nouvelle offre de crédit instantané en six mois, ce qui est impossible avec l'équipe actuelle."
 
 - title: 'Découverte : CTO à temps partagé pour une PME sans direction technique'
-  type: decouverte
+  type: discovery
   difficulty: 1
   minutes: 12
   context: "La fondatrice d'une PME de e-commerce (bijoux, 35 salariés) vous contacte via LinkedIn : son agence web « ne répond plus » et elle ne sait pas si son site est en danger. Elle n'a personne de technique en interne."

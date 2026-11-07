@@ -36,13 +36,13 @@ final readonly class SituationDrawer
         $situation = null !== $key && isset($catalogue[$key])
             ? $catalogue[$key]
             : $this->pick(array_values(array_diff_key($catalogue, array_flip($avoid)) ?: $catalogue));
-        $sectors = $company->sectors ?: ['services aux entreprises'];
+        $sectors = $company->sectors ?: ['business services'];
 
         return new Draw(
             situation: $situation,
             sector: $this->pick($sectors),
-            size: $this->pick($this->canvas->sizes()),
-            city: $this->pick($this->canvas->cities()),
+            size: $this->pick($this->canvas->sizes($company->language)),
+            city: $this->pick($this->canvas->cities($company->language)),
             tone: $this->pick(Tone::forSituation($situation->key)),
             difficulty: $this->pick(Difficulty::forLevel($level)),
         );

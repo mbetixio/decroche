@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Company;
 
 use App\Entity\Company;
+use App\Enum\Language;
 use App\Model\Situation;
 use App\Repository\ScenarioRepository;
 use App\Scenario\ScenarioFactory;
@@ -13,8 +14,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * The example company (config/sparring/demo.yaml) and its library (library.yaml): to try Sparring at once, without
- * analysing a website.
+ * The example company (config/sparring/{language}/demo.yaml) and its library (library.yaml), in the working language:
+ * to try Sparring at once, without analysing a website.
  */
 final readonly class DemoCompany
 {
@@ -32,7 +33,7 @@ final readonly class DemoCompany
     public function apply(Company $company): void
     {
         /** @var array{name: string, website: string, about: string, offer: string, sectors: list<string>, situations: array<string, array<mixed>>} $demo */
-        $demo = Yaml::parseFile($this->directory.'/demo.yaml');
+        $demo = Yaml::parseFile(\sprintf('%s/%s/demo.yaml', $this->directory, $company->language->value));
         $company->name = $demo['name'];
         $company->website = $demo['website'];
         $company->about = $demo['about'];
@@ -52,10 +53,10 @@ final readonly class DemoCompany
      * Adds the example library to the scenarios (an entry already there, by title, is updated). Returns how many were
      * added.
      */
-    public function loadLibrary(): int
+    public function loadLibrary(Language $language): int
     {
         /** @var list<array<mixed>> $entries */
-        $entries = Yaml::parseFile($this->directory.'/library.yaml');
+        $entries = Yaml::parseFile(\sprintf('%s/%s/library.yaml', $this->directory, $language->value));
         $added = 0;
         foreach ($entries as $entry) {
             $fresh = ScenarioFactory::fromArray($entry, null, $this->clock->now());
