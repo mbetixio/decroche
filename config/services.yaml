@@ -1,9 +1,10 @@
 # yaml-language-server: $schema=../vendor/dependency-injection/Loader/schema/services.schema.json
 parameters:
-    # edge-tts, qui génère les voix neuronales d'Edge (EDGE_TTS pour un autre chemin).
+    # edge-tts, which synthesizes Edge's neural voices (EDGE_TTS for another path).
     edge_tts_default: '%kernel.project_dir%/var/edge-tts/bin/edge-tts'
-    # Les répliques déjà dites, gardées en MP3 (VOICES_DIR pour un autre dossier, un volume Docker par exemple).
+    # Lines already said, kept as MP3 (VOICES_DIR for another directory, a Docker volume for instance).
     voices_dir: '%kernel.project_dir%/var/voices'
+    # Sessions in production (SESSION_SAVE_PATH for another directory).
     sessions_dir: '%kernel.project_dir%/var/sessions/%kernel.environment%'
 
 services:
@@ -15,5 +16,6 @@ services:
         resource: '../src/'
         exclude:
             - '../src/Entity/'
+            - '../src/Enum/'
+            - '../src/Model/'
             - '../src/Kernel.php'
-            - '../src/Training/PersonaTools.php'
