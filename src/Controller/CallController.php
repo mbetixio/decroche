@@ -116,8 +116,12 @@ final class CallController extends AbstractController
         $translator = $this->translator;
 
         return new StreamedResponse(static function () use ($events, $translator): void {
-            while (ob_get_level() > 0) {
-                ob_end_flush();
+            // Each sentence must leave at once: no output buffer may hold it back (except the test client's, which
+            // collects the whole stream).
+            if ('cli' !== \PHP_SAPI) {
+                while (ob_get_level() > 0) {
+                    ob_end_flush();
+                }
             }
             foreach ($events as $event) {
                 if ('error' === $event['t']) {

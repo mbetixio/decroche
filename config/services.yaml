@@ -19,3 +19,12 @@ services:
             - '../src/Enum/'
             - '../src/Model/'
             - '../src/Kernel.php'
+
+when@test:
+    services:
+        # Tests never reach the network: a scripted language model, and no voice synthesis.
+        ai.platform.generic.sparring:
+            class: Symfony\AI\Platform\Platform
+            factory: ['App\Tests\Fake\ScriptedModel', 'platform']
+        App\Voice\SpeechSynthesizer:
+            class: App\Tests\Fake\SilentSynthesizer
