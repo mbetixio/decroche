@@ -1,0 +1,127 @@
+{# A call's debrief, on the website and in the MCP app. call: the call; debrief: its Debrief, or null; mine: whether
+   the viewer played it (to replay a moment); standalone: shown outside the site, with the scenario's title. #}
+{% set scenario = call.scenario %}
+{% set persona = scenario.persona %}
+<div class="stack" style="--gap:18px">
+{% if call.status.value == 'abandoned' %}
+    <div class="card pad-l">
+        <span class="badge bad">{{ call.status|trans }}</span>
+        <h2 style="margin-top:10px">{{ scenario.title }}</h2>
+        <p class="muted" style="margin-top:6px">{{ 'debrief.abandoned'|trans({'%name%': persona.name}) }}</p>
+    </div>
+{% elseif debrief %}
+    {% set tone = call.score >= 70 ? 'var(--good)' : (call.score >= 45 ? 'var(--warn)' : 'var(--bad)') %}
+    <div class="card pad-l verdict">
+        <div class="ring" style="--pct: {{ call.score }}; --c: {{ tone }}"><div><div><b>{{ call.score }}</b><div class="tiny faint">/ 100</div></div></div></div>
+        <div class="stack" style="--gap:10px">
+            {% if standalone ?? false %}<div class="eyebrow">{{ scenario.title }}</div>{% endif %}
+            {% if debrief.result %}<h2 style="font-size:22px">{{ debrief.result }}</h2>{% endif %}
+            <div class="chips">
+                {% if debrief.goal %}<span class="badge {{ {reached: 'good', partial: 'warn', missed: 'bad'}[debrief.goal.value] }}"><twig:Icon name="target" />{{ debrief.goal|trans }}</span>{% endif %}
+                <span class="badge {{ debrief.nextStep ? 'good' : 'bad' }}">{{ (debrief.nextStep ? 'debrief.next_step' : 'debrief.no_next_step')|trans }}</span>
+                <span class="badge">{{ 'debrief.uncovered'|trans({'%n%': call.revealedCount, '%total%': call.briefSheet|length}) }}</span>
+                <span class="badge">{{ scenario.difficulty|trans }}</span>
+            </div>
+            <p>{{ debrief.summary }}</p>
+            {% if debrief.outcome %}<p class="small muted">{{ debrief.outcome }}</p>{% endif %}
+        </div>
+    </div>
+
+    <div class="cols-2">
+        <section class="card">
+            <div class="card-head"><h2><twig:Icon name="award" />{{ 'debrief.criteria'|trans }}</h2></div>
+            {% for criterion in debrief.criteria %}
+                <div class="criterion">
+                    <b>{{ criterion.label }}</b>
+                    <twig:Score :value="criterion.score * 10" />
+                    <div class="bar {{ criterion.score >= 7 ? 'good' }}"><i style="width: {{ criterion.score * 10 }}%"></i></div>
+                    <p>{{ criterion.comment }}</p>
+                </div>
+            {% endfor %}
+        </section>
+        <div class="stack" style="--gap:18px">
+            {% if debrief.objectives %}
+                <section class="card">
+                    <div class="card-head"><h2><twig:Icon name="target" />{{ 'debrief.objectives'|trans }}</h2></div>
+                    <div class="list">
+                        {% for objective in debrief.objectives %}
+                            <div class="list-item" style="align-items:flex-start">
+                                <span class="badge {{ {reached: 'good', partial: 'warn', missed: 'bad'}[objective.status.value] }}">{{ objective.status|trans }}</span>
+                                <div><b>{{ objective.objective }}</b>{% if objective.evidence %}<div class="small muted">{{ objective.evidence }}</div>{% endif %}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+            {% if debrief.speech %}
+                {% set speech = debrief.speech %}
+                <section class="card">
+                    <div class="card-head"><h2><twig:Icon name="{{ speech.voice ? 'mic' : 'message' }}" />{{ 'debrief.figures'|trans }}</h2></div>
+                    <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">
+                        <twig:Stat :label="'debrief.talk_share'|trans" :value="speech.talkShare" suffix="%" />
+                        <twig:Stat :label="'debrief.questions'|trans({'%open%': speech.openQuestions})" :value="speech.questions" />
+                        <twig:Stat :label="'debrief.fillers'|trans" :value="speech.fillers" />
+                        {% if speech.wordsPerMinute %}<twig:Stat :label="'debrief.wpm'|trans" :value="speech.wordsPerMinute" />{% endif %}
+                    </div>
+                    {% if debrief.speechComment %}<p class="small muted" style="margin-top:12px">{{ debrief.speechComment }}</p>{% endif %}
+                </section>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <twig:Empty icon="clock" :title="'debrief.pending'|trans" />
+{% endif %}
+
+{% if call.status.value in ['done', 'abandoned'] %}
+    {% set missed = {} %}
+    {% for item in debrief.missed ?? [] %}{% set missed = missed|merge({(item.section.value): item}) %}{% endfor %}
+    <section class="card">
+        <div class="card-head"><h2><twig:Icon name="key" />{{ 'debrief.brief'|trans({'%name%': persona.name}) }}</h2></div>
+        {% if scenario.setup %}<p class="small" style="margin-bottom:10px"><b>{{ 'debrief.their_side'|trans }}</b> {{ scenario.setup }}</p>{% endif %}
+        <div class="list">
+            {% for item in call.briefSheet %}
+                <div class="list-item" style="align-items:flex-start">
+                    <span class="badge {{ item.found ? 'good' : 'bad' }}"><twig:Icon name="{{ item.found ? 'check' : 'x' }}" />{{ (item.found ? 'debrief.found' : 'debrief.missed')|trans }}</span>
+                    <div>
+                        <b>{{ item.section|trans }}</b> — {{ item.text }}
+                        {% if not item.found and missed[item.section.value] is defined %}<div class="small muted" style="margin-top:4px">💡 {{ missed[item.section.value].how }}</div>{% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+
+{% if debrief and call.status.value == 'done' %}
+    <div class="cols-2">
+        <section class="card">
+            <div class="card-head"><h2><twig:Icon name="trophy" />{{ 'debrief.best'|trans }}</h2></div>
+            <div class="stack" style="--gap:12px">
+                {% for quote in debrief.best %}<div class="quote good"><q>{{ quote.quote }}</q><div class="small muted">{{ quote.why }}</div></div>{% else %}<p class="muted">{{ 'debrief.no_best'|trans }}</p>{% endfor %}
+            </div>
+        </section>
+        <section class="card">
+            <div class="card-head"><h2><twig:Icon name="refresh" />{{ 'debrief.worst'|trans }}</h2></div>
+            <div class="stack" style="--gap:12px">
+                {% for quote in debrief.worst %}
+                    <div class="quote bad">
+                        <q>{{ quote.quote }}</q><div class="small muted">{{ quote.why }}</div>
+                        {% if quote.better %}<div class="small" style="margin-top:4px">👉 <i>{{ quote.better }}</i></div>{% endif %}
+                        {% set line = (mine ?? false) ? call.lineOf(quote.quote) : null %}
+                        {% if line is not null %}
+                            <form method="post" action="{{ path('call_replay', {id: call.id, n: line}) }}" style="margin-top:8px">
+                                <input type="hidden" name="_token" value="{{ csrf_token('replay-' ~ call.id) }}">
+                                <button class="btn sm"><twig:Icon name="rewind" />{{ 'debrief.replay_moment'|trans }}</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% else %}<p class="muted">{{ 'debrief.no_worst'|trans }}</p>{% endfor %}
+            </div>
+        </section>
+    </div>
+    <section class="card hero pad-l">
+        <h2 style="color:#fff;margin-bottom:12px"><twig:Icon name="sparkles" /> {{ 'debrief.tips'|trans }}</h2>
+        <ol class="objectives" style="color:#fff">{% for tip in debrief.tips %}<li>{{ tip }}</li>{% endfor %}</ol>
+    </section>
+{% endif %}
+</div>
