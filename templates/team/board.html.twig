@@ -1,0 +1,87 @@
+{# The team board: members and their figures, results by situation, missions, invitations, latest calls. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'nav.team'|trans }}{% endblock %}
+{% block body %}
+<header class="page-head">
+    <div><h1>{{ 'team.title'|trans }}</h1><p>{{ 'team.lead'|trans }}</p></div>
+    <a class="btn primary" href="#invitations"><twig:Icon name="plus" />{{ 'team.invite'|trans }}</a>
+</header>
+
+<section class="card flush">
+    <div class="table-wrap"><table>
+        <thead><tr><th>{{ 'team.member'|trans }}</th><th>{{ 'progress.level'|trans }}</th><th>{{ 'progress.calls'|trans }}</th><th>{{ 'progress.average'|trans }}</th><th>{{ 'progress.trend'|trans }}</th><th>{{ 'team.to_work_on'|trans }}</th><th>{{ 'team.last_call'|trans }}</th></tr></thead>
+        <tbody>
+            {% for row in board.members %}
+                {% set m = row.member %}{% set s = row.stats %}
+                <tr>
+                    <td><a class="row" href="{{ path('team_member', {id: m.id}) }}" style="text-decoration:none;flex-wrap:nowrap"><twig:Avatar :initials="m.initials" :name="m.name" /><span><b>{{ m.name }}</b><span class="tiny faint" style="display:block">{{ m.role|trans }}</span></span></a></td>
+                    <td><span class="badge accent">{{ s.level.number }} · {{ s.level.name|trans }}</span></td>
+                    <td>{{ s.done }}</td>
+                    <td><twig:Score :value="s.average" /></td>
+                    <td>{% if s.trend is not null %}<span class="score {{ s.trend >= 0 ? 'good' : 'bad' }}">{{ s.trend >= 0 ? '▲' : '▼' }} {{ s.trend|abs }}</span>{% else %}<span class="faint">—</span>{% endif %}</td>
+                    <td class="small">{{ s.weakest ? s.criteria[s.weakest].label : '—' }}</td>
+                    <td class="small nowrap">{{ row.lastAt|day }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table></div>
+</section>
+
+<div class="cols-2" style="margin-top:20px">
+    <section class="card" id="missions">
+        <div class="card-head"><h2><twig:Icon name="target" />{{ 'team.missions'|trans }}</h2></div>
+        {% if missions %}
+            <div class="list" style="margin-bottom:16px">
+                {% for row in missions %}
+                    {% set mission = row.mission %}
+                    {% set situation = company().situation(mission.situation) %}
+                    <div class="list-item" style="align-items:flex-start">
+                        <div style="flex:1">
+                            <b>{{ 'play.mission_calls'|trans({'%count%': mission.calls, '%situation%': situation ? situation.emoji ~ ' ' ~ situation.label : 'play.any_situation'|trans}) }}</b>
+                            <div class="small muted">{{ mission.assignee ? mission.assignee.name : 'form.mission.whole_team'|trans }} · {{ 'play.mission_target'|trans({'%score%': mission.target}) }}{% if mission.dueAt %} · {{ 'play.mission_due'|trans({'%date%': mission.dueAt|day}) }}{% endif %}</div>
+                            <div class="chips" style="margin-top:6px">{% for p in row.members %}<span class="chip {{ p.done >= mission.calls ? 'good' }}">{{ p.member.name }} {{ p.done }}/{{ mission.calls }}</span>{% endfor %}</div>
+                        </div>
+                        <form method="post" action="{{ path('team_mission_remove', {id: mission.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('mission-' ~ mission.id) }}"><button class="btn ghost sm" title="{{ 'action.remove'|trans }}"><twig:Icon name="trash" /></button></form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <details {{ missions ? '' : 'open' }}>
+            <summary class="btn sm"><twig:Icon name="plus" />{{ 'team.new_mission'|trans }}</summary>
+            {{ form_start(missionForm, {attr: {class: 'form', style: 'margin-top:14px'}}) }}
+                <div class="cols-2">{{ form_row(missionForm.assignee) }}{{ form_row(missionForm.situation) }}</div>
+                <div class="cols-3">{{ form_row(missionForm.calls) }}{{ form_row(missionForm.target) }}{{ form_row(missionForm.dueAt) }}</div>
+                {{ form_row(missionForm.note) }}
+                <div class="row end"><button class="btn primary">{{ 'team.give_mission'|trans }}</button></div>
+            {{ form_end(missionForm) }}
+        </details>
+    </section>
+    <section class="card" id="invitations">
+        <div class="card-head"><h2><twig:Icon name="mail" />{{ 'team.invitations'|trans }}</h2></div>
+        {% if invitations %}<div style="margin-bottom:16px">{{ include('team/_invitations.html.twig') }}</div>{% endif %}
+        {{ form_start(inviteForm, {attr: {class: 'form'}}) }}
+            {{ form_rest(inviteForm) }}
+            <div class="row end"><button class="btn primary">{{ 'team.create_links'|trans }}</button></div>
+        {{ form_end(inviteForm) }}
+    </section>
+</div>
+
+<div class="cols-2" style="margin-top:20px">
+    <section class="card flush">
+        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="sparkles" />{{ 'progress.by_situation'|trans }}</h2></div>
+        {% if board.situations %}
+            <div class="table-wrap"><table><tbody>{% for row in board.situations %}<tr><td>{{ row.emoji }} {{ row.label }}</td><td class="small muted">{{ 'play.calls'|trans({'%count%': row.calls}) }}</td><td><twig:Score :value="row.average" /></td></tr>{% endfor %}</tbody></table></div>
+        {% else %}<twig:Empty icon="chart" :title="'progress.no_scores'|trans" />{% endif %}
+    </section>
+    <section class="card flush">
+        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="clock" />{{ 'team.latest'|trans }}</h2></div>
+        {% if board.recent %}
+            <div class="list" style="margin-top:8px">
+                {% for call in board.recent %}
+                    <a class="list-item" href="{{ path('call_show', {id: call.id}) }}"><twig:Avatar :initials="call.member.initials" :name="call.member.name" /><span style="flex:1;min-width:0"><b>{{ call.member.name }}</b><span class="small muted" style="display:block">{{ call.scenario.title }} · {{ call.startedAt|moment }}</span></span>{% if call.score is not null %}<twig:Score :value="call.score" />{% else %}<twig:Status :call="call" />{% endif %}</a>
+                {% endfor %}
+            </div>
+        {% else %}<twig:Empty icon="phone" :title="'play.no_calls'|trans" />{% endif %}
+    </section>
+</div>
+{% endblock %}

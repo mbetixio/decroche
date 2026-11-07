@@ -1,0 +1,30 @@
+{# One member's figures, for their managers, with their role and a new password if needed. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ member.name }}{% endblock %}
+{% block body %}
+<header class="page-head">
+    <div class="row" style="--gap:16px">
+        <twig:Avatar :initials="member.initials" :name="member.name" size="lg" />
+        <div><a class="eyebrow" href="{{ path('team') }}" style="text-decoration:none">← {{ 'nav.team'|trans }}</a><h1>{{ member.name }}</h1><p>{{ member.email }} · {{ member.role|trans }}</p></div>
+    </div>
+    <div class="row">
+        {% if member != app.user %}
+            <form method="post" action="{{ path('team_role', {id: member.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('role-' ~ member.id) }}"><button class="btn">{{ (member.isManager ? 'team.make_seller' : 'team.make_manager')|trans }}</button></form>
+            <form method="post" action="{{ path('team_password', {id: member.id}) }}" onsubmit="return confirm(this.dataset.confirm)" data-confirm="{{ 'team.reset_confirm'|trans }}"><input type="hidden" name="_token" value="{{ csrf_token('password-' ~ member.id) }}"><button class="btn ghost"><twig:Icon name="key" />{{ 'team.reset_password'|trans }}</button></form>
+        {% endif %}
+    </div>
+</header>
+{% if password is defined %}
+    <div class="card" style="margin-bottom:20px;border-color:var(--warn)" data-controller="copy">
+        <p><b>{{ 'team.new_password'|trans }}</b> {{ 'team.new_password_help'|trans }}</p>
+        <div class="row" style="margin-top:10px;flex-wrap:nowrap"><input readonly class="mono" value="{{ password }}" data-copy-target="source"><button type="button" class="btn sm" data-action="copy#copy"><twig:Icon name="copy" /><span data-copy-target="label">{{ 'action.copy'|trans }}</span></button></div>
+    </div>
+{% endif %}
+{% if member.profile %}<section class="card" style="margin-bottom:20px"><div class="label small">{{ 'form.profile'|trans }}</div><p class="pre small" style="margin-top:6px">{{ member.profile }}</p></section>{% endif %}
+{% if missions %}
+    <div class="chips" style="margin-bottom:20px">
+        {% for row in missions %}<span class="chip">🎯 {{ row.done }}/{{ row.mission.calls }}{{ row.mission.situation ? ' · ' ~ (company().situation(row.mission.situation).label ?? '') }}</span>{% endfor %}
+    </div>
+{% endif %}
+{{ include('progress/_stats.html.twig') }}
+{% endblock %}

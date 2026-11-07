@@ -1,0 +1,9 @@
+{# The company settings' header and tabs. #}
+<header class="page-head">
+    <div><h1>{{ 'settings.title'|trans }}</h1><p>{{ 'settings.lead'|trans }}</p></div>
+</header>
+<nav class="chips" style="margin-bottom:22px">
+    <a class="chip" href="{{ path('settings') }}" {{ tab == 'company' ? 'aria-current="true"' }}><twig:Icon name="building" />{{ 'settings.tab.company'|trans }}</a>
+    <a class="chip" href="{{ path('settings_situations') }}" {{ tab == 'situations' ? 'aria-current="true"' }}><twig:Icon name="phone" />{{ 'settings.tab.situations'|trans }}</a>
+    <a class="chip" href="{{ path('settings_scorecard') }}" {{ tab == 'scorecard' ? 'aria-current="true"' }}><twig:Icon name="award" />{{ 'settings.tab.scorecard'|trans }}</a>
+</nav>

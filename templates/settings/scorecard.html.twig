@@ -1,0 +1,11 @@
+{# The scorecard the coach grades every call against. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'settings.title'|trans }}{% endblock %}
+{% block body %}
+{{ include('settings/_tabs.html.twig') }}
+{{ form_start(form, {attr: {class: 'stack'}}) }}
+    {{ form_errors(form) }}
+    {{ include('settings/_scorecard.html.twig') }}
+    <div class="row end"><button class="btn primary lg">{{ 'action.save'|trans }}</button></div>
+{{ form_end(form) }}
+{% endblock %}

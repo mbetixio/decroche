@@ -1,0 +1,25 @@
+{# The company: its identity, and the offer sheet the personas and the coach know. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'settings.title'|trans }}{% endblock %}
+{% block body %}
+{{ include('settings/_tabs.html.twig') }}
+<div class="cols-2">
+    {{ form_start(identityForm, {attr: {class: 'form card pad-l', style: 'align-content:start'}}) }}
+        <h2>{{ 'settings.identity'|trans }}</h2>
+        {{ form_rest(identityForm) }}
+        <div class="row end"><button class="btn primary">{{ 'action.save'|trans }}</button></div>
+    {{ form_end(identityForm) }}
+    <div class="stack" id="offer" style="--gap:18px">
+        {{ form_start(offerForm, {attr: {class: 'form card pad-l'}}) }}
+            <h2>{{ 'settings.offer'|trans }}</h2>
+            {{ form_rest(offerForm) }}
+            <div class="row end"><button class="btn primary">{{ 'action.save'|trans }}</button></div>
+        {{ form_end(offerForm) }}
+        <form method="post" action="{{ path('settings_analyze') }}" class="card row between" onsubmit="this.querySelector('button').disabled = true">
+            <div><b>{{ 'settings.reanalyze'|trans }}</b><p class="small muted">{{ 'settings.reanalyze_help'|trans }}{% if company().analyzedAt %} {{ 'settings.analyzed_at'|trans({'%date%': company().analyzedAt|day}) }}{% endif %}</p></div>
+            <input type="hidden" name="_token" value="{{ csrf_token('settings-analyze') }}">
+            <button class="btn"><twig:Icon name="refresh" />{{ 'settings.reanalyze_button'|trans }}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

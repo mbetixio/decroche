@@ -1,0 +1,42 @@
+{# The member's account: profile, password, and their MCP address. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'account.title'|trans }}{% endblock %}
+{% block body %}
+<header class="page-head">
+    <div class="row" style="--gap:16px">
+        <twig:Avatar :initials="app.user.initials" :name="app.user.name" size="lg" />
+        <div><h1>{{ app.user.name }}</h1><p>{{ app.user.email }} · {{ app.user.role|trans }}</p></div>
+    </div>
+    <a class="btn" href="{{ path('profile') }}"><twig:Icon name="user" />{{ 'account.edit_profile'|trans }}</a>
+</header>
+<div class="cols-2">
+    <section class="card pad-l stack" style="--gap:14px">
+        <h2><twig:Icon name="sparkles" />{{ 'account.mcp_title'|trans }}</h2>
+        <p class="small muted">{{ 'account.mcp_lead'|trans }}</p>
+        {% if key %}
+            <div class="stack" style="--gap:8px" data-controller="copy">
+                <div class="label small">{{ 'account.mcp_url'|trans }}</div>
+                <div class="row" style="flex-wrap:nowrap"><input readonly class="mono" value="{{ url('_mcp_endpoint_sparring') }}?key={{ key }}" data-copy-target="source"><button type="button" class="btn sm" data-action="copy#copy"><twig:Icon name="copy" /><span data-copy-target="label">{{ 'action.copy'|trans }}</span></button></div>
+                <p class="tiny" style="color:var(--warn)">{{ 'account.mcp_once'|trans }}</p>
+            </div>
+        {% endif %}
+        <form method="post" action="{{ path('account_mcp_key') }}" {% if app.user.mcpKeyHash %}onsubmit="return confirm(this.dataset.confirm)" data-confirm="{{ 'account.mcp_replace_confirm'|trans }}"{% endif %}>
+            <input type="hidden" name="_token" value="{{ csrf_token('mcp-key') }}">
+            <button class="btn {{ key ? '' : 'primary' }}"><twig:Icon name="key" />{{ (app.user.mcpKeyHash ? 'account.mcp_new' : 'account.mcp_create')|trans }}</button>
+        </form>
+        <details class="small">
+            <summary class="muted" style="cursor:pointer">{{ 'account.mcp_how'|trans }}</summary>
+            <ol class="objectives" style="margin-top:10px">
+                <li>{{ 'account.mcp_step1'|trans }}</li>
+                <li>{{ 'account.mcp_step2'|trans }}</li>
+                <li>{{ 'account.mcp_step3'|trans }}</li>
+            </ol>
+        </details>
+    </section>
+    {{ form_start(form, {attr: {class: 'form card pad-l', style: 'align-content:start'}}) }}
+        <h2><twig:Icon name="key" />{{ 'account.password'|trans }}</h2>
+        {{ form_rest(form) }}
+        <div class="row end"><button class="btn primary">{{ 'account.change_password'|trans }}</button></div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

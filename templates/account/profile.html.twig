@@ -1,0 +1,18 @@
+{# Who the member is: every call is adapted to them. Asked once on arrival, editable since. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'account.profile_title'|trans }}{% endblock %}
+{% block body %}
+<header class="page-head">
+    <div><h1>{{ (first ? 'account.profile_first' : 'account.profile_title')|trans }}</h1><p>{{ 'account.profile_lead'|trans({'%company%': company().name}) }}</p></div>
+</header>
+<div class="cols-main">
+    {{ form_start(form, {attr: {class: 'form card pad-l'}}) }}
+        {{ form_rest(form) }}
+        <div class="row end"><button class="btn primary lg">{{ (first ? 'account.start' : 'action.save')|trans }}</button></div>
+    {{ form_end(form) }}
+    <aside class="card stack" style="--gap:10px;align-content:start">
+        <h2><twig:Icon name="sparkles" />{{ 'account.why_title'|trans }}</h2>
+        <p class="small muted">{{ 'account.why'|trans }}</p>
+    </aside>
+</div>
+{% endblock %}
