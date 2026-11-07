@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Enum\Language;
 use App\Model\Criterion;
+use App\Onboarding\OnboardingStep;
 use App\Model\Situation;
 use App\Repository\CompanyRepository;
 use Doctrine\DBAL\Types\Types;
@@ -19,9 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
 class Company
 {
-    /** The onboarding steps, in order; the company remembers the furthest one reached. */
-    public const array STEPS = ['welcome', 'account', 'company', 'analysis', 'offer', 'situations', 'scorecard', 'team', 'done'];
-
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     public private(set) ?int $id = null;
 
@@ -60,8 +58,8 @@ class Company
     public ?\DateTimeImmutable $analyzedAt = null;
 
     /** The furthest onboarding step reached. */
-    #[ORM\Column(length: 20)]
-    public private(set) string $step = 'welcome';
+    #[ORM\Column(enumType: OnboardingStep::class, length: 20)]
+    public private(set) OnboardingStep $step = OnboardingStep::Welcome;
 
     /** When the onboarding was completed; until then, the instance only shows the onboarding. */
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
@@ -175,20 +173,24 @@ class Company
     /**
      * Records that the onboarding reached this step (it never goes back).
      */
-    public function reach(string $step): void
+    public function reach(OnboardingStep $step): void
     {
-        $index = array_search($step, self::STEPS, true);
-        if (false === $index) {
-            throw new \InvalidArgumentException(\sprintf('Unknown onboarding step "%s".', $step));
-        }
-        if ($index > (int) array_search($this->step, self::STEPS, true)) {
+        if ($step->index() > $this->step->index()) {
             $this->step = $step;
         }
     }
 
+    /**
+     * Whether the onboarding already reached this step (it can be revisited).
+     */
+    public function hasReached(OnboardingStep $step): bool
+    {
+        return $step->index() <= $this->step->index();
+    }
+
     public function completeOnboarding(\DateTimeImmutable $now): void
     {
-        $this->step = 'done';
+        $this->step = OnboardingStep::Done;
         $this->onboardedAt = $now;
     }
 }
