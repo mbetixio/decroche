@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 /**
  * How hard the persona is to convince. It never makes them colder: their tone does that.
  */
-enum Difficulty: int
+enum Difficulty: int implements TranslatableInterface
 {
     case Easy = 1;
     case Demanding = 2;
     case Tough = 3;
 
-    public function label(): string
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
     {
-        return match ($this) {
-            self::Easy => 'Accessible',
-            self::Demanding => 'Exigeant',
-            self::Tough => 'Coriace',
-        };
+        return $translator->trans('enum.difficulty.'.$this->value, locale: $locale);
     }
 
     /**
@@ -40,9 +39,9 @@ enum Difficulty: int
     public function instruction(): string
     {
         return match ($this) {
-            self::Easy => 'Côté difficulté : tu es plutôt ouvert. Si le commercial s\'intéresse vraiment à toi, tu parles volontiers de ta situation et tu te laisses convaincre par une proposition qui tient la route.',
-            self::Demanding => 'Côté difficulté : tu as besoin d\'être convaincu. Tu discutes volontiers, mais l\'essentiel (tes vrais enjeux, ton budget, qui décide) ne sort que si le commercial creuse avec de bonnes questions ; un discours tout fait te laisse poli mais pas intéressé.',
-            self::Tough => 'Côté difficulté : tu es difficile à convaincre. Tu as déjà entendu beaucoup de commerciaux, tu as des objections solides et peu de temps ; tu ne t\'ouvres que si le commercial t\'écoute vraiment, comprend ton problème et répond juste. Exigeant ne veut pas dire désagréable : tu restes humain.',
+            self::Easy => 'Difficulty: you are rather open. If the seller is genuinely interested in you, you gladly talk about your situation and let yourself be convinced by a proposal that holds up.',
+            self::Demanding => 'Difficulty: you need to be convinced. You chat willingly, but the essentials (your real stakes, your budget, who decides) only come out if the seller digs with good questions; a canned pitch leaves you polite but uninterested.',
+            self::Tough => 'Difficulty: you are hard to convince. You have heard many sellers, you have solid objections and little time; you only open up if the seller really listens, understands your problem and answers to the point. Demanding does not mean unpleasant: you stay human.',
         };
     }
 

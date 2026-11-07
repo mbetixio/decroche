@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 /**
  * How far a call reached one of its objectives.
  */
-enum ObjectiveStatus: string
+enum ObjectiveStatus: string implements TranslatableInterface
 {
-    case Reached = 'atteint';
-    case Partial = 'partiel';
-    case Missed = 'manqué';
+    case Reached = 'reached';
+    case Partial = 'partial';
+    case Missed = 'missed';
+
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
+    {
+        return $translator->trans('enum.objective_status.'.$this->value, locale: $locale);
+    }
 
     /**
      * Its weight in the score: a reached objective counts fully, a partial one half.
@@ -37,10 +45,16 @@ enum ObjectiveStatus: string
         };
     }
 
+    /**
+     * Reads a status written by the model, in English or French.
+     */
     public static function fromModel(mixed $value): self
     {
-        return self::tryFrom(\is_string($value) ? mb_strtolower(trim($value)) : '') ?? match (true) {
-            \is_string($value) && str_starts_with(mb_strtolower($value), 'manqu') => self::Missed,
+        $value = \is_string($value) ? mb_strtolower(trim($value)) : '';
+
+        return match (true) {
+            str_starts_with($value, 'reach'), str_starts_with($value, 'atteint') => self::Reached,
+            str_starts_with($value, 'partial'), str_starts_with($value, 'partiel') => self::Partial,
             default => self::Missed,
         };
     }

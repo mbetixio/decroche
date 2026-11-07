@@ -9,47 +9,59 @@ namespace App\Enum;
  */
 enum Tone: string
 {
-    case Warm = 'chaleureux';
-    case Enthusiastic = 'enthousiaste';
+    case Warm = 'warm';
+    case Enthusiastic = 'enthusiastic';
     case Direct = 'direct';
-    case Relaxed = 'detendu';
-    case Careful = 'prudent';
-    case Busy = 'presse';
-    case Curious = 'curieux';
-    case Wary = 'mefiant';
-    case Stressed = 'stresse';
-    case Worried = 'inquiet';
-    case Angry = 'fache';
-    case LetDown = 'decu';
+    case Relaxed = 'relaxed';
+    case Careful = 'careful';
+    case Busy = 'busy';
+    case Curious = 'curious';
+    case Wary = 'wary';
+    case Stressed = 'stressed';
+    case Worried = 'worried';
+    case Angry = 'angry';
+    case LetDown = 'let_down';
 
-    /** Situations that call for another tone than everyday ones (an unhappy client is not relaxed). */
+    /** Situations that call for another tone than everyday ones (an unhappy client is not relaxed), by key. */
     private const array BY_SITUATION = [
         'client_mecontent' => [self::Angry, self::Angry, self::LetDown, self::Stressed],
+        'unhappy_client' => [self::Angry, self::Angry, self::LetDown, self::Stressed],
         'depart_dev' => [self::Worried, self::Stressed, self::Angry],
+        'key_developer_leaving' => [self::Worried, self::Stressed, self::Angry],
         'resiliation' => [self::LetDown, self::Direct, self::Careful, self::Angry],
+        'client_wants_to_stop' => [self::LetDown, self::Direct, self::Careful, self::Angry],
         'echaude_offshore' => [self::Wary, self::LetDown, self::Careful],
+        'burnt_by_offshore' => [self::Wary, self::LetDown, self::Careful],
         'urgence' => [self::Stressed, self::Busy],
+        'developers_by_monday' => [self::Stressed, self::Busy],
         'depart_cto' => [self::Worried, self::Stressed, self::Direct],
+        'cto_leaving' => [self::Worried, self::Stressed, self::Direct],
         'suivi_projet' => [self::Warm, self::Direct, self::LetDown, self::Relaxed],
+        'project_check_in' => [self::Warm, self::Direct, self::LetDown, self::Relaxed],
         'renouvellement' => [self::Direct, self::Careful, self::Busy],
+        'renewal_discount' => [self::Direct, self::Careful, self::Busy],
         'barrage' => [self::Warm, self::Busy, self::Careful, self::Direct],
+        'gatekeeper' => [self::Warm, self::Busy, self::Careful, self::Direct],
     ];
 
-    public function label(): string
+    /**
+     * Their state of mind, in English, for the model's instructions.
+     */
+    public function describe(): string
     {
         return match ($this) {
-            self::Warm => 'chaleureux et bavard, il aime raconter et met vite à l\'aise',
-            self::Enthusiastic => 'entrepreneur enthousiaste, plein d\'idées, il parle vite de sa vision',
-            self::Direct => 'direct et carré, il va droit au but mais reste correct',
-            self::Relaxed => 'sympa et détendu, il plaisante volontiers',
-            self::Careful => 'posé et prudent, il réfléchit avant de répondre et pose des questions',
-            self::Busy => 'pressé mais courtois, il est entre deux réunions',
-            self::Curious => 'curieux et technique, il aime comprendre comment ça marche',
-            self::Wary => 'méfiant mais ouvert si on l\'écoute vraiment',
-            self::Stressed => 'stressé par une échéance, un peu tendu',
-            self::Worried => 'inquiet, il cherche à être rassuré',
-            self::Angry => 'fâché, il ne décolère pas et le fait entendre, sans être grossier',
-            self::LetDown => 'déçu et un peu las, il y avait cru',
+            self::Warm => 'warm and chatty, they like telling stories and quickly put people at ease',
+            self::Enthusiastic => 'an enthusiastic founder, full of ideas, talking fast about their vision',
+            self::Direct => 'direct and straightforward, they get to the point but stay polite',
+            self::Relaxed => 'friendly and relaxed, they joke easily',
+            self::Careful => 'calm and careful, they think before answering and ask questions',
+            self::Busy => 'busy but courteous, between two meetings',
+            self::Curious => 'curious and technical, they like to understand how things work',
+            self::Wary => 'wary, but open if really listened to',
+            self::Stressed => 'stressed by a deadline, a little tense',
+            self::Worried => 'worried, looking to be reassured',
+            self::Angry => 'angry, still fuming and letting it show, without being rude',
+            self::LetDown => 'disappointed and a little weary, they had believed in it',
         };
     }
 
@@ -59,13 +71,12 @@ enum Tone: string
     public function rate(): string
     {
         return match ($this) {
-            self::Warm => '+8%',
+            self::Warm, self::Wary => '+8%',
             self::Enthusiastic, self::Stressed => '+18%',
             self::Direct => '+14%',
             self::Relaxed, self::Curious, self::Worried => '+10%',
             self::Careful => '+4%',
             self::Busy, self::Angry => '+20%',
-            self::Wary => '+8%',
             self::LetDown => '+2%',
         };
     }
@@ -96,7 +107,7 @@ enum Tone: string
     public static function forSituation(string $key): array
     {
         return self::BY_SITUATION[$key]
-            ?? (preg_match('/mecontent|resili|plainte|litige|insatisf|colere|reclam|retard|incident/', $key)
+            ?? (preg_match('/mecontent|unhappy|angry|resili|cancel|churn|plainte|complaint|insatisf|colere|reclam|retard|late|delay|incident|outage/', $key)
                 ? [self::Angry, self::LetDown, self::Stressed, self::Worried]
                 : [self::Warm, self::Warm, self::Enthusiastic, self::Direct, self::Direct, self::Relaxed, self::Relaxed, self::Careful, self::Busy, self::Curious, self::Wary]);
     }

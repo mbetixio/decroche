@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 /**
  * What a member may do in their company's workspace.
  */
-enum MemberRole: string
+enum MemberRole: string implements TranslatableInterface
 {
     /** Practises calls and follows their own progress. */
     case Seller = 'seller';
@@ -15,12 +18,9 @@ enum MemberRole: string
     /** Also runs the workspace: offer sheet, situations, scorecard, team, invitations, missions. */
     case Manager = 'manager';
 
-    public function label(): string
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
     {
-        return match ($this) {
-            self::Seller => 'commercial',
-            self::Manager => 'manager',
-        };
+        return $translator->trans('enum.member_role.'.$this->value, locale: $locale);
     }
 
     /**
