@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Ai\Data;
 use App\Enum\BriefSection;
 use App\Enum\Difficulty;
 use App\Enum\MeetingType;
@@ -127,7 +128,7 @@ class Scenario
 
     public function situation(): ?Situation
     {
-        return null === $this->situation ? null : Situation::fromArray((string) ($this->situation['key'] ?? ''), $this->situation);
+        return null === $this->situation ? null : Situation::fromArray(Data::string($this->situation['key'] ?? ''), $this->situation);
     }
 
     public function setSituation(?Situation $situation): void

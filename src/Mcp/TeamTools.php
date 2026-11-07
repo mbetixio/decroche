@@ -56,7 +56,7 @@ final readonly class TeamTools
             ], $board['members']),
             'situations' => $board['situations'],
             'missions' => array_map(static fn (array $row): array => [
-                'id' => $row['mission']->id, 'for' => $row['mission']->assignee?->name ?? 'everyone', 'situation' => $row['mission']->situation,
+                'id' => $row['mission']->id, 'for' => $row['mission']->assignee->name ?? 'everyone', 'situation' => $row['mission']->situation,
                 'calls' => $row['mission']->calls, 'target_score' => $row['mission']->target, 'due' => $row['mission']->dueAt?->format('Y-m-d'),
                 'progress' => array_map(static fn (array $p): string => $p['member']->name.': '.$p['done'].'/'.$row['mission']->calls, $row['members']),
             ], $this->missions->team()),
@@ -100,7 +100,7 @@ final readonly class TeamTools
         }
         $mission = $this->missionManager->give('' !== $email ? $this->member($email) : null, '' !== $situation ? $situation : null, max(1, min(20, $calls)), max(0, min(100, $target)), $dueAt, $note, $manager);
 
-        return ['mission' => $mission->id, 'for' => $mission->assignee?->name ?? 'everyone', 'calls' => $mission->calls, 'target_score' => $mission->target, 'due' => $mission->dueAt?->format('Y-m-d')];
+        return ['mission' => $mission->id, 'for' => $mission->assignee->name ?? 'everyone', 'calls' => $mission->calls, 'target_score' => $mission->target, 'due' => $mission->dueAt?->format('Y-m-d')];
     }
 
     /**

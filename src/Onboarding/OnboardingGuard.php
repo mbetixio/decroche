@@ -42,7 +42,7 @@ final readonly class OnboardingGuard
     public function __invoke(RequestEvent $event): void
     {
         $request = $event->getRequest();
-        $route = (string) $request->attributes->get('_route');
+        $route = $request->attributes->getString('_route');
         if (!$event->isMainRequest() || '' === $route || str_starts_with($route, '_') || \in_array($route, self::ALWAYS_OPEN, true) || str_starts_with($request->getPathInfo(), '/mcp')) {
             return;
         }

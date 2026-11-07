@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Ai\Data;
 use App\Ai\ModelException;
 use App\Call\CallException;
 use App\Call\CallManager;
@@ -106,7 +107,8 @@ final class CallController extends AbstractController
             $events = $streamer->stream($call, \is_string($body['message'] ?? null) ? $body['message'] : '', $voiceMs, true === ($body['interrupted'] ?? false), '1' !== $request->query->get('browserVoice'));
         } catch (CallException $e) {
             return new JsonResponse(['error' => $this->translator->trans($e->getMessage()), 'ended' => !$call->isLive()], Response::HTTP_BAD_REQUEST);
-        } catch (ModelException|\Throwable) {
+        } catch (\Throwable) {
+            // The model is unreachable or failed: the seller says it again.
             return new JsonResponse(['error' => $this->translator->trans('call.error.unreachable')], Response::HTTP_BAD_GATEWAY);
         }
         // The session is released: the rest of the site answers while the persona speaks.
@@ -125,7 +127,7 @@ final class CallController extends AbstractController
             }
             foreach ($events as $event) {
                 if ('error' === $event['t']) {
-                    $event['error'] = $translator->trans($event['error']);
+                    $event['error'] = $translator->trans(Data::string($event['error']));
                 }
                 echo json_encode($event, \JSON_UNESCAPED_UNICODE)."\n";
                 flush();

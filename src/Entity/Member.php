@@ -94,13 +94,13 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->email;
+        return '' !== $this->email ? $this->email : throw new \LogicException('A member always has an e-mail address.');
     }
 
     /**
      * Never store the password hash in the session: only a hash of it, so that changing it logs other sessions out.
      *
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function __serialize(): array
     {

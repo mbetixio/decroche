@@ -7,6 +7,7 @@ namespace App\Mcp;
 use App\Ai\ModelException;
 use App\Call\CallException;
 use App\Call\CallManager;
+use App\Call\Coach\Debrief;
 use App\Entity\Call;
 use App\Entity\Scenario;
 use App\Enum\CallStatus;
@@ -180,19 +181,19 @@ final readonly class CallTools
      */
     public static function summary(Call $call): array
     {
-        $d = $call->debrief ?? [];
+        $d = Debrief::fromArray($call->debrief ?? []);
 
         return [
             'call' => $call->id,
             'scenario' => $call->scenario->title,
             'score' => $call->score,
-            'result' => $d['result'] ?? '',
-            'criteria' => array_map(static fn (array $c): string => $c['score'].'/10 — '.$c['comment'], $d['criteria'] ?? []),
-            'goal' => $d['goal'] ?? null,
-            'objectives' => array_map(static fn (array $o): string => $o['status'].' — '.$o['objective'], $d['objectives'] ?? []),
-            'summary' => $d['summary'] ?? '',
-            'next_step_obtained' => $d['next_step'] ?? false,
-            'tips' => $d['tips'] ?? [],
+            'result' => $d->result,
+            'criteria' => array_map(static fn (array $c): string => $c['score'].'/10 — '.$c['comment'], $d->criteria),
+            'goal' => $d->goal?->value,
+            'objectives' => array_map(static fn (array $o): string => $o['status']->value.' — '.$o['objective'], $d->objectives),
+            'summary' => $d->summary,
+            'next_step_obtained' => $d->nextStep,
+            'tips' => $d->tips,
             'brief' => self::brief($call),
             'note' => 'Show the full debrief (the hidden brief, the quoted lines) with the debrief app.',
         ];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Call\Coach;
 
+use App\Ai\Data;
 use App\Call\Speech\SpeechFigures;
 use App\Enum\BriefSection;
 use App\Enum\ObjectiveStatus;
@@ -71,31 +72,32 @@ final readonly class Debrief
      */
     public static function fromArray(array $data): self
     {
-        $list = static fn (string $k): array => \is_array($data[$k] ?? null) ? array_values($data[$k]) : [];
-
-        /** @var array<string, array{label: string, score: int, comment: string}> $criteria */
-        $criteria = \is_array($data['criteria'] ?? null) ? $data['criteria'] : [];
-        /** @var list<array{quote: string, why: string}> $best */
-        $best = $list('best');
-        /** @var list<array{quote: string, why: string, better: string}> $worst */
-        $worst = $list('worst');
-        /** @var list<string> $tips */
-        $tips = $list('tips');
+        $criteria = [];
+        foreach (Data::map($data['criteria'] ?? null) as $key => $c) {
+            $c = Data::map($c);
+            $criteria[(string) $key] = ['label' => Data::string($c['label'] ?? ''), 'score' => Data::int($c['score'] ?? 0), 'comment' => Data::string($c['comment'] ?? '')];
+        }
+        $missed = [];
+        foreach (Data::rows($data['missed'] ?? null) as $m) {
+            if (null !== $section = BriefSection::tryFrom(Data::string($m['section'] ?? ''))) {
+                $missed[] = ['section' => $section, 'what' => Data::string($m['what'] ?? ''), 'how' => Data::string($m['how'] ?? '')];
+            }
+        }
 
         return new self(
             criteria: $criteria,
-            summary: (string) ($data['summary'] ?? ''),
-            nextStep: (bool) ($data['next_step'] ?? false),
-            outcome: (string) ($data['outcome'] ?? ''),
-            result: (string) ($data['result'] ?? ''),
-            objectives: array_map(static fn (array $o): array => ['objective' => (string) $o['objective'], 'status' => ObjectiveStatus::fromModel($o['status'] ?? ''), 'evidence' => (string) ($o['evidence'] ?? '')], $list('objectives')),
-            goal: ObjectiveStatus::tryFrom((string) ($data['goal'] ?? '')),
-            missed: array_values(array_filter(array_map(static fn (array $m): ?array => null !== ($s = BriefSection::tryFrom((string) ($m['section'] ?? ''))) ? ['section' => $s, 'what' => (string) ($m['what'] ?? ''), 'how' => (string) ($m['how'] ?? '')] : null, $list('missed')))),
-            best: $best,
-            worst: $worst,
-            tips: $tips,
+            summary: Data::string($data['summary'] ?? ''),
+            nextStep: true === ($data['next_step'] ?? false),
+            outcome: Data::string($data['outcome'] ?? ''),
+            result: Data::string($data['result'] ?? ''),
+            objectives: array_map(static fn (array $o): array => ['objective' => Data::string($o['objective'] ?? ''), 'status' => ObjectiveStatus::fromModel($o['status'] ?? ''), 'evidence' => Data::string($o['evidence'] ?? '')], Data::rows($data['objectives'] ?? null)),
+            goal: ObjectiveStatus::tryFrom(Data::string($data['goal'] ?? '')),
+            missed: $missed,
+            best: array_map(static fn (array $q): array => ['quote' => Data::string($q['quote'] ?? ''), 'why' => Data::string($q['why'] ?? '')], Data::rows($data['best'] ?? null)),
+            worst: array_map(static fn (array $q): array => ['quote' => Data::string($q['quote'] ?? ''), 'why' => Data::string($q['why'] ?? ''), 'better' => Data::string($q['better'] ?? '')], Data::rows($data['worst'] ?? null)),
+            tips: Data::strings($data['tips'] ?? null),
             speech: \is_array($data['speech'] ?? null) ? SpeechFigures::fromArray($data['speech']) : null,
-            speechComment: (string) ($data['speech_comment'] ?? ''),
+            speechComment: Data::string($data['speech_comment'] ?? ''),
         );
     }
 }

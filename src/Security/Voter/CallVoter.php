@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Who may see a call (its member, and managers following the team) and who may play it (its member only).
  *
- * @extends Voter<self::*, Call>
+ * @extends Voter<self::VIEW|self::PLAY, Call>
  */
 final class CallVoter extends Voter
 {

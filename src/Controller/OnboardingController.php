@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Ai\ModelException;
 use App\Company\DemoCompany;
 use App\Company\OfferAnalyst;
 use App\Company\SiteReader;
@@ -101,7 +100,8 @@ final class OnboardingController extends AbstractController
             $analyst->analyze($company);
         } catch (\InvalidArgumentException $e) {
             return new JsonResponse(['error' => $this->translator->trans($e->getMessage())], Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (ModelException|\Throwable) {
+        } catch (\Throwable) {
+            // The model or the website failed: the screen offers to try again.
             return new JsonResponse(['error' => $this->translator->trans('onboarding.analysis.failed')], Response::HTTP_BAD_GATEWAY);
         }
         $company->reach(OnboardingStep::Offer);
@@ -161,7 +161,8 @@ final class OnboardingController extends AbstractController
         $form = $this->createForm(LanguageType::class, ['language' => Language::tryFrom($request->getLocale()) ?? $company->language]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $company->language = $form->get('language')->getData();
+            $language = $form->get('language')->getData();
+            $company->language = $language instanceof Language ? $language : $company->language;
             $company->reach(OnboardingStep::Account);
             $this->em->flush();
 

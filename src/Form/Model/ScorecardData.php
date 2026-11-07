@@ -41,7 +41,7 @@ final class ScorecardData
             while (isset($criteria[$key])) {
                 $key .= '_';
             }
-            $criteria[$key] = new Criterion($key, trim($row['label']), trim($row['hint'] ?? ''));
+            $criteria[$key] = new Criterion($key, trim($row['label']), trim($row['hint']));
         }
 
         return array_values($criteria);

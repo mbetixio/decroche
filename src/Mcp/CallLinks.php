@@ -31,11 +31,6 @@ final readonly class CallLinks
         return $this->to($member, $this->urls->generate('call_briefing', ['id' => $scenario->id]));
     }
 
-    public function page(Member $member, string $route, array $parameters = []): string
-    {
-        return $this->to($member, $this->urls->generate($route, $parameters));
-    }
-
     private function to(Member $member, string $path): string
     {
         $url = $this->loginLinks->createLoginLink($member, lifetime: self::LIFETIME)->getUrl();

@@ -89,7 +89,9 @@ final readonly class SiteReader
         $description = $crawler->filter('meta[name="description"]')->count() > 0 ? trim((string) $crawler->filter('meta[name="description"]')->attr('content')) : '';
         $crawler->filter('script, style, noscript, svg, iframe, template')->each(static function (Crawler $node): void {
             $element = $node->getNode(0);
-            $element?->parentNode?->removeChild($element);
+            if (null !== $element && null !== $element->parentNode) {
+                $element->parentNode->removeChild($element);
+            }
         });
         $body = $crawler->filter('body')->count() > 0 ? $crawler->filter('body')->text('') : '';
         $text = trim(implode("\n", array_filter([$title, $description, (string) preg_replace('/\s+/u', ' ', $body)])));

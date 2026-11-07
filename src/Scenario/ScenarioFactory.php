@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Scenario;
 
+use App\Ai\Data;
 use App\Ai\ModelException;
 use App\Entity\Member;
 use App\Entity\Scenario;
@@ -42,8 +43,8 @@ final class ScenarioFactory
         $scenario = new Scenario(
             title: $title,
             type: MeetingType::tryFrom($text($data['type'] ?? $data['category'] ?? '')) ?? MeetingType::Discovery,
-            difficulty: Difficulty::tryFrom((int) ($data['difficulty'] ?? 2)) ?? Difficulty::Demanding,
-            minutes: max(3, min(60, (int) ($data['minutes'] ?? 12))),
+            difficulty: Difficulty::tryFrom(Data::int($data['difficulty'] ?? 2)) ?? Difficulty::Demanding,
+            minutes: max(3, min(60, Data::int($data['minutes'] ?? 12, 12))),
             context: $text($data['context'] ?? ''),
             goal: $text($data['goal'] ?? ''),
             persona: $persona,

@@ -43,7 +43,7 @@ final class SituationType extends AbstractType
         $resolver->setDefaults([
             'data_class' => SituationData::class,
             // A situation set aside is not checked: only the kept ones must be complete.
-            'validation_groups' => static fn (FormInterface $form): array => ['Default'] + ($form->getData()?->keep ? [1 => 'kept'] : []),
+            'validation_groups' => static fn (FormInterface $form): array => ['Default'] + ($form->getData() instanceof SituationData && $form->getData()->keep ? [1 => 'kept'] : []),
         ]);
     }
 }

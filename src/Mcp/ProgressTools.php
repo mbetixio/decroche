@@ -47,8 +47,8 @@ final readonly class ProgressTools
      */
     public function report(Member $member): array
     {
-        $stats = $this->progress->of($member)->toArray();
-        $stats['level']['name'] = $this->translator->trans($stats['level']['name'], locale: 'en');
+        $report = $this->progress->of($member);
+        $stats = ['level' => ['name' => $this->translator->trans($report->level->name, locale: 'en')] + $report->level->toArray()] + $report->toArray();
 
         return $stats + [
             'missions' => array_map(fn (array $m): array => self::mission($m) + ['situation' => $this->companies->get()->situation($m['mission']->situation)?->label], $this->missions->of($member)),

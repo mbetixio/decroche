@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Call\Coach;
 
+use App\Ai\Data;
 use App\Call\Speech\SpeechFigures;
 use App\Entity\Call;
 use App\Enum\BriefSection;
@@ -35,8 +36,8 @@ final readonly class DebriefBuilder
     {
         $criteria = [];
         foreach ($scorecard as $key => $criterion) {
-            $c = \is_array($data['criteria'][$key] ?? null) ? $data['criteria'][$key] : [];
-            $criteria[$key] = ['label' => $criterion->label, 'score' => max(0, min(10, (int) round((float) ($c['score'] ?? 0)))), 'comment' => self::text($c['comment'] ?? '')];
+            $c = Data::map(Data::map($data['criteria'] ?? null)[$key] ?? null);
+            $criteria[$key] = ['label' => $criterion->label, 'score' => max(0, min(10, Data::int($c['score'] ?? 0))), 'comment' => self::text($c['comment'] ?? '')];
         }
         $skills = [] === $criteria ? 0.0 : array_sum(array_column($criteria, 'score')) / \count($criteria) * 10;
 
@@ -65,7 +66,7 @@ final readonly class DebriefBuilder
             }
         }
 
-        $said = array_map(static fn (Line $l): string => $l->text, array_filter($call->lines(), static fn (Line $l): bool => $l->isSeller()));
+        $said = array_values(array_map(static fn (Line $l): string => $l->text, array_filter($call->lines(), static fn (Line $l): bool => $l->isSeller())));
 
         return ['score' => $score, 'discovered' => $discovered, 'debrief' => new Debrief(
             criteria: $criteria,
@@ -76,8 +77,8 @@ final readonly class DebriefBuilder
             objectives: $objectives,
             goal: null === $reached ? null : ($reached >= 0.99 ? ObjectiveStatus::Reached : ($reached > 0 ? ObjectiveStatus::Partial : ObjectiveStatus::Missed)),
             missed: array_values($missed),
-            best: self::quotes($data['best'] ?? [], ['quote', 'why'], $said),
-            worst: self::quotes($data['worst'] ?? [], ['quote', 'why', 'better'], $said),
+            best: array_map(static fn (array $q): array => ['quote' => $q['quote'], 'why' => $q['why']], self::quotes($data['best'] ?? null, $said)),
+            worst: self::quotes($data['worst'] ?? null, $said),
             tips: \array_slice(array_values(array_filter(array_map(self::text(...), \is_array($data['tips'] ?? null) ? $data['tips'] : []))), 0, 3),
             speech: $figures,
             speechComment: self::text($data['speech'] ?? ''),
@@ -113,19 +114,16 @@ final readonly class DebriefBuilder
     /**
      * Quotes the seller really said (give or take punctuation and case), two at most.
      *
-     * @template K of string
-     *
-     * @param list<K>      $keys
      * @param list<string> $said
      *
-     * @return list<array<K, string>>
+     * @return list<array{quote: string, why: string, better: string}>
      */
-    private static function quotes(mixed $list, array $keys, array $said): array
+    private static function quotes(mixed $list, array $said): array
     {
         $kept = [];
-        foreach (\is_array($list) ? $list : [] as $q) {
-            if (\is_array($q) && self::wasSaid(self::text($q['quote'] ?? ''), $said)) {
-                $kept[] = array_combine($keys, array_map(static fn (string $k): string => self::text($q[$k] ?? ''), $keys));
+        foreach (Data::rows($list) as $q) {
+            if (self::wasSaid(self::text($q['quote'] ?? ''), $said)) {
+                $kept[] = ['quote' => self::text($q['quote'] ?? ''), 'why' => self::text($q['why'] ?? ''), 'better' => self::text($q['better'] ?? '')];
             }
         }
 

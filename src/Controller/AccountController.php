@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Ai\Data;
 use App\Company\TeamManager;
 use App\Entity\Member;
 use App\Form\ChangePasswordType;
@@ -52,7 +53,7 @@ final class AccountController extends AbstractController
         $form = $this->createForm(ChangePasswordType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->team->changePassword($me, (string) $form->get('password')->getData());
+            $this->team->changePassword($me, Data::string($form->get('password')->getData()));
             $this->addFlash('success', 'account.password_changed');
 
             return $this->redirectToRoute('account');

@@ -30,7 +30,7 @@ final readonly class LanguageModel
      */
     public function text(string $system, array $messages, float $temperature = 0.8): string
     {
-        return trim($this->platform->invoke($this->model, self::bag($system, $messages), $this->options($temperature))->asText());
+        return trim($this->platform->invoke($this->model(), self::bag($system, $messages), $this->options($temperature))->asText());
     }
 
     /**
@@ -42,7 +42,7 @@ final readonly class LanguageModel
      */
     public function stream(string $system, array $messages, float $temperature = 0.8): \Generator
     {
-        $result = $this->platform->invoke($this->model, self::bag($system, $messages), ['stream' => true] + $this->options($temperature));
+        $result = $this->platform->invoke($this->model(), self::bag($system, $messages), ['stream' => true] + $this->options($temperature));
         if (!$result->getResult() instanceof StreamResult) {
             yield $result->asText();
 
@@ -78,6 +78,18 @@ final readonly class LanguageModel
         }
 
         throw new ModelException('The model did not answer with a JSON object.');
+    }
+
+    /**
+     * The model's name, which must be set.
+     *
+     * @return non-empty-string
+     *
+     * @throws ModelException when AI_MODEL is empty
+     */
+    private function model(): string
+    {
+        return '' !== $this->model ? $this->model : throw new ModelException('No model is set: give AI_MODEL in .env.local.');
     }
 
     /**

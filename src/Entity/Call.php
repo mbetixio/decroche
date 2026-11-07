@@ -113,7 +113,9 @@ class Call
 
     public function lastLine(): Line
     {
-        return Line::fromArray($this->lines[array_key_last($this->lines)]);
+        $last = end($this->lines);
+
+        return Line::fromArray(false !== $last ? $last : throw new \LogicException('A call always holds its opening line.'));
     }
 
     /**

@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Who may see and play a scenario, and who may edit or archive it (see {@see Scenario::visibleTo()}).
  *
- * @extends Voter<self::*, Scenario>
+ * @extends Voter<self::VIEW|self::EDIT, Scenario>
  */
 final class ScenarioVoter extends Voter
 {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Call\Speech;
 
+use App\Ai\Data;
 /**
  * A call in figures: how the seller talked, measured on the transcript (not on the audio).
  */
@@ -53,7 +54,12 @@ final readonly class SpeechFigures
         $int = static fn (string $k): int => \is_numeric($data[$k] ?? null) ? (int) $data[$k] : 0;
         $maybe = static fn (string $k): ?int => \is_numeric($data[$k] ?? null) ? (int) $data[$k] : null;
 
-        return new self((bool) ($data['voice'] ?? false), $int('talk_share'), $int('seller_words'), $int('persona_words'), $int('questions'), $int('open_questions'), $int('fillers'), array_map('intval', \is_array($data['filler_words'] ?? null) ? $data['filler_words'] : []), $int('longest'), $maybe('wpm'), $maybe('reply_delay'));
+        $fillerWords = [];
+        foreach (Data::map($data['filler_words'] ?? null) as $word => $count) {
+            $fillerWords[(string) $word] = Data::int($count);
+        }
+
+        return new self(true === ($data['voice'] ?? false), $int('talk_share'), $int('seller_words'), $int('persona_words'), $int('questions'), $int('open_questions'), $int('fillers'), $fillerWords, $int('longest'), $maybe('wpm'), $maybe('reply_delay'));
     }
 
     /**
