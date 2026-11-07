@@ -42,9 +42,9 @@ security:
                 name: SPARRING_REMEMBERME
 
     access_control:
-        - { path: ^/(connexion|bienvenue|rejoindre)(/|$), roles: PUBLIC_ACCESS }
+        - { path: ^/(login|welcome|join)(/|$), roles: PUBLIC_ACCESS }
         - { path: ^/mcp, roles: ROLE_USER }
-        - { path: ^/(equipe|entreprise)(/|$), roles: ROLE_MANAGER }
+        - { path: ^/(team|settings)(/|$), roles: ROLE_MANAGER }
         - { path: ^/, roles: ROLE_USER }
 
     role_hierarchy:

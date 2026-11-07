@@ -11,6 +11,7 @@ use App\Company\SiteReader;
 use App\Company\TeamManager;
 use App\Entity\Company;
 use App\Entity\Member;
+use App\Enum\Language;
 use App\Enum\MemberRole;
 use App\Form\AccountType;
 use App\Form\CompanyType;
@@ -49,7 +50,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * website analysed, or the example company), the offer sheet, the situations, the scorecard, the team, then the first
  * call. Each step can be revisited; none can be skipped ahead.
  */
-#[Route('/bienvenue')]
+#[Route('/welcome')]
 final class OnboardingController extends AbstractController
 {
     public function __construct(
@@ -89,7 +90,7 @@ final class OnboardingController extends AbstractController
     /**
      * The analysis of the website, run by the analysis screen (a minute or two): the offer sheet, then the situations.
      */
-    #[Route('/analyse/lancer', name: 'onboarding_analyze', methods: ['POST'])]
+    #[Route('/analysis/run', name: 'onboarding_analyze', methods: ['POST'])]
     #[IsCsrfTokenValid('onboarding-analysis', tokenKey: 'token')]
     public function analyze(OfferAnalyst $analyst): JsonResponse
     {
@@ -112,7 +113,7 @@ final class OnboardingController extends AbstractController
     /**
      * While a manager sets the instance up, sellers wait here.
      */
-    #[Route('/patience', name: 'onboarding_waiting', priority: 1)]
+    #[Route('/wait', name: 'onboarding_waiting', priority: 1)]
     public function waiting(): Response
     {
         return $this->render('onboarding/waiting.html.twig');
@@ -121,7 +122,7 @@ final class OnboardingController extends AbstractController
     /**
      * Completes the onboarding.
      */
-    #[Route('/terminer', name: 'onboarding_finish', methods: ['POST'], priority: 1)]
+    #[Route('/finish', name: 'onboarding_finish', methods: ['POST'], priority: 1)]
     #[IsCsrfTokenValid('onboarding-finish')]
     public function finish(): Response
     {
@@ -156,7 +157,8 @@ final class OnboardingController extends AbstractController
 
     private function welcome(Request $request, Company $company): Response
     {
-        $form = $this->createForm(LanguageType::class, ['language' => $company->language]);
+        // The language being previewed (?lang=…) is the one ticked.
+        $form = $this->createForm(LanguageType::class, ['language' => Language::tryFrom($request->getLocale()) ?? $company->language]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $company->language = $form->get('language')->getData();

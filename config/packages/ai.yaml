@@ -11,16 +11,15 @@ ai:
                 supports_embeddings: false
                 completions_path: '%env(AI_COMPLETIONS_PATH)%'
 
-framework:
-    http_client:
-        scoped_clients:
-            # The model's HTTP client: its extra headers (AI_HEADERS, a JSON object) and generous time limits, since a
-            # long answer may take a while.
-            ai.http_client:
-                base_uri: '%env(AI_BASE_URL)%'
-                headers: '%env(json:AI_HEADERS)%'
-                timeout: 600
-                max_duration: 900
-
 services:
     Symfony\AI\Platform\Bridge\Generic\FallbackModelCatalog: ~
+
+    # The model's HTTP client: its extra headers (AI_HEADERS, a JSON object, read at runtime) and generous time limits,
+    # since a long answer may take a while.
+    ai.http_client:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['@http_client', 'withOptions']
+        arguments:
+            - headers: '%env(json:AI_HEADERS)%'
+              timeout: 600
+              max_duration: 900
