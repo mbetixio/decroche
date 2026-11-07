@@ -1,0 +1,33 @@
+{# The library: the managers' practice cases and the meetings the member prepared, filterable by type. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'nav.library'|trans }}{% endblock %}
+{% block body %}
+<header class="page-head">
+    <div>
+        <h1>{{ 'library.title'|trans }}</h1>
+        <p>{{ 'library.lead'|trans }}</p>
+    </div>
+    <div class="row">
+        <a class="btn" href="{{ path('prepare') }}"><twig:Icon name="wand" />{{ 'nav.prepare'|trans }}</a>
+        {% if is_granted('ROLE_MANAGER') %}<a class="btn primary" href="{{ path('scenario_new') }}"><twig:Icon name="plus" />{{ 'library.new'|trans }}</a>{% endif %}
+    </div>
+</header>
+<nav class="chips" style="margin-bottom:20px" aria-label="{{ 'library.filter'|trans }}">
+    <a class="chip" href="{{ path('library') }}" {{ type is null ? 'aria-current="true"' }}>{{ 'library.all'|trans }}</a>
+    {% for t in types %}<a class="chip" href="{{ path('library', {type: t.value}) }}" {{ type == t ? 'aria-current="true"' }}>{{ t|trans }}</a>{% endfor %}
+</nav>
+{% if scenarios %}
+    <div class="grid">
+        {% for scenario in scenarios %}
+            <a class="card hover stack" style="--gap:10px;text-decoration:none" href="{{ path('scenario_show', {id: scenario.id}) }}">
+                <div class="row between"><span class="badge brand">{{ scenario.type|trans }}</span><span class="badge">{{ scenario.difficulty|trans }}</span></div>
+                <h3>{{ scenario.title }}</h3>
+                <p class="small muted">{{ scenario.context|length > 150 ? scenario.context|slice(0, 150) ~ '…' : scenario.context }}</p>
+                <div class="row small muted" style="margin-top:auto"><twig:Avatar :initials="scenario.persona.initials" :name="scenario.persona.name" /> <span>{{ scenario.persona.name }} · {{ scenario.persona.role }}</span></div>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card"><twig:Empty icon="book" :title="'library.empty'|trans" :text="'library.empty_text'|trans" /></div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,44 @@
+{# A scenario of the library: what the seller knows, who they meet, and their calls on it. Never the brief. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ scenario.title }}{% endblock %}
+{% block body %}
+{% set persona = scenario.persona %}
+<header class="page-head">
+    <div>
+        <a class="eyebrow" href="{{ path('library') }}" style="text-decoration:none">← {{ 'nav.library'|trans }}</a>
+        <h1>{{ scenario.title }}</h1>
+        <div class="chips" style="margin-top:10px">
+            <span class="badge brand">{{ scenario.type|trans }}</span><span class="badge">{{ scenario.difficulty|trans }}</span>
+            <span class="badge"><twig:Icon name="clock" />{{ 'briefing.minutes'|trans({'%count%': scenario.minutes}) }}</span>
+            {% if not scenario.active %}<span class="badge bad">{{ 'library.archived_badge'|trans }}</span>{% endif %}
+        </div>
+    </div>
+    <div class="row">
+        {% if is_granted('SCENARIO_EDIT', scenario) %}
+            <a class="btn" href="{{ path('scenario_edit', {id: scenario.id}) }}">{{ 'action.edit'|trans }}</a>
+            <form method="post" action="{{ path('scenario_archive', {id: scenario.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('archive-' ~ scenario.id) }}"><button class="btn ghost">{{ (scenario.active ? 'library.archive' : 'library.restore')|trans }}</button></form>
+        {% endif %}
+        {% if scenario.active %}<a class="btn primary" href="{{ path('call_briefing', {id: scenario.id}) }}"><twig:Icon name="phone" />{{ 'library.play'|trans }}</a>{% endif %}
+    </div>
+</header>
+<div class="cols-main">
+    <section class="card pad-l stack" style="--gap:12px">
+        <h2>{{ 'briefing.context'|trans }}</h2>
+        <p>{{ scenario.context }}</p>
+        <p><b>{{ 'briefing.goal'|trans }}</b> {{ scenario.goal }}</p>
+        <div class="row" style="margin-top:8px"><twig:Avatar :initials="persona.initials" :name="persona.name" size="lg" /><div><b>{{ persona.name }}</b><div class="small muted">{{ persona.role }} · {{ persona.company }}</div></div></div>
+    </section>
+    <section class="card flush">
+        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="clock" />{{ 'library.my_calls'|trans }}</h2></div>
+        {% if calls %}
+            <div class="list" style="margin-top:8px">
+                {% for call in calls %}
+                    <a class="list-item" href="{{ path('call_show', {id: call.id}) }}"><span style="flex:1">{{ call.startedAt|moment }}</span>{% if call.score is not null %}<twig:Score :value="call.score" />{% else %}<twig:Status :call="call" />{% endif %}</a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <twig:Empty icon="phone" :title="'library.no_calls'|trans" />
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

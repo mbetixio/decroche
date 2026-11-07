@@ -1,0 +1,27 @@
+{# The company's offer sheet and catalogue of situations, as the personas know them. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'nav.offer'|trans }}{% endblock %}
+{% block body %}
+<header class="page-head">
+    <div><div class="eyebrow">{{ company.name }}</div><h1>{{ 'offer.title'|trans }}</h1><p>{{ 'offer.lead'|trans }}</p></div>
+    {% if is_granted('ROLE_MANAGER') %}<a class="btn" href="{{ path('settings') }}">{{ 'action.edit'|trans }}</a>{% endif %}
+</header>
+<div class="cols-main">
+    <section class="card pad-l stack" style="--gap:12px">
+        <h2><twig:Icon name="file" />{{ 'offer.sheet'|trans }}</h2>
+        <div class="pre">{{ company.offer ?: 'offer.none'|trans }}</div>
+        {% if company.sectors %}<div class="chips">{% for sector in company.sectors %}<span class="chip">{{ sector }}</span>{% endfor %}</div>{% endif %}
+    </section>
+    <section class="card flush">
+        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="phone" />{{ 'offer.situations'|trans }}</h2></div>
+        <div class="list" style="margin-top:8px">
+            {% for situation in company.situations %}
+                <div class="list-item" style="align-items:flex-start">
+                    <span class="emoji">{{ situation.emoji }}</span>
+                    <div><b>{{ situation.label }}</b><div class="small muted">{{ situation.family|trans }} · {{ situation.direction|trans }}</div></div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

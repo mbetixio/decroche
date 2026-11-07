@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Model;
 
 use App\Entity\Scenario;
+use App\Model\Persona;
 use App\Enum\BriefSection;
 use App\Enum\Difficulty;
 use App\Enum\MeetingType;
@@ -79,5 +80,21 @@ final class ScenarioData
             'context' => $this->context, 'goal' => $this->goal, 'opening' => $this->opening, 'brief' => $this->brief,
             'persona' => ['name' => $this->personaName, 'role' => $this->personaRole, 'company' => $this->personaCompany, 'personality' => $this->personaPersonality],
         ];
+    }
+
+    /**
+     * Applies the edits to an existing scenario (what the persona goes through on their side is kept).
+     */
+    public function applyTo(Scenario $scenario): void
+    {
+        $scenario->title = trim($this->title);
+        $scenario->type = $this->type;
+        $scenario->difficulty = $this->difficulty;
+        $scenario->minutes = $this->minutes;
+        $scenario->context = trim($this->context);
+        $scenario->goal = trim($this->goal);
+        $scenario->opening = trim($this->opening);
+        $scenario->setPersona(new Persona(trim($this->personaName), trim($this->personaRole), trim($this->personaCompany), trim($this->personaPersonality), $scenario->persona()->gender, $scenario->persona()->tone));
+        $scenario->setBrief(array_map(trim(...), $this->brief) + ['setup' => $scenario->setup()]);
     }
 }
