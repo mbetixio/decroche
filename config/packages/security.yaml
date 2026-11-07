@@ -3,31 +3,36 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
     providers:
-        sellers:
-            entity: { class: App\Entity\Seller, property: email }
-        mcp_keys:
-            entity: { class: App\Entity\Seller, property: mcpKeyHash }
+        members:
+            entity: { class: App\Entity\Member, property: email }
 
     firewalls:
         dev:
             pattern: ^/(_profiler(/|$)|(_wdt|assets|build)/)
             security: false
-        # Claude, ChatGPT ou tout client MCP s'entraîne au nom d'un commercial : sa clé personnelle, dans l'adresse
-        # (/mcp?key=…) ou en « Authorization: Bearer … ».
+        # Claude, ChatGPT or any MCP client practises on behalf of a member: their personal key, in the address
+        # (/mcp?key=…, the simplest way to add a connector) or as "Authorization: Bearer …".
         mcp:
             pattern: ^/mcp
             stateless: true
-            provider: mcp_keys
-            custom_authenticators: [App\Mcp\SellerKeyAuthenticator]
-            entry_point: App\Mcp\SellerKeyAuthenticator
+            provider: members
+            custom_authenticators: [App\Security\McpKeyAuthenticator]
+            entry_point: App\Security\McpKeyAuthenticator
         main:
             lazy: true
-            provider: sellers
+            provider: members
             form_login:
                 login_path: login
                 check_path: login
                 default_target_path: home
                 enable_csrf: true
+            # The call links handed out over MCP sign the member in: signed, short-lived, usable a few times.
+            login_link:
+                check_route: login_link_check
+                signature_properties: [id, email]
+                lifetime: 900
+                max_uses: 3
+                used_link_cache: cache.app
             logout:
                 path: logout
                 target: login
@@ -37,11 +42,9 @@ security:
                 name: SPARRING_REMEMBERME
 
     access_control:
-        - { path: ^/(connexion|inscription)$, roles: PUBLIC_ACCESS }
-        - { path: ^/rejoindre/, roles: PUBLIC_ACCESS }
+        - { path: ^/(connexion|bienvenue|rejoindre)(/|$), roles: PUBLIC_ACCESS }
         - { path: ^/mcp, roles: ROLE_USER }
-        - { path: ^/equipe, roles: ROLE_MANAGER }
-        - { path: ^/espace, roles: ROLE_MANAGER }
+        - { path: ^/(equipe|entreprise)(/|$), roles: ROLE_MANAGER }
         - { path: ^/, roles: ROLE_USER }
 
     role_hierarchy:
