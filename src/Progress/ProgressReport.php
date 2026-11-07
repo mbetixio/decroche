@@ -10,6 +10,7 @@ use App\Entity\Member;
 use App\Enum\ObjectiveStatus;
 use App\Model\Criterion;
 use App\Repository\CallRepository;
+use App\Repository\CompanyRepository;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -19,6 +20,7 @@ final readonly class ProgressReport
 {
     public function __construct(
         private CallRepository $calls,
+        private CompanyRepository $companies,
         private Experience $experience,
         private ClockInterface $clock,
     ) {
@@ -46,7 +48,7 @@ final readonly class ProgressReport
             }
         }
         if ([] === $labels) {
-            $labels = array_map(static fn (Criterion $c): string => $c->label, Criterion::defaults());
+            $labels = array_map(static fn (Criterion $c): string => $c->label, Criterion::defaults($this->companies->get()->language));
         }
         $criteria = [];
         foreach ($labels as $key => $label) {

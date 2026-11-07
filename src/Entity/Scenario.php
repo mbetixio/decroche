@@ -171,7 +171,8 @@ class Scenario
     }
 
     /**
-     * What the seller (and their AI, over MCP) may see: never the brief.
+     * What the seller (and their AI, over MCP) may see: never the brief. Enums are given by value; the caller
+     * translates them.
      *
      * @return array<string, mixed>
      */
@@ -183,15 +184,15 @@ class Scenario
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'type' => $this->type->label(),
-            'difficulty' => $this->difficulty->label(),
+            'type' => $this->type->value,
+            'difficulty' => $this->difficulty->value,
             'minutes' => $this->minutes,
             'context' => $this->context,
             'goal' => $this->goal,
             'persona' => ['name' => $persona->name, 'role' => $persona->role, 'company' => $persona->company],
         ] + (null !== $situation ? [
             'situation' => $situation->label,
-            'call' => $situation->direction->label(),
+            'direction' => $situation->direction->value,
             'material' => $this->material,
             'objectives' => $this->objectives,
         ] : []);

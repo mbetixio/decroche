@@ -45,7 +45,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
     }
 
     /**
-     * L'heure d'Etixio, quel que soit le réglage de PHP sur la machine (APP_TIMEZONE pour en changer).
+     * The application's time zone, whatever PHP's own setting on the machine (APP_TIMEZONE to change it).
      */
     public function boot(): void
     {

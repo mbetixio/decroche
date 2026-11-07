@@ -5,29 +5,23 @@ declare(strict_types=1);
 namespace App\Progress;
 
 /**
- * A member's level, from their experience points: Stagiaire to Légende.
+ * A member's level, from their experience points (from "Intern" to "Legend"; names are translated, "level.1"…).
  */
 final readonly class Level
 {
-    /** The levels, by number: the XP that reaches them and their name. */
-    public const array LEVELS = [
-        1 => [0, 'Stagiaire'],
-        2 => [150, 'Junior'],
-        3 => [400, 'Confirmé'],
-        4 => [800, 'Senior'],
-        5 => [1400, 'Expert'],
-        6 => [2200, 'Chasseur d\'élite'],
-        7 => [3300, 'Légende'],
-    ];
+    /** The XP that reaches each level, by number. */
+    public const array LEVELS = [1 => 0, 2 => 150, 3 => 400, 4 => 800, 5 => 1400, 6 => 2200, 7 => 3300];
 
     public function __construct(
         public int $number,
+        /** The translation key of its name ("level.3"). */
         public string $name,
         public int $xp,
         /** The XP that reached this level. */
         public int $from,
         /** The XP that reaches the next one; null at the top. */
         public ?int $to,
+        /** The translation key of the next level's name; null at the top. */
         public ?string $next,
     ) {
     }
@@ -35,14 +29,14 @@ final readonly class Level
     public static function of(int $xp): self
     {
         $number = 1;
-        foreach (self::LEVELS as $n => [$threshold]) {
+        foreach (self::LEVELS as $n => $threshold) {
             if ($xp >= $threshold) {
                 $number = $n;
             }
         }
         $next = self::LEVELS[$number + 1] ?? null;
 
-        return new self($number, self::LEVELS[$number][1], $xp, self::LEVELS[$number][0], $next[0] ?? null, $next[1] ?? null);
+        return new self($number, 'level.'.$number, $xp, self::LEVELS[$number], $next, null !== $next ? 'level.'.($number + 1) : null);
     }
 
     /**

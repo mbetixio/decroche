@@ -22,7 +22,7 @@ final readonly class Situation
         public string $emoji,
         public SituationFamily $family,
         public CallDirection $direction,
-        /** What the seller has in front of them before the call ("the form message", "the client file"…). */
+        /** What the seller has in front of them before the call ("the form message", "the client file"…), if anything. */
         public string $material,
         /** Who is on the line, what they want, what is stuck, what is hidden. */
         public string $pitch,
@@ -49,9 +49,9 @@ final readonly class Situation
             key: self::slug('' !== $key ? $key : $label),
             label: $label,
             emoji: mb_substr($text($data['emoji'] ?? '') ?: '📞', 0, 4),
-            family: SituationFamily::tryFrom($text($data['family'] ?? '')) ?? SituationFamily::Prospecting,
-            direction: CallDirection::tryFrom($text($data['direction'] ?? '')) ?? CallDirection::Outgoing,
-            material: $text($data['material'] ?? '') ?: 'La fiche',
+            family: SituationFamily::fromModel($data['family'] ?? ''),
+            direction: CallDirection::fromModel($data['direction'] ?? ''),
+            material: $text($data['material'] ?? ''),
             pitch: $pitch,
             objectives: $objectives,
         );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\Language;
 use App\Model\Criterion;
 use App\Model\Situation;
 use App\Repository\CompanyRepository;
@@ -26,6 +27,10 @@ class Company
 
     #[ORM\Column(length: 120)]
     public string $name = '';
+
+    /** The working language: the interface, the personas, the coach and the analysis all speak it. */
+    #[ORM\Column(enumType: Language::class, length: 5)]
+    public Language $language = Language::French;
 
     /** The company's website, read by the analysis. */
     #[ORM\Column(length: 255, nullable: true)]
@@ -61,14 +66,6 @@ class Company
     /** When the onboarding was completed; until then, the instance only shows the onboarding. */
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     public private(set) ?\DateTimeImmutable $onboardedAt = null;
-
-    /**
-     * "d'Etixio", "de Paie Express": the name after "l'offre", "l'équipe".
-     */
-    public function of(): string
-    {
-        return (preg_match('/^[aeiouyhàâéèêëîïôöùûü]/iu', $this->name) ? 'd\'' : 'de ').$this->name;
-    }
 
     /**
      * @param list<string> $sectors
@@ -135,7 +132,7 @@ class Company
     public function scorecard(): array
     {
         if (null === $this->criteria || \count($this->criteria) < 2) {
-            return Criterion::defaults();
+            return Criterion::defaults($this->language);
         }
         $list = [];
         foreach ($this->criteria as $key => $c) {
