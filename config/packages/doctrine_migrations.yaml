@@ -1,0 +1,5 @@
+# The database schema is versioned as migrations (bin/console doctrine:migrations:migrate, run by app:install).
+doctrine_migrations:
+    migrations_paths:
+        'DoctrineMigrations': '%kernel.project_dir%/migrations'
+    enable_profiler: false
