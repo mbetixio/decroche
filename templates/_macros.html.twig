@@ -1,4 +1,0 @@
-{% macro score(n) %}{% if n is null %}<span class="muted">—</span>{% else %}<span class="score {{ n >= 70 ? 'hi' : (n >= 45 ? 'mid' : 'lo') }}">{{ n }}</span>{% endif %}{% endmacro %}
-{% macro bar(v, max) %}{% set pct = max ? (v / max * 100)|round : 0 %}<div class="bar {{ pct >= 70 ? 'good' : (pct >= 45 ? 'mid' : 'lo') }}"><i style="width: {{ pct }}%"></i></div>{% endmacro %}
-{% macro status(t) %}{% if t.status == 'done' %}<span class="tag good">Débriefé</span>{% elseif t.status == 'abandoned' %}<span class="tag bad">Abandonné</span>{% elseif t.status == 'debriefing' %}<span class="tag warn">À débriefer</span>{% else %}<span class="tag brand">En cours</span>{% endif %}{% endmacro %}
-{% macro goal(g) %}{% if g == 'atteint' %}<span class="tag good">✅ Objectif atteint</span>{% elseif g == 'partiel' %}<span class="tag warn">◐ Partiellement</span>{% elseif g == 'manqué' %}<span class="tag bad">✗ Manqué</span>{% endif %}{% endmacro %}

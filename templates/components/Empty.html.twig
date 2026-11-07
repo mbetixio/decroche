@@ -1,0 +1,8 @@
+{# An empty state: an icon, a sentence, and an optional action in the block. #}
+{% props icon = 'info', title, text = null %}
+<div class="empty" {{ attributes }}>
+    <span class="empty-icon"><twig:Icon :name="icon" /></span>
+    <h3>{{ title }}</h3>
+    {% if text %}<p class="small">{{ text }}</p>{% endif %}
+    {% block content %}{% endblock %}
+</div>

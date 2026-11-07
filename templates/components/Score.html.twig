@@ -1,0 +1,3 @@
+{# A score out of 100, coloured: good from 70, fair from 45. #}
+{% props value = null %}
+{% if value is null %}<span class="faint">—</span>{% else %}<span class="score {{ value >= 70 ? 'good' : (value >= 45 ? 'warn' : 'bad') }}" {{ attributes }}>{{ value }}</span>{% endif %}

@@ -1,0 +1,4 @@
+{# The status of a call, as a badge. #}
+{% props call %}
+{% set tone = {live: 'good', debriefing: 'warn', done: 'accent', abandoned: ''}[call.status.value] %}
+<span class="badge {{ tone }}" {{ attributes }}>{{ call.status|trans }}</span>

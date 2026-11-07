@@ -1,0 +1,4 @@
+{# Round initials, coloured from the name so each person keeps their colour. #}
+{% props initials, name = '', size = '' %}
+{% set hue = name ? (name|length * 37 + (name|first|default('a')|lower in 'aeiou' ? 140 : 0)) % 360 : 18 %}
+<span class="avatar {{ size }}" style="--avatar-bg: linear-gradient(135deg, hsl({{ hue }} 75% 58%), hsl({{ (hue + 40) % 360 }} 80% 52%))" {{ attributes }}>{{ initials }}</span>

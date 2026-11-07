@@ -1,39 +1,52 @@
+{# The page skeleton. Signed-in members of a set-up instance get the app shell (sidebar, or a bottom bar on phones);
+   the onboarding, the sign-in and the call screen fill the whole page through the "page" block. #}
 <!doctype html>
-<html lang="fr">
+<html lang="{{ app.request.locale }}">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% block title %}Sparring{% endblock %} · Sparring</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e2552d'/><text x='16' y='22' font-size='17' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'>S</text></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>{% include '_style.css.twig' %}</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>{% block title %}Sparring{% endblock %} · {{ company().name ?: 'Sparring' }}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23f2542d'/><stop offset='1' stop-color='%236d5dfc'/></linearGradient></defs><rect width='32' height='32' rx='9' fill='url(%23g)'/><text x='16' y='22' font-size='17' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'>S</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@700;800&display=swap" rel="stylesheet">
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
 </head>
 <body>
-{% set route = app.request.attributes.get('_route') %}
-{% if app.user %}
-<header class="top"><div class="wrap">
-  <a class="logo" href="{{ path('home') }}"><b>S</b> Sparring</a>
-  <nav class="nav">
-    <a href="{{ path('home') }}" class="{{ route in ['home', 'call', 'training'] ? 'on' }}">📞 Jouer</a>
-    <a href="{{ path('library') }}" class="{{ route in ['library', 'scenario'] ? 'on' }}">Bibliothèque</a>
-    <a href="{{ path('offer') }}" class="{{ route == 'offer' ? 'on' }}">L'offre</a>
-    <a href="{{ path('progress') }}" class="{{ route == 'progress' ? 'on' }}">Ma progression</a>
-    {% if is_granted('ROLE_MANAGER') %}<a href="{{ path('team') }}" class="{{ route in ['team', 'team_seller'] ? 'on' }}">Équipe</a>{% endif %}
-    <a href="{{ path('scenario_generate') }}" class="{{ route == 'scenario_generate' ? 'on' }}">Préparer un rendez-vous</a>
-    {% if is_granted('ROLE_MANAGER') %}<a href="{{ path('space') }}" class="{{ route == 'space' ? 'on' }}">⚙️ Mon espace</a>{% endif %}
-  </nav>
-  <div class="who">
-    <a href="{{ path('account') }}" class="row" style="text-decoration:none"><span class="avatar">{{ app.user.initials }}</span><span>{{ app.user.name }}{% if app.user.workspace %}<span class="small muted" style="display:block;line-height:1.1">{{ app.user.workspace.name }}{% if app.user.manager %} · manager{% endif %}</span>{% endif %}</span></a>
-    <a href="{{ path('me') }}" class="btn ghost small" title="Qui je suis">Mon profil</a>
-    <a href="{{ path('logout') }}" class="btn ghost small">Déconnexion</a>
-  </div>
-</div></header>
-{% endif %}
-<main class="wrap">
-  {% for type, messages in app.flashes %}{% for message in messages %}<div class="flash {{ type == 'error' ? 'error' }}">{{ message }}</div>{% endfor %}{% endfor %}
-  {% block body %}{% endblock %}
-</main>
-{% block scripts %}{% endblock %}
+{% block page %}
+<div class="shell">
+    <aside class="sidebar">
+        <a class="brand" href="{{ path('home') }}">
+            <span class="brand-mark"><twig:Icon name="phone" /></span>
+            <span>Sparring<small>{{ company().name }}</small></span>
+        </a>
+        {% set route = app.request.attributes.get('_route') %}
+        <nav class="nav" aria-label="{{ 'nav.main'|trans }}">
+            <a href="{{ path('home') }}" {{ route in ['home', 'call_briefing', 'call_show'] ? 'aria-current="page"' }}><twig:Icon name="phone" /><span>{{ 'nav.play'|trans }}</span></a>
+            <a href="{{ path('library') }}" {{ route starts with 'library' or route starts with 'scenario' ? 'aria-current="page"' }}><twig:Icon name="book" /><span>{{ 'nav.library'|trans }}</span></a>
+            <a href="{{ path('prepare') }}" class="secondary" {{ route == 'prepare' ? 'aria-current="page"' }}><twig:Icon name="wand" /><span>{{ 'nav.prepare'|trans }}</span></a>
+            <a href="{{ path('progress') }}" {{ route == 'progress' ? 'aria-current="page"' }}><twig:Icon name="chart" /><span>{{ 'nav.progress'|trans }}</span></a>
+            <a href="{{ path('offer') }}" class="secondary" {{ route == 'offer' ? 'aria-current="page"' }}><twig:Icon name="file" /><span>{{ 'nav.offer'|trans }}</span></a>
+            {% if is_granted('ROLE_MANAGER') %}
+                <span class="nav-label">{{ 'nav.manage'|trans }}</span>
+                <a href="{{ path('team') }}" {{ route starts with 'team' ? 'aria-current="page"' }}><twig:Icon name="users" /><span>{{ 'nav.team'|trans }}</span></a>
+                <a href="{{ path('settings') }}" class="secondary" {{ route starts with 'settings' ? 'aria-current="page"' }}><twig:Icon name="building" /><span>{{ 'nav.company'|trans }}</span></a>
+            {% endif %}
+        </nav>
+        <div class="sidebar-foot">
+            <a class="me" href="{{ path('account') }}">
+                <twig:Avatar :initials="app.user.initials" :name="app.user.name" />
+                <span><b>{{ app.user.name }}</b><span>{{ app.user.role|trans }}</span></span>
+            </a>
+            <a class="btn ghost sm" href="{{ path('logout') }}"><twig:Icon name="logout" />{{ 'nav.logout'|trans }}</a>
+        </div>
+    </aside>
+    <main class="main" id="main">
+        {{ include('_flashes.html.twig') }}
+        {% block body %}{% endblock %}
+    </main>
+</div>
+{% endblock %}
 </body>
 </html>

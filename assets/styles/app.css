@@ -359,7 +359,8 @@ a.list-item:hover { background: var(--surface-2); border-radius: 12px; }
 @keyframes pulse { 50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--brand) 18%, transparent); } }
 
 .situation-card { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: start; }
-.situation-card:has(input[data-remove]:checked) { opacity: .45; }
+.situation-card:has(.keep-toggle:not(:checked)) { opacity: .45; }
+.situation-card .keep-toggle { margin-top: 10px; }
 .situation-card details summary { cursor: pointer; list-style: none; }
 .situation-card details summary::-webkit-details-marker { display: none; }
 

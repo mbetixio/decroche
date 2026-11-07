@@ -1,0 +1,3 @@
+{# A figure with its label and icon. #}
+{% props label, value, icon = null, suffix = null %}
+<dl class="stat" {{ attributes }}><dt>{% if icon %}<twig:Icon :name="icon" />{% endif %}{{ label }}</dt><dd>{{ value }}{% if suffix %}<small>{{ suffix }}</small>{% endif %}</dd></dl>

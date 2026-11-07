@@ -1,0 +1,37 @@
+{# Sparring's form theme: a label, the widget, a hint and the errors, laid out by the design system. #}
+{% use 'form_div_layout.html.twig' %}
+
+{% block form_row %}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}{%- set widget_attr = {attr: {'aria-describedby': id ~ '_help'}} -%}{%- endif -%}
+    <div class="field{% if compound and expanded is defined and expanded %} field-choices{% endif %}">
+        {{- form_label(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{% endblock %}
+
+{% block form_help %}
+    {%- if help is not empty -%}<p id="{{ id }}_help" class="help">{{ help|trans(help_translation_parameters, translation_domain) }}</p>{%- endif -%}
+{% endblock %}
+
+{% block form_errors %}
+    {%- if errors|length > 0 -%}<ul class="errors">{%- for error in errors -%}<li>{{ error.message }}</li>{%- endfor -%}</ul>{%- endif -%}
+{% endblock %}
+
+{# Expanded choices (radios, checkboxes) as selectable cards. #}
+{% block choice_widget_expanded %}
+    <div class="choices" {{ block('widget_container_attributes') }}>
+    {%- for child in form %}
+        <label class="choice">{{- form_widget(child) -}}<b>{{ child.vars.label|trans({}, child.vars.translation_domain is same as(false) ? false : choice_translation_domain) }}</b></label>
+    {% endfor -%}
+    </div>
+{% endblock %}
+
+{% block checkbox_row %}
+    <div class="field">
+        <label class="check">{{- form_widget(form) -}}<span>{{ label|trans({}, translation_domain) }}</span></label>
+        {{- form_errors(form) -}}
+    </div>
+{% endblock %}

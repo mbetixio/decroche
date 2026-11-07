@@ -1,6 +1,0 @@
-{# Le transcript de l'appel, une fois raccroché : qui a dit quoi, dans l'ordre. #}
-<details class="card" style="margin-top:16px"{{ open is defined and open ? ' open' : '' }}><summary><b>Le transcript de l'appel</b> <span class="muted small">· {{ t.sellerTurns }} répliques, {{ t.durationMinutes }} min{% if t.spoken %} · dicté au micro{% endif %}</span></summary>
-<div class="transcript">
-  {% for msg in t.messages %}<p class="{{ msg.role }}"><b>{{ msg.role == 'seller' ? (mine ? 'Vous' : t.seller.name) : t.scenario.persona.name }}</b><span>{{ msg.content }}{% if mine and msg.role == 'seller' and not t.live %}<form method="post" action="{{ path('training_replay', {id: t.id, n: loop.index0}) }}" class="replay" title="Rejouer l'appel à partir d'ici, pour dire autre chose"><input type="hidden" name="_token" value="{{ csrf_token('replay' ~ t.id) }}"><button class="btn ghost small">↺ Rejouer d'ici</button></form>{% endif %}</span></p>{% endfor %}
-</div>
-</details>
