@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'onboarding.waiting.title'|trans }}{% endblock %}
+{% block page %}
+<div class="onboarding-main" style="min-height:100dvh">
+    <div class="card pad-l" style="max-width:520px">
+        <twig:Empty icon="clock" :title="'onboarding.waiting.title'|trans" :text="'onboarding.waiting.text'|trans({'%company%': company().name ?: 'Sparring'})">
+            <a class="btn ghost" href="{{ path('logout') }}"><twig:Icon name="logout" />{{ 'nav.logout'|trans }}</a>
+        </twig:Empty>
+    </div>
+</div>
+{% endblock %}

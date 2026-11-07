@@ -1,0 +1,17 @@
+{% extends 'onboarding/layout.html.twig' %}
+{% block heading %}{{ 'onboarding.team.title'|trans }}{% endblock %}
+{% block lead %}<p class="lead">{{ 'onboarding.team.lead'|trans }}</p>{% endblock %}
+{% block content %}
+{{ form_start(form, {attr: {class: 'form card pad-l'}}) }}
+    {{ form_row(form.emails) }}
+    {{ form_row(form.role) }}
+    <div><button class="btn" name="action" value="invite"><twig:Icon name="mail" />{{ 'onboarding.team.create'|trans }}</button></div>
+    {% if invitations %}
+        <div class="stack" style="--gap:10px">
+            <h3>{{ 'onboarding.team.links'|trans }}</h3>
+            {{ include('team/_invitations.html.twig', {invitations: invitations, withdraw: false}) }}
+        </div>
+    {% endif %}
+    {{ include('onboarding/_foot.html.twig', {actions: '<button class="btn primary lg" name="action" value="continue">' ~ (invitations ? 'action.continue' : 'onboarding.team.later')|trans ~ ' →</button>'}) }}
+{{ form_end(form) }}
+{% endblock %}

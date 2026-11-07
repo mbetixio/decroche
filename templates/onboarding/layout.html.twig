@@ -1,0 +1,31 @@
+{# The onboarding layout: the steps on a gradient on the left, the current step on the right. #}
+{% extends 'base.html.twig' %}
+{% block title %}{{ step|trans }}{% endblock %}
+{% block page %}
+{% set steps = enum('App\\Onboarding\\OnboardingStep').cases() %}
+<div class="onboarding">
+    <aside class="onboarding-aside">
+        <div class="brand"><span class="brand-mark"><twig:Icon name="phone" /></span><span>Sparring<small>{{ 'onboarding.tagline'|trans }}</small></span></div>
+        <ol class="steps">
+            {% for s in steps %}
+                <li class="{{ s.index < step.index ? 'done' : (s == step ? 'current') }}">
+                    <span class="dot">{% if s.index < step.index %}<twig:Icon name="check" />{% else %}{{ loop.index }}{% endif %}</span>
+                    {% if company().hasReached(s) and s != step and (not s.public or not app.user) %}<a href="{{ path('onboarding', {step: s.value}) }}" style="color:inherit;text-decoration:none">{{ s|trans }}</a>{% else %}{{ s|trans }}{% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+        <blockquote>{{ 'onboarding.quote'|trans }}</blockquote>
+    </aside>
+    <main class="onboarding-main">
+        {{ include('_flashes.html.twig') }}
+        <div class="onboarding-panel">
+            <div>
+                <div class="eyebrow">{{ 'onboarding.step_of'|trans({'%n%': step.index + 1, '%total%': steps|length}) }}</div>
+                <h1>{% block heading %}{% endblock %}</h1>
+                {% block lead %}{% endblock %}
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+{% endblock %}

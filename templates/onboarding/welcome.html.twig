@@ -1,0 +1,20 @@
+{% extends 'onboarding/layout.html.twig' %}
+{% block heading %}{{ 'onboarding.welcome.title'|trans }}{% endblock %}
+{% block lead %}<p class="lead">{{ 'onboarding.welcome.lead'|trans }}</p>{% endblock %}
+{% block content %}
+<div class="cols-3">
+    <div class="card"><div class="feature"><span class="emoji">🎲</span><div><h3>{{ 'onboarding.welcome.f1_title'|trans }}</h3><p class="small muted">{{ 'onboarding.welcome.f1'|trans }}</p></div></div></div>
+    <div class="card"><div class="feature"><span class="emoji">📞</span><div><h3>{{ 'onboarding.welcome.f2_title'|trans }}</h3><p class="small muted">{{ 'onboarding.welcome.f2'|trans }}</p></div></div></div>
+    <div class="card"><div class="feature"><span class="emoji">🎯</span><div><h3>{{ 'onboarding.welcome.f3_title'|trans }}</h3><p class="small muted">{{ 'onboarding.welcome.f3'|trans }}</p></div></div></div>
+</div>
+{{ form_start(form) }}
+    <div class="stack">
+        <div>
+            <h2 class="row"><twig:Icon name="globe" size="20" />{{ 'onboarding.welcome.language'|trans }}</h2>
+            <p class="small muted" style="margin-top:4px">{{ 'onboarding.welcome.language_help'|trans }}</p>
+        </div>
+        {{ form_widget(form.language) }}
+        {{ include('onboarding/_foot.html.twig', {actions: '<button class="btn primary lg">' ~ 'action.start'|trans ~ ' →</button>'}) }}
+    </div>
+{{ form_end(form) }}
+{% endblock %}

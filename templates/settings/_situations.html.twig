@@ -1,0 +1,28 @@
+{# The catalogue of situations, as cards: keep or set aside, open to edit, add one. Used by the onboarding and the
+   company settings. Expects "form" (a SituationsType). #}
+<div class="stack" data-controller="collection" data-collection-index-value="{{ form.situations|length }}" data-collection-placeholder-value="__situation__">
+    <div class="stack" style="--gap:12px" data-collection-target="list">
+        {% for situation in form.situations %}
+            {{ include('settings/_situation_card.html.twig', {situation: situation}) }}
+        {% endfor %}
+    </div>
+    {% set prototype = form.situations.vars.prototype %}
+    <template data-collection-target="template">
+        <div class="card situation-card">
+            <span class="emoji">📞</span>
+            <div class="stack" style="--gap:12px">
+                {{ form_widget(prototype.key) }}
+                <div class="cols-2">{{ form_row(prototype.label) }}{{ form_row(prototype.emoji, {value: '📞'}) }}</div>
+                <div class="cols-2">{{ form_row(prototype.family) }}{{ form_row(prototype.direction) }}</div>
+                {{ form_row(prototype.material) }}
+                {{ form_row(prototype.pitch) }}
+                {{ form_row(prototype.objectives) }}
+            </div>
+            <div class="stack" style="--gap:6px;justify-items:end">
+                {{ form_widget(prototype.keep, {attr: {checked: 'checked', hidden: true}}) }}
+                <button type="button" class="btn ghost sm" data-action="collection#remove" title="{{ 'action.remove'|trans }}"><twig:Icon name="trash" /></button>
+            </div>
+        </div>
+    </template>
+    <div><button type="button" class="btn" data-action="collection#add"><twig:Icon name="plus" />{{ 'settings.situations.add'|trans }}</button></div>
+</div>

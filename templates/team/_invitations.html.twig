@@ -1,0 +1,18 @@
+{# Pending invitations with their link to copy (and to withdraw, on the team page). #}
+<div class="list">
+    {% for invitation in invitations %}
+        <div class="list-item">
+            <span class="emoji"><twig:Icon name="mail" size="18" /></span>
+            <div style="flex:1;min-width:0">
+                <div class="row"><b>{{ invitation.email }}</b><span class="badge">{{ invitation.role|trans }}</span></div>
+                <div class="row" data-controller="copy" style="margin-top:6px;flex-wrap:nowrap">
+                    <input readonly value="{{ url('join', {token: invitation.token}) }}" data-copy-target="source" class="mono" style="padding:7px 10px">
+                    <button type="button" class="btn sm" data-action="copy#copy"><twig:Icon name="copy" /><span data-copy-target="label">{{ 'action.copy'|trans }}</span></button>
+                </div>
+            </div>
+            {% if withdraw|default(true) %}
+                <form method="post" action="{{ path('team_invitation_withdraw', {id: invitation.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('withdraw-' ~ invitation.id) }}"><button class="btn ghost sm" title="{{ 'action.withdraw'|trans }}"><twig:Icon name="trash" /></button></form>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>

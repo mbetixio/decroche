@@ -1,0 +1,9 @@
+{# The onboarding footer: back, progress dots, and the main action. #}
+{% set steps = enum('App\\Onboarding\\OnboardingStep').cases() %}
+<div class="onboarding-foot">
+    {% if step.previous and (not step.previous.public or not app.user) %}
+        <a class="btn ghost" href="{{ path('onboarding', {step: step.previous.value}) }}"><twig:Icon name="arrow-left" />{{ 'action.back'|trans }}</a>
+    {% else %}<span></span>{% endif %}
+    <div class="progress-dots" aria-hidden="true">{% for s in steps %}<i class="{{ s.index <= step.index ? 'on' }}"></i>{% endfor %}</div>
+    {{ actions|default('')|raw }}
+</div>

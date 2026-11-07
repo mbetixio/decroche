@@ -1,0 +1,10 @@
+{% extends 'onboarding/layout.html.twig' %}
+{% block heading %}{{ 'onboarding.scorecard.title'|trans }}{% endblock %}
+{% block lead %}<p class="lead">{{ 'onboarding.scorecard.lead'|trans }}</p>{% endblock %}
+{% block content %}
+{{ form_start(form, {attr: {class: 'stack'}}) }}
+    {{ form_errors(form) }}{{ form_errors(form.criteria) }}
+    {{ include('settings/_scorecard.html.twig') }}
+    {{ include('onboarding/_foot.html.twig', {actions: '<button class="btn primary lg">' ~ 'action.continue'|trans ~ ' →</button>'}) }}
+{{ form_end(form) }}
+{% endblock %}
