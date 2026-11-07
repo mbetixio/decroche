@@ -32,7 +32,7 @@
 {% endif %}
 
 <details class="card" style="margin-top:18px" {{ call.status.value == 'abandoned' ? 'open' }}>
-    <summary class="row between" style="cursor:pointer"><b>{{ 'call.transcript'|trans }}</b><span class="small muted">{{ 'call.transcript_meta'|trans({'%turns%': call.sellerTurns, '%minutes%': call.durationMinutes(date())}) }}{% if call.isSpoken %} · {{ 'call.spoken'|trans }}{% endif %}</span></summary>
+    <summary class="row between" style="cursor:pointer"><b>{{ 'call.transcript'|trans }}</b><span class="small muted">{{ 'call.transcript_meta'|trans({'%count%': call.sellerTurns, '%minutes%': call.durationMinutes(now)}) }}{% if call.isSpoken %} · {{ 'call.spoken'|trans }}{% endif %}</span></summary>
     <div class="transcript" style="margin-top:12px">
         {% for line in call.lines %}
             <p class="{{ line.speaker.value }}">

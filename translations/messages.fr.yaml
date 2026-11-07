@@ -274,7 +274,7 @@ call:
     abandon_confirm: 'Abandonner cet appel ? Il ne sera pas noté.'
     again: 'Rejouer'
     transcript: 'Le transcript de l''appel'
-    transcript_meta: '{0} aucune réplique · %minutes% min|{1} 1 réplique · %minutes% min|]1,Inf[ %turns% répliques · %minutes% min'
+    transcript_meta: '{0} aucune réplique · %minutes% min|{1} 1 réplique · %minutes% min|]1,Inf[ %count% répliques · %minutes% min'
     spoken: 'dicté au micro'
     you: 'Vous'
     replay_from_here: 'Rejouer d''ici'

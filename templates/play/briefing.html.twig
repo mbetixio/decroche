@@ -25,7 +25,7 @@
         </section>
         {% if scenario.material %}
             <section class="card stack" style="--gap:10px">
-                <h2><twig:Icon name="file" />{{ situation ? situation.material : 'briefing.document'|trans }}</h2>
+                <h2><twig:Icon name="file" />{{ 'briefing.document'|trans }}</h2>
                 <div class="doc pre">{{ scenario.material }}</div>
             </section>
         {% endif %}

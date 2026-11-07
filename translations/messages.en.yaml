@@ -274,7 +274,7 @@ call:
     abandon_confirm: 'Abandon this call? It will not be graded.'
     again: 'Play again'
     transcript: 'The call''s transcript'
-    transcript_meta: '{0} no lines · %minutes% min|{1} 1 line · %minutes% min|]1,Inf[ %turns% lines · %minutes% min'
+    transcript_meta: '{0} no lines · %minutes% min|{1} 1 line · %minutes% min|]1,Inf[ %count% lines · %minutes% min'
     spoken: 'spoken into the microphone'
     you: 'You'
     replay_from_here: 'Replay from here'

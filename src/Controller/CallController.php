@@ -20,6 +20,7 @@ use App\Security\Voter\ScenarioVoter;
 use App\Voice\SpeechSynthesizer;
 use App\Voice\SynthesisException;
 use App\Voice\VoiceCasting;
+use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -69,7 +70,7 @@ final class CallController extends AbstractController
      */
     #[Route('/{id<\d+>}', name: 'call_show')]
     #[IsGranted(CallVoter::VIEW, 'call')]
-    public function show(Call $call, #[CurrentUser] Member $me, SpeechSynthesizer $synthesizer, VoiceCasting $casting, CompanyRepository $companies): Response
+    public function show(Call $call, #[CurrentUser] Member $me, SpeechSynthesizer $synthesizer, VoiceCasting $casting, CompanyRepository $companies, ClockInterface $clock): Response
     {
         $this->calls->expire($call);
         $company = $companies->get();
@@ -78,7 +79,7 @@ final class CallController extends AbstractController
                 'call' => $call,
                 'scenario' => $call->scenario,
                 'voice' => $synthesizer->isAvailable() ? $casting->voice($call->scenario, $company->language) : null,
-                'secondsLeft' => $call->secondsLeft(new \DateTimeImmutable()),
+                'secondsLeft' => $call->secondsLeft($clock->now()),
             ]);
         }
 
@@ -86,6 +87,7 @@ final class CallController extends AbstractController
             'call' => $call,
             'debrief' => null !== $call->debrief ? Debrief::fromArray($call->debrief) : null,
             'mine' => $call->member === $me,
+            'now' => $clock->now(),
         ]);
     }
 

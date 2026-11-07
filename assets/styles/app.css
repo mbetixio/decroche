@@ -142,7 +142,7 @@ p + p { margin-top: .6em; }
 .me { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; text-decoration: none; }
 .me:hover { background: var(--surface-2); }
 .me b { display: block; font-size: 14px; }
-.me span { font-size: 12px; color: var(--ink-3); }
+.me > span:not(.avatar) span { font-size: 12px; color: var(--ink-3); }
 
 .main { padding: 34px clamp(18px, 4vw, 48px) 80px; max-width: 1240px; width: 100%; }
 .page-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
@@ -471,3 +471,6 @@ a.chip:hover { border-color: var(--ink-3); }
 .chip.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
 details > summary.btn { list-style: none; width: fit-content; }
 details > summary.btn::-webkit-details-marker { display: none; }
+h2:has(> svg), h3:has(> svg) { display: flex; align-items: center; gap: 8px; }
+h2 > svg, h3 > svg { color: var(--brand); flex: none; }
+.card.hero h2 > svg, .card.dark h2 > svg { color: inherit; }
