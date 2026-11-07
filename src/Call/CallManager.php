@@ -38,7 +38,7 @@ final readonly class CallManager
     public function start(Member $member, Scenario $scenario): Call
     {
         if (!$scenario->active) {
-            throw new CallException('Ce scénario est archivé.');
+            throw new CallException('call.error.archived');
         }
         $this->abandonCurrent($member);
         $call = new Call($member, $scenario, $this->clock->now());
@@ -61,14 +61,14 @@ final readonly class CallManager
     {
         $text = trim($text);
         if ('' === $text) {
-            throw new CallException('Votre message est vide.');
+            throw new CallException('call.error.empty');
         }
         if (mb_strlen($text) > 2000) {
-            throw new CallException('Votre message est trop long : en rendez-vous, on parle, on ne lit pas un mémoire.');
+            throw new CallException('call.error.too_long');
         }
         $this->expire($call);
         if (!$call->isLive()) {
-            throw new CallException('Cet appel est terminé.');
+            throw new CallException('call.error.over');
         }
         $call->say(Speaker::Seller, $text, $this->clock->now(), $voiceMs);
         $this->calls->save($call);
@@ -147,7 +147,7 @@ final readonly class CallManager
     public function abandon(Call $call): Call
     {
         if (!$call->isLive()) {
-            throw new CallException('Cet appel n\'est plus en cours.');
+            throw new CallException('call.error.not_live');
         }
         $call->stop(CallEnd::Seller, $this->clock->now(), abandoned: true);
         $this->calls->save($call);
@@ -163,7 +163,7 @@ final readonly class CallManager
     public function replay(Call $call, int $line): Call
     {
         if ($call->isLive()) {
-            throw new CallException('Terminez d\'abord cet appel.');
+            throw new CallException('call.error.finish_first');
         }
         $this->abandonCurrent($call->member);
         try {

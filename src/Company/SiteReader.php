@@ -59,7 +59,7 @@ final readonly class SiteReader
         }
         $host = parse_url($url, \PHP_URL_HOST);
         if (!\is_string($host) || !str_contains($host, '.')) {
-            throw new \InvalidArgumentException('Cette adresse de site n\'est pas valide.');
+            throw new \InvalidArgumentException('company.error.invalid_website');
         }
 
         return $url;

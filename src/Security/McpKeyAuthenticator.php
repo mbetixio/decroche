@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
  */
 final class McpKeyAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
-    private const string HELP = 'Ajoutez votre adresse personnelle, affichée sur Sparring dans « Mon compte » : /mcp?key=…';
+    private const string HELP = 'Add your personal address, shown in Sparring under "My account": /mcp?key=… / Ajoutez votre adresse personnelle, affichée dans « Mon compte » : /mcp?key=…';
 
     public function __construct(
         private readonly MemberRepository $members,
@@ -45,7 +45,7 @@ final class McpKeyAuthenticator extends AbstractAuthenticator implements Authent
         }
 
         return new SelfValidatingPassport(new UserBadge(hash('sha256', $key), fn (): Member => $this->members->findOneByMcpKey($key)
-            ?? throw new CustomUserMessageAuthenticationException('Cette clé n\'appartient à personne. '.self::HELP)));
+            ?? throw new CustomUserMessageAuthenticationException('Unknown key / Clé inconnue. '.self::HELP)));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

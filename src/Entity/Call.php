@@ -80,7 +80,7 @@ class Call
     {
         $line = $from->lines()[$n] ?? null;
         if (null === $line || !$line->isSeller()) {
-            throw new \InvalidArgumentException('On ne rejoue qu\'à partir d\'une de vos répliques.');
+            throw new \InvalidArgumentException('call.error.replay_line');
         }
         $now = self::local($now);
         $elapsed = max(0, $line->at->getTimestamp() - $from->startedAt->getTimestamp());

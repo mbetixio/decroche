@@ -35,7 +35,7 @@ final readonly class TeamManager
     public function create(string $name, string $email, string $password, MemberRole $role, string $profile = ''): Member
     {
         if (null !== $this->members->findOneByEmail($email)) {
-            throw new \DomainException('Un compte existe déjà avec cette adresse.');
+            throw new \DomainException('team.error.email_taken');
         }
         $member = new Member(trim($name), $email, $role, $this->clock->now());
         $member->setPassword($this->hasher->hashPassword($member, $password));
@@ -54,7 +54,7 @@ final readonly class TeamManager
     public function invite(string $email, MemberRole $role, ?Member $by): Invitation
     {
         if (null !== $this->members->findOneByEmail($email)) {
-            throw new \DomainException('Un compte existe déjà avec cette adresse.');
+            throw new \DomainException('team.error.email_taken');
         }
         foreach ($this->invitations->pending() as $pending) {
             if ($pending->email === mb_strtolower(trim($email))) {
@@ -76,7 +76,7 @@ final readonly class TeamManager
     public function accept(Invitation $invitation, string $name, string $password): Member
     {
         if (!$invitation->isPending()) {
-            throw new \DomainException('Cette invitation a déjà servi.');
+            throw new \DomainException('team.error.invitation_used');
         }
         $member = $this->create($name, $invitation->email, $password, $invitation->role);
         $invitation->accept($this->clock->now());
@@ -99,7 +99,7 @@ final readonly class TeamManager
     public function toggleRole(Member $member, Member $by): void
     {
         if ($member === $by) {
-            throw new \DomainException('Vous ne pouvez pas changer votre propre rôle.');
+            throw new \DomainException('team.error.own_role');
         }
         $member->role = $member->isManager() ? MemberRole::Seller : MemberRole::Manager;
         $this->em->flush();
