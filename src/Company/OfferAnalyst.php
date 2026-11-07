@@ -35,7 +35,7 @@ final readonly class OfferAnalyst
     {
         $site = null !== $company->website && '' !== $company->website ? $this->site->read($company->website) : '';
         if ('' === trim($site) && mb_strlen(trim($company->about)) < 30) {
-            throw new \InvalidArgumentException('Donnez l\'adresse d\'un site lisible, ou décrivez votre entreprise en quelques phrases.');
+            throw new \InvalidArgumentException('company.error.nothing_to_analyze');
         }
         $this->offer($company, $site);
         $this->situations($company);
@@ -49,21 +49,22 @@ final readonly class OfferAnalyst
      */
     public function offer(Company $company, string $site): void
     {
-        $system = <<<'PROMPT'
-            Tu prépares un outil d'entraînement commercial : des commerciaux vont s'entraîner au téléphone contre des clients
-            simulés. Pour que les situations soient crédibles, tu rédiges la fiche d'offre de leur société, à partir de son site
-            et de ce qu'elle dit d'elle-même. Cette fiche servira au client simulé (ce qu'il peut savoir et objecter), au coach
-            (qui pénalise toute promesse hors offre) et aux commerciaux.
-            N'écris que ce que les sources disent ou impliquent clairement ; quand une information manque (prix, délais…),
-            écris « à préciser » plutôt que d'inventer. Aucun tarif inventé.
-            Réponds uniquement avec un objet JSON, en français :
-            {"name": "le nom de la société",
-             "offer": "la fiche, en texte simple avec ces rubriques, chacune sur son paragraphe :\nQui : …\n\nLes offres : (une ligne par offre, commençant par « - »)\n\nLe cadre : délais, prix et façon de chiffrer, démarche commerciale (premier rendez-vous, démo, devis…), engagements\n\nRéférences et preuves : …\n\nCe que la société ne propose pas, ou que rien ne garantit : …\n\nLes objections classiques des prospects : (une ligne par objection, entre guillemets, comme un client la dirait)\n\nLes arguments forts : …",
-             "sectors": ["10 à 15 secteurs ou types de clients que la société sert ou vise (en minuscules, ex. « e-commerce », « cabinets d'avocats », « collectivités »)"]}
+        $language = $company->language->englishName();
+        $system = <<<PROMPT
+            You are preparing a sales training tool: sellers will practise on the phone against simulated clients. For the
+            situations to be believable, you write their company's offer sheet, from its website and what it says about itself.
+            This sheet will be used by the simulated client (what they may know and object), by the coach (who penalizes any
+            promise outside the offer) and by the sellers.
+            Only write what the sources say or clearly imply; when a piece of information is missing (prices, lead times…),
+            write "to be specified" (in {$language}) rather than inventing. No invented prices.
+            Answer only with a JSON object; every text value is written in {$language}:
+            {"name": "the company's name",
+             "offer": "the sheet, in plain text with these sections, each in its own paragraph, their titles translated into {$language}:\nWho: …\n\nThe offers: (one line per offer, starting with \"- \")\n\nThe terms: lead times, prices and how they are quoted, sales process (first meeting, demo, quote…), commitments\n\nReferences and proof: …\n\nWhat the company does not offer, or what nothing guarantees: …\n\nProspects' classic objections: (one line per objection, in quotes, as a client would say it)\n\nThe strong arguments: …",
+             "sectors": ["10 to 15 sectors or types of clients the company serves or targets (lowercase)"]}
             PROMPT;
-        $user = 'Ce que la société dit d\'elle-même : '.('' !== trim($company->about) ? trim($company->about) : '(rien)')
-            ."\n\nSon nom déclaré : {$company->name}"
-            ."\n\nSon site".('' !== $site ? " :\n{$site}" : ' : (pas de site lisible)');
+        $user = 'What the company says about itself: '.('' !== trim($company->about) ? trim($company->about) : '(nothing)')
+            ."\n\nIts declared name: {$company->name}"
+            ."\n\nIts website".('' !== $site ? ":\n{$site}" : ': (no readable website)');
 
         $data = $this->model->json($system, $user, 0.3);
         $offer = \is_string($data['offer'] ?? null) ? trim($data['offer']) : '';
@@ -82,24 +83,24 @@ final readonly class OfferAnalyst
      */
     public function situations(Company $company): void
     {
-        $canvas = json_encode(array_values(array_map(static fn (Situation $s): array => ['label' => $s->label, 'family' => $s->family->value, 'direction' => $s->direction->value, 'pitch' => $s->pitch], $this->canvas->situations())), \JSON_UNESCAPED_UNICODE);
+        $canvas = json_encode(array_values(array_map(static fn (Situation $s): array => ['label' => $s->label, 'family' => $s->family->value, 'direction' => $s->direction->value, 'pitch' => $s->pitch], $this->canvas->situations($company->language))), \JSON_UNESCAPED_UNICODE);
+        $language = $company->language->englishName();
         $system = <<<PROMPT
-            Tu prépares un jeu d'entraînement commercial : à chaque partie, un commercial tire une situation d'appel au hasard
-            (un appel qu'il passe ou qu'il reçoit) et la joue contre un client simulé. Écris le catalogue des situations de
-            cette société, d'après sa fiche d'offre : 14 à 18 situations variées et réalistes pour SON métier, qui couvrent
-            la prospection, la relation client et la négociation. Reprends et adapte les situations du canevas commun qui
-            ont du sens pour elle (en réécrivant le pitch avec ses offres, ses clients, ses objections), et ajoute 4 à 6
-            situations propres à son métier.
-            Le canevas commun : {$canvas}
-            Réponds uniquement avec un objet JSON, en français :
-            {"situations": [{"key": "identifiant_court_en_snake_case", "label": "titre court", "emoji": "un emoji",
-              "family": "prospection, client ou negociation", "direction": "sortant (le commercial appelle) ou entrant (on l'appelle)",
-              "material": "le document que le commercial a sous les yeux avant l'appel (« Le message du formulaire », « La fiche client »…)",
-              "pitch": "3 ou 4 phrases : qui est en face, ce qu'il veut, ce qui coince, ce qui se cache",
-              "objectives": ["trois objectifs concrets et vérifiables pour l'appel"]}]}
+            You are preparing a sales training game: in each round, a seller draws a phone call situation at random (a call
+            they make or receive) and plays it against a simulated client. Write this company's catalogue of situations, from
+            its offer sheet: 14 to 18 varied, realistic situations for ITS business, covering prospecting, client relations and
+            negotiation. Take and adapt the situations of the common canvas that make sense for it (rewriting the pitch with
+            its offers, its clients, its objections), and add 4 to 6 situations specific to its business.
+            The common canvas: {$canvas}
+            Answer only with a JSON object; every text value is written in {$language}:
+            {"situations": [{"key": "short_identifier_in_snake_case", "label": "short title", "emoji": "one emoji",
+              "family": "prospecting, client or negotiation", "direction": "outgoing (the seller calls) or incoming (the seller is called)",
+              "material": "the document the seller has in front of them before the call (the form message, the client file…)",
+              "pitch": "3 or 4 sentences: who is on the other end, what they want, what is stuck, what is hidden",
+              "objectives": ["three concrete, checkable objectives for the call"]}]}
             PROMPT;
 
-        $data = $this->model->json($system, "La société : {$company->name}\n\nSa fiche d'offre :\n{$company->offer}", 0.7);
+        $data = $this->model->json($system, "The company: {$company->name}\n\nIts offer sheet:\n{$company->offer}", 0.7);
         $situations = [];
         foreach (\is_array($data['situations'] ?? null) ? $data['situations'] : [] as $s) {
             if (\is_array($s) && null !== $situation = Situation::fromArray(\is_string($s['key'] ?? null) ? $s['key'] : '', $s)) {

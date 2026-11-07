@@ -32,9 +32,9 @@ final readonly class Coach
     {
         $company = $this->companies->get();
         $scorecard = $company->scorecard();
-        $figures = $this->speech->analyze($call);
+        $figures = $this->speech->analyze($call, $company->language);
         if (0 === $call->sellerTurns()) {
-            return ['debrief' => $this->builder->empty($call, $scorecard, $figures), 'score' => 0];
+            return ['debrief' => $this->builder->empty($call, $scorecard, $figures, $company->language), 'score' => 0];
         }
         $data = $this->model->json($this->prompt->system($call, $company), $this->prompt->user($call, $figures, $now), 0.4);
         $result = $this->builder->build($call, $data, $scorecard, $figures);

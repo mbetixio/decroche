@@ -5,23 +5,32 @@ declare(strict_types=1);
 namespace App\Call\Speech;
 
 use App\Entity\Call;
+use App\Enum\Language;
 use App\Enum\Speaker;
 use App\Model\Line;
 
 /**
- * Measures how the seller talked, from the transcript: talk share, questions (open ones), filler words, longest line,
+ * Measures how the seller talked, from the transcript and in the working language: talk share, questions (open ones), filler words, longest line,
  * speech rate when spoken, reply delay.
  */
 final class SpeechAnalyzer
 {
-    /** Filler words that weaken a pitch (speech recognition keeps the "euh" when they are said). */
-    public const array FILLERS = ['euh', 'heu', 'bah', 'ben', 'du coup', 'en fait', 'voilà', 'genre', 'en gros', 'quoi', 'enfin bref', 'vous voyez', 'tu vois', 'franchement', 'honnêtement'];
+    /** Filler words that weaken a pitch, by language (speech recognition keeps the "euh" and "um" when they are said). */
+    public const array FILLERS = [
+        'fr' => ['euh', 'heu', 'bah', 'ben', 'du coup', 'en fait', 'voilà', 'genre', 'en gros', 'quoi', 'enfin bref', 'vous voyez', 'tu vois', 'franchement', 'honnêtement'],
+        'en' => ['um', 'uh', 'erm', 'like', 'you know', 'i mean', 'basically', 'actually', 'literally', 'sort of', 'kind of', 'to be honest', 'honestly', 'right'],
+    ];
 
-    /** Words that open a question, so that an unpunctuated spoken question still counts (and counts as open). */
-    private const array ASKING = ['qu\'est-ce', 'qu est-ce', 'comment', 'pourquoi', 'quel', 'quelle', 'quels', 'quelles', 'combien', 'est-ce que', 'qui ', 'où ', 'quand', 'lequel', 'laquelle', 'racontez', 'dites-moi', 'expliquez'];
+    /** Words that open a question, by language, so that an unpunctuated spoken question still counts (and counts as open). */
+    private const array ASKING = [
+        'fr' => ['qu\'est-ce', 'qu est-ce', 'comment', 'pourquoi', 'quel', 'quelle', 'quels', 'quelles', 'combien', 'est-ce que', 'qui ', 'où ', 'quand', 'lequel', 'laquelle', 'racontez', 'dites-moi', 'expliquez'],
+        'en' => ['what', 'how', 'why', 'which', 'who', 'where', 'when', 'tell me', 'walk me through', 'could you describe', 'can you explain'],
+    ];
 
-    public function analyze(Call $call): SpeechFigures
+    public function analyze(Call $call, Language $language = Language::French): SpeechFigures
     {
+        $asking = self::ASKING[$language->value];
+        $fillerWords = self::FILLERS[$language->value];
         $lines = $call->lines();
         $seller = array_values(array_filter($lines, static fn (Line $l): bool => $l->isSeller()));
         $sellerWords = array_sum(array_map(static fn (Line $l): int => self::words($l->text), $seller));
@@ -32,13 +41,13 @@ final class SpeechAnalyzer
         foreach ($seller as $line) {
             $text = ' '.mb_strtolower($line->text).' ';
             foreach (preg_split('/(?<=[.?!])\s+/u', trim($text), -1, \PREG_SPLIT_NO_EMPTY) ?: [] as $sentence) {
-                $asks = array_filter(self::ASKING, static fn (string $w): bool => str_contains(' '.$sentence, ' '.$w) || str_starts_with($sentence, trim($w)));
+                $asks = array_filter($asking, static fn (string $w): bool => str_contains(' '.$sentence, ' '.$w) || str_starts_with($sentence, trim($w)));
                 if (str_contains($sentence, '?') || [] !== $asks) {
                     ++$questions;
                     $open += [] !== $asks ? 1 : 0;
                 }
             }
-            foreach (self::FILLERS as $filler) {
+            foreach ($fillerWords as $filler) {
                 if (($n = (int) preg_match_all('/(?<![\p{L}])'.preg_quote($filler, '/').'(?![\p{L}])/u', $text)) > 0) {
                     $fillers[$filler] = ($fillers[$filler] ?? 0) + $n;
                 }

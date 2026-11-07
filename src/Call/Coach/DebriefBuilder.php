@@ -7,17 +7,24 @@ namespace App\Call\Coach;
 use App\Call\Speech\SpeechFigures;
 use App\Entity\Call;
 use App\Enum\BriefSection;
+use App\Enum\Language;
 use App\Enum\ObjectiveStatus;
 use App\Model\Criterion;
 use App\Model\Line;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Turns what the model returned into a reliable debrief and a score: every criterion of the scorecard graded 0 to 10,
  * every objective judged, only quotes the seller really said, and the score computed here rather than by the model
  * (70 % skills, 30 % objectives).
  */
-final class DebriefBuilder
+final readonly class DebriefBuilder
 {
+    public function __construct(
+        private TranslatorInterface $translator,
+    ) {
+    }
+
     /**
      * @param array<mixed>            $data      the model's JSON
      * @param array<string, Criterion> $scorecard
@@ -38,7 +45,7 @@ final class DebriefBuilder
         $objectives = [];
         foreach ($call->scenario->objectives() as $i => $objective) {
             $j = \is_array($judged[$i] ?? null) ? $judged[$i] : [];
-            $objectives[] = ['objective' => $objective, 'status' => self::status($j['status'] ?? ''), 'evidence' => self::text($j['evidence'] ?? '')];
+            $objectives[] = ['objective' => $objective, 'status' => ObjectiveStatus::fromModel($j['status'] ?? ''), 'evidence' => self::text($j['evidence'] ?? '')];
         }
         $reached = [] === $objectives ? null : array_sum(array_map(static fn (array $o): float => $o['status']->weight(), $objectives)) / \count($objectives);
         $score = (int) round(null === $reached ? $skills : 0.7 * $skills + 30 * $reached);
@@ -82,22 +89,23 @@ final class DebriefBuilder
      *
      * @param array<string, Criterion> $scorecard
      */
-    public function empty(Call $call, array $scorecard, SpeechFigures $figures): Debrief
+    public function empty(Call $call, array $scorecard, SpeechFigures $figures, Language $language): Debrief
     {
         $objectives = $call->scenario->objectives();
+        $t = fn (string $key): string => $this->translator->trans($key, locale: $language->value);
 
         return new Debrief(
-            criteria: array_map(static fn (Criterion $c): array => ['label' => $c->label, 'score' => 0, 'comment' => 'Aucune réplique : rien à évaluer.'], $scorecard),
-            summary: 'Le rendez-vous s\'est terminé avant que le commercial ne prenne la parole.',
+            criteria: array_map(fn (Criterion $c): array => ['label' => $c->label, 'score' => 0, 'comment' => $t('debrief.empty.comment')], $scorecard),
+            summary: $t('debrief.empty.summary'),
             nextStep: false,
-            outcome: 'Rien n\'a été engagé.',
-            result: 'Appel raccroché sans un mot',
+            outcome: $t('debrief.empty.outcome'),
+            result: $t('debrief.empty.result'),
             objectives: array_map(static fn (string $o): array => ['objective' => $o, 'status' => ObjectiveStatus::Missed, 'evidence' => ''], $objectives),
             goal: [] === $objectives ? null : ObjectiveStatus::Missed,
             missed: [],
             best: [],
             worst: [],
-            tips: ['Ouvrez le rendez-vous en reprenant le contexte et en demandant au client ce qu\'il attend de l\'échange.'],
+            tips: [$t('debrief.empty.tip')],
             speech: $figures,
         );
     }
@@ -145,16 +153,6 @@ final class DebriefBuilder
         return false;
     }
 
-    private static function status(mixed $value): ObjectiveStatus
-    {
-        $status = mb_strtolower(self::text($value));
-
-        return match (true) {
-            str_starts_with($status, 'atteint') => ObjectiveStatus::Reached,
-            str_starts_with($status, 'partiel') => ObjectiveStatus::Partial,
-            default => ObjectiveStatus::Missed,
-        };
-    }
 
     private static function text(mixed $value): string
     {

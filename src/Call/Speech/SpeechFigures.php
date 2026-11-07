@@ -61,10 +61,10 @@ final readonly class SpeechFigures
      */
     public function describe(): string
     {
-        return \sprintf('L\'appel en chiffres : le commercial a eu %d %% de la parole (%d mots contre %d), %d question(s) dont %d ouverte(s), %d tic(s) de langage%s, une plus longue tirade de %d mots%s%s.',
+        return \sprintf('The call in figures: the seller had %d %% of the words (%d against %d), %d question(s) of which %d open, %d filler word(s)%s, a longest line of %d words%s%s.',
             $this->talkShare, $this->sellerWords, $this->personaWords, $this->questions, $this->openQuestions, $this->fillers,
             [] === $this->fillerWords ? '' : ' ('.implode(', ', array_keys($this->fillerWords)).')', $this->longest,
-            null !== $this->wordsPerMinute ? ', un débit de '.$this->wordsPerMinute.' mots par minute' : '',
-            $this->voice ? ' ; l\'appel a été mené à la voix (les répliques sont des transcriptions : ignore l\'orthographe et la ponctuation)' : '');
+            null !== $this->wordsPerMinute ? ', a pace of '.$this->wordsPerMinute.' words per minute' : '',
+            $this->voice ? '; the call was made by voice (the lines are transcriptions: ignore spelling and punctuation)' : '');
     }
 }

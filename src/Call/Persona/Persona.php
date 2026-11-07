@@ -31,7 +31,7 @@ final readonly class Persona
      */
     public function reply(Call $call, \DateTimeImmutable $now, ?string $note = null): \Generator
     {
-        $messages = [['role' => 'user', 'content' => '[Le rendez-vous commence : le commercial vient d\'arriver. Ouvre la conversation.]']];
+        $messages = [['role' => 'user', 'content' => '[The meeting starts: the seller has just arrived. Open the conversation.]']];
         foreach ($call->lines() as $line) {
             $messages[] = ['role' => Speaker::Persona === $line->speaker ? 'assistant' : 'user', 'content' => $line->text];
         }
