@@ -1,7 +1,7 @@
 {% extends 'security/_layout.html.twig' %}
 {% block title %}{{ 'security.login'|trans }}{% endblock %}
 {% block content %}
-<div><h1 style="font-size:26px">{{ 'security.login_title'|trans }}</h1><p class="muted">{{ 'security.login_lead'|trans }}</p></div>
+<div><h1>{{ 'security.login_title'|trans }}</h1><p class="muted">{{ 'security.login_lead'|trans }}</p></div>
 {% if error %}<div class="flash error" style="position:static"><twig:Icon name="alert" /><span>{{ error.messageKey|trans(error.messageData, 'security') }}</span></div>{% endif %}
 <form method="post" action="{{ path('login') }}" class="form">
     <div class="field"><label for="email">{{ 'form.email'|trans }}</label><input id="email" type="email" name="_username" value="{{ last }}" autocomplete="email" required autofocus></div>

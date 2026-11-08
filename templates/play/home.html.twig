@@ -18,17 +18,7 @@
 {% endif %}
 
 <section class="play-hero">
-    <div class="card hero pad-l call-cta" data-controller="draw">
-        <span class="badge glass"><twig:Icon name="sparkles" />{{ 'play.ready'|trans }}</span>
-        <h2>{{ 'play.cta_title'|trans }}</h2>
-        <p>{{ 'play.cta_text'|trans }}</p>
-        <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit" style="margin-top:22px">
-            <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
-            <button class="btn white lg"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button>
-        </form>
-        <p class="tiny" style="color:rgb(255 255 255 / .7);margin-top:10px">{{ 'play.adapted'|trans }}</p>
-        <p class="small" data-draw-target="error" data-fallback="{{ 'play.draw_failed'|trans }}" style="color:#ffe1d6;margin-top:8px" hidden></p>
-    </div>
+    {{ include('play/_new_call.html.twig') }}
     <div class="card pad-l row" style="--gap:22px;align-items:center">
         <div class="level-ring" style="--pct: {{ level.percent }}"><div><div><b>{{ level.number }}</b><div class="tiny faint">{{ 'play.level'|trans }}</div></div></div></div>
         <div class="stack" style="--gap:6px">

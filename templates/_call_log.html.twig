@@ -1,0 +1,12 @@
+{# An excerpt of a practice call that writes itself, line by line: the AI client objects, the seller asks the right
+   question, a section of the hidden brief unlocks, the coach grades. It shows the product in ten seconds. #}
+<div class="call-log" data-controller="call-log" aria-label="{{ 'log.aria'|trans }}">
+    <div class="call-log-head"><span class="rec"></span>{{ 'log.title'|trans }}<span class="call-log-time">03:58</span></div>
+    <ol>
+        <li class="client" data-call-log-target="line"><time>00:03</time><b>{{ 'log.client'|trans }}</b><span>{{ 'log.line1'|trans }}</span></li>
+        <li class="seller" data-call-log-target="line"><time>00:07</time><b>{{ 'log.you'|trans }}</b><span>{{ 'log.line2'|trans }}</span></li>
+        <li class="client" data-call-log-target="line"><time>00:12</time><b>{{ 'log.client'|trans }}</b><span>{{ 'log.line3'|trans }}</span></li>
+        <li class="unlock" data-call-log-target="line"><time></time><b>{{ 'log.brief'|trans }}</b><span>{{ 'log.line4'|trans }}</span></li>
+        <li class="coach" data-call-log-target="line"><time>03:58</time><b>{{ 'log.coach'|trans }}</b><span><strong>78</strong>/100 · {{ 'log.line5'|trans }}</span></li>
+    </ol>
+</div>
