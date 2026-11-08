@@ -11,7 +11,7 @@ use Symfony\Component\Process\Process;
 /**
  * Microsoft Edge's neural voices (Denise, Henri…), synthesized server-side by edge-tts, the reference library for
  * Edge's read-aloud service: the seller's browser no longer needs good voices of its own. The MP3s are cached, so a
- * line already said is never synthesized twice.
+ * line already said is never synthesized twice; lines not heard for a while are pruned.
  *
  * The read-aloud service is not a documented public API: Microsoft changes its access token now and then, and
  * "pip install -U edge-tts" follows. When it fails, the browser's own voice takes over.
@@ -24,6 +24,7 @@ final readonly class EdgeTtsSynthesizer implements SpeechSynthesizer
         private string $binary,
         #[Autowire('%env(default:voices_dir:VOICES_DIR)%')]
         private string $cache,
+        private VoiceCachePruner $pruner,
     ) {
     }
 
@@ -54,7 +55,14 @@ final readonly class EdgeTtsSynthesizer implements SpeechSynthesizer
         }
         $file = \sprintf('%s/%s.mp3', $this->cache, sha1($voice.$prosody->rate.$prosody->pitch."\n".$text));
         if (is_file($file) && filesize($file) > 0) {
+            // Heard again: the pruner keeps it.
+            @touch($file);
+
             return new EdgeTtsSynthesis($file, null, '');
+        }
+        // Now and then (one new line in two hundred), the cache is pruned: no cron needed.
+        if (1 === random_int(1, 200)) {
+            $this->pruner->prune();
         }
         if (!is_dir($this->cache)) {
             @mkdir($this->cache, 0o775, true);

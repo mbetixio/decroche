@@ -23,4 +23,7 @@ else
     php bin/console app:install --no-interaction
 fi
 
+# The cached voices not heard for 30 days go (they are also pruned now and then while the app runs).
+php bin/console app:prune-voices --no-interaction || true
+
 exec docker-php-entrypoint "$@"
