@@ -3,15 +3,19 @@
 {% block title %}{{ 'account.profile_title'|trans }}{% endblock %}
 {% block body %}
 <header class="page-head">
-    <div><h1>{{ (first ? 'account.profile_first' : 'account.profile_title')|trans }}</h1><p>{{ 'account.profile_lead'|trans({'%company%': company().name}) }}</p></div>
+    <div class="page-head-text">
+        {% if not first %}<a class="eyebrow" href="{{ path('account') }}"><twig:Icon name="arrow-left" size="14" />{{ 'account.title'|trans }}</a>{% endif %}
+        <h1>{{ (first ? 'account.profile_first' : 'account.profile_title')|trans }}</h1>
+        <p class="lead">{{ 'account.profile_lead'|trans({'%company%': company().name}) }}</p>
+    </div>
 </header>
-<div class="cols-main">
-    {{ form_start(form, {attr: {class: 'form card pad-l'}}) }}
+<div class="split">
+    {{ form_start(form, {attr: {class: 'form'}}) }}
         {{ form_rest(form) }}
-        <div class="row end"><button class="btn primary lg">{{ (first ? 'account.start' : 'action.save')|trans }}</button></div>
+        <div class="form-actions"><button class="btn primary lg">{{ (first ? 'account.start' : 'action.save')|trans }}</button></div>
     {{ form_end(form) }}
-    <aside class="card stack" style="--gap:10px;align-content:start">
-        <h2>{{ 'account.why_title'|trans }}</h2>
+    <aside class="stack stack-s" aria-labelledby="why-title">
+        <h2 id="why-title" class="label">{{ 'account.why_title'|trans }}</h2>
         <p class="small muted">{{ 'account.why'|trans }}</p>
     </aside>
 </div>

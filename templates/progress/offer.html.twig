@@ -3,25 +3,27 @@
 {% block title %}{{ 'nav.offer'|trans }}{% endblock %}
 {% block body %}
 <header class="page-head">
-    <div><div class="eyebrow">{{ company.name }}</div><h1>{{ 'offer.title'|trans }}</h1><p>{{ 'offer.lead'|trans }}</p></div>
-    {% if is_granted('ROLE_MANAGER') %}<a class="btn" href="{{ path('settings') }}">{{ 'action.edit'|trans }}</a>{% endif %}
+    <div class="page-head-text"><p class="eyebrow">{{ company.name }}</p><h1>{{ 'offer.title'|trans }}</h1><p class="lead">{{ 'offer.lead'|trans }}</p></div>
+    {% if is_granted('ROLE_MANAGER') %}<div class="page-actions"><a class="btn" href="{{ path('settings') }}">{{ 'action.edit'|trans }}</a></div>{% endif %}
 </header>
-<div class="cols-main">
-    <section class="card pad-l stack" style="--gap:12px">
-        <h2>{{ 'offer.sheet'|trans }}</h2>
-        <div class="pre">{{ company.offer ?: 'offer.none'|trans }}</div>
-        {% if company.sectors %}<div class="chips">{% for sector in company.sectors %}<span class="chip">{{ sector }}</span>{% endfor %}</div>{% endif %}
+<div class="split">
+    <section aria-labelledby="sheet-title">
+        <div class="section-head"><h2 id="sheet-title">{{ 'offer.sheet'|trans }}</h2></div>
+        <div class="pre measure">{{ company.offer ?: 'offer.none'|trans }}</div>
+        {% if company.sectors %}
+            <div class="stack stack-s mt-l">
+                <h3 class="label">{{ 'form.sectors'|trans }}</h3>
+                <p class="muted">{{ company.sectors|join(' · ') }}</p>
+            </div>
+        {% endif %}
     </section>
-    <section class="card flush">
-        <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'offer.situations'|trans }}</h2></div>
-        <div class="list" style="margin-top:8px">
+    <section aria-labelledby="situations-title">
+        <div class="section-head"><h2 id="situations-title">{{ 'offer.situations'|trans }}</h2></div>
+        <ul class="list">
             {% for situation in company.situations %}
-                <div class="list-item" style="align-items:flex-start">
-                    <span class="emoji">{{ situation.emoji }}</span>
-                    <div><b>{{ situation.label }}</b><div class="small muted">{{ situation.family|trans }} · {{ situation.direction|trans }}</div></div>
-                </div>
+                <li class="list-item"><span><span class="list-title">{{ situation.label }}</span><span class="list-sub">{{ situation.family|trans }} · {{ situation.direction|trans }}</span></span></li>
             {% endfor %}
-        </div>
+        </ul>
     </section>
 </div>
 {% endblock %}

@@ -4,16 +4,17 @@
 {% block body %}
 {% set scenario = call.scenario %}
 <header class="page-head">
-    <div>
-        <div class="eyebrow">{{ call.startedAt|moment }}{% if not mine %} · {{ call.member.name }}{% endif %}{% if call.isReplay %} · ↺ {{ 'call.replay'|trans }}{% endif %}</div>
+    <div class="page-head-text">
+        <p class="eyebrow"><time datetime="{{ call.startedAt.format('c') }}">{{ call.startedAt|moment }}</time>{% if not mine %} · {{ call.member.name }}{% endif %}{% if call.isReplay %} · {{ 'call.replay'|trans }}{% endif %}</p>
         <h1>{{ scenario.title }}</h1>
-        <p>{{ scenario.persona.name }} · {{ scenario.persona.role }}, {{ scenario.persona.company }}</p>
+        <p class="lead">{{ scenario.persona.name }} · {{ scenario.persona.role }}, {{ scenario.persona.company }}</p>
     </div>
-    <div class="row">
-        <twig:Status :call="call" />
+    <div class="page-actions">
         {% if mine and not call.isLive %}
             <form method="post" action="{{ path('call_start', {id: scenario.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('call-start-' ~ scenario.id) }}"><button class="btn"><twig:Icon name="refresh" />{{ 'call.again'|trans }}</button></form>
             <form method="post" action="{{ path('call_draw') }}" data-controller="draw" data-action="draw#submit"><input type="hidden" name="token" value="{{ csrf_token('call-draw') }}"><button class="btn primary"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button></form>
+        {% else %}
+            <twig:Status :call="call" />
         {% endif %}
     </div>
 </header>
@@ -22,8 +23,10 @@
     {# The coach is still to write the debrief: it starts at once, behind a waiting screen. #}
     <form method="post" action="{{ path('call_finish', {id: call.id}) }}" data-controller="autosubmit">
         <input type="hidden" name="_token" value="{{ csrf_token('call-' ~ call.id) }}">
-        <div class="card pad-l" style="text-align:center">
-            <div class="overlay" style="position:static;background:none;color:inherit;backdrop-filter:none"><div><div class="spinner"></div><h2>{{ 'call.analysing'|trans }}</h2><p class="muted">{{ 'call.analysing_text'|trans }}</p></div></div>
+        <div class="panel waiting" role="status">
+            <span class="loader" aria-hidden="true"><i></i><i></i><i></i></span>
+            <h2>{{ 'call.analysing'|trans }}</h2>
+            <p>{{ 'call.analysing_text'|trans }}</p>
             <noscript><button class="btn primary">{{ 'call.write_debrief'|trans }}</button></noscript>
         </div>
     </form>
@@ -31,18 +34,18 @@
     {{ include('call/_debrief.html.twig') }}
 {% endif %}
 
-<details class="card" style="margin-top:18px" {{ call.status.value == 'abandoned' ? 'open' }}>
-    <summary class="row between" style="cursor:pointer"><b>{{ 'call.transcript'|trans }}</b><span class="small muted">{{ 'call.transcript_meta'|trans({'%count%': call.sellerTurns, '%minutes%': call.durationMinutes(now)}) }}{% if call.isSpoken %} · {{ 'call.spoken'|trans }}{% endif %}</span></summary>
-    <div class="transcript" style="margin-top:12px">
+<details class="transcript-toggle" {{ call.status.value == 'abandoned' ? 'open' }}>
+    <summary><h2>{{ 'call.transcript'|trans }}</h2><span class="small faint">{{ 'call.transcript_meta'|trans({'%count%': call.sellerTurns, '%minutes%': call.durationMinutes(now)}) }}{% if call.isSpoken %} · {{ 'call.spoken'|trans }}{% endif %}</span></summary>
+    <div class="transcript">
         {% for line in call.lines %}
-            <p class="{{ line.speaker.value }}">
-                <b>{{ line.isSeller ? (mine ? 'call.you'|trans : call.member.name) : scenario.persona.name }}</b>
-                <span>{{ line.text }}
+            <div class="{{ line.speaker.value }}">
+                <span class="who">{{ line.isSeller ? (mine ? 'call.you'|trans : call.member.name) : scenario.persona.name }}</span>
+                <div>{{ line.text }}
                     {% if mine and line.isSeller and not call.isLive %}
                         <form method="post" action="{{ path('call_replay', {id: call.id, n: loop.index0}) }}" title="{{ 'call.replay_from_here_title'|trans }}"><input type="hidden" name="_token" value="{{ csrf_token('replay-' ~ call.id) }}"><button class="btn ghost sm"><twig:Icon name="rewind" />{{ 'call.replay_from_here'|trans }}</button></form>
                     {% endif %}
-                </span>
-            </p>
+                </div>
+            </div>
         {% endfor %}
     </div>
 </details>

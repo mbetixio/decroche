@@ -1,0 +1,16 @@
+{# Calls as a call log: when (in the monospace), what and with whom, then the score or the status.
+   calls: the calls; who: show the member rather than the persona (the team's latest calls). #}
+<ol class="log">
+    {% for call in calls %}
+        <li>
+            <a class="log-row" href="{{ path('call_show', {id: call.id}) }}">
+                <time class="log-time" datetime="{{ call.startedAt.format('c') }}">{{ call.startedAt.format('Y-m-d') }} {{ call.startedAt.format('H:i') }}</time>
+                <span>
+                    <span class="log-title">{{ call.scenario.title }}</span>
+                    <span class="log-sub">{{ (who ?? false) ? call.member.name : call.scenario.persona.name ~ ' · ' ~ call.scenario.persona.role }}</span>
+                </span>
+                <span class="log-figure">{% if call.score is not null %}<twig:Score :value="call.score" />{% else %}<twig:Status :call="call" />{% endif %}</span>
+            </a>
+        </li>
+    {% endfor %}
+</ol>

@@ -1,3 +1,4 @@
-{# A person's initials, in a quiet square. #}
+{# A person's initials, in a quiet square (never a random colour). Decorative next to the name: hidden from screen
+   readers unless it stands alone (pass the name). #}
 {% props initials, name = '', size = '' %}
-<span class="avatar {{ size }}" title="{{ name }}" {{ attributes }}>{{ initials }}</span>
+<span class="avatar {{ size }}" {% if name %}title="{{ name }}"{% endif %} aria-hidden="true" {{ attributes }}>{{ initials }}</span>

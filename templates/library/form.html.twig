@@ -3,29 +3,42 @@
 {% block title %}{{ (scenario ? 'library.edit_title' : 'library.new_title')|trans }}{% endblock %}
 {% block body %}
 <header class="page-head">
-    <div><h1>{{ (scenario ? 'library.edit_title' : 'library.new_title')|trans }}</h1><p>{{ 'library.form_lead'|trans }}</p></div>
+    <div class="page-head-text">
+        <a class="eyebrow" href="{{ scenario ? path('scenario_show', {id: scenario.id}) : path('library') }}"><twig:Icon name="arrow-left" size="14" />{{ scenario ? scenario.title : 'nav.library'|trans }}</a>
+        <h1>{{ (scenario ? 'library.edit_title' : 'library.new_title')|trans }}</h1>
+        <p class="lead">{{ 'library.form_lead'|trans }}</p>
+    </div>
 </header>
 {{ form_start(form, {attr: {class: 'form'}}) }}
-<div class="cols-2">
-    <section class="card pad-l form">
-        <h2>{{ 'library.form.meeting'|trans }}</h2>
-        {{ form_row(form.title) }}
-        <div class="cols-3">{{ form_row(form.type) }}{{ form_row(form.difficulty) }}{{ form_row(form.minutes) }}</div>
-        {{ form_row(form.context) }}
-        {{ form_row(form.goal) }}
-        <h2 style="margin-top:8px">{{ 'library.form.persona'|trans }}</h2>
-        <div class="cols-3">{{ form_row(form.personaName) }}{{ form_row(form.personaRole) }}{{ form_row(form.personaCompany) }}</div>
-        {{ form_row(form.personaPersonality) }}
-        {{ form_row(form.opening) }}
-    </section>
-    <section class="card pad-l form" style="align-content:start">
-        <h2>{{ 'library.form.brief'|trans }}</h2>
-        <p class="small muted">{{ 'library.form.brief_help'|trans }}</p>
+<div class="halves">
+    <div class="stack stack-l">
+        <fieldset class="form-group">
+            <legend class="visually-hidden">{{ 'library.form.meeting'|trans }}</legend>
+            <h2 aria-hidden="true">{{ 'library.form.meeting'|trans }}</h2>
+            {{ form_row(form.title) }}
+            <div class="fields-3">{{ form_row(form.type) }}{{ form_row(form.difficulty) }}{{ form_row(form.minutes) }}</div>
+            {{ form_row(form.context) }}
+            {{ form_row(form.goal) }}
+        </fieldset>
+        <fieldset class="form-group">
+            <legend class="visually-hidden">{{ 'library.form.persona'|trans }}</legend>
+            <h2 aria-hidden="true">{{ 'library.form.persona'|trans }}</h2>
+            <div class="fields-3">{{ form_row(form.personaName) }}{{ form_row(form.personaRole) }}{{ form_row(form.personaCompany) }}</div>
+            {{ form_row(form.personaPersonality) }}
+            {{ form_row(form.opening) }}
+        </fieldset>
+    </div>
+    <fieldset class="panel pad-l form-group">
+        <legend class="visually-hidden">{{ 'library.form.brief'|trans }}</legend>
+        <div class="stack stack-s">
+            <h2 aria-hidden="true">{{ 'library.form.brief'|trans }}</h2>
+            <p class="small muted">{{ 'library.form.brief_help'|trans }}</p>
+        </div>
         {% for field in form.brief %}{{ form_row(field) }}{% endfor %}
         {% do form.brief.setRendered %}
-    </section>
+    </fieldset>
 </div>
-<div class="row end" style="margin-top:18px">
+<div class="form-actions">
     <a class="btn ghost" href="{{ scenario ? path('scenario_show', {id: scenario.id}) : path('library') }}">{{ 'action.cancel'|trans }}</a>
     <button class="btn primary">{{ 'action.save'|trans }}</button>
 </div>

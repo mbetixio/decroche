@@ -1,55 +1,61 @@
-{# The briefing before the call: who is on the line, the situation, the document, the objectives. Then pick up. #}
+{# The briefing before the call: the situation, the document, the objectives; on the side, who is on the line and the
+   one button to call them. #}
 {% extends 'base.html.twig' %}
 {% block title %}{{ scenario.title }}{% endblock %}
 {% block body %}
 {% set persona = scenario.persona %}
 {% set situation = scenario.situation %}
+{% set incoming = situation and situation.isIncoming %}
 <header class="page-head">
-    <div>
-        <div class="eyebrow">{{ situation ? situation.emoji ~ ' ' ~ situation.label : scenario.type|trans }}</div>
+    <div class="page-head-text">
+        <p class="eyebrow">{{ situation ? situation.label : scenario.type|trans }}</p>
         <h1>{{ scenario.title }}</h1>
-        <div class="chips" style="margin-top:10px">
-            {% if situation %}<span class="badge brand"><twig:Icon name="{{ situation.isIncoming ? 'phone-incoming' : 'phone-outgoing' }}" />{{ situation.direction|trans }}</span>{% endif %}
-            <span class="badge">{{ scenario.difficulty|trans }}</span>
-            <span class="badge"><twig:Icon name="clock" />{{ 'briefing.minutes'|trans({'%count%': scenario.minutes}) }}</span>
-        </div>
+        <dl class="facts">
+            {% if situation %}<div><dt class="visually-hidden">{{ 'briefing.direction'|trans }}</dt><dd><twig:Icon :name="incoming ? 'phone-incoming' : 'phone-outgoing'" size="15" class="inline-icon" /> {{ situation.direction|trans }}</dd></div>{% endif %}
+            <div><dt>{{ 'briefing.difficulty'|trans }}</dt><dd>{{ scenario.difficulty|trans }}</dd></div>
+            <div><dt>{{ 'briefing.length'|trans }}</dt><dd>{{ 'briefing.minutes'|trans({'%count%': scenario.minutes}) }}</dd></div>
+        </dl>
     </div>
 </header>
 
-<div class="cols-main">
-    <div class="stack" style="--gap:18px">
-        <section class="card pad-l stack" style="--gap:10px">
-            <h2>{{ 'briefing.context'|trans }}</h2>
-            <p>{{ scenario.context }}</p>
-            <p><b>{{ 'briefing.goal'|trans }}</b> {{ scenario.goal }}</p>
+<div class="split">
+    <div class="stack stack-l">
+        <section aria-labelledby="context-title">
+            <div class="section-head"><h2 id="context-title">{{ 'briefing.context'|trans }}</h2></div>
+            <div class="stack measure">
+                <p>{{ scenario.context }}</p>
+                <p><b>{{ 'briefing.goal'|trans }}</b> {{ scenario.goal }}</p>
+            </div>
         </section>
         {% if scenario.material %}
-            <section class="card stack" style="--gap:10px">
-                <h2>{{ 'briefing.document'|trans }}</h2>
-                <div class="doc pre">{{ scenario.material }}</div>
+            <section aria-labelledby="document-title">
+                <div class="section-head"><h2 id="document-title">{{ situation and situation.material ? situation.material : 'briefing.document'|trans }}</h2></div>
+                <div class="doc">{{ scenario.material }}</div>
             </section>
         {% endif %}
         {% if scenario.objectives %}
-            <section class="card stack" style="--gap:10px">
-                <h2>{{ 'briefing.objectives'|trans }}</h2>
-                <ol class="objectives">{% for objective in scenario.objectives %}<li>{{ objective }}</li>{% endfor %}</ol>
+            <section aria-labelledby="objectives-title">
+                <div class="section-head"><h2 id="objectives-title">{{ 'briefing.objectives'|trans }}</h2></div>
+                <ol class="numbered">{% for objective in scenario.objectives %}<li><span>{{ objective }}</span></li>{% endfor %}</ol>
             </section>
         {% endif %}
     </div>
-    <aside class="stack" style="--gap:18px;align-content:start">
-        <section class="card dark pad-l" style="text-align:center;display:grid;justify-items:center;gap:8px">
-            <twig:Avatar :initials="persona.initials" :name="persona.name" size="xl" />
-            <h2 style="color:#fff;margin-top:6px">{{ persona.name }}</h2>
-            <p style="color:rgb(255 255 255 / .7)">{{ persona.role }}<br>{{ persona.company }}</p>
-            <form method="post" action="{{ path('call_start', {id: scenario.id}) }}" style="margin-top:14px;width:100%">
+    <aside class="stack stack-l">
+        <section class="panel pad-l persona" aria-labelledby="persona-title">
+            <twig:Avatar :initials="persona.initials" size="xl" />
+            <div>
+                <h2 id="persona-title">{{ persona.name }}</h2>
+                <p>{{ persona.role }}<br>{{ persona.company }}</p>
+            </div>
+            <form method="post" action="{{ path('call_start', {id: scenario.id}) }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('call-start-' ~ scenario.id) }}">
-                <button class="btn primary lg block"><twig:Icon name="phone" />{{ ((situation and situation.isIncoming) ? 'briefing.answer' : 'briefing.call')|trans({'%name%': persona.firstName}) }}</button>
+                <button class="btn primary lg block"><twig:Icon name="phone" />{{ (incoming ? 'briefing.answer' : 'briefing.call')|trans({'%name%': persona.firstName}) }}</button>
             </form>
-            <p class="tiny" style="color:rgb(255 255 255 / .55)">{{ 'briefing.mic'|trans }}</p>
+            <p class="note">{{ 'briefing.mic'|trans }}</p>
         </section>
-        <section class="card small stack" style="--gap:8px">
-            <b>{{ 'briefing.how_title'|trans }}</b>
-            <p class="muted">{{ 'briefing.how'|trans }}</p>
+        <section aria-labelledby="how-title">
+            <h2 class="label" id="how-title">{{ 'briefing.how_title'|trans }}</h2>
+            <p class="small muted">{{ 'briefing.how'|trans }}</p>
         </section>
     </aside>
 </div>

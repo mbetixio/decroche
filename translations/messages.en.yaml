@@ -10,6 +10,10 @@ nav:
     team: 'The team'
     company: 'The company'
     logout: 'Sign out'
+    account: 'My account'
+    library_short: 'Library'
+    progress_short: 'Progress'
+    account_short: 'Account'
 action:
     back: 'Back'
     cancel: 'Cancel'
@@ -138,6 +142,7 @@ onboarding:
     waiting:
         title: 'Just a little longer'
         text: 'A manager is setting %company% up. Come back in a few minutes.'
+    steps: 'Setup steps'
 level:
     '1': 'Rookie'
     '2': 'Junior'
@@ -318,6 +323,7 @@ call:
         sample: 'Hello, %name% speaking. Go ahead.'
     dial_name: 'Call %name%'
     pick_up_name: 'Answer'
+    keys: 'Call controls'
 company:
     error:
         invalid_website: 'This does not look like a website address.'
@@ -350,6 +356,9 @@ team:
     reset_confirm: 'Generate a new password? The old one will stop working.'
     new_password: 'The new password:'
     new_password_help: 'pass it on, it will not be shown again.'
+    members: 'The members'
+    invitation_link: 'Invitation link for %email%'
+    profile: 'Profile'
 scenario:
     error:
         too_short: 'Give a little more to work with (a few lines at least).'
@@ -382,6 +391,16 @@ debrief:
     no_worst: 'Nothing serious.'
     replay_moment: 'Replay this moment'
     tips: 'Three tips for next time'
+    score: 'Your score'
+    goal_label: 'Goal'
+    next_step_label: 'Next step'
+    next_step_yes: 'Obtained'
+    next_step_no: 'None'
+    brief_label: 'Hidden brief'
+    uncovered_short: '%n% / %total% uncovered'
+    out_of_ten: 'Out of 10'
+    how_to: 'To get it:'
+    better: 'Better:'
 play:
     hello: 'Hello %name%'
     title: 'Ready for a call?'
@@ -427,6 +446,10 @@ briefing:
     mic: 'Allow the microphone: you talk as on the phone.'
     how_title: 'How it works'
     how: 'Your persona has a hidden brief (their real budget, their real pain, who decides…). Uncover it with the right questions. Hang up once you have a next step, or when they leave.'
+    direction: 'Direction'
+    difficulty: 'Difficulty'
+    length: 'Length'
+    type: 'Type'
 library:
     title: 'The library'
     lead: 'Your managers'' practice cases, and the meetings you prepared.'
@@ -487,6 +510,9 @@ progress:
     call: 'Call'
     status: 'Status'
     score: 'Score'
+    scores_aria: 'Chart of your last %count% scores; the latest is %last%.'
+    scores_member: 'Scores'
+    recent_member: 'Latest calls'
 offer:
     title: 'The offer'
     lead: 'What your personas know of the company, and the situations that may come up.'

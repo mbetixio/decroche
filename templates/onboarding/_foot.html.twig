@@ -1,9 +1,10 @@
-{# The onboarding footer: back, progress dots, and the main action. #}
+{# The onboarding footer: back, how far along, and the step's main action.
+   label: the main button's text; name/value: its name and value when the form has several submit buttons. #}
 {% set steps = enum('App\\Onboarding\\OnboardingStep').cases() %}
 <div class="onboarding-foot">
     {% if step.previous and (not step.previous.public or not app.user) %}
         <a class="btn ghost" href="{{ path('onboarding', {step: step.previous.value}) }}"><twig:Icon name="arrow-left" />{{ 'action.back'|trans }}</a>
     {% else %}<span></span>{% endif %}
-    <div class="progress-dots" aria-hidden="true">{% for s in steps %}<i class="{{ s.index <= step.index ? 'on' }}"></i>{% endfor %}</div>
-    {{ actions|default('')|raw }}
+    <span class="ob-progress" aria-hidden="true"><span class="bar signal"><i style="--pct: {{ ((step.index + 1) / steps|length * 100)|round }}%"></i></span>{{ step.index + 1 }}/{{ steps|length }}</span>
+    <button class="btn primary lg" {% if name is defined %}name="{{ name }}" value="{{ value }}"{% endif %}>{{ label }}<twig:Icon name="arrow-right" /></button>
 </div>

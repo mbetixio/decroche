@@ -10,6 +10,10 @@ nav:
     team: 'L''équipe'
     company: 'La société'
     logout: 'Se déconnecter'
+    account: 'Mon compte'
+    library_short: 'Biblio'
+    progress_short: 'Progrès'
+    account_short: 'Compte'
 action:
     back: 'Retour'
     cancel: 'Annuler'
@@ -138,6 +142,7 @@ onboarding:
     waiting:
         title: 'Encore un peu de patience'
         text: 'Un manager est en train de mettre en place %company%. Revenez dans quelques minutes.'
+    steps: 'Étapes de la mise en place'
 level:
     '1': 'Stagiaire'
     '2': 'Junior'
@@ -318,6 +323,7 @@ call:
         sample: 'Bonjour, %name% à l''appareil. Je vous écoute.'
     dial_name: 'Appeler %name%'
     pick_up_name: 'Décrocher'
+    keys: 'Commandes de l''appel'
 company:
     error:
         invalid_website: 'Cette adresse ne ressemble pas à un site web.'
@@ -350,6 +356,9 @@ team:
     reset_confirm: 'Générer un nouveau mot de passe ? L''ancien ne fonctionnera plus.'
     new_password: 'Le nouveau mot de passe :'
     new_password_help: 'transmettez-le, il ne sera plus affiché.'
+    members: 'Les membres'
+    invitation_link: 'Lien d''invitation pour %email%'
+    profile: 'Profil'
 scenario:
     error:
         too_short: 'Donnez un peu plus de matière (quelques lignes au moins).'
@@ -382,6 +391,16 @@ debrief:
     no_worst: 'Rien de rédhibitoire.'
     replay_moment: 'Rejouer ce moment'
     tips: 'Trois conseils pour la prochaine fois'
+    score: 'Votre score'
+    goal_label: 'Objectif'
+    next_step_label: 'Étape suivante'
+    next_step_yes: 'Obtenue'
+    next_step_no: 'Aucune'
+    brief_label: 'Brief caché'
+    uncovered_short: '%n% / %total% découvertes'
+    out_of_ten: 'Sur 10'
+    how_to: 'Pour l''obtenir :'
+    better: 'Mieux :'
 play:
     hello: 'Bonjour %name%'
     title: 'Prêt pour un appel ?'
@@ -427,6 +446,10 @@ briefing:
     mic: 'Autorisez le micro : on parle comme au téléphone.'
     how_title: 'Comment ça marche'
     how: 'Votre interlocuteur a un brief caché (son vrai budget, sa vraie douleur, qui décide…). À vous de le découvrir avec les bonnes questions. Raccrochez quand vous avez obtenu une prochaine étape, ou quand il part.'
+    direction: 'Sens'
+    difficulty: 'Difficulté'
+    length: 'Durée'
+    type: 'Type'
 library:
     title: 'La bibliothèque'
     lead: 'Les mises en situation de vos managers, et les rendez-vous que vous avez préparés.'
@@ -487,6 +510,9 @@ progress:
     call: 'Appel'
     status: 'Statut'
     score: 'Note'
+    scores_aria: 'Graphique de vos %count% dernières notes ; la dernière est %last%.'
+    scores_member: 'Les notes'
+    recent_member: 'Derniers appels'
 offer:
     title: 'L''offre'
     lead: 'Ce que vos interlocuteurs savent de la société, et les situations qui peuvent tomber.'

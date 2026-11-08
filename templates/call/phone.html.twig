@@ -32,67 +32,67 @@
      data-call-sample-audio-value="{{ voice ? path('call_voice', {id: call.id, n: 0}) }}"
      data-call-edge-voice-value="{{ voice }}"
      data-call-labels-value="{{ labels|json_encode }}">
-    <div class="cs-top">
-        <span class="cs-pill">{{ call.isReplay ? '↺ ' ~ 'call.replay'|trans ~ ' · ' }}{{ situation ? situation.emoji ~ ' ' ~ situation.label : scenario.type|trans }}</span>
-        <span class="cs-pill" title="{{ 'call.left_title'|trans }}">{{ 'call.left'|trans }} <b data-call-target="clock">--:--</b></span>
-    </div>
+    <header class="cs-top">
+        <span>{{ call.isReplay ? 'call.replay'|trans ~ ' · ' }}{{ situation ? situation.label : scenario.type|trans }}</span>
+        <span class="cs-clock" title="{{ 'call.left_title'|trans }}"><b data-call-target="clock">--:--</b> {{ 'call.left'|trans }}</span>
+    </header>
 
     <div class="cs-who">
-        <button type="button" class="avatar cs-avatar" data-call-target="avatar" data-action="call#interrupt" aria-label="{{ 'call.interrupt'|trans }}" style="border:0;cursor:pointer;color:#fff">{{ persona.initials }}</button>
+        <button type="button" class="avatar cs-avatar" data-call-target="avatar" data-action="call#interrupt" aria-label="{{ 'call.interrupt'|trans }}">{{ persona.initials }}</button>
         <h1 class="cs-name">{{ persona.name }}</h1>
-        <div class="cs-sub">{{ persona.role }} · {{ persona.company }}</div>
-        <div class="cs-status"><span data-call-target="since" hidden>00:00</span><span class="cs-state" data-call-target="state">{{ (incoming ? 'call.state.incoming' : 'call.state.ready')|trans }}</span></div>
+        <p class="cs-sub">{{ persona.role }} · {{ persona.company }}</p>
+        <p class="cs-status" role="status"><span class="cs-since" data-call-target="since" hidden>00:00</span><span class="cs-state" data-call-target="state">{{ (incoming ? 'call.state.incoming' : 'call.state.ready')|trans }}</span></p>
     </div>
 
     <div class="cs-caption" data-call-target="caption" aria-live="polite"></div>
 
-    <form class="cs-keypad" data-call-target="keypad" data-action="call#type" hidden>
-        <input data-call-target="input" maxlength="2000" autocomplete="off" placeholder="{{ 'call.keypad_placeholder'|trans }}" aria-label="{{ 'call.keypad_placeholder'|trans }}">
-        <button class="cs-send" aria-label="{{ 'action.send'|trans }}"><twig:Icon name="arrow-right" /></button>
-    </form>
-
     <div class="cs-controls">
-        <div class="cs-keys" data-call-target="keys" hidden>
-            <button type="button" class="cs-key" data-key="mute" data-action="call#toggleMute"><i><twig:Icon name="mic-off" /></i><span>{{ 'call.key.mute'|trans }}</span></button>
-            <button type="button" class="cs-key" data-key="speaker" data-action="call#toggleSpeaker"><i><twig:Icon name="volume-x" /></i><span>{{ 'call.key.speaker'|trans }}</span></button>
-            <button type="button" class="cs-key" data-key="subs" data-action="call#toggleSubs"><i><twig:Icon name="captions" /></i><span>{{ 'call.key.captions'|trans }}</span></button>
-            <button type="button" class="cs-key" data-key="keypad" data-action="call#toggleKeypad"><i><twig:Icon name="keyboard" /></i><span>{{ 'call.key.keypad'|trans }}</span></button>
-            <button type="button" class="cs-key" data-key="sheet" data-action="call#toggleSheet"><i><twig:Icon name="clipboard" /></i><span>{{ 'call.key.sheet'|trans }}</span></button>
+        <form class="cs-keypad" data-call-target="keypad" data-action="call#type" hidden>
+            <input data-call-target="input" maxlength="2000" autocomplete="off" placeholder="{{ 'call.keypad_placeholder'|trans }}" aria-label="{{ 'call.keypad_placeholder'|trans }}">
+            <button class="cs-send" aria-label="{{ 'action.send'|trans }}"><twig:Icon name="arrow-right" /></button>
+        </form>
+        <div class="cs-keys" data-call-target="keys" role="group" aria-label="{{ 'call.keys'|trans }}" hidden>
+            <button type="button" class="cs-key" data-key="mute" data-action="call#toggleMute" aria-pressed="false"><i><twig:Icon name="mic-off" /></i><span>{{ 'call.key.mute'|trans }}</span></button>
+            <button type="button" class="cs-key" data-key="speaker" data-action="call#toggleSpeaker" aria-pressed="false"><i><twig:Icon name="volume-x" /></i><span>{{ 'call.key.speaker'|trans }}</span></button>
+            <button type="button" class="cs-key" data-key="subs" data-action="call#toggleSubs" aria-pressed="false"><i><twig:Icon name="captions" /></i><span>{{ 'call.key.captions'|trans }}</span></button>
+            <button type="button" class="cs-key" data-key="keypad" data-action="call#toggleKeypad" aria-pressed="false"><i><twig:Icon name="keyboard" /></i><span>{{ 'call.key.keypad'|trans }}</span></button>
+            <button type="button" class="cs-key" data-key="sheet" data-action="call#toggleSheet" aria-pressed="false"><i><twig:Icon name="clipboard" /></i><span>{{ 'call.key.sheet'|trans }}</span></button>
         </div>
-        <div>
-            <button type="button" class="cs-pickup" data-call-target="pickup" data-action="call#pickUp"><twig:Icon name="phone" /><span>{{ (incoming ? 'call.pick_up_name' : 'call.dial_name')|trans({'%name%': persona.firstName}) }}</span></button>
-            <form method="post" action="{{ path('call_finish', {id: call.id}) }}" data-call-target="finish" data-action="call#hangUp" hidden>
-                <input type="hidden" name="_token" value="{{ csrf_token('call-' ~ call.id) }}">
-                <button class="cs-round hangup" aria-label="{{ 'call.hang_up'|trans }}"><twig:Icon name="phone" /></button>
-            </form>
-        </div>
-        <div class="cs-hint" data-call-target="hint">{{ (incoming ? 'call.hint.incoming' : 'call.hint.outgoing')|trans }} {{ 'call.hint.talk'|trans }}</div>
+        {# Before the call: a labelled, still button (it only pulses for an incoming call). During the call: hang up. #}
+        <button type="button" class="cs-pickup" data-call-target="pickup" data-action="call#pickUp"><twig:Icon name="phone" /><span>{{ (incoming ? 'call.pick_up_name' : 'call.dial_name')|trans({'%name%': persona.firstName}) }}</span></button>
+        <form method="post" action="{{ path('call_finish', {id: call.id}) }}" data-call-target="finish" data-action="call#hangUp" hidden>
+            <input type="hidden" name="_token" value="{{ csrf_token('call-' ~ call.id) }}">
+            <button class="cs-hangup"><twig:Icon name="phone" /><span>{{ 'call.hang_up'|trans }}</span></button>
+        </form>
+        <p class="cs-hint" data-call-target="hint">{{ (incoming ? 'call.hint.incoming' : 'call.hint.outgoing')|trans }} {{ 'call.hint.talk'|trans }}</p>
     </div>
 
-    <aside class="cs-sheet" data-call-target="sheet" hidden>
-        <div class="row between" style="margin-bottom:14px"><h2>{{ 'call.sheet.title'|trans }}</h2><button type="button" class="btn ghost sm" data-action="call#closeSheet">{{ 'action.hide'|trans }}</button></div>
-        <div class="stack" style="--gap:14px">
-            <p class="small"><b>{{ 'call.sheet.goal'|trans }}</b> {{ scenario.goal }}</p>
-            {% if scenario.objectives %}
-                <ol class="objectives small">{% for objective in scenario.objectives %}<li>{{ objective }}</li>{% endfor %}</ol>
-            {% endif %}
-            <div>
-                <div class="label small">{{ 'call.sheet.uncovered'|trans }}</div>
-                <div class="progress-dots" style="margin-top:6px">{% for section in call.briefSheet %}<i data-call-target="dot" class="{{ section.found ? 'on' }}"></i>{% endfor %}</div>
+    <aside class="cs-sheet" data-call-target="sheet" aria-labelledby="sheet-title" hidden>
+        <div class="cs-sheet-head"><h2 id="sheet-title">{{ 'call.sheet.title'|trans }}</h2><button type="button" class="btn ghost sm" data-action="call#closeSheet">{{ 'action.hide'|trans }}</button></div>
+        <div class="stack">
+            <div class="block">
+                <p class="small"><b>{{ 'call.sheet.goal'|trans }}</b> {{ scenario.goal }}</p>
+                {% if scenario.objectives %}
+                    <ol class="numbered small">{% for objective in scenario.objectives %}<li><span>{{ objective }}</span></li>{% endfor %}</ol>
+                {% endif %}
             </div>
-            <details open><summary class="small muted">{{ 'call.sheet.context'|trans }}</summary><p class="small" style="margin-top:6px">{{ scenario.context }}</p></details>
+            <div class="block">
+                <p class="label" id="uncovered-label">{{ 'call.sheet.uncovered'|trans }}</p>
+                <div class="brief-dots" role="img" aria-labelledby="uncovered-label">{% for section in call.briefSheet %}<i data-call-target="dot" class="{{ section.found ? 'on' }}"></i>{% endfor %}</div>
+            </div>
+            <details class="block" open><summary>{{ 'call.sheet.context'|trans }}</summary><p class="small">{{ scenario.context }}</p></details>
             {% if scenario.material %}
-                <details><summary class="small muted">{{ situation ? situation.material : 'call.sheet.document'|trans }}</summary><div class="doc small pre" style="margin-top:6px">{{ scenario.material }}</div></details>
+                <details class="block"><summary>{{ situation and situation.material ? situation.material : 'call.sheet.document'|trans }}</summary><div class="doc small">{{ scenario.material }}</div></details>
             {% endif %}
-            <div class="card" style="padding:14px">
-                <label class="check small"><input type="checkbox" data-call-target="barge" data-action="call#toggleBarge"> <span>{{ 'call.sheet.barge'|trans }}</span></label>
-                {% if voice %}<label class="check small" style="margin-top:8px"><input type="checkbox" data-action="call#toggleBrowserVoice"> <span>{{ 'call.sheet.browser_voice'|trans }}</span></label>{% endif %}
-                <div class="row" style="margin-top:10px"><button type="button" class="btn sm" data-action="call#testVoice"><twig:Icon name="volume" />{{ 'call.sheet.test_voice'|trans }}</button></div>
-                <p class="tiny faint" data-call-target="voiceNote" style="margin-top:6px"></p>
+            <div class="cs-options">
+                <label class="check"><input type="checkbox" data-call-target="barge" data-action="call#toggleBarge"> <span>{{ 'call.sheet.barge'|trans }}</span></label>
+                {% if voice %}<label class="check"><input type="checkbox" data-action="call#toggleBrowserVoice"> <span>{{ 'call.sheet.browser_voice'|trans }}</span></label>{% endif %}
+                <div><button type="button" class="btn sm" data-action="call#testVoice"><twig:Icon name="volume" />{{ 'call.sheet.test_voice'|trans }}</button></div>
+                <p class="tiny faint" data-call-target="voiceNote"></p>
             </div>
-            <form method="post" action="{{ path('call_abandon', {id: call.id}) }}" onsubmit="return confirm(this.dataset.confirm)" data-confirm="{{ 'call.abandon_confirm'|trans }}">
+            <form method="post" action="{{ path('call_abandon', {id: call.id}) }}" data-controller="confirm" data-action="confirm#ask" data-confirm-message-value="{{ 'call.abandon_confirm'|trans }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('call-' ~ call.id) }}">
-                <button class="btn ghost block">{{ 'call.abandon'|trans }}</button>
+                <button class="btn ghost danger block">{{ 'call.abandon'|trans }}</button>
             </form>
         </div>
     </aside>

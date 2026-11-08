@@ -1,7 +1,8 @@
-{# An empty state: a sentence, an optional explanation, and an optional action in the block. #}
-{% props icon = null, title, text = null %}
-<div class="empty" {{ attributes }}>
+{# An empty state: a short title, an optional sentence, and an optional action in the block. Pass centered="1" when it
+   fills a page on its own. (icon is accepted for compatibility but not shown: no icon in front of every heading.) #}
+{% props icon = null, title, text = null, centered = false %}
+<div class="empty{{ centered ? ' centered' }}" {{ attributes }}>
     <h3>{{ title }}</h3>
-    {% if text %}<p class="small">{{ text }}</p>{% endif %}
+    {% if text %}<p>{{ text }}</p>{% endif %}
     {% block content %}{% endblock %}
 </div>

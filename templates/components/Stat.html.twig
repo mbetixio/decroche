@@ -1,3 +1,4 @@
-{# A figure with its label and icon. #}
+{# A figure with its label (and an optional note under it). Meant to sit in a <div class="stats">.
+   icon is accepted for compatibility but not shown. #}
 {% props label, value, icon = null, suffix = null %}
-<dl class="stat" {{ attributes }}><dt>{% if icon %}<twig:Icon :name="icon" />{% endif %}{{ label }}</dt><dd>{{ value }}{% if suffix %}<small>{{ suffix }}</small>{% endif %}</dd></dl>
+<dl class="stat" {{ attributes }}><dt>{{ label }}</dt><dd>{{ value }}{% if suffix %}<small>{{ suffix }}</small>{% endif %}</dd></dl>

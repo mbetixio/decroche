@@ -2,9 +2,9 @@
 {% block heading %}{{ 'onboarding.situations.title'|trans }}{% endblock %}
 {% block lead %}<p class="lead">{{ 'onboarding.situations.lead'|trans({'%count%': form.situations|length}) }}</p>{% endblock %}
 {% block content %}
-{{ form_start(form, {attr: {class: 'stack'}}) }}
+{{ form_start(form, {attr: {class: 'form'}}) }}
     {{ form_errors(form) }}{{ form_errors(form.situations) }}
     {{ include('settings/_situations.html.twig') }}
-    {{ include('onboarding/_foot.html.twig', {actions: '<button class="btn primary lg">' ~ 'action.continue'|trans ~ ' →</button>'}) }}
+    {{ include('onboarding/_foot.html.twig', {label: 'action.continue'|trans}) }}
 {{ form_end(form) }}
 {% endblock %}

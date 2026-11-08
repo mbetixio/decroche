@@ -1,3 +1,4 @@
-{# A score out of 100, coloured: good from 70, fair from 45. #}
-{% props value = null %}
-{% if value is null %}<span class="faint">—</span>{% else %}<span class="score {{ value >= 70 ? 'good' : (value >= 45 ? 'warn' : 'bad') }}" {{ attributes }}>{{ value }}</span>{% endif %}
+{# A score in the monospace, coloured by band (good from 70, fair from 45); "out" adds the scale ("/ 100").
+   The figure itself carries the meaning: the colour only reinforces it. #}
+{% props value = null, out = null %}
+{% if value is null %}<span class="faint" aria-label="—">—</span>{% else %}<span class="score {{ value >= 70 ? 'good' : (value >= 45 ? 'warn' : 'bad') }}" {{ attributes }}>{{ value }}{% if out %}<small> / {{ out }}</small>{% endif %}</span>{% endif %}

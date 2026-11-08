@@ -1,9 +1,9 @@
-{# Flash messages, top right; they fade by themselves (see the dismiss controller). #}
+{# Flash messages, top right; they fade by themselves (see the dismiss controller). Errors are announced at once. #}
 {% set icons = {success: 'check', error: 'alert', info: 'info'} %}
 <div class="flashes" aria-live="polite">
     {% for type, messages in app.flashes %}
         {% for message in messages %}
-            <div class="flash {{ type }}" data-controller="dismiss" data-dismiss-delay-value="{{ type == 'error' ? 9000 : 5000 }}">
+            <div class="flash {{ type }}" data-controller="dismiss" data-dismiss-delay-value="{{ type == 'error' ? 9000 : 5000 }}" {{ type == 'error' ? 'role="alert"' }}>
                 <twig:Icon :name="icons[type] ?? 'info'" />
                 <span>{{ message|trans }}</span>
                 <button type="button" data-action="dismiss#close" aria-label="{{ 'action.close'|trans }}"><twig:Icon name="x" size="16" /></button>

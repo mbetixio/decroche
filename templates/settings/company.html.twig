@@ -3,23 +3,25 @@
 {% block title %}{{ 'settings.title'|trans }}{% endblock %}
 {% block body %}
 {{ include('settings/_tabs.html.twig') }}
-<div class="cols-2">
-    {{ form_start(identityForm, {attr: {class: 'form card pad-l', style: 'align-content:start'}}) }}
-        <h2>{{ 'settings.identity'|trans }}</h2>
-        {{ form_rest(identityForm) }}
-        <div class="row end"><button class="btn primary">{{ 'action.save'|trans }}</button></div>
-    {{ form_end(identityForm) }}
-    <div class="stack" id="offer" style="--gap:18px">
-        {{ form_start(offerForm, {attr: {class: 'form card pad-l'}}) }}
-            <h2>{{ 'settings.offer'|trans }}</h2>
+<div class="halves">
+    <section aria-labelledby="identity-title">
+        <div class="section-head"><h2 id="identity-title">{{ 'settings.identity'|trans }}</h2></div>
+        {{ form_start(identityForm, {attr: {class: 'form'}}) }}
+            {{ form_rest(identityForm) }}
+            <div class="form-actions"><button class="btn primary">{{ 'action.save'|trans }}</button></div>
+        {{ form_end(identityForm) }}
+    </section>
+    <section id="offer" aria-labelledby="offer-title">
+        <div class="section-head"><h2 id="offer-title">{{ 'settings.offer'|trans }}</h2></div>
+        {{ form_start(offerForm, {attr: {class: 'form'}}) }}
             {{ form_rest(offerForm) }}
-            <div class="row end"><button class="btn primary">{{ 'action.save'|trans }}</button></div>
+            <div class="form-actions"><button class="btn primary">{{ 'action.save'|trans }}</button></div>
         {{ form_end(offerForm) }}
-        <form method="post" action="{{ path('settings_analyze') }}" class="card row between" onsubmit="this.querySelector('button').disabled = true">
-            <div><b>{{ 'settings.reanalyze'|trans }}</b><p class="small muted">{{ 'settings.reanalyze_help'|trans }}{% if company().analyzedAt %} {{ 'settings.analyzed_at'|trans({'%date%': company().analyzedAt|day}) }}{% endif %}</p></div>
+        <form method="post" action="{{ path('settings_analyze') }}" class="panel tinted mt-l row between" data-controller="busy" data-action="busy#start">
+            <div class="grow"><p class="list-title">{{ 'settings.reanalyze'|trans }}</p><p class="small muted">{{ 'settings.reanalyze_help'|trans }}{% if company().analyzedAt %} {{ 'settings.analyzed_at'|trans({'%date%': company().analyzedAt|day}) }}{% endif %}</p></div>
             <input type="hidden" name="_token" value="{{ csrf_token('settings-analyze') }}">
             <button class="btn"><twig:Icon name="refresh" />{{ 'settings.reanalyze_button'|trans }}</button>
         </form>
-    </div>
+    </section>
 </div>
 {% endblock %}

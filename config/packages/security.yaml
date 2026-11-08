@@ -37,6 +37,8 @@ security:
             logout:
                 path: logout
                 target: login
+                # The sign-out links carry a token: another site cannot sign a member out.
+                enable_csrf: true
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 2592000

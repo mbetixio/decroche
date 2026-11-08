@@ -1,42 +1,51 @@
-{# The library: the managers' practice cases and the meetings the member prepared, filterable by type. #}
+{# The library: the managers' practice cases and the meetings the member prepared, filterable by type. A surprise call
+   stays the main action. #}
 {% extends 'base.html.twig' %}
 {% block title %}{{ 'nav.library'|trans }}{% endblock %}
 {% block body %}
 <header class="page-head">
-    <div>
+    <div class="page-head-text">
         <h1>{{ 'library.title'|trans }}</h1>
-        <p>{{ 'library.lead'|trans }}</p>
+        <p class="lead">{{ 'library.lead'|trans }}</p>
     </div>
-    <div class="row">
+    <div class="page-actions">
         <a class="btn" href="{{ path('prepare') }}"><twig:Icon name="wand" />{{ 'nav.prepare'|trans }}</a>
         {% if is_granted('ROLE_MANAGER') %}<a class="btn" href="{{ path('scenario_new') }}"><twig:Icon name="plus" />{{ 'library.new'|trans }}</a>{% endif %}
     </div>
 </header>
-<div class="cols-main" style="margin-bottom:30px;align-items:stretch">
+
+<div class="home-top">
     {{ include('play/_new_call.html.twig') }}
-    <div class="card stack" style="--gap:10px">
-        <h2>{{ 'library.or_title'|trans }}</h2>
-        <p class="small muted">{{ 'library.or_text'|trans }}</p>
-    </div>
+    <section class="stack stack-s" aria-labelledby="or-title">
+        <h2 id="or-title" class="label">{{ 'library.or_title'|trans }}</h2>
+        <p class="muted">{{ 'library.or_text'|trans }}</p>
+    </section>
 </div>
-<h2 style="margin-bottom:14px">{{ 'library.scenarios'|trans }}</h2>
-<nav class="chips" style="margin-bottom:20px" aria-label="{{ 'library.filter'|trans }}">
-    <a class="chip" href="{{ path('library') }}" {{ type is null ? 'aria-current="true"' }}>{{ 'library.all'|trans }}</a>
-    {% for t in types %}<a class="chip" href="{{ path('library', {type: t.value}) }}" {{ type == t ? 'aria-current="true"' }}>{{ t|trans }}</a>{% endfor %}
-</nav>
-{% if scenarios %}
-    <div class="grid">
-        {% for scenario in scenarios %}
-            <a class="card hover stack" style="--gap:10px;text-decoration:none" href="{{ path('scenario_show', {id: scenario.id}) }}">
-                <div class="row between"><span class="badge brand">{{ scenario.type|trans }}</span><span class="badge">{{ scenario.difficulty|trans }}</span></div>
-                <h3>{{ scenario.title }}</h3>
-                <p class="small muted">{{ scenario.context|length > 150 ? scenario.context|slice(0, 150) ~ '…' : scenario.context }}</p>
-                <div class="row small muted" style="margin-top:auto"><twig:Avatar :initials="scenario.persona.initials" :name="scenario.persona.name" /> <span>{{ scenario.persona.name }} · {{ scenario.persona.role }}</span></div>
-            </a>
-        {% endfor %}
-    </div>
-{% else %}
-    <div class="card"><twig:Empty icon="book" :title="'library.empty'|trans" :text="'library.empty_text'|trans" /></div>
-{% endif %}
+
+<section class="section spaced" aria-labelledby="scenarios-title">
+    <h2 id="scenarios-title" class="visually-hidden">{{ 'library.scenarios'|trans }}</h2>
+    <nav class="tabs" aria-label="{{ 'library.filter'|trans }}">
+        <a href="{{ path('library') }}" {{ type is null ? 'aria-current="true"' }}>{{ 'library.all'|trans }}</a>
+        {% for t in types %}<a href="{{ path('library', {type: t.value}) }}" {{ type == t ? 'aria-current="true"' }}>{{ t|trans }}</a>{% endfor %}
+    </nav>
+    {% if scenarios %}
+        <ul class="grid">
+            {% for scenario in scenarios %}
+                <li>
+                    <a class="scenario-card" href="{{ path('scenario_show', {id: scenario.id}) }}">
+                        <span class="meta">{{ scenario.type|trans }} · {{ scenario.difficulty|trans }} · {{ 'briefing.minutes'|trans({'%count%': scenario.minutes}) }}</span>
+                        <h3>{{ scenario.title }}</h3>
+                        <p>{{ scenario.context|length > 150 ? scenario.context|slice(0, 150) ~ '…' : scenario.context }}</p>
+                        <span class="persona-line"><twig:Avatar :initials="scenario.persona.initials" /><span>{{ scenario.persona.name }} · {{ scenario.persona.role }}</span></span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <twig:Empty :title="'library.empty'|trans" :text="'library.empty_text'|trans">
+            <a class="btn" href="{{ path('prepare') }}"><twig:Icon name="wand" />{{ 'nav.prepare'|trans }}</a>
+        </twig:Empty>
+    {% endif %}
+</section>
 {{ include('play/_draw_overlay.html.twig') }}
 {% endblock %}

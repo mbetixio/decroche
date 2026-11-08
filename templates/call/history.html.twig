@@ -1,16 +1,18 @@
-{# Every call of the member. #}
+{# Every call of the member, as a call log. #}
 {% extends 'base.html.twig' %}
 {% block title %}{{ 'call.history'|trans }}{% endblock %}
 {% block body %}
-<header class="page-head"><div><h1>{{ 'call.history'|trans }}</h1></div></header>
-<section class="card flush">
-    {% if calls %}
-        <div class="table-wrap"><table>
-            <thead><tr><th>{{ 'progress.date'|trans }}</th><th>{{ 'progress.call'|trans }}</th><th>{{ 'progress.status'|trans }}</th><th>{{ 'progress.score'|trans }}</th></tr></thead>
-            <tbody>{% for call in calls %}<tr><td class="nowrap small">{{ call.startedAt|moment }}</td><td><a href="{{ path('call_show', {id: call.id}) }}">{{ call.scenario.title }}</a></td><td><twig:Status :call="call" /></td><td><twig:Score :value="call.score" /></td></tr>{% endfor %}</tbody>
-        </table></div>
-    {% else %}
-        <twig:Empty icon="phone" :title="'play.no_calls'|trans" />
-    {% endif %}
-</section>
+<header class="page-head">
+    <div class="page-head-text">
+        <a class="eyebrow" href="{{ path('home') }}"><twig:Icon name="arrow-left" size="14" />{{ 'nav.play'|trans }}</a>
+        <h1>{{ 'call.history'|trans }}</h1>
+    </div>
+</header>
+{% if calls %}
+    {{ include('call/_log.html.twig') }}
+{% else %}
+    <twig:Empty :title="'play.no_calls'|trans" :text="'play.no_calls_text'|trans">
+        <a class="btn primary" href="{{ path('home') }}"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</a>
+    </twig:Empty>
+{% endif %}
 {% endblock %}

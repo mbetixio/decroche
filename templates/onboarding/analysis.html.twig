@@ -2,18 +2,18 @@
 {% block heading %}{{ 'onboarding.analysis.title'|trans }}{% endblock %}
 {% block lead %}<p class="lead">{{ 'onboarding.analysis.lead'|trans({'%company%': company().name}) }}</p>{% endblock %}
 {% block content %}
-<div class="card pad-l stack" data-controller="analysis"
+<div class="stack" data-controller="analysis"
      data-analysis-url-value="{{ path('onboarding_analyze') }}"
      data-analysis-token-value="{{ csrf_token('onboarding-analysis') }}">
-    <div class="analysis">
+    <ol class="analysis">
         {% for key in ['read', 'offer', 'clients', 'situations'] %}
-            <div class="analysis-step" data-analysis-target="step"><span class="dot"><twig:Icon name="check" /></span><span>{{ ('onboarding.analysis.' ~ key)|trans({'%site%': company().website ?? '—'}) }}</span></div>
+            <li class="analysis-step" data-analysis-target="step"><span class="dot" aria-hidden="true"><twig:Icon name="check" /></span><span>{{ ('onboarding.analysis.' ~ key)|trans({'%site%': company().website ?? '—'}) }}</span></li>
         {% endfor %}
-    </div>
-    <p class="small muted" data-analysis-target="status">{{ 'onboarding.analysis.wait'|trans }}</p>
+    </ol>
+    <p class="small muted" role="status" data-analysis-target="status">{{ 'onboarding.analysis.wait'|trans }}</p>
     <div class="row" data-analysis-target="retry" hidden>
         <a class="btn" href="{{ path('onboarding', {step: 'company'}) }}"><twig:Icon name="arrow-left" />{{ 'onboarding.analysis.edit'|trans }}</a>
-        <button class="btn primary" data-action="analysis#run"><twig:Icon name="refresh" />{{ 'action.retry'|trans }}</button>
+        <button type="button" class="btn primary" data-action="analysis#run"><twig:Icon name="refresh" />{{ 'action.retry'|trans }}</button>
     </div>
 </div>
 {% endblock %}

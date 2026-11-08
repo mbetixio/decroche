@@ -3,17 +3,20 @@
 {% block title %}{{ 'nav.prepare'|trans }}{% endblock %}
 {% block body %}
 <header class="page-head">
-    <div><h1>{{ 'prepare.title'|trans }}</h1><p>{{ 'prepare.lead'|trans }}</p></div>
+    <div class="page-head-text">
+        <h1>{{ 'prepare.title'|trans }}</h1>
+        <p class="lead">{{ 'prepare.lead'|trans }}</p>
+    </div>
 </header>
-<div class="cols-main">
-    {{ form_start(form, {attr: {class: 'form card pad-l'}}) }}
+<div class="split">
+    {{ form_start(form, {attr: {class: 'form', 'data-controller': 'busy', 'data-action': 'busy#start', 'data-busy-overlay-value': 'draw-overlay'}}) }}
         {{ form_row(form.fromCall) }}
         {{ form_row(form.text) }}
-        <div class="cols-3">{{ form_row(form.type) }}{{ form_row(form.difficulty) }}{{ form_row(form.minutes) }}</div>
-        <div class="row end"><button class="btn primary lg" onclick="setTimeout(() => document.getElementById('draw-overlay').hidden = false, 0)"><twig:Icon name="wand" />{{ 'prepare.submit'|trans }}</button></div>
+        <div class="fields-3">{{ form_row(form.type) }}{{ form_row(form.difficulty) }}{{ form_row(form.minutes) }}</div>
+        <div class="form-actions"><button class="btn primary lg"><twig:Icon name="wand" />{{ 'prepare.submit'|trans }}</button></div>
     {{ form_end(form) }}
-    <aside class="card stack" style="--gap:10px;align-content:start">
-        <h2>{{ 'prepare.how_title'|trans }}</h2>
+    <aside class="stack" aria-labelledby="how-title">
+        <h2 id="how-title" class="label">{{ 'prepare.how_title'|trans }}</h2>
         <p class="small muted">{{ 'prepare.how'|trans }}</p>
         <p class="small muted">{{ 'prepare.mcp'|trans }}</p>
     </aside>

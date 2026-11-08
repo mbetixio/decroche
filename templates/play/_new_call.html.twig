@@ -1,11 +1,11 @@
 {# The main action, wherever one may want to play: a call drawn at random from the company's situations. #}
-<div class="card hero pad-l call-cta" data-controller="draw" {{ attrs|default('')|raw }}>
-    <h2>{{ 'play.cta_title'|trans }}</h2>
+<section class="panel pad-l new-call" data-controller="draw" aria-labelledby="new-call-title">
+    <h2 id="new-call-title">{{ 'play.cta_title'|trans }}</h2>
     <p>{{ 'play.cta_text'|trans }}</p>
-    <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit" style="margin-top:24px">
+    <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit">
         <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
         <button class="btn primary lg"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button>
     </form>
-    <p class="tiny" style="opacity:.65;margin-top:12px">{{ 'play.adapted'|trans }}</p>
-    <p class="small" data-draw-target="error" data-fallback="{{ 'play.draw_failed'|trans }}" style="color:var(--brand);margin-top:8px" hidden></p>
-</div>
+    <p class="note">{{ 'play.adapted'|trans }}</p>
+    <p class="error" role="alert" data-draw-target="error" data-fallback="{{ 'play.draw_failed'|trans }}" hidden></p>
+</section>

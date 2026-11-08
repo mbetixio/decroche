@@ -4,16 +4,17 @@
 {% block body %}
 {% set persona = scenario.persona %}
 <header class="page-head">
-    <div>
-        <a class="eyebrow" href="{{ path('library') }}" style="text-decoration:none">← {{ 'nav.library'|trans }}</a>
+    <div class="page-head-text">
+        <a class="eyebrow" href="{{ path('library') }}"><twig:Icon name="arrow-left" size="14" />{{ 'nav.library'|trans }}</a>
         <h1>{{ scenario.title }}</h1>
-        <div class="chips" style="margin-top:10px">
-            <span class="badge brand">{{ scenario.type|trans }}</span><span class="badge">{{ scenario.difficulty|trans }}</span>
-            <span class="badge"><twig:Icon name="clock" />{{ 'briefing.minutes'|trans({'%count%': scenario.minutes}) }}</span>
-            {% if not scenario.active %}<span class="badge bad">{{ 'library.archived_badge'|trans }}</span>{% endif %}
-        </div>
+        <dl class="facts">
+            <div><dt>{{ 'briefing.type'|trans }}</dt><dd>{{ scenario.type|trans }}</dd></div>
+            <div><dt>{{ 'briefing.difficulty'|trans }}</dt><dd>{{ scenario.difficulty|trans }}</dd></div>
+            <div><dt>{{ 'briefing.length'|trans }}</dt><dd>{{ 'briefing.minutes'|trans({'%count%': scenario.minutes}) }}</dd></div>
+            {% if not scenario.active %}<div><dt class="visually-hidden">{{ 'progress.status'|trans }}</dt><dd class="bad">{{ 'library.archived_badge'|trans }}</dd></div>{% endif %}
+        </dl>
     </div>
-    <div class="row">
+    <div class="page-actions">
         {% if is_granted('SCENARIO_EDIT', scenario) %}
             <a class="btn" href="{{ path('scenario_edit', {id: scenario.id}) }}">{{ 'action.edit'|trans }}</a>
             <form method="post" action="{{ path('scenario_archive', {id: scenario.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('archive-' ~ scenario.id) }}"><button class="btn ghost">{{ (scenario.active ? 'library.archive' : 'library.restore')|trans }}</button></form>
@@ -21,23 +22,28 @@
         {% if scenario.active %}<a class="btn primary" href="{{ path('call_briefing', {id: scenario.id}) }}"><twig:Icon name="phone" />{{ 'library.play'|trans }}</a>{% endif %}
     </div>
 </header>
-<div class="cols-main">
-    <section class="card pad-l stack" style="--gap:12px">
-        <h2>{{ 'briefing.context'|trans }}</h2>
-        <p>{{ scenario.context }}</p>
-        <p><b>{{ 'briefing.goal'|trans }}</b> {{ scenario.goal }}</p>
-        <div class="row" style="margin-top:8px"><twig:Avatar :initials="persona.initials" :name="persona.name" size="lg" /><div><b>{{ persona.name }}</b><div class="small muted">{{ persona.role }} · {{ persona.company }}</div></div></div>
-    </section>
-    <section class="card flush">
-        <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'library.my_calls'|trans }}</h2></div>
-        {% if calls %}
-            <div class="list" style="margin-top:8px">
-                {% for call in calls %}
-                    <a class="list-item" href="{{ path('call_show', {id: call.id}) }}"><span style="flex:1">{{ call.startedAt|moment }}</span>{% if call.score is not null %}<twig:Score :value="call.score" />{% else %}<twig:Status :call="call" />{% endif %}</a>
-                {% endfor %}
+<div class="split">
+    <section aria-labelledby="context-title">
+        <div class="section-head"><h2 id="context-title">{{ 'briefing.context'|trans }}</h2></div>
+        <div class="stack measure">
+            <p>{{ scenario.context }}</p>
+            <p><b>{{ 'briefing.goal'|trans }}</b> {{ scenario.goal }}</p>
+            <div class="person-head">
+                <twig:Avatar :initials="persona.initials" size="lg" />
+                <div><p class="list-title">{{ persona.name }}</p><p class="small muted">{{ persona.role }} · {{ persona.company }}</p></div>
             </div>
+        </div>
+    </section>
+    <section aria-labelledby="calls-title">
+        <div class="section-head"><h2 id="calls-title">{{ 'library.my_calls'|trans }}</h2></div>
+        {% if calls %}
+            <ol class="log">
+                {% for call in calls %}
+                    <li><a class="log-row" href="{{ path('call_show', {id: call.id}) }}"><time class="log-time" datetime="{{ call.startedAt.format('c') }}">{{ call.startedAt.format('Y-m-d H:i') }}</time><span class="log-title">{{ call.status|trans }}</span><span class="log-figure">{% if call.score is not null %}<twig:Score :value="call.score" />{% else %}<twig:Status :call="call" />{% endif %}</span></a></li>
+                {% endfor %}
+            </ol>
         {% else %}
-            <twig:Empty icon="phone" :title="'library.no_calls'|trans" />
+            <twig:Empty :title="'library.no_calls'|trans" />
         {% endif %}
     </section>
 </div>

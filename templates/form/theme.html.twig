@@ -1,15 +1,28 @@
-{# Practicall's form theme: a label, the widget, a hint and the errors, laid out by the design system. #}
+{# Practicall's form theme: a label, the widget, a hint and the errors, laid out by the design system. The hint and
+   the errors are tied to the widget (aria-describedby), and an invalid widget says so (aria-invalid). #}
 {% use 'form_div_layout.html.twig' %}
 
 {% block form_row %}
+    {%- set described = [] -%}
+    {%- if help is not empty -%}{%- set described = described|merge([id ~ '_help']) -%}{%- endif -%}
+    {%- if errors|length > 0 -%}{%- set described = described|merge([id ~ '_errors']) -%}{%- endif -%}
     {%- set widget_attr = {} -%}
-    {%- if help is not empty -%}{%- set widget_attr = {attr: {'aria-describedby': id ~ '_help'}} -%}{%- endif -%}
-    <div class="field{% if compound and expanded is defined and expanded %} field-choices{% endif %}">
-        {{- form_label(form) -}}
-        {{- form_widget(form, widget_attr) -}}
-        {{- form_help(form) -}}
-        {{- form_errors(form) -}}
-    </div>
+    {%- if described -%}{%- set widget_attr = {attr: attr|merge({'aria-describedby': described|join(' ')} + (errors|length > 0 ? {'aria-invalid': 'true'} : {}))} -%}{%- endif -%}
+    {%- if compound and expanded is defined and expanded -%}
+        <fieldset class="field field-choices">
+            <legend class="label">{{ label is not same as(false) ? (label is empty ? name|humanize : label|trans(label_translation_parameters, translation_domain)) }}</legend>
+            {{- form_widget(form, widget_attr) -}}
+            {{- form_help(form) -}}
+            {{- form_errors(form) -}}
+        </fieldset>
+    {%- else -%}
+        <div class="field">
+            {{- form_label(form) -}}
+            {{- form_widget(form, widget_attr) -}}
+            {{- form_help(form) -}}
+            {{- form_errors(form) -}}
+        </div>
+    {%- endif -%}
 {% endblock %}
 
 {% block form_help %}
@@ -17,14 +30,14 @@
 {% endblock %}
 
 {% block form_errors %}
-    {%- if errors|length > 0 -%}<ul class="errors">{%- for error in errors -%}<li>{{ error.message }}</li>{%- endfor -%}</ul>{%- endif -%}
+    {%- if errors|length > 0 -%}<ul class="errors" id="{{ id }}_errors">{%- for error in errors -%}<li>{{ error.message }}</li>{%- endfor -%}</ul>{%- endif -%}
 {% endblock %}
 
-{# Expanded choices (radios, checkboxes) as selectable cards. #}
+{# Expanded choices (radios, checkboxes) as selectable tiles. #}
 {% block choice_widget_expanded %}
     <div class="choices" {{ block('widget_container_attributes') }}>
     {%- for child in form %}
-        <label class="choice">{{- form_widget(child) -}}<b>{{ child.vars.label|trans({}, child.vars.translation_domain is same as(false) ? false : choice_translation_domain) }}</b></label>
+        <label class="choice">{{- form_widget(child) -}}<span>{{ child.vars.label|trans({}, child.vars.translation_domain is same as(false) ? false : choice_translation_domain) }}</span></label>
     {% endfor -%}
     </div>
 {% endblock %}

@@ -1,24 +1,26 @@
-{# One situation of the catalogue: the essentials at a glance, the details to unfold. #}
+{# One situation of the catalogue: the essentials at a glance, the details to unfold; a labelled switch to keep it. #}
 {% set data = situation.vars.data %}
-<div class="card situation-card">
-    <span class="emoji">{{ data.emoji ?? '📞' }}</span>
+<div class="panel situation-card">
+    <span class="emoji" aria-hidden="true">{{ data.emoji ?? '📞' }}</span>
     <details {{ situation.vars.valid ? '' : 'open' }}>
         <summary>
-            <b>{{ data.label ?? '' }}</b>
-            <div class="row small muted" style="margin-top:4px">
-                {% if data %}<span class="badge">{{ data.family|trans }}</span><span class="badge {{ data.direction.value == 'incoming' ? 'accent' : 'brand' }}"><twig:Icon :name="data.direction.value == 'incoming' ? 'phone-incoming' : 'phone-outgoing'" />{{ data.direction|trans }}</span>{% endif %}
-                <span>{{ 'settings.situations.edit'|trans }}</span>
-            </div>
-            {% if data and data.pitch %}<p class="small muted" style="margin-top:8px">{{ data.pitch|length > 180 ? data.pitch|slice(0, 180) ~ '…' : data.pitch }}</p>{% endif %}
+            <span class="list-title">{{ data.label ?? '' }}</span>
+            <span class="meta">
+                {% if data %}<span>{{ data.family|trans }}</span><span>{{ data.direction|trans }}</span>{% endif %}
+                <span class="edit">{{ 'settings.situations.edit'|trans }}</span>
+            </span>
+            {% if data and data.pitch %}<span class="pitch">{{ data.pitch|length > 180 ? data.pitch|slice(0, 180) ~ '…' : data.pitch }}</span>{% endif %}
         </summary>
-        <div class="stack" style="--gap:12px;margin-top:14px">
+        <div class="editor">
             {{ form_widget(situation.key) }}
-            <div class="cols-2">{{ form_row(situation.label) }}{{ form_row(situation.emoji) }}</div>
-            <div class="cols-2">{{ form_row(situation.family) }}{{ form_row(situation.direction) }}</div>
+            <div class="fields-2">{{ form_row(situation.label) }}{{ form_row(situation.emoji) }}</div>
+            <div class="fields-2">{{ form_row(situation.family) }}{{ form_row(situation.direction) }}</div>
             {{ form_row(situation.material) }}
             {{ form_row(situation.pitch) }}
             {{ form_row(situation.objectives) }}
         </div>
     </details>
-    {{ form_widget(situation.keep, {attr: {title: 'form.situation.keep'|trans, 'data-remove': 'false', class: 'keep-toggle'}}) }}
+    <div class="keep">
+        <label>{{ form_widget(situation.keep, {attr: {'data-remove': 'false', class: 'keep-toggle'}}) }}<span>{{ 'form.situation.keep'|trans }}</span></label>
+    </div>
 </div>

@@ -73,7 +73,7 @@ final class CallFlowTest extends FunctionalTestCase
         $call = $this->call($call->id);
         self::assertSame(CallStatus::Done, $call->status);
         self::assertNotNull($call->score);
-        self::assertSelectorTextContains('.ring', (string) $call->score);
+        self::assertSelectorTextContains('.verdict-score', (string) $call->score);
         self::assertTrue($call->isRevealed(BriefSection::Budget));
         self::assertTrue($call->isSpoken());
     }

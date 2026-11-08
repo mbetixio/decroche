@@ -1,18 +1,18 @@
 {# The scorecard as editable rows: a criterion and what the coach expects. Expects "form" (a ScorecardType). #}
-<div class="card pad-l stack" data-controller="collection" data-collection-index-value="{{ form.criteria|length }}" data-collection-placeholder-value="__criterion__">
-    <div class="stack" style="--gap:10px" data-collection-target="list">
+<div class="stack" data-controller="collection" data-collection-index-value="{{ form.criteria|length }}" data-collection-placeholder-value="__criterion__">
+    <div class="stack" data-collection-target="list">
         {% for criterion in form.criteria %}
-            <div class="cols-2 criterion-row" style="grid-template-columns: 1fr 2fr auto;align-items:end">
+            <div class="criterion-row">
                 {{ form_row(criterion.label) }}{{ form_row(criterion.hint) }}
-                <button type="button" class="btn ghost" data-action="collection#remove" title="{{ 'action.remove'|trans }}"><twig:Icon name="trash" /></button>
+                <button type="button" class="btn ghost icon" data-action="collection#remove" aria-label="{{ 'action.remove'|trans }}" title="{{ 'action.remove'|trans }}"><twig:Icon name="trash" /></button>
             </div>
         {% endfor %}
     </div>
     <template data-collection-target="template">
-        <div class="cols-2 criterion-row" style="grid-template-columns: 1fr 2fr auto;align-items:end">
+        <div class="criterion-row">
             {{ form_row(form.criteria.vars.prototype.label) }}{{ form_row(form.criteria.vars.prototype.hint) }}
-            <button type="button" class="btn ghost" data-action="collection#remove"><twig:Icon name="trash" /></button>
+            <button type="button" class="btn ghost icon" data-action="collection#remove" aria-label="{{ 'action.remove'|trans }}" title="{{ 'action.remove'|trans }}"><twig:Icon name="trash" /></button>
         </div>
     </template>
-    <div class="row"><button type="button" class="btn" data-action="collection#add"><twig:Icon name="plus" />{{ 'settings.scorecard.add'|trans }}</button><span class="small muted">{{ 'settings.scorecard.limits'|trans }}</span></div>
+    <div class="row"><button type="button" class="btn" data-action="collection#add"><twig:Icon name="plus" />{{ 'settings.scorecard.add'|trans }}</button><span class="small faint">{{ 'settings.scorecard.limits'|trans }}</span></div>
 </div>

@@ -6,8 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" content="#f3f1ec" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#14161b" media="(prefers-color-scheme: dark)">
     {# The page's own title (already escaped by its block), then the product's name. #}
     {% set page_title = block('title') is defined and block('title')|trim != '' ? block('title')|trim ~ ' · Practicall' : 'Practicall' %}
     <title>{{ page_title|raw }}</title>
@@ -38,30 +38,33 @@
 <a class="skip-link" href="#main">{{ 'meta.skip'|trans }}</a>
 {% block page %}
 <div class="shell">
+    {% set route = app.request.attributes.get('_route') %}
     <aside class="sidebar">
         <a class="brand" href="{{ path('home') }}">
-            <img class="brand-logo" src="/brand/logo.svg" alt="" width="38" height="38">
+            <img class="brand-logo" src="/brand/logo.svg" alt="" width="34" height="34">
             <span>Practicall<small>{{ company().name }}</small></span>
         </a>
-        {% set route = app.request.attributes.get('_route') %}
+        {# On phones the sidebar becomes a bottom bar: the secondary links ("desktop-only") are reached from their pages,
+           and the account takes the last place. #}
         <nav class="nav" aria-label="{{ 'nav.main'|trans }}">
-            <a href="{{ path('home') }}" {{ route in ['home', 'call_briefing', 'call_show'] ? 'aria-current="page"' }}><twig:Icon name="phone" /><span>{{ 'nav.play'|trans }}</span></a>
-            <a href="{{ path('library') }}" {{ route starts with 'library' or route starts with 'scenario' ? 'aria-current="page"' }}><twig:Icon name="book" /><span>{{ 'nav.library'|trans }}</span></a>
-            <a href="{{ path('prepare') }}" class="secondary" {{ route == 'prepare' ? 'aria-current="page"' }}><twig:Icon name="wand" /><span>{{ 'nav.prepare'|trans }}</span></a>
-            <a href="{{ path('progress') }}" {{ route == 'progress' ? 'aria-current="page"' }}><twig:Icon name="chart" /><span>{{ 'nav.progress'|trans }}</span></a>
-            <a href="{{ path('offer') }}" class="secondary" {{ route == 'offer' ? 'aria-current="page"' }}><twig:Icon name="file" /><span>{{ 'nav.offer'|trans }}</span></a>
+            <a href="{{ path('home') }}" {{ route in ['home', 'call_briefing', 'call_show', 'call_history'] ? 'aria-current="page"' }}><twig:Icon name="phone" /><span>{{ 'nav.play'|trans }}</span></a>
+            <a href="{{ path('library') }}" {{ route == 'library' or route starts with 'scenario' ? 'aria-current="page"' }}><twig:Icon name="book" /><span class="long">{{ 'nav.library'|trans }}</span><span class="short" aria-hidden="true">{{ 'nav.library_short'|trans }}</span></a>
+            <a href="{{ path('prepare') }}" class="desktop-only" {{ route == 'prepare' ? 'aria-current="page"' }}><twig:Icon name="wand" /><span>{{ 'nav.prepare'|trans }}</span></a>
+            <a href="{{ path('progress') }}" {{ route == 'progress' ? 'aria-current="page"' }}><twig:Icon name="chart" /><span class="long">{{ 'nav.progress'|trans }}</span><span class="short" aria-hidden="true">{{ 'nav.progress_short'|trans }}</span></a>
+            <a href="{{ path('offer') }}" class="desktop-only" {{ route == 'offer' ? 'aria-current="page"' }}><twig:Icon name="file" /><span>{{ 'nav.offer'|trans }}</span></a>
             {% if is_granted('ROLE_MANAGER') %}
-                <span class="nav-label">{{ 'nav.manage'|trans }}</span>
+                <span class="nav-label" aria-hidden="true">{{ 'nav.manage'|trans }}</span>
                 <a href="{{ path('team') }}" {{ route starts with 'team' ? 'aria-current="page"' }}><twig:Icon name="users" /><span>{{ 'nav.team'|trans }}</span></a>
-                <a href="{{ path('settings') }}" class="secondary" {{ route starts with 'settings' ? 'aria-current="page"' }}><twig:Icon name="building" /><span>{{ 'nav.company'|trans }}</span></a>
+                <a href="{{ path('settings') }}" class="desktop-only" {{ route starts with 'settings' ? 'aria-current="page"' }}><twig:Icon name="building" /><span>{{ 'nav.company'|trans }}</span></a>
             {% endif %}
+            <a href="{{ path('account') }}" class="phone-only" {{ route in ['account', 'profile'] ? 'aria-current="page"' }}><twig:Icon name="user" /><span class="long">{{ 'nav.account'|trans }}</span><span class="short" aria-hidden="true">{{ 'nav.account_short'|trans }}</span></a>
         </nav>
         <div class="sidebar-foot">
-            <a class="me" href="{{ path('account') }}">
+            <a class="me" href="{{ path('account') }}" {{ route in ['account', 'profile'] ? 'aria-current="page"' }}>
                 <twig:Avatar :initials="app.user.initials" :name="app.user.name" />
-                <span><b>{{ app.user.name }}</b><span>{{ app.user.role|trans }}</span></span>
+                <span class="grow"><span class="me-name">{{ app.user.name }}</span><span class="me-role">{{ app.user.role|trans }}</span></span>
             </a>
-            <a class="btn ghost sm" href="{{ path('logout') }}"><twig:Icon name="logout" />{{ 'nav.logout'|trans }}</a>
+            <a class="btn ghost sm" href="{{ logout_path() }}"><twig:Icon name="logout" />{{ 'nav.logout'|trans }}</a>
         </div>
     </aside>
     <main class="main" id="main">

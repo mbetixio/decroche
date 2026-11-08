@@ -2,19 +2,21 @@
 {% block heading %}{{ 'onboarding.welcome.title'|trans }}{% endblock %}
 {% block lead %}<p class="lead">{{ 'onboarding.welcome.lead'|trans }}</p>{% endblock %}
 {% block content %}
-<div class="stack" style="--gap:10px">
-    <div class="card"><div class="feature"><span class="emoji">🎲</span><div><h3>{{ 'onboarding.welcome.f1_title'|trans }}</h3><p class="small muted">{{ 'onboarding.welcome.f1'|trans }}</p></div></div></div>
-    <div class="card"><div class="feature"><span class="emoji">📞</span><div><h3>{{ 'onboarding.welcome.f2_title'|trans }}</h3><p class="small muted">{{ 'onboarding.welcome.f2'|trans }}</p></div></div></div>
-    <div class="card"><div class="feature"><span class="emoji">🎯</span><div><h3>{{ 'onboarding.welcome.f3_title'|trans }}</h3><p class="small muted">{{ 'onboarding.welcome.f3'|trans }}</p></div></div></div>
-</div>
-{{ form_start(form) }}
-    <div class="stack">
-        <div>
-            <h2 class="row">{{ 'onboarding.welcome.language'|trans }}</h2>
-            <p class="small muted" style="margin-top:4px">{{ 'onboarding.welcome.language_help'|trans }}</p>
-        </div>
+{# The product in ten seconds: a call writing itself, then what it does in three short lines. #}
+{{ include('_call_log.html.twig') }}
+<ul class="features">
+    <li><h2 class="h3">{{ 'onboarding.welcome.f1_title'|trans }}</h2><p>{{ 'onboarding.welcome.f1'|trans }}</p></li>
+    <li><h2 class="h3">{{ 'onboarding.welcome.f2_title'|trans }}</h2><p>{{ 'onboarding.welcome.f2'|trans }}</p></li>
+    <li><h2 class="h3">{{ 'onboarding.welcome.f3_title'|trans }}</h2><p>{{ 'onboarding.welcome.f3'|trans }}</p></li>
+</ul>
+{{ form_start(form, {attr: {class: 'form'}}) }}
+    <fieldset class="stack">
+        <legend class="stack stack-s">
+            <span class="h2">{{ 'onboarding.welcome.language'|trans }}</span>
+            <span class="small muted">{{ 'onboarding.welcome.language_help'|trans }}</span>
+        </legend>
         <div data-controller="language" data-action="change->language#preview">{{ form_widget(form.language) }}</div>
-        {{ include('onboarding/_foot.html.twig', {actions: '<button class="btn primary lg">' ~ 'action.start'|trans ~ ' →</button>'}) }}
-    </div>
+    </fieldset>
+    {{ include('onboarding/_foot.html.twig', {label: 'action.start'|trans}) }}
 {{ form_end(form) }}
 {% endblock %}
