@@ -120,10 +120,13 @@ export default class extends Controller {
         setTimeout(() => this.finishTarget.requestSubmit(), 1500);
     }
 
+    // Hanging up sends the call to the coach: the debrief takes some thirty seconds, behind a waiting screen.
     hangUp() {
         this.over = true;
         this.stopListening();
         this.hush();
+        const overlay = document.getElementById('debrief-overlay');
+        if (overlay) overlay.hidden = false;
     }
 
     // One exchange, streamed: each sentence is said as soon as it arrives, while the persona writes the next.

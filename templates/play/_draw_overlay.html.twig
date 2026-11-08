@@ -1,8 +1,9 @@
-{# The waiting screen while a call is drawn and written (shown by the draw controller). #}
-<div class="overlay" id="draw-overlay" role="status" aria-live="polite" hidden>
+{# A waiting screen for a long step: a call drawn and written (by default), or the debrief being written (shown by the
+   draw, busy and call controllers). id, title and text may be given. #}
+<div class="overlay" id="{{ id ?? 'draw-overlay' }}" role="status" aria-live="polite" hidden>
     <div class="overlay-panel">
         <span class="loader" aria-hidden="true"><i></i><i></i><i></i></span>
-        <h2>{{ 'play.drawing'|trans }}</h2>
-        <p>{{ 'play.drawing_text'|trans }}</p>
+        <h2>{{ title ?? 'play.drawing'|trans }}</h2>
+        <p>{{ text ?? 'play.drawing_text'|trans }}</p>
     </div>
 </div>
