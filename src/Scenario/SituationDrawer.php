@@ -11,7 +11,7 @@ use Random\Randomizer;
 
 /**
  * Draws a surprise call: a situation of the company's catalogue (not one of the seller's last ones), dressed up at
- * random, harder as the seller levels up.
+ * random, around the difficulty the seller's recent scores call for.
  */
 final readonly class SituationDrawer
 {
@@ -27,7 +27,7 @@ final readonly class SituationDrawer
      *
      * @throws \LogicException when the company has no situation yet
      */
-    public function draw(Company $company, int $level = 1, ?string $key = null, array $avoid = []): Draw
+    public function draw(Company $company, Difficulty $target = Difficulty::Easy, ?string $key = null, array $avoid = []): Draw
     {
         $catalogue = $company->situations();
         if ([] === $catalogue) {
@@ -44,7 +44,7 @@ final readonly class SituationDrawer
             size: $this->pick($this->canvas->sizes($company->language)),
             city: $this->pick($this->canvas->cities($company->language)),
             tone: $this->pick(Tone::forSituation($situation->key)),
-            difficulty: $this->pick(Difficulty::forLevel($level)),
+            difficulty: $this->pick($target->around()),
         );
     }
 

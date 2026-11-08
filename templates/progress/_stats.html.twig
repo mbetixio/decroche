@@ -1,12 +1,10 @@
 {# A member's figures: for themself, and for their managers. stats: Stats; recent: their last calls; mine: their own. #}
-{% set level = stats.level %}
 <div class="stats">
-    <twig:Stat :label="'progress.level'|trans" :value="level.number" :suffix="level.name|trans" />
+    <twig:Stat :label="'progress.difficulty'|trans" :value="stats.challenge.difficulty|trans" :suffix="stats.challenge.warmingUp ? 'progress.warming_up'|trans : 'progress.recent_average'|trans({'%average%': stats.challenge.recentAverage})" />
     <twig:Stat :label="'progress.calls'|trans" :value="stats.done" :suffix="stats.abandoned ? 'progress.abandoned'|trans({'%count%': stats.abandoned}) : null" />
     <twig:Stat :label="'progress.average'|trans" :value="stats.average ?? '—'" :suffix="stats.trend is not null ? (stats.trend >= 0 ? '+' : '−') ~ stats.trend|abs ~ ' ' ~ 'progress.trend'|trans : null" />
     <twig:Stat :label="'progress.goals'|trans" :value="stats.goalRate is not null ? stats.goalRate ~ ' %' : '—'" />
     <twig:Stat :label="'progress.discovery'|trans" :value="stats.discovery is not null ? stats.discovery ~ ' %' : '—'" />
-    <twig:Stat :label="'progress.streak'|trans" :value="stats.streak" :suffix="'progress.days'|trans" />
 </div>
 
 <div class="halves section spaced">

@@ -11,7 +11,7 @@
     <h2 id="members-title" class="visually-hidden">{{ 'team.members'|trans }}</h2>
     <div class="table-wrap"><table>
         <thead><tr>
-            <th scope="col">{{ 'team.member'|trans }}</th><th scope="col">{{ 'progress.level'|trans }}</th><th scope="col" class="num">{{ 'progress.calls'|trans }}</th>
+            <th scope="col">{{ 'team.member'|trans }}</th><th scope="col">{{ 'progress.difficulty'|trans }}</th><th scope="col" class="num">{{ 'progress.calls'|trans }}</th>
             <th scope="col" class="num">{{ 'progress.average'|trans }}</th><th scope="col" class="num">{{ 'progress.trend'|trans }}</th><th scope="col">{{ 'team.to_work_on'|trans }}</th><th scope="col">{{ 'team.last_call'|trans }}</th>
         </tr></thead>
         <tbody>
@@ -19,7 +19,7 @@
                 {% set m = row.member %}{% set s = row.stats %}
                 <tr>
                     <th scope="row"><a class="member-cell" href="{{ path('team_member', {id: m.id}) }}"><twig:Avatar :initials="m.initials" /><span><b>{{ m.name }}</b><span class="list-sub">{{ m.role|trans }}</span></span></a></th>
-                    <td class="nowrap">{{ s.level.number }} · {{ s.level.name|trans }}</td>
+                    <td class="nowrap">{{ s.challenge.difficulty|trans }}</td>
                     <td class="num">{{ s.done }}</td>
                     <td class="num"><twig:Score :value="s.average" /></td>
                     <td class="num">{% if s.trend is not null %}<span class="score {{ s.trend >= 0 ? 'good' : 'bad' }}"><span aria-hidden="true">{{ s.trend >= 0 ? '▲' : '▼' }}</span> <span class="visually-hidden">{{ s.trend >= 0 ? '+' : '−' }}</span>{{ s.trend|abs }}</span>{% else %}<span class="faint">—</span>{% endif %}</td>

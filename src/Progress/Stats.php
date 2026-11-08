@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Progress;
 
 /**
- * A member's figures: calls, scores, trend, criteria, level and XP, streak, objectives, by situation.
+ * A member's figures: calls, scores, trend, criteria, the difficulty of the next calls, objectives, by situation.
  */
 final readonly class Stats
 {
@@ -30,8 +30,7 @@ final readonly class Stats
         public ?string $weakest,
         public ?string $strongest,
         public array $scores,
-        public Level $level,
-        public int $streak,
+        public Challenge $challenge,
         /** Calls whose goal was fully reached. */
         public int $goals,
         public array $bySituation,
@@ -53,8 +52,8 @@ final readonly class Stats
         return [
             'calls' => $this->calls, 'done' => $this->done, 'abandoned' => $this->abandoned, 'average' => $this->average,
             'best' => $this->best, 'last' => $this->last, 'trend' => $this->trend, 'criteria' => $this->criteria,
-            'weakest' => $this->weakest, 'strongest' => $this->strongest, 'xp' => $this->level->xp, 'level' => $this->level->toArray(),
-            'streak' => $this->streak, 'goals_reached' => $this->goals, 'goal_rate' => $this->goalRate(),
+            'weakest' => $this->weakest, 'strongest' => $this->strongest, 'challenge' => $this->challenge->toArray(),
+            'goals_reached' => $this->goals, 'goal_rate' => $this->goalRate(),
             'by_situation' => $this->bySituation, 'discovery' => $this->discovery,
         ];
     }

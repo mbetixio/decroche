@@ -65,7 +65,7 @@ final readonly class CallTools
      *
      * @return array<string, mixed>
      */
-    #[McpTool(name: 'new_call', title: 'New call', description: 'The game: draws a call situation from the company\'s catalogue (at random unless a situation key is given), writes it for the seller at their level (about fifteen seconds) and returns its briefing and a call link. By default (mode "link"), give the seller the link: it opens the phone screen in their browser, already signed in, to take the call out loud with a voice. With mode "chat", the call starts here: show the briefing and the persona\'s first line, then relay the seller\'s words with reply.')]
+    #[McpTool(name: 'new_call', title: 'New call', description: 'The game: draws a call situation from the company\'s catalogue (at random unless a situation key is given), writes it for the seller at a difficulty that follows their latest scores (about fifteen seconds) and returns its briefing and a call link. By default (mode "link"), give the seller the link: it opens the phone screen in their browser, already signed in, to take the call out loud with a voice. With mode "chat", the call starts here: show the briefing and the persona\'s first line, then relay the seller\'s words with reply.')]
     public function newCall(string $situation = '', string $mode = 'link'): array
     {
         $member = $this->me->member();

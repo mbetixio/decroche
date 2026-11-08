@@ -1,8 +1,8 @@
-{# Home: the one main action (a new call), the level, the missions, the latest calls as a log, what may come up. #}
+{# Home: the one main action (a new call), where the member stands (the difficulty of their calls, their average and
+   trend, what to work on), the missions, the latest calls as a log, what may come up. #}
 {% extends 'base.html.twig' %}
 {% block title %}{{ 'nav.play'|trans }}{% endblock %}
 {% block body %}
-{% set level = stats.level %}
 <header class="page-head">
     <div class="page-head-text">
         <p class="eyebrow">{{ 'play.hello'|trans({'%name%': app.user.name|split(' ')|first}) }}</p>
@@ -22,17 +22,22 @@
 
 <div class="home-top">
     {{ include('play/_new_call.html.twig') }}
-    <section class="level" aria-labelledby="level-title">
-        <h2 class="visually-hidden" id="level-title">{{ 'progress.level'|trans }}</h2>
-        <div class="level-figure"><b class="num">{{ level.number }}</b><span>{{ level.name|trans }}</span></div>
-        <div class="stack stack-s">
-            <div class="bar signal" role="img" aria-label="{{ level.percent }} %"><i style="--pct: {{ level.percent }}%"></i></div>
-            <p class="small muted">{{ level.xp }} XP{% if level.to %} · {{ 'play.to_next'|trans({'%xp%': level.to - level.xp, '%level%': level.next|trans}) }}{% endif %}</p>
-        </div>
+    {% set challenge = stats.challenge %}
+    <section class="standing" aria-labelledby="standing-title">
+        <h2 id="standing-title" class="standing-title">{{ 'play.standing.title'|trans }}</h2>
+        <p class="standing-mode">{{ 'play.standing.mode'|trans }} <b>{{ challenge.difficulty|trans }}</b></p>
+        <p class="small muted">
+            {%- if challenge.warmingUp -%}
+                {{ 'play.standing.warm_up'|trans({'%count%': constant('App\\Progress\\Challenge::WARM_UP')}) }}
+            {%- else -%}
+                {{ 'play.standing.why'|trans({'%count%': challenge.basis, '%average%': challenge.recentAverage}) }}
+                {{ (challenge.difficulty.value == 3 ? 'play.standing.top' : 'play.standing.next')|trans }}
+            {%- endif -%}
+        </p>
         <div class="stats">
             <twig:Stat :label="'progress.calls'|trans" :value="stats.done" />
-            <twig:Stat :label="'progress.average'|trans" :value="stats.average ?? '—'" />
-            <twig:Stat :label="'progress.streak'|trans" :value="stats.streak" :suffix="'progress.days'|trans" />
+            <twig:Stat :label="'progress.average'|trans" :value="stats.average ?? '—'" :suffix="stats.trend is not null ? (stats.trend >= 0 ? '+' : '−') ~ stats.trend|abs ~ ' ' ~ 'progress.trend'|trans : null" />
+            <twig:Stat :label="'play.standing.work_on'|trans" :value="stats.weakest ? stats.criteria[stats.weakest].label : '—'" :suffix="stats.weakest ? stats.criteria[stats.weakest].average|number_format(1) ~ ' / 10' : null" />
         </div>
     </section>
 </div>

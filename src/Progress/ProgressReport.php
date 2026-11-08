@@ -12,18 +12,16 @@ use App\Enum\ObjectiveStatus;
 use App\Model\Criterion;
 use App\Repository\CallRepository;
 use App\Repository\CompanyRepository;
-use Psr\Clock\ClockInterface;
 
 /**
- * Computes a member's figures from their calls. Replays of a moment count neither in averages nor in XP.
+ * Computes a member's figures from their calls, and the difficulty of their next surprise calls. Replays of a moment
+ * do not count.
  */
 final readonly class ProgressReport
 {
     public function __construct(
         private CallRepository $calls,
         private CompanyRepository $companies,
-        private Experience $experience,
-        private ClockInterface $clock,
     ) {
     }
 
@@ -76,8 +74,7 @@ final readonly class ProgressReport
             weakest: array_key_first($rated),
             strongest: array_key_last($rated),
             scores: array_reverse(array_map(static fn (Call $c): array => ['id' => $c->id, 'score' => (int) $c->score, 'date' => $c->startedAt->format('d/m'), 'title' => $c->scenario->title], \array_slice($done, 0, 20))),
-            level: Level::of(array_sum(array_map($this->experience->of(...), $done))),
-            streak: $this->experience->streak($calls, $this->clock->now()),
+            challenge: Challenge::of($scores),
             goals: \count(array_filter($debriefs, static fn (Debrief $d): bool => ObjectiveStatus::Reached === $d->goal)),
             bySituation: $this->bySituation($done),
             discovery: 0 === $sections ? null : (int) round(array_sum(array_map(static fn (Call $c): int => $c->revealedCount(), $done)) / $sections * 100),

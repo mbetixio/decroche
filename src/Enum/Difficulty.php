@@ -46,16 +46,16 @@ enum Difficulty: int implements TranslatableInterface
     }
 
     /**
-     * The difficulties a seller of this level may draw: harder as they progress.
+     * The difficulties a call aimed at this one may get: mostly this one, sometimes a neighbour, so that calls vary.
      *
      * @return non-empty-list<self>
      */
-    public static function forLevel(int $level): array
+    public function around(): array
     {
-        return match (true) {
-            $level <= 1 => [self::Easy, self::Easy, self::Demanding],
-            $level <= 3 => [self::Easy, self::Demanding, self::Demanding, self::Tough],
-            default => [self::Demanding, self::Tough, self::Tough],
+        return match ($this) {
+            self::Easy => [self::Easy, self::Easy, self::Demanding],
+            self::Demanding => [self::Easy, self::Demanding, self::Demanding, self::Tough],
+            self::Tough => [self::Demanding, self::Tough, self::Tough],
         };
     }
 }

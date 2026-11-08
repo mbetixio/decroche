@@ -18,7 +18,7 @@ use Random\Randomizer;
 
 /**
  * Drawing a surprise call with a seeded randomizer: a given situation, recent ones avoided, the dressing taken from
- * the company and the canvas (config/practicall), the tone from the situation and the difficulty from the level.
+ * the company and the canvas (config/practicall), the tone from the situation and the difficulty around the target.
  */
 final class SituationDrawerTest extends TestCase
 {
@@ -103,13 +103,13 @@ final class SituationDrawerTest extends TestCase
         self::assertSame('business services', self::drawer()->draw($company)->sector);
     }
 
-    public function testTheLevelSetsTheDifficulty(): void
+    public function testTheTargetSetsTheDifficulty(): void
     {
         $drawer = self::drawer();
         $beginner = $veteran = [];
         for ($i = 0; $i < 40; ++$i) {
-            $beginner[] = $drawer->draw(self::catalogue(), 1)->difficulty;
-            $veteran[] = $drawer->draw(self::catalogue(), 6)->difficulty;
+            $beginner[] = $drawer->draw(self::catalogue(), Difficulty::Easy)->difficulty;
+            $veteran[] = $drawer->draw(self::catalogue(), Difficulty::Tough)->difficulty;
         }
 
         self::assertNotContains(Difficulty::Tough, $beginner);

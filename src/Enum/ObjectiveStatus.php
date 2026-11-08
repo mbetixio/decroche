@@ -34,18 +34,6 @@ enum ObjectiveStatus: string implements TranslatableInterface
     }
 
     /**
-     * The experience points it brings on top of the score.
-     */
-    public function bonus(): int
-    {
-        return match ($this) {
-            self::Reached => 10,
-            self::Partial => 4,
-            self::Missed => 0,
-        };
-    }
-
-    /**
      * Reads a status written by the model, in English or French.
      */
     public static function fromModel(mixed $value): self

@@ -13,10 +13,9 @@ use App\Repository\CallRepository;
 use App\Repository\CompanyRepository;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Schema\ToolAnnotations;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * The seller's own figures: level, scores and trend, criteria, missions, last calls.
+ * The seller's own figures: the difficulty of their next calls, scores and trend, criteria, missions, last calls.
  */
 final readonly class ProgressTools
 {
@@ -26,14 +25,13 @@ final readonly class ProgressTools
         private MissionTracker $missions,
         private CallRepository $calls,
         private CompanyRepository $companies,
-        private TranslatorInterface $translator,
     ) {
     }
 
     /**
      * @return array<string, mixed>
      */
-    #[McpTool(name: 'my_progress', title: 'My progress', description: 'The seller\'s figures: level and XP, streak, calls, average score and trend, average by criterion with the strongest and weakest, results by situation, the missions their manager gave them (to play one: new_call with its situation key), and the last calls.', annotations: new ToolAnnotations(readOnlyHint: true))]
+    #[McpTool(name: 'my_progress', title: 'My progress', description: 'The seller\'s figures: the difficulty of their next surprise calls (it follows their last five scores), calls, average score and trend, average by criterion with the strongest and weakest, results by situation, the missions their manager gave them (to play one: new_call with its situation key), and the last calls.', annotations: new ToolAnnotations(readOnlyHint: true))]
     public function myProgress(): array
     {
         $member = $this->me->member();
@@ -48,10 +46,7 @@ final readonly class ProgressTools
      */
     public function report(Member $member): array
     {
-        $report = $this->progress->of($member);
-        $stats = ['level' => ['name' => $this->translator->trans($report->level->name, locale: 'en')] + $report->level->toArray()] + $report->toArray();
-
-        return $stats + [
+        return $this->progress->of($member)->toArray() + [
             'missions' => array_map(fn (array $m): array => self::mission($m) + ['situation' => $this->companies->get()->situation($m['mission']->situation)?->label], $this->missions->of($member)),
             'recent' => array_map(static fn (Call $c): array => [
                 'call' => $c->id, 'scenario' => $c->scenario->title, 'date' => $c->startedAt->format('Y-m-d H:i'), 'status' => $c->status->value, 'score' => $c->score,

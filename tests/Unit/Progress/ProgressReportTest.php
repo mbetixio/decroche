@@ -8,17 +8,16 @@ use App\Entity\Call;
 use App\Entity\Scenario;
 use App\Enum\BriefSection;
 use App\Enum\CallEnd;
+use App\Enum\Difficulty;
 use App\Enum\Language;
-use App\Progress\Experience;
 use App\Progress\ProgressReport;
 use App\Repository\CallRepository;
 use App\Tests\Unit\Fixtures;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Clock\MockClock;
 
 /**
- * A member's figures summarized from their calls (averages, trend, criteria, level, streak, goals, discovery) and the
+ * A member's figures summarized from their calls (averages, trend, criteria, the difficulty of the next calls, goals, discovery) and the
  * figures by situation. The repositories are final: they are real ones over stubbed Doctrine plumbing.
  */
 final class ProgressReportTest extends TestCase
@@ -30,8 +29,6 @@ final class ProgressReportTest extends TestCase
         return new ProgressReport(
             new CallRepository(self::createStub(ManagerRegistry::class)),
             self::companies(self::company($language)),
-            new Experience(),
-            new MockClock(self::at('2026-11-13 20:00:00')),
         );
     }
 
@@ -71,8 +68,8 @@ final class ProgressReportTest extends TestCase
         self::assertNull($stats->weakest);
         self::assertNull($stats->discovery);
         self::assertNull($stats->goalRate());
-        self::assertSame(1, $stats->level->number);
-        self::assertSame(0, $stats->streak);
+        self::assertSame(Difficulty::Easy, $stats->challenge->difficulty);
+        self::assertTrue($stats->challenge->isWarmingUp());
         self::assertSame([], $stats->bySituation);
         // Without any debrief, the criteria are the company's default scorecard, in its language.
         self::assertSame(['label' => 'Découverte du besoin', 'average' => null], $stats->criteria['discovery']);
@@ -102,10 +99,9 @@ final class ProgressReportTest extends TestCase
         self::assertSame('discovery', $stats->strongest);
         self::assertSame(1, $stats->goals);
         self::assertSame(33, $stats->goalRate());
-        // XP: 80 + 10 (reached) + 60 + 70 + 4 (partial) = 224.
-        self::assertSame(224, $stats->level->xp);
-        self::assertSame(2, $stats->level->number);
-        self::assertSame(3, $stats->streak);
+        // Three graded calls averaging 70: the next ones are tough.
+        self::assertSame(Difficulty::Tough, $stats->challenge->difficulty);
+        self::assertSame(70, $stats->challenge->recentAverage);
         self::assertSame([70, 60, 80], array_column($stats->scores, 'score'));
         self::assertSame(['11/11', '12/11', '13/11'], array_column($stats->scores, 'date'));
     }
@@ -124,7 +120,7 @@ final class ProgressReportTest extends TestCase
         self::assertSame(3, $stats->calls);
         self::assertSame(1, $stats->done);
         self::assertSame(50, $stats->average);
-        self::assertSame(50, $stats->level->xp);
+        self::assertSame(1, $stats->challenge->basis, 'The replay does not count.');
     }
 
     public function testTrendComparesTheLastThreeScoresWithTheThreeBefore(): void
@@ -169,10 +165,8 @@ final class ProgressReportTest extends TestCase
         $data = self::report()->summarize([self::doneCall(80, self::debrief(8, 4, 'reached'))])->toArray();
 
         self::assertSame(80, $data['average']);
-        self::assertSame(90, $data['xp']);
         self::assertSame(100, $data['goal_rate']);
         self::assertSame(1, $data['goals_reached']);
-        self::assertSame(1, $data['level']['number']);
-        self::assertSame(1, $data['streak']);
+        self::assertSame(['difficulty' => 'Easy', 'recent_average' => null, 'basis' => 1], $data['challenge']);
     }
 }

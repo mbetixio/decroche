@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\IdentityTranslator;
 
 /**
- * An objective's status: read from the model in English or French, its weight in the score and its XP bonus.
+ * An objective's status: read from the model in English or French, its weight in the score.
  */
 final class ObjectiveStatusTest extends TestCase
 {
@@ -42,13 +42,6 @@ final class ObjectiveStatusTest extends TestCase
         self::assertSame(1.0, ObjectiveStatus::Reached->weight());
         self::assertSame(0.5, ObjectiveStatus::Partial->weight());
         self::assertSame(0.0, ObjectiveStatus::Missed->weight());
-    }
-
-    public function testBonus(): void
-    {
-        self::assertSame(10, ObjectiveStatus::Reached->bonus());
-        self::assertSame(4, ObjectiveStatus::Partial->bonus());
-        self::assertSame(0, ObjectiveStatus::Missed->bonus());
     }
 
     public function testTranslationKey(): void

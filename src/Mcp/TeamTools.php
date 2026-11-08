@@ -43,7 +43,7 @@ final readonly class TeamTools
     /**
      * @return array<string, mixed>
      */
-    #[McpTool(name: 'team', title: 'The team', description: 'For managers: every member with their level, calls, average score, trend, weakest criterion and last activity; the results by situation; the missions in progress; the latest calls.', annotations: new ToolAnnotations(readOnlyHint: true))]
+    #[McpTool(name: 'team', title: 'The team', description: 'For managers: every member with the difficulty of their calls, calls, average score, trend, weakest criterion and last activity; the results by situation; the missions in progress; the latest calls.', annotations: new ToolAnnotations(readOnlyHint: true))]
     public function team(): array
     {
         $this->me->manager();
@@ -52,8 +52,8 @@ final readonly class TeamTools
         return [
             'members' => array_map(static fn (array $row): array => [
                 'name' => $row['member']->name, 'email' => $row['member']->email, 'role' => $row['member']->role->value,
-                'level' => $row['stats']->level->number, 'calls' => $row['stats']->done, 'average' => $row['stats']->average,
-                'trend' => $row['stats']->trend, 'weakest' => $row['stats']->weakest, 'streak' => $row['stats']->streak,
+                'difficulty' => $row['stats']->challenge->difficulty->name, 'calls' => $row['stats']->done, 'average' => $row['stats']->average,
+                'trend' => $row['stats']->trend, 'weakest' => $row['stats']->weakest,
                 'last_call' => $row['lastAt']?->format('Y-m-d'),
             ], $board['members']),
             'situations' => $board['situations'],

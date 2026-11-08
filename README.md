@@ -21,7 +21,7 @@ signed in; *"How is my team doing?"* gives a manager the team's figures.
 
 | | |
 |---|---|
-| 🎲 **Situations drawn from your offer** | The onboarding reads your website and writes your offer sheet and 14–18 call situations specific to your business. Each "New call" draws one at random and writes a unique scenario around it (a persona, a document, three objectives, a hidden brief), at the seller's level. |
+| 🎲 **Situations drawn from your offer** | The onboarding reads your website and writes your offer sheet and 14–18 call situations specific to your business. Each "New call" draws one at random and writes a unique scenario around it (a persona, a document, three objectives, a hidden brief), at a difficulty that follows the seller's latest scores. |
 | 📞 **A real call, out loud** | A phone screen, not a chatbot. Speech recognition in the browser, Microsoft Edge neural voices generated server-side, each sentence voiced while the next one is being written (streaming), barge-in, a ringtone, a timer. |
 | 🎯 **A debrief that teaches** | A score out of 100 on your scorecard, the call's objectives judged, the hidden brief revealed with what was missed and the question that would have found it, the best and worst lines quoted word for word, three tips, the talk-share and filler words. Replay from any of your lines. |
 | 🧑‍💼 **For managers** | The team board, each seller's progress by criterion and by situation, missions ("3 price-request calls scored 70+ by Friday"), invitations, your own library of scenarios. |
@@ -81,7 +81,7 @@ phone screen lets you type your lines.
 | `library`, `call_link`, `start_call` | The managers' scenarios, a call link for one, or playing it in the chat. |
 | `reply`, `hang_up` | Relay the seller's words to the persona word for word; hang up and have the coach debrief. |
 | `debrief` | **MCP App**: the graded debrief, rendered in the conversation. |
-| `my_progress` | Level, scores, criteria, results by situation, missions, last calls. |
+| `my_progress` | The difficulty of the next calls, scores and trend, criteria, results by situation, missions, last calls. |
 | `team`, `member_progress`, `give_mission`, `invite` | For managers. |
 
 The persona's hidden brief never leaves the server before the debrief: the client's model cannot cheat for the seller.
@@ -113,7 +113,7 @@ src/
     Speech/     talk share, questions, filler words, pace
   Scenario/     situation canvas and drawer, scenario writer and factory, surprise calls
   Company/      website reader, offer analyst, example company, team and missions
-  Progress/     levels and XP, a member's figures, the team board, missions
+  Progress/     a member's figures, the difficulty that follows their scores, the team board, missions
   Voice/        edge-tts synthesis, voice casting per language, gender and tone
   Mcp/          the MCP tools, the debrief app, call links
   Onboarding/   the steps and the guard that steers first-boot visitors
