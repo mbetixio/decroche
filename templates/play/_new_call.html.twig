@@ -1,6 +1,5 @@
 {# The main action, wherever one may want to play: a call drawn at random from the company's situations. #}
 <div class="card hero pad-l call-cta" data-controller="draw" {{ attrs|default('')|raw }}>
-    <span class="badge glass"><twig:Icon name="sparkles" />{{ 'play.ready'|trans }}</span>
     <h2>{{ 'play.cta_title'|trans }}</h2>
     <p>{{ 'play.cta_text'|trans }}</p>
     <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit" style="margin-top:24px">

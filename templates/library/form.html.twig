@@ -19,7 +19,7 @@
         {{ form_row(form.opening) }}
     </section>
     <section class="card pad-l form" style="align-content:start">
-        <h2><twig:Icon name="key" />{{ 'library.form.brief'|trans }}</h2>
+        <h2>{{ 'library.form.brief'|trans }}</h2>
         <p class="small muted">{{ 'library.form.brief_help'|trans }}</p>
         {% for field in form.brief %}{{ form_row(field) }}{% endfor %}
         {% do form.brief.setRendered %}

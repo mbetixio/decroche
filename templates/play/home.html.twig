@@ -25,9 +25,9 @@
             <h2>{{ level.name|trans }}</h2>
             <p class="small muted">{{ level.xp }} XP{% if level.to %} · {{ 'play.to_next'|trans({'%xp%': level.to - level.xp, '%level%': level.next|trans}) }}{% endif %}</p>
             <div class="chips" style="margin-top:6px">
-                {% if stats.streak %}<span class="badge warn"><twig:Icon name="flame" />{{ 'play.streak'|trans({'%count%': stats.streak}) }}</span>{% endif %}
+                {% if stats.streak %}<span class="badge">{{ 'play.streak'|trans({'%count%': stats.streak}) }}</span>{% endif %}
                 <span class="badge">{{ 'play.calls'|trans({'%count%': stats.done}) }}</span>
-                {% if stats.average is not null %}<span class="badge accent">{{ 'play.average'|trans }} {{ stats.average }}</span>{% endif %}
+                {% if stats.average is not null %}<span class="badge">{{ 'play.average'|trans }} {{ stats.average }}</span>{% endif %}
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
 
 {% if missions %}
     <section style="margin-top:30px" data-controller="draw">
-        <div class="card-head"><h2><twig:Icon name="target" />{{ 'play.missions'|trans }}</h2></div>
+        <div class="card-head"><h2>{{ 'play.missions'|trans }}</h2></div>
         <div class="grid">
             {% for row in missions %}
                 {% set mission = row.mission %}
@@ -65,7 +65,7 @@
 
 <div class="cols-main" style="margin-top:30px">
     <section class="card flush">
-        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="clock" />{{ 'play.recent'|trans }}</h2>{% if recent %}<a class="btn ghost sm" href="{{ path('call_history') }}">{{ 'action.see_all'|trans }}</a>{% endif %}</div>
+        <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'play.recent'|trans }}</h2>{% if recent %}<a class="btn ghost sm" href="{{ path('call_history') }}">{{ 'action.see_all'|trans }}</a>{% endif %}</div>
         {% if recent %}
             <div class="list" style="margin-top:8px">
                 {% for call in recent %}
@@ -82,7 +82,7 @@
         {% endif %}
     </section>
     <section class="card">
-        <div class="card-head"><h2><twig:Icon name="sparkles" />{{ 'play.may_come_up'|trans }}</h2></div>
+        <div class="card-head"><h2>{{ 'play.may_come_up'|trans }}</h2></div>
         <div class="chips">
             {% for situation in situations %}<span class="chip">{{ situation.emoji }} {{ situation.label }}</span>{% endfor %}
         </div>

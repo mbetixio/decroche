@@ -8,12 +8,12 @@
 </header>
 <div class="cols-main">
     <section class="card pad-l stack" style="--gap:12px">
-        <h2><twig:Icon name="file" />{{ 'offer.sheet'|trans }}</h2>
+        <h2>{{ 'offer.sheet'|trans }}</h2>
         <div class="pre">{{ company.offer ?: 'offer.none'|trans }}</div>
         {% if company.sectors %}<div class="chips">{% for sector in company.sectors %}<span class="chip">{{ sector }}</span>{% endfor %}</div>{% endif %}
     </section>
     <section class="card flush">
-        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="phone" />{{ 'offer.situations'|trans }}</h2></div>
+        <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'offer.situations'|trans }}</h2></div>
         <div class="list" style="margin-top:8px">
             {% for situation in company.situations %}
                 <div class="list-item" style="align-items:flex-start">

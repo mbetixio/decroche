@@ -29,7 +29,7 @@
         <div class="row" style="margin-top:8px"><twig:Avatar :initials="persona.initials" :name="persona.name" size="lg" /><div><b>{{ persona.name }}</b><div class="small muted">{{ persona.role }} · {{ persona.company }}</div></div></div>
     </section>
     <section class="card flush">
-        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="clock" />{{ 'library.my_calls'|trans }}</h2></div>
+        <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'library.my_calls'|trans }}</h2></div>
         {% if calls %}
             <div class="list" style="margin-top:8px">
                 {% for call in calls %}

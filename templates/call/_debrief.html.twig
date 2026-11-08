@@ -29,7 +29,7 @@
 
     <div class="cols-2">
         <section class="card">
-            <div class="card-head"><h2><twig:Icon name="award" />{{ 'debrief.criteria'|trans }}</h2></div>
+            <div class="card-head"><h2>{{ 'debrief.criteria'|trans }}</h2></div>
             {% for criterion in debrief.criteria %}
                 <div class="criterion">
                     <b>{{ criterion.label }}</b>
@@ -42,7 +42,7 @@
         <div class="stack" style="--gap:18px">
             {% if debrief.objectives %}
                 <section class="card">
-                    <div class="card-head"><h2><twig:Icon name="target" />{{ 'debrief.objectives'|trans }}</h2></div>
+                    <div class="card-head"><h2>{{ 'debrief.objectives'|trans }}</h2></div>
                     <div class="list">
                         {% for objective in debrief.objectives %}
                             <div class="list-item" style="align-items:flex-start">
@@ -56,7 +56,7 @@
             {% if debrief.speech %}
                 {% set speech = debrief.speech %}
                 <section class="card">
-                    <div class="card-head"><h2><twig:Icon name="{{ speech.voice ? 'mic' : 'message' }}" />{{ 'debrief.figures'|trans }}</h2></div>
+                    <div class="card-head"><h2>{{ 'debrief.figures'|trans }}</h2></div>
                     <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr))">
                         <twig:Stat :label="'debrief.talk_share'|trans" :value="speech.talkShare" suffix="%" />
                         <twig:Stat :label="'debrief.questions'|trans({'%open%': speech.openQuestions})" :value="speech.questions" />
@@ -76,7 +76,7 @@
     {% set missed = {} %}
     {% for item in debrief.missed ?? [] %}{% set missed = missed|merge({(item.section.value): item}) %}{% endfor %}
     <section class="card">
-        <div class="card-head"><h2><twig:Icon name="key" />{{ 'debrief.brief'|trans({'%name%': persona.name}) }}</h2></div>
+        <div class="card-head"><h2>{{ 'debrief.brief'|trans({'%name%': persona.name}) }}</h2></div>
         {% if scenario.setup %}<p class="small" style="margin-bottom:10px"><b>{{ 'debrief.their_side'|trans }}</b> {{ scenario.setup }}</p>{% endif %}
         <div class="list">
             {% for item in call.briefSheet %}
@@ -95,13 +95,13 @@
 {% if debrief and call.status.value == 'done' %}
     <div class="cols-2">
         <section class="card">
-            <div class="card-head"><h2><twig:Icon name="trophy" />{{ 'debrief.best'|trans }}</h2></div>
+            <div class="card-head"><h2>{{ 'debrief.best'|trans }}</h2></div>
             <div class="stack" style="--gap:12px">
                 {% for quote in debrief.best %}<div class="quote good"><q>{{ quote.quote }}</q><div class="small muted">{{ quote.why }}</div></div>{% else %}<p class="muted">{{ 'debrief.no_best'|trans }}</p>{% endfor %}
             </div>
         </section>
         <section class="card">
-            <div class="card-head"><h2><twig:Icon name="refresh" />{{ 'debrief.worst'|trans }}</h2></div>
+            <div class="card-head"><h2>{{ 'debrief.worst'|trans }}</h2></div>
             <div class="stack" style="--gap:12px">
                 {% for quote in debrief.worst %}
                     <div class="quote bad">
@@ -120,7 +120,7 @@
         </section>
     </div>
     <section class="card hero pad-l">
-        <h2 style="color:#fff;margin-bottom:12px"><twig:Icon name="sparkles" /> {{ 'debrief.tips'|trans }}</h2>
+        <h2 style="color:#fff;margin-bottom:12px">{{ 'debrief.tips'|trans }}</h2>
         <ol class="objectives" style="color:#fff">{% for tip in debrief.tips %}<li>{{ tip }}</li>{% endfor %}</ol>
     </section>
 {% endif %}

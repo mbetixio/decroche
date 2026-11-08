@@ -11,7 +11,7 @@
 
 <div class="cols-2" style="margin-top:20px">
     <section class="card">
-        <div class="card-head"><h2><twig:Icon name="chart" />{{ 'progress.scores'|trans }}</h2></div>
+        <div class="card-head"><h2>{{ 'progress.scores'|trans }}</h2></div>
         {% if stats.scores|length > 1 %}
             {% set n = stats.scores|length %}
             {% set points = [] %}
@@ -26,7 +26,7 @@
         {% endif %}
     </section>
     <section class="card">
-        <div class="card-head"><h2><twig:Icon name="award" />{{ 'progress.criteria'|trans }}</h2></div>
+        <div class="card-head"><h2>{{ 'progress.criteria'|trans }}</h2></div>
         {% for key, criterion in stats.criteria %}
             <div class="criterion">
                 <b>{{ criterion.label }}{% if key == stats.strongest %} <span class="badge good">{{ 'progress.strongest'|trans }}</span>{% elseif key == stats.weakest %} <span class="badge warn">{{ 'progress.weakest'|trans }}</span>{% endif %}</b>
@@ -39,7 +39,7 @@
 
 {% if stats.bySituation %}
     <section class="card flush" style="margin-top:20px">
-        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="sparkles" />{{ 'progress.by_situation'|trans }}</h2></div>
+        <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'progress.by_situation'|trans }}</h2></div>
         <div class="table-wrap"><table>
             <thead><tr><th>{{ 'progress.situation'|trans }}</th><th>{{ 'progress.calls'|trans }}</th><th>{{ 'progress.average'|trans }}</th><th>{{ 'progress.goals'|trans }}</th></tr></thead>
             <tbody>{% for row in stats.bySituation %}<tr><td>{{ row.emoji }} {{ row.label }}</td><td>{{ row.calls }}</td><td><twig:Score :value="row.average" /></td><td>{{ row.goals }}</td></tr>{% endfor %}</tbody>
@@ -48,7 +48,7 @@
 {% endif %}
 
 <section class="card flush" style="margin-top:20px">
-    <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="clock" />{{ 'play.recent'|trans }}</h2></div>
+    <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'play.recent'|trans }}</h2></div>
     {% if recent %}
         <div class="table-wrap"><table>
             <thead><tr><th>{{ 'progress.date'|trans }}</th><th>{{ 'progress.call'|trans }}</th><th>{{ 'progress.status'|trans }}</th><th>{{ 'progress.score'|trans }}</th></tr></thead>

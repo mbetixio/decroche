@@ -29,7 +29,7 @@
 
 <div class="cols-2" style="margin-top:20px">
     <section class="card" id="missions">
-        <div class="card-head"><h2><twig:Icon name="target" />{{ 'team.missions'|trans }}</h2></div>
+        <div class="card-head"><h2>{{ 'team.missions'|trans }}</h2></div>
         {% if missions %}
             <div class="list" style="margin-bottom:16px">
                 {% for row in missions %}
@@ -57,7 +57,7 @@
         </details>
     </section>
     <section class="card" id="invitations">
-        <div class="card-head"><h2><twig:Icon name="mail" />{{ 'team.invitations'|trans }}</h2></div>
+        <div class="card-head"><h2>{{ 'team.invitations'|trans }}</h2></div>
         {% if invitations %}<div style="margin-bottom:16px">{{ include('team/_invitations.html.twig') }}</div>{% endif %}
         {{ form_start(inviteForm, {attr: {class: 'form'}}) }}
             {{ form_rest(inviteForm) }}
@@ -68,13 +68,13 @@
 
 <div class="cols-2" style="margin-top:20px">
     <section class="card flush">
-        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="sparkles" />{{ 'progress.by_situation'|trans }}</h2></div>
+        <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'progress.by_situation'|trans }}</h2></div>
         {% if board.situations %}
             <div class="table-wrap"><table><tbody>{% for row in board.situations %}<tr><td>{{ row.emoji }} {{ row.label }}</td><td class="small muted">{{ 'play.calls'|trans({'%count%': row.calls}) }}</td><td><twig:Score :value="row.average" /></td></tr>{% endfor %}</tbody></table></div>
         {% else %}<twig:Empty icon="chart" :title="'progress.no_scores'|trans" />{% endif %}
     </section>
     <section class="card flush">
-        <div class="card-head" style="padding:18px 20px 0"><h2><twig:Icon name="clock" />{{ 'team.latest'|trans }}</h2></div>
+        <div class="card-head" style="padding:18px 20px 0"><h2>{{ 'team.latest'|trans }}</h2></div>
         {% if board.recent %}
             <div class="list" style="margin-top:8px">
                 {% for call in board.recent %}
