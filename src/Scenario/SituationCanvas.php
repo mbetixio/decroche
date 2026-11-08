@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Scenario;
 
+use App\Ai\Data;
 use App\Enum\Language;
 use App\Model\Situation;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -60,7 +61,15 @@ final class SituationCanvas
      */
     private function data(Language $language): array
     {
-        /* @var array{sizes: list<string>, cities: list<string>, situations: array<string, array<mixed>>} */
-        return $this->data[$language->value] ??= Yaml::parseFile(\sprintf('%s/%s/situations.yaml', $this->directory, $language->value));
+        if (!isset($this->data[$language->value])) {
+            $file = Data::map(Yaml::parseFile(\sprintf('%s/%s/situations.yaml', $this->directory, $language->value)));
+            $situations = [];
+            foreach (Data::map($file['situations'] ?? null) as $key => $situation) {
+                $situations[(string) $key] = Data::map($situation);
+            }
+            $this->data[$language->value] = ['sizes' => Data::strings($file['sizes'] ?? null), 'cities' => Data::strings($file['cities'] ?? null), 'situations' => $situations];
+        }
+
+        return $this->data[$language->value];
     }
 }
