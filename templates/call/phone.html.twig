@@ -16,7 +16,7 @@
     no_recognition: 'call.no_recognition'|trans, resume: 'call.state.resume'|trans, voice_server: 'call.voice.server'|trans,
     voice_browser: 'call.voice.browser'|trans, sample: 'call.voice.sample'|trans,
 } %}
-<div class="callscreen" id="main" data-state="idle"
+<div class="callscreen" id="main" data-state="{{ incoming ? 'incoming' : 'idle' }}"
      data-controller="call"
      data-call-talk-url-value="{{ path('call_talk', {id: call.id}) }}"
      data-call-token-value="{{ csrf_token('call-' ~ call.id) }}"
@@ -60,7 +60,7 @@
             <button type="button" class="cs-key" data-key="sheet" data-action="call#toggleSheet"><i><twig:Icon name="clipboard" /></i><span>{{ 'call.key.sheet'|trans }}</span></button>
         </div>
         <div>
-            <button type="button" class="cs-round pickup" data-call-target="pickup" data-action="call#pickUp" aria-label="{{ (incoming ? 'call.pick_up' : 'call.dial')|trans }}"><twig:Icon name="phone" /></button>
+            <button type="button" class="cs-pickup" data-call-target="pickup" data-action="call#pickUp"><twig:Icon name="phone" /><span>{{ (incoming ? 'call.pick_up_name' : 'call.dial_name')|trans({'%name%': persona.firstName}) }}</span></button>
             <form method="post" action="{{ path('call_finish', {id: call.id}) }}" data-call-target="finish" data-action="call#hangUp" hidden>
                 <input type="hidden" name="_token" value="{{ csrf_token('call-' ~ call.id) }}">
                 <button class="cs-round hangup" aria-label="{{ 'call.hang_up'|trans }}"><twig:Icon name="phone" /></button>

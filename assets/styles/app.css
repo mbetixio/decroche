@@ -445,7 +445,8 @@ a.list-item:hover b { text-decoration: underline; text-decoration-color: var(--b
 .cs-avatar::before, .cs-avatar::after { content: ''; position: absolute; inset: 0; border-radius: inherit; border: 2px solid var(--brand); opacity: 0; }
 [data-state='speaking'] .cs-avatar::before, [data-state='speaking'] .cs-avatar::after,
 [data-state='ringing'] .cs-avatar::before, [data-state='ringing'] .cs-avatar::after,
-[data-state='idle'] .cs-avatar::before { animation: wave 1.6s infinite ease-out; }
+[data-state='incoming'] .cs-avatar::before, [data-state='incoming'] .cs-avatar::after { animation: wave 1.6s infinite ease-out; }
+[data-state='incoming'] .cs-avatar::after { animation-delay: .8s; }
 [data-state='speaking'] .cs-avatar::after, [data-state='ringing'] .cs-avatar::after { animation-delay: .8s; }
 @keyframes wave { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(1.45); opacity: 0; } }
 [data-state='thinking'] .cs-avatar { animation: breathe 1.2s infinite ease-in-out; }
@@ -477,8 +478,13 @@ a.list-item:hover b { text-decoration: underline; text-decoration-color: var(--b
 .cs-key[aria-pressed='true'] { background: rgb(255 255 255 / .16); color: #fff; }
 .cs-round { width: 84px; height: 84px; border-radius: 14px; border: 0; cursor: pointer; display: grid; place-items: center; color: #fff; }
 .cs-round svg { width: 32px; height: 32px; }
-.cs-round.pickup { background: #1fa463; animation: nudge 1.4s infinite; }
-@keyframes nudge { 50% { box-shadow: 0 0 0 10px rgb(31 164 99 / .18); } }
+.cs-round.pickup { background: #1fa463; }
+/* Before the call: a labelled button. Still when the seller places the call; it only rings for an incoming call. */
+.cs-pickup { display: inline-flex; align-items: center; gap: 12px; padding: 18px 30px; border: 0; border-radius: 14px; background: #1fa463; color: #fff; font: 600 17px var(--font); cursor: pointer; transition: background .12s; }
+.cs-pickup svg { width: 24px; height: 24px; }
+.cs-pickup:hover { background: #188a52; }
+[data-state='incoming'] .cs-pickup { animation: nudge 1.4s infinite; }
+@keyframes nudge { 50% { box-shadow: 0 0 0 10px rgb(31 164 99 / .2); } }
 .cs-round.hangup { background: var(--bad); }
 .cs-round.hangup svg { transform: rotate(135deg); }
 .cs-hint { color: rgb(255 255 255 / .55); font-size: 13px; text-align: center; max-width: 440px; min-height: 18px; }

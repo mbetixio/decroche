@@ -294,8 +294,8 @@ call:
         ended: 'Appel terminé'
         resume: 'Appel en attente : reprenez la ligne'
     hint:
-        incoming: 'Ça sonne : décrochez.'
-        outgoing: 'Appuyez pour lancer l''appel.'
+        incoming: 'On vous appelle : décrochez.'
+        outgoing: 'L''appel n''est pas encore lancé : appuyez sur le bouton vert pour appeler.'
         talk: 'Parlez naturellement, comme au téléphone.'
     key:
         mute: 'Micro'
@@ -316,6 +316,8 @@ call:
         server: 'Voix neuronale Microsoft (%voice%), générée par le serveur : la même sur tous les navigateurs.'
         browser: 'Voix du navigateur : pour la plus naturelle, jouez dans Microsoft Edge.'
         sample: 'Bonjour, %name% à l''appareil. Je vous écoute.'
+    dial_name: 'Appeler %name%'
+    pick_up_name: 'Décrocher'
 company:
     error:
         invalid_website: 'Cette adresse ne ressemble pas à un site web.'
