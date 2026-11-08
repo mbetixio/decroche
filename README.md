@@ -1,3 +1,5 @@
+<p align="center"><img src="public/brand/logo.svg" width="120" alt="Practicall"></p>
+
 # Practicall
 
 **A flight simulator for sales calls.** Your sellers pick up the phone and talk, out loud, to an AI client who plays

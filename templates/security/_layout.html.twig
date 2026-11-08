@@ -1,9 +1,9 @@
-{# A centred card on the gradient, for the sign-in pages. #}
+{# A centred card, for the sign-in pages. #}
 {% extends 'base.html.twig' %}
 {% block page %}
 <div class="auth">
     <div class="auth-card card pad-l stack" style="--gap:18px">
-        <div class="brand" style="padding:0"><span class="brand-mark"><twig:Icon name="phone" /></span><span>Practicall<small>{{ company().name }}</small></span></div>
+        <div class="brand" style="padding:0"><img class="brand-logo" src="/brand/logo.svg" alt="" width="38" height="38"><span>Practicall<small>{{ company().name }}</small></span></div>
         {{ include('_flashes.html.twig') }}
         {% block content %}{% endblock %}
     </div>

@@ -5,7 +5,7 @@
 {% set steps = enum('App\\Onboarding\\OnboardingStep').cases() %}
 <div class="onboarding">
     <aside class="onboarding-aside">
-        <div class="brand"><span class="brand-mark"><twig:Icon name="phone" /></span><span>Practicall<small>{{ 'onboarding.tagline'|trans }}</small></span></div>
+        <div class="brand"><img class="brand-logo" src="/brand/logo.svg" alt="" width="38" height="38"><span>Practicall<small>{{ 'onboarding.tagline'|trans }}</small></span></div>
         <ol class="steps">
             {% for s in steps %}
                 <li class="{{ s.index < step.index ? 'done' : (s == step ? 'current') }}">

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Practicall">
+  <!-- On a dark background, the seller's bubble keeps a light outline. -->
+  <style>@media (prefers-color-scheme: dark) { .edge { stroke: #eef1f8; } }</style>
+  <!-- Practicall: a coach (the whistle) and a seller on the phone (the headset), in conversation. -->
+  <!-- The coach's bubble, behind -->
+  <path d="M41 5.5a17 17 0 0 1 13.6 27.2l3.4 8.8-9.3-3.9A17 17 0 1 1 41 5.5z" fill="#fff" stroke="#f2542d" stroke-width="3.6" stroke-linejoin="round"/>
+  <circle cx="40.5" cy="22" r="5.4" fill="#f2542d"/>
+  <path d="M40.5 16.6h9.6a1.9 1.9 0 0 1 1.9 1.9v2.4a1.9 1.9 0 0 1-1.9 1.9h-7.2z" fill="#f2542d"/>
+  <circle cx="40.5" cy="22" r="1.9" fill="#fff"/>
+  <path d="M41.8 10.4l.9 2.6M46.3 9.6v2.8M50.6 10.6l-1 2.6" stroke="#f2542d" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- The seller's bubble, in front -->
+  <path d="M24 21a18 18 0 1 1-14.3 29l-6.2 7.2 1.7-10.6A18 18 0 0 1 24 21z" class="edge" fill="#fff" stroke="#10172a" stroke-width="3.6" stroke-linejoin="round"/>
+  <circle cx="24" cy="35" r="5.4" fill="#10172a"/>
+  <path d="M13.8 51.2c1.8-5.3 5.6-7.9 10.2-7.9s8.4 2.6 10.2 7.9a17.9 17.9 0 0 1-20.4 0z" fill="#10172a"/>
+  <path d="M24 43.6l-1.6 1.9 1.6 5.7 1.6-5.7z" fill="#f2542d"/>
+  <path d="M16.6 35.5a7.4 7.4 0 0 1 14.8 0" fill="none" stroke="#10172a" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="15.2" y="34.2" width="3" height="5" rx="1.5" fill="#10172a"/>
+  <rect x="29.8" y="34.2" width="3" height="5" rx="1.5" fill="#10172a"/>
+  <path d="M17.2 39.4c.6 2.4 2.6 3.4 4.8 3.4" fill="none" stroke="#10172a" stroke-width="1.6" stroke-linecap="round"/>
+</svg>
