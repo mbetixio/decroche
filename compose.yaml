@@ -9,11 +9,11 @@ services:
     ports:
       - "${PRACTICALL_PORT:-7077}:80"
     environment:
-      # Any OpenAI-compatible API (see .env for the defaults and examples).
-      AI_API_KEY: ${AI_API_KEY:?Set AI_API_KEY to your model provider key}
-      AI_BASE_URL: ${AI_BASE_URL:-https://opencode.ai/zen/go/v1}
+      # Hugging Face Inference Providers by default (a token hf_…); any OpenAI-compatible API works (see the README).
+      AI_API_KEY: ${AI_API_KEY:?Set AI_API_KEY to a Hugging Face token (hf_…) or another provider key}
+      AI_BASE_URL: ${AI_BASE_URL:-https://router.huggingface.co/v1}
       AI_COMPLETIONS_PATH: ${AI_COMPLETIONS_PATH:-/chat/completions}
-      AI_MODEL: ${AI_MODEL:-deepseek-v4.1-flash}
+      AI_MODEL: ${AI_MODEL:-openai/gpt-oss-120b}
       AI_HEADERS: ${AI_HEADERS:-{}}
       # The public address of the instance, for the links it generates (call links, invitations).
       DEFAULT_URI: ${DEFAULT_URI:-http://localhost:7077}

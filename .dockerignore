@@ -13,3 +13,4 @@ phpstan.dist.neon
 .phpunit.cache
 compose.yaml
 Dockerfile
+.env.docker

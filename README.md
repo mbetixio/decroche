@@ -1,106 +1,236 @@
-<p align="center"><img src="public/brand/logo.svg" width="120" alt="Practicall"></p>
+<p align="center"><img src="public/brand/logo.svg" width="110" alt="Practicall"></p>
 
-# Practicall
+<h1 align="center">Practicall</h1>
 
-**A flight simulator for sales calls.** Your sellers pick up the phone and talk, out loud, to an AI client who plays
-one of *your* real situations: a price request from your website, an unhappy client, a renewal with a discount request…
-The client has a hidden brief (their real budget, their real pain, who decides, what would get a yes) that the seller
-must uncover. When they hang up, a coach grades the call against your own scorecard, reveals the hidden brief, quotes
-the best and worst lines, and lets them replay any moment.
+<p align="center"><b>Rehearse your sales calls out loud, against an AI client who knows things you don't —<br>including the real client meeting you have tomorrow, straight from its e-mail thread in Claude.<br>Then get graded by a coach, and follow your progress.</b></p>
 
-Practicall is built with **Symfony 8.1**, **Symfony AI** and the **MCP SDK**. Its MCP server lets a seller train from
-Claude (or any MCP client): *"Give me a call to practise"* returns a signed link that opens the phone screen, already
-signed in; *"How is my team doing?"* gives a manager the team's figures.
+<p align="center">Symfony 8.1 · Symfony AI · MCP · Hugging Face Inference Providers · PHP 8.5</p>
 
-> Built for the Symfony AI & MCP Hackathon. One instance per company: on first boot, a step-by-step onboarding sets it
-> up from the company's website, in English or French.
+<p align="center">Open source (MIT) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
+
+<p align="center"><img src="docs/screenshots/phone.png" alt="The phone screen during a practice call" width="900"></p>
 
 ---
+
+## Why
+
+Sales people learn on real prospects. Every fumbled discovery question, every price given too early, every
+"let me send you a brochure" costs a deal — and nobody tells them what went wrong.
+
+**Practicall is a flight simulator for sales calls.** A seller picks up the phone (a real phone screen, with a voice,
+not a chatbot) and talks to an AI client built from *their own company's* offer and situations: a price request from
+the website, a furious client, a CTO who is about to leave, a renewal with a discount request… The client has a
+**hidden brief** — their real budget, their real pain, who decides, their objections, what would get a yes — and only
+gives it away to the right questions. When the seller hangs up, a coach grades the call against the company's own
+scorecard, reveals the brief, quotes the best and worst lines, and lets them replay any moment.
+
+One instance per company: on first boot, a step-by-step onboarding reads the company's website and writes its offer
+sheet and 14–18 call situations specific to its business, in English or French.
 
 ## What it does
 
 | | |
 |---|---|
-| 🎲 **Situations drawn from your offer** | The onboarding reads your website and writes your offer sheet and 14–18 call situations specific to your business. Each "New call" draws one at random and writes a unique scenario around it (a persona, a document, three objectives, a hidden brief), at a difficulty that follows the seller's latest scores. |
-| 📞 **A real call, out loud** | A phone screen, not a chatbot. Speech recognition in the browser, Microsoft Edge neural voices generated server-side, each sentence voiced while the next one is being written (streaming), barge-in, a ringtone, a timer. |
-| 🎯 **A debrief that teaches** | A score out of 100 on your scorecard, the call's objectives judged, the hidden brief revealed with what was missed and the question that would have found it, the best and worst lines quoted word for word, three tips, the talk-share and filler words. Replay from any of your lines. |
-| 🧑‍💼 **For managers** | The team board, each seller's progress by criterion and by situation, missions ("3 price-request calls scored 70+ by Friday"), invitations, your own library of scenarios. |
-| 🤖 **From Claude, through MCP** | Draw or prepare a call and get a call link, play a call in the chat, read your progress; managers read the team, give missions, invite people. The debrief shows as an MCP App. |
-| 🌍 **English and French** | The working language chosen at setup drives the whole interface, the personas, their voices and the debriefs. |
+| 🎲 **Calls drawn from your own business** | The onboarding analyses your website into an offer sheet and a catalogue of situations. Each *New call* draws one at random and writes a unique scenario around it: a person, a company, the document you have in front of you (laid out like a CRM record), three objectives, and a hidden brief. |
+| 📞 **A real call, out loud** | Speech recognition in the browser, neural voices generated server-side, the reply streamed and voiced sentence by sentence, interruptions (barge-in), a timer. No text box unless you want the keypad. |
+| 🎯 **A debrief that teaches** | A score out of 100 on your scorecard, the call's objectives judged one by one, the hidden brief revealed with what you missed and *the question that would have found it*, your best and worst lines quoted word for word with a better alternative, three tips, talk share and filler words. Replay the call from any of your lines. |
+| 📈 **Progress that means something** | No XP or badges: the difficulty of your next calls follows your last five scores, and the home page tells you why, your trend, and the one criterion to work on. |
+| 🧑‍💼 **Managers follow the team** | The team board (difficulty, average, trend, weakest criterion per seller), each seller's debriefs, missions ("3 price-request calls scored 70+ by Friday"), invitations, the company's own library of scenarios and scorecard. |
+| 🤖 **Rehearse your next real call, from Claude** | Got a client meeting tomorrow? Ask Claude (connected to your mailbox) to get you ready: it reads the meeting's e-mail thread, and Practicall turns it into a practice call with *that* client — their context, their likely objections, a hidden brief — ready to take out loud in one click. Then, still in conversation, read your debriefs, ask why you keep losing at closing, and (for managers) follow and coach the team. |
 
-## Run it in five minutes
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/home.png" alt="Home: a new call, where you stand, your missions and latest calls"><br><sub><b>Home</b> — one action, where you stand and why, what to work on.</sub></td>
+<td width="50%"><img src="docs/screenshots/briefing.png" alt="The briefing before the call"><br><sub><b>Briefing</b> — the situation, the document, the objectives; the person stays in view.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/debrief.png" alt="The graded debrief"><br><sub><b>Debrief</b> — the score, the criteria, the objectives, the call in figures.</sub></td>
+<td><img src="docs/screenshots/team.png" alt="The team board"><br><sub><b>Team</b> — each seller's difficulty, average, trend and weak spot; missions.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/progress.png" alt="A seller's progress"><br><sub><b>Progress</b> — scores over time, criteria, results by situation.</sub></td>
+<td><img src="docs/screenshots/onboarding.png" alt="The first onboarding step"><br><sub><b>Onboarding</b> — the instance sets itself up from the company's website.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/sign-in.png" alt="The sign-in page"><br><sub><b>Sign-in</b> — a practice call writes itself while you sign in.</sub></td>
+<td><img src="docs/screenshots/debrief-dark.png" alt="The debrief in the dark theme"><br><sub><b>Dark theme</b> — every screen, light or dark, English or French.</sub></td>
+</tr>
+</table>
 
-You need an API key for an **OpenAI-compatible** chat model. The defaults use DeepSeek through
-[OpenCode Go](https://opencode.ai); OpenAI, Mistral, OpenRouter or a local Ollama work too (see
-[Configuration](#configuration)).
+## Practicall in Claude (MCP)
 
-### With Docker
+The MCP server turns Claude (or any MCP client) into a sales coach that knows your company, your calls and your team.
+Each member connects with a personal address, so Claude only ever sees what that member may see.
+
+**Rehearse the call that is coming.** With Claude connected to your mailbox (a Gmail connector, for instance):
+
+> *"Find the last e-mail from Satelis Mobile and get me ready for tomorrow's call with their CEO."*
+
+Claude reads the e-mail, passes it to `prepare_call`, and Practicall writes a rehearsal of *that* meeting — the person,
+their context, their likely objections and a credible hidden brief you will have to uncover. Claude hands you a
+signed link: the phone screen opens in your browser, already signed in, and you rehearse out loud. A prospect sheet,
+meeting notes or a CRM export work just as well.
+
+**Understand your calls.**
+
+> *"Show me the debrief of my last call."* · *"Compare my last three calls: what keeps going wrong at closing?"* ·
+> *"Which questions would have found the budget?"*
+
+The graded debrief appears right in the conversation (an MCP App), and `my_progress` gives Claude your scores, your
+trend, your criteria and your missions to reason on.
+
+**Coach a team** (managers).
+
+> *"Who on my team struggles with objections? Give Jordan three objection calls scored 70+ before Friday."* ·
+> *"Invite our new hire, sam@acme.com."*
+
+**Or just practise.** *"Give me a call"* draws a surprise situation; with `mode: chat` the call is even played in
+writing, in the conversation.
+
+| Tool | |
+|---|---|
+| `prepare_call` | Writes a rehearsal of a real meeting from any text (an e-mail, notes, a prospect sheet); returns a call link or starts it in the chat. |
+| `new_call`, `situations` | A surprise call drawn from the company's catalogue (or a given situation). |
+| `library`, `call_link`, `start_call` | The managers' scenarios, a signed link to one, or playing it in the chat. |
+| `reply`, `hang_up` | A call played in the chat: the seller's words relayed word for word, then the coach's debrief. |
+| `debrief` | **MCP App**: the graded debrief, rendered in the conversation. |
+| `my_progress` | Difficulty and why, scores and trend, criteria, results by situation, missions, latest calls. |
+| `team`, `member_progress`, `give_mission`, `invite` | For managers. |
+
+The persona's hidden brief never leaves the server before the debrief: the client's model cannot whisper the answers.
+
+**Connect it.** In Practicall, open *My account → Train from Claude → Create my MCP address*, then in Claude add a
+custom connector with that address (`https://your-instance/mcp?key=pcl_…`). The MCP endpoint needs a public HTTPS
+address for Claude to reach it (see [Deploy](#deploy-on-a-server)).
+
+## Run it
+
+You need **an API key for a language model**. Practicall uses [Hugging Face Inference Providers](https://huggingface.co/docs/inference-providers)
+by default — one token gives access to fast open models — and works with any OpenAI-compatible API.
+
+### 1. Get a Hugging Face token (2 minutes)
+
+1. Sign in or create a free account on [huggingface.co](https://huggingface.co).
+2. Open [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) → **Create new token** → type
+   **Fine-grained** → tick **"Make calls to Inference Providers"** → **Create token**.
+3. Copy it right away: it starts with `hf_` and is shown only once.
+
+The free account comes with a small monthly credit, enough to try. A practice call (twenty lines, the scenario and the
+debrief) costs a few cents with the default model.
+
+### 2a. With Docker (recommended)
 
 ```bash
 git clone https://github.com/<you>/practicall.git && cd practicall
-AI_API_KEY=your-key docker compose up -d --build
+echo "AI_API_KEY=hf_your_token" > .env.docker
+docker compose --env-file .env.docker up -d --build
 ```
 
-Open <http://localhost:7077>: the onboarding starts. Pick a language, create your manager account, then either give
-your company's website (the analysis takes a minute or two) or click **Load the example** to play right away with a
-software services company and its 24 situations.
+Open <http://localhost:7077>. Then choose:
 
-To skip the onboarding entirely, start with `PRACTICALL_DEMO=1`: the example company and a manager are created, and the
-manager's credentials are printed by `docker compose logs`.
+- **A real instance, set up from your company** (default): the onboarding starts. Pick the language, create the first
+  manager account, give your website (analysed in a minute or two), review the offer, the situations and the
+  scorecard, invite your team.
+- **A demo instance, with test data**: add `PRACTICALL_DEMO=1` to `.env.docker` before starting.
 
-### Without Docker
+  ```bash
+  echo "PRACTICALL_DEMO=1" >> .env.docker
+  docker compose --env-file .env.docker up -d --build
+  docker compose logs practicall | grep -A1 Manager     # the demo manager's e-mail and password
+  ```
 
-Requires PHP 8.5 with `pdo_sqlite` and `intl`, Composer, and Python 3 for the voices.
+  The onboarding is skipped: an example company (a software services firm), its 24 situations, a library of 7
+  scenarios and a manager account are created. `PRACTICALL_LANGUAGE=fr` gives the same in French.
+
+The database, the sessions, the synthesized voices and the instance's own secrets live in the `practicall` volume:
+`docker compose down` keeps them, `docker compose down -v` starts over.
+
+### 2b. Without Docker
+
+Requires PHP 8.5 with `pdo_sqlite` and `intl`, [Composer](https://getcomposer.org), and Python 3 for the voices.
 
 ```bash
 git clone https://github.com/<you>/practicall.git && cd practicall
 composer install
+echo "AI_API_KEY=hf_your_token" > .env.local     # never committed
 python3 -m venv var/edge-tts && var/edge-tts/bin/pip install edge-tts==7.3.1   # optional: neural voices
-echo "AI_API_KEY=your-key" > .env.local
-php bin/console app:install --demo        # prints the demo manager's e-mail and password
-symfony serve                             # or: php -S 127.0.0.1:8000 -t public
 ```
 
-Without `--demo`, `app:install` only creates the database and the first visit opens the onboarding.
+Then either the onboarding:
 
-**Use Chrome, Edge or Safari** (speech recognition) and allow the microphone. With no microphone, the keypad on the
-phone screen lets you type your lines.
+```bash
+php bin/console app:install            # creates the database; the first visit opens the onboarding
+```
 
-## Train from Claude (MCP)
+or the demo data:
 
-1. In Practicall, open **My account → Train from Claude → Create my MCP address**.
-2. In Claude, add a custom connector with that address (`https://your-instance/mcp?key=…`).
-3. Ask: *"Give me a Practicall call to practise"*, *"Rehearse my meeting tomorrow with the CIO of Acme, here is what I
-   know…"*, *"How am I doing?"*, or as a manager *"Who on my team struggles with objections? Give them a mission."*
+```bash
+php bin/console app:install --demo --language=en    # prints the demo manager's e-mail and password
+```
 
-| Tool | What it does |
-|---|---|
-| `situations` | The company's catalogue of call situations. |
-| `new_call` | Draws a situation and writes the call; returns the briefing and a **signed call link** (or, with `mode: chat`, starts the call in the conversation). |
-| `prepare_call` | Writes a rehearsal of a real meeting from a prospect sheet. |
-| `library`, `call_link`, `start_call` | The managers' scenarios, a call link for one, or playing it in the chat. |
-| `reply`, `hang_up` | Relay the seller's words to the persona word for word; hang up and have the coach debrief. |
-| `debrief` | **MCP App**: the graded debrief, rendered in the conversation. |
-| `my_progress` | The difficulty of the next calls, scores and trend, criteria, results by situation, missions, last calls. |
-| `team`, `member_progress`, `give_mission`, `invite` | For managers. |
+and serve it:
 
-The persona's hidden brief never leaves the server before the debrief: the client's model cannot cheat for the seller.
+```bash
+symfony serve        # or: php -S 127.0.0.1:8000 -t public
+```
 
-## How Symfony AI and the MCP SDK are used
+**Use Chrome, Edge or Safari** (speech recognition) and allow the microphone. Without a microphone, the keypad on the
+phone screen lets you type your lines. Without edge-tts, the browser's own voice speaks.
 
-- **One model, many roles.** `App\Ai\LanguageModel` wraps a Symfony AI *generic* platform (`config/packages/ai.yaml`),
-  so any OpenAI-compatible API works. The same model plays the persona (streamed), writes scenarios and offer sheets
-  (JSON), and coaches (JSON, low temperature).
+## Configuration
+
+Put your values in `.env.local` (without Docker) or `.env.docker` (with Docker). Only `AI_API_KEY` is required.
+
+| Variable | Default | |
+|---|---|---|
+| `AI_API_KEY` | — | **Required.** Your model provider's key: a Hugging Face token `hf_…` by default. |
+| `AI_BASE_URL` | `https://router.huggingface.co/v1` | Any OpenAI-compatible endpoint (see below). |
+| `AI_MODEL` | `openai/gpt-oss-120b` | The model. A fast one keeps the calls lively. |
+| `AI_COMPLETIONS_PATH` | `/chat/completions` | |
+| `AI_HEADERS` | `{}` | Extra HTTP headers for the model's API, as JSON. |
+| `DEFAULT_URI` | `http://127.0.0.1:8000` | The instance's public address, for the links it generates (call links, invitations). |
+| `MCP_ALLOWED_HOSTS` | `localhost,127.0.0.1,…` | Host names the MCP endpoint answers on: add your domain. |
+| `TRUSTED_PROXIES` | — | Your reverse proxy, e.g. `private_ranges`. |
+| `PRACTICALL_DEMO`, `PRACTICALL_LANGUAGE` | `0`, `en` | Docker only: load the demo data instead of the onboarding. |
+| `PRACTICALL_PORT` | `7077` | Docker only: the port on your machine. |
+| `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | The neural voices and their cache. |
+
+**Choosing a model.** The persona answers in one to four sentences and must answer *fast* (it is a phone call); the
+coach and the scenario writer produce long structured JSON. On Hugging Face, `openai/gpt-oss-120b` answers in about
+0.6 s and handles both well; `Qwen/Qwen3-235B-A22B-Instruct-2507` is a good alternative in French. Other providers:
+
+| Provider | `AI_BASE_URL` | `AI_MODEL` |
+|---|---|---|
+| Hugging Face (default) | `https://router.huggingface.co/v1` | `openai/gpt-oss-120b` |
+| OpenAI | `https://api.openai.com/v1` | `gpt-5.4-mini` |
+| DeepSeek | `https://api.deepseek.com/v1` | `deepseek-chat` |
+| A local Ollama | `http://localhost:11434/v1` | `qwen3:32b` |
+
+## Deploy on a server
+
+`docker compose up -d --build` on any server, behind your HTTPS reverse proxy (Caddy, Traefik, Nginx Proxy Manager…)
+pointing at port 7077. Set `DEFAULT_URI=https://your-domain` and add the domain to `MCP_ALLOWED_HOSTS` so that call
+links, invitations and the MCP endpoint use it. The container migrates the database and prunes old voices at each
+start.
+
+## How Symfony AI, MCP and Hugging Face are used
+
+- **One model behind every role, through Symfony AI.** `App\Ai\LanguageModel` wraps a Symfony AI *generic* platform
+  declared in `config/packages/ai.yaml`, pointed at Hugging Face Inference Providers by default. The same model plays
+  the persona (streamed), writes scenarios and offer sheets (JSON) and coaches (JSON, low temperature);
+  `App\Ai\Data` reads the model's loose JSON into exact types.
 - **Streaming end to end.** The persona's reply is a stream of `TextDelta`s (`Persona::reply()`), filtered of its
-  control markers (`[devoiler:budget]`, `[fin]`) on the fly, cut into sentences (`SentenceSplitter`), each voiced in
-  parallel by edge-tts (`TurnStreamer`), and sent to the browser as NDJSON as soon as its voice is ready.
-- **MCP tools as plain services.** `src/Mcp/*Tools.php` are services whose methods carry `#[McpTool]`; the schema comes
-  from the signatures. A personal key authenticates the member (`McpKeyAuthenticator`, a stateless firewall).
-- **Call links.** `CallLinks` uses Symfony's `LoginLinkHandler` (signed, 15 minutes, a few uses) with a target path:
-  the model hands the seller a link, and the phone screen opens already signed in.
+  control markers (`[devoiler:budget]` when a brief section is given away, `[fin]` when the persona hangs up), cut into
+  sentences (`SentenceSplitter`), each voiced in parallel by edge-tts (`TurnStreamer`) and sent to the browser as NDJSON
+  as soon as its voice is ready.
+- **MCP tools as plain Symfony services.** `src/Mcp/*Tools.php` methods carry `#[McpTool]`; schemas come from the
+  signatures. A stateless firewall authenticates each member by a personal key (`McpKeyAuthenticator`), redacted from
+  the logs.
+- **Call links.** `CallLinks` uses Symfony's login links (signed with the member's password hash, 15 minutes, a few
+  uses) with a target path: the model hands the seller a link, and the phone screen opens already signed in.
 - **An MCP App.** `DebriefApp` (`#[AsMcpApp]`) renders the debrief with the site's own Twig partial and stylesheet.
 - **Tests without the network.** `tests/Fake/ScriptedModel` builds a Symfony AI `MockPlatformFactory` platform that
-  answers each kind of prompt, so the whole suite (onboarding, a streamed call, the MCP server) runs offline.
+  answers each kind of prompt, so the whole suite — onboarding, a streamed call, the MCP server — runs offline.
 
 ## Architecture
 
@@ -108,39 +238,46 @@ The persona's hidden brief never leaves the server before the debrief: the clien
 src/
   Ai/           LanguageModel (Symfony AI), Data (typed reading of the model's JSON)
   Call/         CallManager (start, talk, expire, finish, abandon, replay), TurnStreamer, SentenceSplitter
-    Persona/    the persona's prompt, reply and marker filter
+    Persona/    the persona's prompt, its streamed reply and marker filter
     Coach/      the coach's prompt, the debrief and its scoring
     Speech/     talk share, questions, filler words, pace
   Scenario/     situation canvas and drawer, scenario writer and factory, surprise calls
-  Company/      website reader, offer analyst, example company, team and missions
+  Company/      website reader (private networks refused), offer analyst, example company, team and missions
   Progress/     a member's figures, the difficulty that follows their scores, the team board, missions
-  Voice/        edge-tts synthesis, voice casting per language, gender and tone
+  Voice/        edge-tts synthesis and its cache pruning, voice casting per language, gender and tone
   Mcp/          the MCP tools, the debrief app, call links
   Onboarding/   the steps and the guard that steers first-boot visitors
-  Controller/   thin controllers; Form/ typed models validated with constraints
+  Controller/   thin controllers; Form/ typed models validated with constraints; Twig/ the CRM-style document
   Entity/ Enum/ Model/ Repository/  the domain
-templates/      Twig, with anonymous Twig components; assets/ Stimulus controllers and one CSS design system
-translations/   English and French; config/practicall/{en,fr}/ the example company and situation canvas
+templates/      Twig with anonymous Twig components; assets/ Stimulus controllers and one CSS design system (light and dark)
+translations/   English and French; config/practicall/{en,fr}/ the example company and the situation canvas
 ```
 
 ## Quality
 
 ```bash
-php vendor/bin/phpunit                    # unit and functional tests, offline
+php vendor/bin/phpunit                    # 300+ unit and functional tests, offline, in a few seconds
 vendor/bin/phpstan analyse                # level max, with the Symfony and Doctrine extensions
-vendor/bin/php-cs-fixer fix --dry-run     # Symfony coding standard
+vendor/bin/php-cs-fixer fix --dry-run     # Symfony coding standard, strict types everywhere
 ```
 
-## Configuration
+Accessible (WCAG AA contrasts, keyboard, reduced motion), responsive down to 360 px, every page in English and French.
+A company's instance stays out of search engines (`noindex`, `robots.txt`).
 
-| Variable | Default | |
-|---|---|---|
-| `AI_API_KEY` | — | The model provider's key (required). |
-| `AI_BASE_URL` | `https://opencode.ai/zen/go/v1` | Any OpenAI-compatible endpoint, e.g. `https://api.openai.com/v1`. |
-| `AI_MODEL` | `deepseek-v4.1-flash` | e.g. `gpt-5.4-mini`. A fast model keeps the calls lively. |
-| `AI_COMPLETIONS_PATH` | `/chat/completions` | |
-| `AI_HEADERS` | `{}` | Extra HTTP headers, as JSON. |
-| `DEFAULT_URI` | `http://127.0.0.1:8000` | The instance's public address, for links made outside a request. |
-| `MCP_ALLOWED_HOSTS` | `localhost,127.0.0.1,…` | Host names the MCP endpoint answers on: add your domain. |
-| `TRUSTED_PROXIES` | — | Your reverse proxy, e.g. `private_ranges`. |
-| `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | Without edge-tts, the browser's own voice speaks. |
+## Maintenance
+
+- `php bin/console app:prune-voices --days=30` deletes the cached voices not heard for 30 days. It also runs at each
+  container start and, now and then, on its own: no cron needed.
+- Expired sessions are cleaned up by PHP. Calls and debriefs are kept: they are the members' history.
+
+## Built for the Symfony AI & MCP Hackathon
+
+Practicall was built for the [Symfony AI & MCP Hackathon](https://symfony.com/hackathon) (26 October – 22 November
+2026), to show what Symfony AI and the PHP MCP SDK make possible in a real product: a model playing a person on the
+phone in real time, a coach grading structured feedback, and the same product reachable from Claude — down to
+rehearsing tomorrow's client meeting from its e-mail thread.
+
+## License
+
+Practicall is open source, released under the [MIT License](LICENSE). Contributions and forks are welcome.
+

@@ -28,3 +28,6 @@
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
 /.claude/
+
+# The model key for docker compose (see the README).
+/.env.docker
