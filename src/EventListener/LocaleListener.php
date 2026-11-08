@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use App\Enum\Language;
+use App\Onboarding\OnboardingStep;
 use App\Repository\CompanyRepository;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Every page speaks the company's working language. Before it is chosen, on the first onboarding screen, a "lang"
- * query parameter previews the other language.
+ * Every page speaks the company's working language. Until it is chosen (the first onboarding screen), pages speak
+ * English, and a "lang" query parameter previews the other language.
  */
 #[AsEventListener(event: KernelEvents::REQUEST, priority: 20)]
 final readonly class LocaleListener
@@ -29,7 +30,11 @@ final readonly class LocaleListener
             return;
         }
         $company = $this->companies->get();
-        $preview = $company->isOnboarded() ? null : Language::tryFrom($request->query->getString('lang'));
-        $request->setLocale(($preview ?? $company->language)->value);
+        if ($company->hasReached(OnboardingStep::Account)) {
+            $request->setLocale($company->language->value);
+
+            return;
+        }
+        $request->setLocale((Language::tryFrom($request->query->getString('lang')) ?? Language::English)->value);
     }
 }
