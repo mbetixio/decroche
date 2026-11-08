@@ -44,7 +44,7 @@
         <p class="cs-status" role="status"><span class="cs-since" data-call-target="since" hidden>00:00</span><span class="cs-state" data-call-target="state">{{ (incoming ? 'call.state.incoming' : 'call.state.ready')|trans }}</span></p>
     </div>
 
-    <div class="cs-caption" data-call-target="caption" aria-live="polite"></div>
+    <div class="cs-caption" data-call-target="caption" data-you="{{ 'call.you'|trans }}" aria-live="polite"></div>
 
     <div class="cs-controls">
         <form class="cs-keypad" data-call-target="keypad" data-action="call#type" hidden>

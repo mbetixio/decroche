@@ -656,7 +656,7 @@ td.num, th.num { text-align: right; }
 /* A phone, not a chat: who is on the line, a state, one caption, the keys, and one big labelled button. */
 .callscreen {
     position: fixed; inset: 0; z-index: 50;
-    display: grid; grid-template-rows: auto 1fr auto auto; justify-items: center;
+    display: flex; flex-direction: column; align-items: center; gap: var(--s-3);
     padding: var(--s-4) var(--s-4) max(var(--s-6), env(safe-area-inset-bottom));
     overflow-y: auto; background: var(--bg);
 }
@@ -668,7 +668,8 @@ td.num, th.num { text-align: right; }
 .cs-clock b { color: var(--ink); font-weight: 600; }
 .cs-clock.late, .cs-clock.late b { color: var(--bad); }
 
-.cs-who { display: grid; justify-items: center; align-content: center; gap: var(--s-2); padding: var(--s-6) 0; text-align: center; }
+.cs-who { flex: 1 0 auto; display: grid; justify-items: center; align-content: center; gap: var(--s-2); padding: var(--s-5) 0; text-align: center; }
+.cs-top, .cs-caption, .cs-controls { flex: none; }
 .cs-avatar {
     --size: 120px; position: relative; margin-bottom: var(--s-4);
     border: 0; border-radius: 24px; cursor: pointer;
@@ -696,8 +697,16 @@ td.num, th.num { text-align: right; }
 @keyframes blink { 50% { opacity: .25; } }
 
 /* The caption: what is understood, or what the persona says when captions are on. */
-.cs-caption { width: 100%; max-width: 640px; min-height: 3.2em; padding: 0 var(--s-2) var(--s-5); text-align: center; font: 500 var(--text-xl)/1.45 var(--font-display); letter-spacing: -.01em; color: var(--ink); }
-.cs-caption.me { color: var(--ink-2); font-style: italic; }
+/* A fixed-height box: long replies scroll inside it (the controller keeps the latest words in view) and never run under
+   the keys. Left-aligned, at reading size. */
+.cs-caption {
+    width: 100%; max-width: 620px; min-height: 4.8em; max-height: 8.2em; overflow-y: auto; overscroll-behavior: contain;
+    padding: var(--s-3) var(--s-4); border-radius: var(--radius-l); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line);
+    font: 500 var(--text-l)/1.55 var(--font); color: var(--ink); text-align: left; scroll-behavior: smooth;
+}
+.cs-caption:empty { visibility: hidden; }
+.cs-caption.me { color: var(--ink-2); }
+.cs-caption.me::before { content: attr(data-you) ' · '; font: 600 var(--text-xs) var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--brand-text); }
 .cs-caption.sent { color: var(--ink-3); }
 .cs-caption.warn { color: var(--warn); font-family: var(--font); font-size: var(--text-m); }
 

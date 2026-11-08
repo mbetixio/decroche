@@ -51,6 +51,9 @@ final readonly class ScenarioWriter
             A simulated persona will play the other party on the phone: they will have a hidden brief that the seller must
             discover through questions. The title, context, document and objectives are shown to the seller: they must reveal
             nothing of the brief (neither the real pain, nor the hidden information, nor the real budget).
+            The persona's attitude must make sense with the situation and with what {$company->name} sells: someone who calls,
+            or who asked to be called back, is interested in it; their doubts are real but come out later in the call, when
+            the seller pitches, quotes or asks the right question, never as a greeting.
             Answer only with a JSON object; every text value is written in {$language}:
             {"title": "a short, telling title, as the seller sees it",
              "context": "what the seller knows before the call, addressing them as you, 2 to 4 sentences: {$this->direction($situation)}",
@@ -150,9 +153,11 @@ final readonly class ScenarioWriter
 
     private function openingHint(Situation $situation): string
     {
+        // The first line opens a real call: who it is and why they call, nothing more. Objections, fears and past bad
+        // experiences belong to the hidden brief and come out later, when the seller asks or pitches.
         return $situation->isIncoming()
-            ? "the persona's first line as they call the seller (they introduce themselves and get to the point, in their mood)"
-            : "the persona's first line as they pick up the phone without knowing who is calling (their company and first name, in their mood)";
+            ? "the persona's first line as they call the seller: in one or two short sentences, who they are and why they are calling, in their mood and as interested as someone who chose to call; no objection, doubt, fear or past bad experience yet, nothing from the hidden brief"
+            : "the persona's first line as they pick up the phone without knowing who is calling: their first name or their company, in their mood, and nothing more";
     }
 
     private function briefFields(): string

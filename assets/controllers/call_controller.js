@@ -468,6 +468,8 @@ export default class extends Controller {
     show(text, cls = '') {
         this.captionTarget.textContent = text;
         this.captionTarget.className = 'cs-caption ' + cls;
+        // A long reply scrolls within the caption, its latest words in view.
+        this.captionTarget.scrollTop = this.captionTarget.scrollHeight;
     }
 
     toggleKey(name, on) {
