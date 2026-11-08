@@ -889,3 +889,8 @@ td.num, th.num { text-align: right; }
 
 /* "To work on" is a criterion's name, not a figure: plain text, never broken mid-word. */
 .standing .stat:last-child dd { font: 600 var(--text-m, 16px)/1.3 var(--font); letter-spacing: 0; overflow-wrap: normal; }
+/* A side column that stays in view while the main one scrolls (the persona and the call button on the briefing). */
+@media (min-width: 901px) { .sticky-side { position: sticky; top: var(--s-6); } }
+/* Columns may shrink below their content's natural width; a full-width button wraps instead of widening its column. */
+.split > * { min-width: 0; }
+.btn.block { white-space: normal; text-align: center; }
