@@ -16,7 +16,7 @@
     no_recognition: 'call.no_recognition'|trans, resume: 'call.state.resume'|trans, voice_server: 'call.voice.server'|trans,
     voice_browser: 'call.voice.browser'|trans, sample: 'call.voice.sample'|trans,
 } %}
-<div class="callscreen" data-state="idle"
+<div class="callscreen" id="main" data-state="idle"
      data-controller="call"
      data-call-talk-url-value="{{ path('call_talk', {id: call.id}) }}"
      data-call-token-value="{{ csrf_token('call-' ~ call.id) }}"

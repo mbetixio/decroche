@@ -1,4 +1,4 @@
-# Sparring's interface in French. Keys are grouped by page; enums use enum.<name>.<value>.
+# Practicall's interface in French. Keys are grouped by page; enums use enum.<name>.<value>.
 nav:
     main: 'Navigation principale'
     play: 'Jouer'
@@ -79,7 +79,7 @@ onboarding:
     step_of: 'Étape %n% sur %total%'
     welcome:
         title: 'Entraînez vos commerciaux aux appels difficiles'
-        lead: 'Sparring met vos commerciaux face à des interlocuteurs IA qui jouent vos vrais clients : ils décrochent, ils objectent, ils cachent leur budget. Après chaque appel, un débrief noté selon votre grille.'
+        lead: 'Practicall met vos commerciaux face à des interlocuteurs IA qui jouent vos vrais clients : ils décrochent, ils objectent, ils cachent leur budget. Après chaque appel, un débrief noté selon votre grille.'
         f1_title: 'Des situations tirées de votre offre'
         f1: 'Une demande de prix, un client mécontent, une relance de devis… tirées au hasard, comme dans la vraie vie.'
         f2_title: 'Un vrai appel, à voix haute'
@@ -101,7 +101,7 @@ onboarding:
         analyze: 'Analyser'
     analysis:
         title: 'Analyse en cours'
-        lead: 'Sparring découvre %company% : une minute ou deux.'
+        lead: 'Practicall découvre %company% : une minute ou deux.'
         read: 'Lecture de %site%'
         offer: 'Rédaction de la fiche offre'
         clients: 'Repérage de vos clients types'
@@ -126,7 +126,7 @@ onboarding:
         later: 'Plus tard'
     done:
         title: 'C''est prêt'
-        lead: 'Sparring connaît maintenant %company%.'
+        lead: 'Practicall connaît maintenant %company%.'
         offer: 'Fiche offre'
         situations: 'Situations'
         criteria: 'Critères'
@@ -134,7 +134,7 @@ onboarding:
         first_call: 'Une situation vous attend.'
         first_call_text: 'Vous ne savez pas laquelle avant de décrocher : comme dans la vraie vie. Parlez au micro, comme au téléphone.'
         go: 'Aller à l''accueil'
-        flash: 'Bienvenue dans Sparring !'
+        flash: 'Bienvenue dans Practicall !'
     waiting:
         title: 'Encore un peu de patience'
         text: 'Un manager est en train de mettre en place %company%. Revenez dans quelques minutes.'
@@ -242,7 +242,7 @@ account:
     mcp_how: 'Comment l''ajouter à Claude'
     mcp_step1: 'Dans Claude, ouvrez Réglages → Connecteurs → Ajouter un connecteur personnalisé.'
     mcp_step2: 'Collez votre adresse MCP et enregistrez.'
-    mcp_step3: 'Demandez : « Lance-moi un appel Sparring » ou « Où en est mon équipe ? ».'
+    mcp_step3: 'Demandez : « Lance-moi un appel Practicall » ou « Où en est mon équipe ? ».'
 call:
     error:
         archived: 'Ce scénario est archivé.'
@@ -456,12 +456,12 @@ library:
     scenarios: 'Les scénarios'
 prepare:
     title: 'Préparer un vrai rendez-vous'
-    lead: 'Collez ce que vous savez du prospect : Sparring écrit l''interlocuteur et son brief caché, puis vous répétez.'
+    lead: 'Collez ce que vous savez du prospect : Practicall écrit l''interlocuteur et son brief caché, puis vous répétez.'
     submit: 'Écrire la répétition'
     failed: 'La répétition n''a pas pu être écrite (le modèle est injoignable) : réessayez.'
     how_title: 'Comment ça marche'
     how: 'En une minute, l''IA écrit un interlocuteur crédible avec un budget, une douleur, un décideur et des objections, à partir de vos informations. Vous ne voyez pas le brief : vous le découvrez en appelant.'
-    mcp: 'Aussi depuis Claude : « prépare mon rendez-vous de demain avec… » grâce au serveur MCP de Sparring (voir Mon compte).'
+    mcp: 'Aussi depuis Claude : « prépare mon rendez-vous de demain avec… » grâce au serveur MCP de Practicall (voir Mon compte).'
 progress:
     title: 'Ma progression'
     lead: 'Vos notes, vos critères forts et faibles, vos résultats par situation.'
@@ -520,7 +520,7 @@ security:
     lost: 'Mot de passe perdu ? Un manager peut vous en donner un nouveau.'
     join: 'Rejoindre'
     join_title: 'Rejoignez %company%'
-    join_lead: '%name% vous invite à vous entraîner sur Sparring (%email%). Choisissez votre mot de passe.'
+    join_lead: '%name% vous invite à vous entraîner sur Practicall (%email%). Choisissez votre mot de passe.'
     join_submit: 'Rejoindre l''équipe'
     join_invalid: 'Cette invitation n''est plus valable'
     join_invalid_text: 'Elle a déjà servi ou a été retirée : demandez-en une nouvelle à votre manager.'
@@ -537,3 +537,6 @@ log:
     line3: '« … Les délais. Le dernier projet a pris quatre mois de retard. »'
     line4: 'Vraie douleur découverte'
     line5: 'bonne question ouverte, prochaine étape à verrouiller'
+meta:
+    description: 'Practicall : entraînez-vous aux appels commerciaux à voix haute face à un client IA au brief caché, puis recevez un débrief noté par un coach.'
+    skip: 'Aller au contenu'

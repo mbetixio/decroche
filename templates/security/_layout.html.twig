@@ -7,7 +7,7 @@
         <p class="auth-statement">{{ 'security.statement'|trans|raw }}</p>
         {{ include('_call_log.html.twig') }}
     </aside>
-    <main class="auth-main">
+    <main class="auth-main" id="main">
         <div class="auth-card">
             {{ include('_flashes.html.twig') }}
             {% block content %}{% endblock %}

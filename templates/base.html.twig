@@ -4,16 +4,38 @@
 <html lang="{{ app.request.locale }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="color-scheme" content="light dark">
-    <title>{% block title %}Practicall{% endblock %} · {{ company().name ?: 'Practicall' }}</title>
+    <meta name="theme-color" content="#f3f1ec" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0c0e14" media="(prefers-color-scheme: dark)">
+    {# The page's own title (already escaped by its block), then the product's name. #}
+    {% set page_title = block('title') is defined and block('title')|trim != '' ? block('title')|trim ~ ' · Practicall' : 'Practicall' %}
+    <title>{{ page_title|raw }}</title>
+    <meta name="description" content="{{ 'meta.description'|trans }}">
+    {# An instance holds a company's private calls: search engines stay out, links still get a rich preview. #}
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="application-name" content="Practicall">
+    <meta name="apple-mobile-web-app-title" content="Practicall">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Practicall">
+    <meta property="og:title" content="{{ page_title|raw }}">
+    <meta property="og:description" content="{{ 'meta.description'|trans }}">
+    <meta property="og:image" content="{{ app.request.schemeAndHttpHost }}/brand/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="{{ app.request.locale == 'fr' ? 'fr_FR' : 'en_US' }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
     <link rel="icon" type="image/svg+xml" href="/brand/logo.svg">
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     {% block importmap %}{{ importmap('app') }}{% endblock %}
 </head>
 <body>
+<a class="skip-link" href="#main">{{ 'meta.skip'|trans }}</a>
 {% block page %}
 <div class="shell">
     <aside class="sidebar">

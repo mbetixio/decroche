@@ -5,7 +5,7 @@
     <p>{{ 'play.cta_text'|trans }}</p>
     <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit" style="margin-top:24px">
         <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
-        <button class="btn white lg"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button>
+        <button class="btn primary lg"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button>
     </form>
     <p class="tiny" style="opacity:.65;margin-top:12px">{{ 'play.adapted'|trans }}</p>
     <p class="small" data-draw-target="error" data-fallback="{{ 'play.draw_failed'|trans }}" style="color:var(--brand);margin-top:8px" hidden></p>
