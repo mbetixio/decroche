@@ -13,7 +13,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * The company this Sparring instance trains: who it is, what it sells (its offer sheet, drafted from its website then
+ * The company this Practicall instance trains: who it is, what it sells (its offer sheet, drafted from its website then
  * corrected), its typical clients, the call situations its sellers run into, and its scorecard. There is one per
  * instance; the onboarding fills it in on first boot.
  */
@@ -50,7 +50,7 @@ class Company
     #[ORM\Column(type: Types::JSON)]
     private array $situations = [];
 
-    /** @var array<string, array{label: string, hint: string}>|null the scorecard (null: Sparring's own) */
+    /** @var array<string, array{label: string, hint: string}>|null the scorecard (null: Practicall's own) */
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $criteria = null;
 
@@ -124,7 +124,7 @@ class Company
     }
 
     /**
-     * The criteria the coach grades on: the company's own, or Sparring's.
+     * The criteria the coach grades on: the company's own, or Practicall's.
      *
      * @return array<string, Criterion>
      */
@@ -142,7 +142,7 @@ class Company
     }
 
     /**
-     * @param list<Criterion> $criteria two to eight; fewer brings back Sparring's own scorecard
+     * @param list<Criterion> $criteria two to eight; fewer brings back Practicall's own scorecard
      */
     public function setScorecard(array $criteria): void
     {

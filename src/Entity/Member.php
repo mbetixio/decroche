@@ -69,7 +69,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function newMcpKey(): string
     {
-        $key = 'spr_'.bin2hex(random_bytes(20));
+        $key = 'pcl_'.bin2hex(random_bytes(20));
         $this->mcpKeyHash = hash('sha256', $key);
 
         return $key;

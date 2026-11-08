@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final readonly class LanguageModel
 {
     public function __construct(
-        #[Autowire(service: 'ai.platform.generic.sparring')]
+        #[Autowire(service: 'ai.platform.generic.practicall')]
         private PlatformInterface $platform,
         #[Autowire(env: 'AI_MODEL')]
         private string $model,

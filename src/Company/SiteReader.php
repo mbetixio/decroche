@@ -75,7 +75,7 @@ final readonly class SiteReader
                 'timeout' => 10,
                 'max_duration' => 20,
                 'max_redirects' => 3,
-                'headers' => ['User-Agent' => 'Mozilla/5.0 (compatible; Sparring/1.0; offer analysis)', 'Accept-Language' => 'fr,en;q=0.5'],
+                'headers' => ['User-Agent' => 'Mozilla/5.0 (compatible; Practicall/1.0; offer analysis)', 'Accept-Language' => 'fr,en;q=0.5'],
             ]);
             if (200 !== $response->getStatusCode() || !str_contains($response->getHeaders()['content-type'][0] ?? 'text/html', 'html')) {
                 return ['', []];

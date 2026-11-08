@@ -1,5 +1,5 @@
 # The example company (Etixio, an offshore software and AI company): its offer sheet, typical clients and call
-# situations. The onboarding can load it to try Sparring without analysing a website.
+# situations. The onboarding can load it to try Practicall without analysing a website.
 name: Etixio
 website: 'https://etixio.com'
 about: "Etixio développe des logiciels et intègre l'IA pour ses clients, avec des équipes offshore francophones à Madagascar, à l'île Maurice et au Vietnam."

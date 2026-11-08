@@ -43,7 +43,7 @@ final class OnboardingTest extends FunctionalTestCase
         self::assertResponseRedirects('/welcome/account');
 
         $this->client->followRedirect();
-        $this->submit('Create my account', ['account[name]' => 'Morgan Lee', 'account[email]' => 'morgan@sparring.test', 'account[password]' => 'password-123', 'account[profile]' => 'Sales manager.']);
+        $this->submit('Create my account', ['account[name]' => 'Morgan Lee', 'account[email]' => 'morgan@practicall.test', 'account[password]' => 'password-123', 'account[profile]' => 'Sales manager.']);
         self::assertResponseRedirects('/welcome/company');
         self::assertTrue($this->service(MemberRepository::class)->hasAny());
 
@@ -73,7 +73,7 @@ final class OnboardingTest extends FunctionalTestCase
         $this->client->request('GET', '/welcome?lang=en');
         $this->submit('Get started', ['language[language]' => 'en']);
         $this->client->followRedirect();
-        $this->submit('Create my account', ['account[name]' => 'Morgan Lee', 'account[email]' => 'morgan@sparring.test', 'account[password]' => 'password-123', 'account[profile]' => 'Sales manager.']);
+        $this->submit('Create my account', ['account[name]' => 'Morgan Lee', 'account[email]' => 'morgan@practicall.test', 'account[password]' => 'password-123', 'account[profile]' => 'Sales manager.']);
         $this->client->followRedirect();
         $this->submit('Analyse', ['company[name]' => 'Acme', 'company[about]' => 'Acme builds software for retailers and logistics firms across Europe.']);
         self::assertResponseRedirects('/welcome/analysis');

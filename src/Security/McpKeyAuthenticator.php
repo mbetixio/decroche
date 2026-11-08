@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
  */
 final class McpKeyAuthenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
-    private const string HELP = 'Add your personal address, shown in Sparring under "My account": /mcp?key=… / Ajoutez votre adresse personnelle, affichée dans « Mon compte » : /mcp?key=…';
+    private const string HELP = 'Add your personal address, shown in Practicall under "My account": /mcp?key=… / Ajoutez votre adresse personnelle, affichée dans « Mon compte » : /mcp?key=…';
 
     public function __construct(
         private readonly MemberRepository $members,

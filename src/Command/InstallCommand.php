@@ -42,7 +42,7 @@ final readonly class InstallCommand
         SymfonyStyle $io,
         #[Option(description: 'Load the example company, its library and a manager, skipping the onboarding')] bool $demo = false,
         #[Option(description: 'The working language of the example company (en or fr)')] string $language = 'en',
-        #[Option(description: 'The demo manager\'s e-mail address')] string $email = 'manager@sparring.test',
+        #[Option(description: 'The demo manager\'s e-mail address')] string $email = 'manager@practicall.test',
         #[Option(description: 'The demo manager\'s password (generated when omitted)')] ?string $password = null,
     ): int {
         $application = new Application($this->kernel);

@@ -50,14 +50,14 @@ abstract class FunctionalTestCase extends WebTestCase
         $this->service(EntityManagerInterface::class)->flush();
     }
 
-    protected function member(string $email = 'seller@sparring.test', MemberRole $role = MemberRole::Seller, string $profile = 'Junior seller, two years in software services.'): Member
+    protected function member(string $email = 'seller@practicall.test', MemberRole $role = MemberRole::Seller, string $profile = 'Junior seller, two years in software services.'): Member
     {
         return $this->service(TeamManager::class)->create(ucfirst(strstr($email, '@', true) ?: 'Member').' Test', $email, 'password-123', $role, $profile);
     }
 
     protected function manager(): Member
     {
-        return $this->member('manager@sparring.test', MemberRole::Manager, 'Sales manager.');
+        return $this->member('manager@practicall.test', MemberRole::Manager, 'Sales manager.');
     }
 
     /**

@@ -16,7 +16,7 @@
         {% if key %}
             <div class="stack" style="--gap:8px" data-controller="copy">
                 <div class="label small">{{ 'account.mcp_url'|trans }}</div>
-                <div class="row" style="flex-wrap:nowrap"><input readonly class="mono" value="{{ url('_mcp_endpoint_sparring') }}?key={{ key }}" data-copy-target="source"><button type="button" class="btn sm" data-action="copy#copy"><twig:Icon name="copy" /><span data-copy-target="label">{{ 'action.copy'|trans }}</span></button></div>
+                <div class="row" style="flex-wrap:nowrap"><input readonly class="mono" value="{{ url('_mcp_endpoint_practicall') }}?key={{ key }}" data-copy-target="source"><button type="button" class="btn sm" data-action="copy#copy"><twig:Icon name="copy" /><span data-copy-target="label">{{ 'action.copy'|trans }}</span></button></div>
                 <p class="tiny" style="color:var(--warn)">{{ 'account.mcp_once'|trans }}</p>
             </div>
         {% endif %}

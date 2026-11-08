@@ -1,5 +1,5 @@
 /*
- * Sparring's design system: tokens (colours, radii, shadows, type), a light and a dark theme, the app shell, and the
+ * Practicall's design system: tokens (colours, radii, shadows, type), a light and a dark theme, the app shell, and the
  * components the Twig components render. Plain modern CSS (custom properties, nesting, :has(), view transitions):
  * no build step.
  */
@@ -316,21 +316,25 @@ a.list-item:hover { background: var(--surface-2); border-radius: 12px; }
 .onboarding { display: grid; grid-template-columns: minmax(300px, 420px) minmax(0, 1fr); min-height: 100dvh; }
 .onboarding-aside {
     position: sticky; top: 0; height: 100dvh;
-    padding: 40px 36px; color: #fff;
-    background: radial-gradient(120% 90% at 0% 0%, #f7853b 0%, transparent 55%), radial-gradient(120% 100% at 100% 100%, #6d5dfc 0%, transparent 60%), #1b1430;
-    display: flex; flex-direction: column; gap: 30px; overflow: hidden;
+    padding: 40px 32px; color: var(--ink);
+    background: var(--surface); border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 34px; overflow: hidden;
 }
-.onboarding-aside .brand { padding: 0; color: #fff; }
-.onboarding-aside .brand small { color: rgb(255 255 255 / .6); }
-.steps { list-style: none; padding: 0; display: grid; gap: 4px; }
-.steps li { display: flex; gap: 12px; align-items: center; padding: 9px 10px; border-radius: 12px; color: rgb(255 255 255 / .55); font-weight: 600; font-size: 14px; }
-.steps li .dot { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 1.5px solid rgb(255 255 255 / .3); font-size: 12px; flex: none; }
+.onboarding-aside .brand { padding: 0; color: var(--ink); }
+.onboarding-aside .brand small { color: var(--ink-3); }
+/* The steps, joined by a thin line: done ones ticked, the current one highlighted. */
+.steps { list-style: none; padding: 0; display: grid; gap: 2px; position: relative; }
+.steps li { position: relative; display: flex; gap: 14px; align-items: center; padding: 10px 12px; border-radius: 12px; color: var(--ink-3); font-weight: 600; font-size: 14.5px; }
+.steps li:not(:last-child)::after { content: ''; position: absolute; left: 25px; top: 38px; height: 18px; width: 2px; background: var(--line); border-radius: 2px; }
+.steps li.done:not(:last-child)::after { background: var(--brand); opacity: .45; }
+.steps li .dot { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line); background: var(--surface); font-size: 12px; flex: none; position: relative; z-index: 1; }
 .steps li .dot svg { width: 14px; height: 14px; }
-.steps li.done { color: rgb(255 255 255 / .85); }
-.steps li.done .dot { background: rgb(255 255 255 / .9); color: #1b1430; border-color: transparent; }
-.steps li.current { color: #fff; background: rgb(255 255 255 / .1); }
-.steps li.current .dot { background: var(--brand); border-color: var(--brand); color: #fff; box-shadow: 0 0 0 5px rgb(242 84 45 / .25); }
-.onboarding-aside blockquote { margin-top: auto; font-size: 14px; color: rgb(255 255 255 / .75); border-left: 2px solid rgb(255 255 255 / .3); padding-left: 14px; }
+.steps li.done { color: var(--ink-2); }
+.steps li.done .dot { background: var(--brand-soft); color: var(--brand); border-color: transparent; }
+.steps li.current { color: var(--ink); background: var(--surface-2); }
+.steps li.current .dot { background: var(--brand); border-color: var(--brand); color: #fff; }
+.steps li a:hover { color: var(--ink); }
+.onboarding-aside blockquote { margin-top: auto; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); border-left: 3px solid var(--brand); padding: 2px 0 2px 14px; }
 
 .onboarding-main { display: grid; place-items: center; padding: 48px clamp(20px, 5vw, 72px); }
 .onboarding-panel { width: min(760px, 100%); display: grid; gap: 26px; animation: rise .5s var(--ease); }
@@ -463,7 +467,7 @@ a.list-item:hover { background: var(--surface-2); border-radius: 12px; }
 
 /* ---------------------------------------------------------------- Sign-in pages, filters */
 
-.auth { min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; background: var(--gradient); }
+.auth { min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; background: var(--bg); }
 .auth-card { width: min(440px, 100%); box-shadow: var(--shadow-l); }
 a.chip { text-decoration: none; }
 a.chip:hover { border-color: var(--ink-3); }

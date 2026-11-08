@@ -14,15 +14,15 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * The example company (config/sparring/{language}/demo.yaml) and its library (library.yaml), in the working language:
- * to try Sparring at once, without analysing a website.
+ * The example company (config/practicall/{language}/demo.yaml) and its library (library.yaml), in the working language:
+ * to try Practicall at once, without analysing a website.
  */
 final readonly class DemoCompany
 {
     public function __construct(
         private ScenarioRepository $scenarios,
         private ClockInterface $clock,
-        #[Autowire('%kernel.project_dir%/config/sparring')]
+        #[Autowire('%kernel.project_dir%/config/practicall')]
         private string $directory,
     ) {
     }

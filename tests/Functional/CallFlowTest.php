@@ -136,7 +136,7 @@ final class CallFlowTest extends FunctionalTestCase
     public function testAnotherSellerCannotSeeTheCall(): void
     {
         $call = $this->pickUp();
-        $this->signIn($this->member('other@sparring.test'));
+        $this->signIn($this->member('other@practicall.test'));
         $this->client->request('GET', '/calls/'.$call->id);
         self::assertResponseStatusCodeSame(403);
     }

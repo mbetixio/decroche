@@ -1,4 +1,4 @@
-# Sparring
+# Practicall
 
 **A flight simulator for sales calls.** Your sellers pick up the phone and talk, out loud, to an AI client who plays
 one of *your* real situations: a price request from your website, an unhappy client, a renewal with a discount request…
@@ -6,7 +6,7 @@ The client has a hidden brief (their real budget, their real pain, who decides, 
 must uncover. When they hang up, a coach grades the call against your own scorecard, reveals the hidden brief, quotes
 the best and worst lines, and lets them replay any moment.
 
-Sparring is built with **Symfony 8.1**, **Symfony AI** and the **MCP SDK**. Its MCP server lets a seller train from
+Practicall is built with **Symfony 8.1**, **Symfony AI** and the **MCP SDK**. Its MCP server lets a seller train from
 Claude (or any MCP client): *"Give me a call to practise"* returns a signed link that opens the phone screen, already
 signed in; *"How is my team doing?"* gives a manager the team's figures.
 
@@ -35,7 +35,7 @@ You need an API key for an **OpenAI-compatible** chat model. The defaults use De
 ### With Docker
 
 ```bash
-git clone https://github.com/<you>/sparring.git && cd sparring
+git clone https://github.com/<you>/practicall.git && cd practicall
 AI_API_KEY=your-key docker compose up -d --build
 ```
 
@@ -43,7 +43,7 @@ Open <http://localhost:7077>: the onboarding starts. Pick a language, create you
 your company's website (the analysis takes a minute or two) or click **Load the example** to play right away with a
 software services company and its 24 situations.
 
-To skip the onboarding entirely, start with `SPARRING_DEMO=1`: the example company and a manager are created, and the
+To skip the onboarding entirely, start with `PRACTICALL_DEMO=1`: the example company and a manager are created, and the
 manager's credentials are printed by `docker compose logs`.
 
 ### Without Docker
@@ -51,7 +51,7 @@ manager's credentials are printed by `docker compose logs`.
 Requires PHP 8.5 with `pdo_sqlite` and `intl`, Composer, and Python 3 for the voices.
 
 ```bash
-git clone https://github.com/<you>/sparring.git && cd sparring
+git clone https://github.com/<you>/practicall.git && cd practicall
 composer install
 python3 -m venv var/edge-tts && var/edge-tts/bin/pip install edge-tts==7.3.1   # optional: neural voices
 echo "AI_API_KEY=your-key" > .env.local
@@ -66,9 +66,9 @@ phone screen lets you type your lines.
 
 ## Train from Claude (MCP)
 
-1. In Sparring, open **My account → Train from Claude → Create my MCP address**.
+1. In Practicall, open **My account → Train from Claude → Create my MCP address**.
 2. In Claude, add a custom connector with that address (`https://your-instance/mcp?key=…`).
-3. Ask: *"Give me a Sparring call to practise"*, *"Rehearse my meeting tomorrow with the CIO of Acme, here is what I
+3. Ask: *"Give me a Practicall call to practise"*, *"Rehearse my meeting tomorrow with the CIO of Acme, here is what I
    know…"*, *"How am I doing?"*, or as a manager *"Who on my team struggles with objections? Give them a mission."*
 
 | Tool | What it does |
@@ -118,7 +118,7 @@ src/
   Controller/   thin controllers; Form/ typed models validated with constraints
   Entity/ Enum/ Model/ Repository/  the domain
 templates/      Twig, with anonymous Twig components; assets/ Stimulus controllers and one CSS design system
-translations/   English and French; config/sparring/{en,fr}/ the example company and situation canvas
+translations/   English and French; config/practicall/{en,fr}/ the example company and situation canvas
 ```
 
 ## Quality

@@ -16,7 +16,7 @@ use Twig\Environment;
  * revealed with what was uncovered or missed, the best and worst lines, three tips.
  */
 #[AsMcpApp(
-    uri: 'ui://sparring/debrief',
+    uri: 'ui://practicall/debrief',
     name: 'debrief',
     title: 'Show the debrief',
     description: 'Shows the graded debrief of a call (the latest by default), whether it was played here or out loud through a call link: the score out of 100, the company\'s criteria, the hidden brief revealed with what was uncovered or missed, the best and worst lines, three tips. If the call has just stopped, the debrief is written first (about thirty seconds).',

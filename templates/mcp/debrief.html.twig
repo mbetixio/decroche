@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sparring debrief</title>
+<title>Practicall debrief</title>
 <style>
 {{ source('@styles/app.css') }}
 body { background: var(--bg); padding: 10px; }
@@ -35,7 +35,7 @@ window.addEventListener('message', (event) => {
   if (msg.id !== undefined && pending.has(msg.id)) { const { resolve, reject } = pending.get(msg.id); pending.delete(msg.id); msg.error ? reject(msg.error) : resolve(msg.result); }
   else if (msg.method === 'ui/notifications/tool-result') { show(msg.params); }
 });
-rpc('ui/initialize', { appInfo: { name: 'Sparring', version: '1.0.0' }, appCapabilities: {}, protocolVersion: '2026-01-26' })
+rpc('ui/initialize', { appInfo: { name: 'Practicall', version: '1.0.0' }, appCapabilities: {}, protocolVersion: '2026-01-26' })
   .then(() => notify('ui/notifications/initialized', {}))
   .catch(() => {});
 </script>

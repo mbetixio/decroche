@@ -75,7 +75,7 @@ final class MemberTest extends TestCase
         self::assertNull($member->mcpKeyHash);
 
         $key = $member->newMcpKey();
-        self::assertMatchesRegularExpression('/^spr_[0-9a-f]{40}$/', $key);
+        self::assertMatchesRegularExpression('/^pcl_[0-9a-f]{40}$/', $key);
         self::assertSame(hash('sha256', $key), $member->mcpKeyHash);
 
         $next = $member->newMcpKey();

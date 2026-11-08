@@ -26,7 +26,7 @@ final class McpTest extends FunctionalTestCase
 
     public function testAnUnknownKeyIsRefused(): void
     {
-        $this->client->request('POST', '/mcp?key=spr_forged', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json, text/event-stream'], content: '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}');
+        $this->client->request('POST', '/mcp?key=pcl_forged', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json, text/event-stream'], content: '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}');
         self::assertResponseStatusCodeSame(401);
     }
 
@@ -89,11 +89,11 @@ final class McpTest extends FunctionalTestCase
         $team = $this->tool('team');
         self::assertCount(2, $team['members']);
 
-        $mission = $this->tool('give_mission', ['email' => 'seller@sparring.test', 'situation' => 'price_request', 'calls' => 2, 'target' => 70]);
+        $mission = $this->tool('give_mission', ['email' => 'seller@practicall.test', 'situation' => 'price_request', 'calls' => 2, 'target' => 70]);
         self::assertSame('Seller Test', $mission['for']);
-        self::assertSame(1, \count($this->tool('member_progress', ['email' => 'seller@sparring.test'])['missions']));
+        self::assertSame(1, \count($this->tool('member_progress', ['email' => 'seller@practicall.test'])['missions']));
 
-        $invitation = $this->tool('invite', ['email' => 'new@sparring.test']);
+        $invitation = $this->tool('invite', ['email' => 'new@practicall.test']);
         self::assertStringContainsString('/join/', $invitation['link']);
     }
 

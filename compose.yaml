@@ -1,13 +1,13 @@
-# Sparring in one container, over plain HTTP on one port (put your own HTTPS reverse proxy in front for a public
+# Practicall in one container, over plain HTTP on one port (put your own HTTPS reverse proxy in front for a public
 # domain). The model's key comes from your environment or a .env file next to this one, never from the repository:
 #   AI_API_KEY=… docker compose up -d --build        then open http://localhost:7077
 services:
-  sparring:
+  practicall:
     build: .
-    image: sparring:latest
+    image: practicall:latest
     restart: unless-stopped
     ports:
-      - "${SPARRING_PORT:-7077}:80"
+      - "${PRACTICALL_PORT:-7077}:80"
     environment:
       # Any OpenAI-compatible API (see .env for the defaults and examples).
       AI_API_KEY: ${AI_API_KEY:?Set AI_API_KEY to your model provider key}
@@ -20,10 +20,10 @@ services:
       MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-localhost,127.0.0.1}
       TRUSTED_PROXIES: ${TRUSTED_PROXIES:-private_ranges}
       # 1: skip the onboarding and load the example company (with a manager printed in the logs).
-      SPARRING_DEMO: ${SPARRING_DEMO:-0}
-      SPARRING_LANGUAGE: ${SPARRING_LANGUAGE:-en}
+      PRACTICALL_DEMO: ${PRACTICALL_DEMO:-0}
+      PRACTICALL_LANGUAGE: ${PRACTICALL_LANGUAGE:-en}
     volumes:
-      - sparring:/var/sparring
+      - practicall:/var/practicall
     healthcheck:
       test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 80) ? 0 : 1);"]
       interval: 30s
@@ -32,4 +32,4 @@ services:
       retries: 3
 
 volumes:
-  sparring:
+  practicall:

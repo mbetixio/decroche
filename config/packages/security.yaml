@@ -39,7 +39,7 @@ security:
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 2592000
-                name: SPARRING_REMEMBERME
+                name: PRACTICALL_REMEMBERME
 
     access_control:
         - { path: ^/(login|welcome|join)(/|$), roles: PUBLIC_ACCESS }

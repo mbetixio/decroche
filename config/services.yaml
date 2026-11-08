@@ -23,7 +23,7 @@ services:
 when@test:
     services:
         # Tests never reach the network: a scripted language model, and no voice synthesis.
-        ai.platform.generic.sparring:
+        ai.platform.generic.practicall:
             class: Symfony\AI\Platform\Platform
             factory: ['App\Tests\Fake\ScriptedModel', 'platform']
         App\Voice\SpeechSynthesizer:

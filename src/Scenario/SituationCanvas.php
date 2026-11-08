@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * The common canvas (config/sparring/{language}/situations.yaml): the call situations nearly every B2B sales team
+ * The common canvas (config/practicall/{language}/situations.yaml): the call situations nearly every B2B sales team
  * meets, which the analysis of a company adapts to its business, and the random dressing of a surprise call.
  */
 final class SituationCanvas
@@ -20,7 +20,7 @@ final class SituationCanvas
     private array $data = [];
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%/config/sparring')]
+        #[Autowire('%kernel.project_dir%/config/practicall')]
         private readonly string $directory,
     ) {
     }

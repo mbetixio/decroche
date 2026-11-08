@@ -1,11 +1,11 @@
 mcp:
     servers:
-        sparring:
-            name: 'Sparring'
+        practicall:
+            name: 'Practicall'
             version: '1.0.0'
             description: "The sales team's practice ground, tailored to their company's offer: tough calls against an AI persona with a hidden brief, then a graded debrief."
             instructions: |
-                Sparring trains sellers for hard sales calls. The other party (the "persona") is played by this server: they
+                Practicall trains sellers for hard sales calls. The other party (the "persona") is played by this server: they
                 have a hidden brief (real budget, real pain, who decides, objections, what would get a yes) that neither you
                 nor the seller can read before the debrief. That wall is the exercise: never pretend to know more.
                 To start, new_call draws a call situation from the company's catalogue (a price request, a cold call, an
