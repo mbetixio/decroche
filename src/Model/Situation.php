@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use function Symfony\Component\String\u;
 use App\Enum\CallDirection;
 use App\Enum\SituationFamily;
 
@@ -84,8 +85,9 @@ final readonly class Situation
      */
     public static function slug(string $label): string
     {
-        $ascii = (string) iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $label);
-        $slug = trim((string) preg_replace('/[^a-z0-9]+/', '_', strtolower($ascii)), '_');
+        // Symfony's transliteration rather than iconv, whose result depends on the system ("é" gives "'e" on macOS).
+        $ascii = u($label)->ascii()->lower()->toString();
+        $slug = trim((string) preg_replace('/[^a-z0-9]+/', '_', $ascii), '_');
 
         return substr('' !== $slug ? $slug : 'situation', 0, 28);
     }

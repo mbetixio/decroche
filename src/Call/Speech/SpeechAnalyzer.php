@@ -23,7 +23,7 @@ final class SpeechAnalyzer
 
     /** Words that open a question, by language, so that an unpunctuated spoken question still counts (and counts as open). */
     private const array ASKING = [
-        'fr' => ['qu\'est-ce', 'qu est-ce', 'comment', 'pourquoi', 'quel', 'quelle', 'quels', 'quelles', 'combien', 'est-ce que', 'qui ', 'où ', 'quand', 'lequel', 'laquelle', 'racontez', 'dites-moi', 'expliquez'],
+        'fr' => ['qu\'est-ce', 'qu est-ce', 'comment', 'pourquoi', 'quel', 'quelle', 'quels', 'quelles', 'combien', 'est-ce que', 'qui', 'où', 'quand', 'lequel', 'laquelle', 'racontez', 'dites-moi', 'expliquez'],
         'en' => ['what', 'how', 'why', 'which', 'who', 'where', 'when', 'tell me', 'walk me through', 'could you describe', 'can you explain'],
     ];
 
@@ -41,7 +41,8 @@ final class SpeechAnalyzer
         foreach ($seller as $line) {
             $text = ' '.mb_strtolower($line->text).' ';
             foreach (preg_split('/(?<=[.?!])\s+/u', trim($text), -1, \PREG_SPLIT_NO_EMPTY) ?: [] as $sentence) {
-                $asks = array_filter($asking, static fn (string $w): bool => str_contains(' '.$sentence, ' '.$w) || str_starts_with($sentence, trim($w)));
+                // Whole words only: "however" is not "how", "quelque chose" is not "quel".
+                $asks = array_filter($asking, static fn (string $w): bool => 1 === preg_match('/(?<![\p{L}\'])'.preg_quote($w, '/').'(?![\p{L}])/u', $sentence));
                 if (str_contains($sentence, '?') || [] !== $asks) {
                     ++$questions;
                     $open += [] !== $asks ? 1 : 0;

@@ -6,8 +6,8 @@ framework:
     trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
 
     # Note that the session will be started ONLY if you read or write from it.
-    # Un nom de cookie propre à Sparring : les cookies de 127.0.0.1 ne distinguent pas les ports,
-    # un autre projet Symfony en local écraserait sinon la session (et déconnecterait).
+    # A cookie name of Sparring's own: cookies on 127.0.0.1 do not tell ports apart, so another local Symfony project
+    # would otherwise overwrite the session (and sign the member out).
     session:
         name: SPARRING_SESSION
     csrf_protection: true
@@ -15,7 +15,7 @@ framework:
     #esi: true
     #fragments: true
 
-# En production (Docker), les sessions vivent dans le volume persistant : un redéploiement ne déconnecte personne.
+# In production (Docker), sessions live in the persistent volume: a redeployment signs nobody out.
 when@prod:
     framework:
         session:

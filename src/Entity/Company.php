@@ -102,9 +102,10 @@ class Company
     {
         $this->situations = [];
         foreach ($situations as $situation) {
+            // Two situations with the same key: the second becomes "key_2" (a key the slug keeps as it is).
             $key = $situation->key;
-            while (isset($this->situations[$key])) {
-                $key .= '_';
+            for ($n = 2; isset($this->situations[$key]); ++$n) {
+                $key = $situation->key.'_'.$n;
             }
             $this->situations[$key] = ['key' => $key] + $situation->toArray();
         }
