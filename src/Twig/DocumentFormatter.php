@@ -25,8 +25,8 @@ final class DocumentFormatter
         }
 
         $html = '<div class="record">';
-        // The header: a first line that is not a field ("PROSPECT SHEET — JANE DOE, ACME").
-        if (1 !== preg_match(self::FIELD, $lines[0])) {
+        // The header: a short first line that reads as a title ("PROSPECT SHEET — JANE DOE, ACME"), not a sentence.
+        if (self::isTitle($lines[0])) {
             $html .= $this->header(array_shift($lines));
         }
         $fields = $notes = [];
@@ -59,6 +59,12 @@ final class DocumentFormatter
         $subject = self::calm($parts[\count($parts) - 1]);
 
         return '<header class="record-head">'.(null !== $kind ? '<span class="record-kind">'.self::e($kind).'</span>' : '').'<strong class="record-subject">'.self::e($subject).'</strong></header>';
+    }
+
+    private static function isTitle(string $line): bool
+    {
+        return mb_strlen($line) <= 90 && 1 !== preg_match(self::FIELD, $line)
+            && (mb_strtoupper($line) === $line || 1 === preg_match('/\s[—–]\s/u', $line));
     }
 
     /**
