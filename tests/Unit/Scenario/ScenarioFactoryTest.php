@@ -67,6 +67,19 @@ final class ScenarioFactoryTest extends TestCase
         self::assertEquals(self::at(), $scenario->createdAt);
     }
 
+    /**
+     * Quotes are stripped character by character: a last letter sharing a byte with « » “ ” (ë, û…) stays whole.
+     */
+    public function testQuotesNeverBreakTheLastLetter(): void
+    {
+        $data = ['opening' => '“Bonjour, c’est Noë”', 'objectives' => ['• Rassurer Noë', '- Proposer un rendez-vous dû']] + self::data();
+        $scenario = ScenarioFactory::fromArray($data, null, self::at());
+
+        self::assertSame('Bonjour, c’est Noë', $scenario->opening);
+        self::assertTrue(mb_check_encoding($scenario->opening, 'UTF-8'));
+        self::assertSame(['Rassurer Noë', 'Proposer un rendez-vous dû'], $scenario->objectives());
+    }
+
     public function testDefaultsAndBounds(): void
     {
         $data = ['title' => 'T', 'persona' => ['name' => 'Paul'], 'opening' => 'Hi', 'brief' => ['pain' => 'P'], 'category' => 'negotiation', 'difficulty' => 9, 'minutes' => 500];

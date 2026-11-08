@@ -35,7 +35,8 @@ final class ScenarioFactory
             $brief[$key] = \is_array($value) ? implode(' ; ', Situation::strings($value)) : $text($value);
         }
         $title = $text($data['title'] ?? '');
-        $opening = trim($text($data['opening'] ?? ''), " \t\n«»\"“”");
+        // Quotes around the first line go; character by character, since « » “ ” span several bytes.
+        $opening = (string) preg_replace('/^[\s«»"“”]+|[\s«»"“”]+$/u', '', $text($data['opening'] ?? ''));
         if ('' === $title || '' === $persona->name || '' === $opening || '' === $brief[BriefSection::Pain->value]) {
             throw new ModelException('The scenario is incomplete: a title, the persona\'s name, their first line and their real pain are required.');
         }

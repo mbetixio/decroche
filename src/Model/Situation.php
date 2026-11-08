@@ -103,7 +103,8 @@ final readonly class Situation
         if (\is_string($list)) {
             $list = preg_split('/\R/', $list) ?: [];
         }
-        $clean = array_map(static fn (mixed $v): string => \is_scalar($v) ? trim((string) $v, " \t-•") : '', \is_array($list) ? $list : []);
+        // Leading dashes and bullets go, character by character (• spans several bytes).
+        $clean = array_map(static fn (mixed $v): string => \is_scalar($v) ? (string) preg_replace('/^[\s\-•]+|[\s\-•]+$/u', '', (string) $v) : '', \is_array($list) ? $list : []);
 
         return \array_slice(array_values(array_unique(array_filter($clean, static fn (string $v): bool => '' !== $v))), 0, $max);
     }

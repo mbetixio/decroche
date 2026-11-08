@@ -20,9 +20,6 @@ services:
             - '../src/Model/'
             - '../src/Kernel.php'
 
-    # SQLite leaves foreign keys unchecked unless asked: the mapping's ON DELETE CASCADE / SET NULL then apply.
-    Doctrine\DBAL\Driver\AbstractSQLiteDriver\Middleware\EnableForeignKeys:
-        tags: [doctrine.middleware]
 
 when@test:
     services:
@@ -32,3 +29,15 @@ when@test:
             factory: ['App\Tests\Fake\ScriptedModel', 'platform']
         App\Voice\SpeechSynthesizer:
             class: App\Tests\Fake\SilentSynthesizer
+
+# SQLite leaves foreign keys unchecked unless asked: the mapping's ON DELETE CASCADE / SET NULL then apply. Not in tests,
+# where it slows every request about tenfold (the schema is rebuilt for each test).
+when@dev:
+    services:
+        Doctrine\DBAL\Driver\AbstractSQLiteDriver\Middleware\EnableForeignKeys:
+            tags: [doctrine.middleware]
+
+when@prod:
+    services:
+        Doctrine\DBAL\Driver\AbstractSQLiteDriver\Middleware\EnableForeignKeys:
+            tags: [doctrine.middleware]
