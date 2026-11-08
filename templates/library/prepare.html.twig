@@ -9,9 +9,14 @@
     </div>
 </header>
 <div class="split">
-    {{ form_start(form, {attr: {class: 'form', 'data-controller': 'busy', 'data-action': 'busy#start', 'data-busy-overlay-value': 'draw-overlay'}}) }}
+    {# The text's label, example and help follow the chosen source. #}
+    {% set modes = {
+        sheet: {label: 'form.prepare.text'|trans, placeholder: 'form.prepare.text_placeholder'|trans, help: 'form.prepare.text_help'|trans, rows: 10},
+        call: {label: 'form.prepare.call_text'|trans, placeholder: 'form.prepare.call_placeholder'|trans, help: 'form.prepare.call_help'|trans, rows: 16},
+    } %}
+    {{ form_start(form, {attr: {class: 'form', 'data-controller': 'busy source', 'data-action': 'busy#start change->source#update', 'data-busy-overlay-value': 'draw-overlay', 'data-source-modes-value': modes|json_encode}}) }}
         {{ form_row(form.fromCall) }}
-        {{ form_row(form.text) }}
+        {{ form_row(form.text, {attr: {'data-source-target': 'text'}}) }}
         <div class="fields-3">{{ form_row(form.type) }}{{ form_row(form.difficulty) }}{{ form_row(form.minutes) }}</div>
         <div class="form-actions"><button class="btn primary lg"><twig:Icon name="wand" />{{ 'prepare.submit'|trans }}</button></div>
     {{ form_end(form) }}

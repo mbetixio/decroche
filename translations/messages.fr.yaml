@@ -195,6 +195,9 @@ form:
         text: 'Ce que vous savez'
         text_help: 'Collez la fiche, des notes, un e-mail, ou le transcript : la mise en situation sera écrite à partir de là.'
         text_placeholder: 'Mme Durand, DSI de Transports Martin (220 personnes), a téléchargé notre livre blanc…'
+        call_text: 'Le transcript de l''appel'
+        call_placeholder: "Vous : Bonjour Madame Durand, je vous appelle suite à…\nClient : Oui, je vous écoute, mais je n'ai que cinq minutes…"
+        call_help: 'Collez le transcript d''un vrai appel : la répétition rejoue cet interlocuteur, avec ce qu''il a laissé paraître et ce qu''il a caché.'
         type: 'Type de rendez-vous'
         type_any: 'Au choix du rédacteur'
         difficulty: 'Difficulté'

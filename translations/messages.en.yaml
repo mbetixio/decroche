@@ -195,6 +195,9 @@ form:
         text: 'What you know'
         text_help: 'Paste the sheet, notes, an email or the transcript: the rehearsal will be written from it.'
         text_placeholder: 'Ms Durand, CIO of Martin Logistics (220 people), downloaded our white paper…'
+        call_text: 'The call''s transcript'
+        call_placeholder: "You: Hello Ms Durand, I am calling about…\nClient: Yes, go ahead, but I only have five minutes…"
+        call_help: 'Paste the transcript of a real call: the rehearsal plays that person again, with what they let show and what they kept back.'
         type: 'Type of meeting'
         type_any: 'Writer''s choice'
         difficulty: 'Difficulty'
