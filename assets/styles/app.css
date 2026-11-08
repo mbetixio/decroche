@@ -427,8 +427,22 @@ input[type=checkbox], input[type=radio] { accent-color: var(--action); width: 18
 .avatar.lg { --size: 56px; border-radius: var(--radius-l); }
 .avatar.xl { --size: 88px; border-radius: 14px; }
 
-/* The seller's document: a sheet of paper, typed. */
-.doc { padding: var(--s-4) var(--s-5); border-radius: var(--radius); background: var(--paper); color: var(--paper-ink); box-shadow: inset 0 0 0 1px var(--paper-line); font: 14px/1.7 var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+/* The seller's document, laid out like a CRM record: a header, a grid of fields, then free notes. */
+.doc { padding: var(--s-5); border-radius: var(--radius); background: var(--paper); color: var(--paper-ink); box-shadow: inset 0 0 0 1px var(--paper-line); font: 15px/1.6 var(--font); overflow-wrap: anywhere; }
+.record { display: grid; gap: var(--s-4); }
+.record-head { display: grid; gap: 2px; padding-bottom: var(--s-3); border-bottom: 1px solid var(--paper-line); }
+.record-kind { font: 500 12px var(--font-mono); letter-spacing: .04em; color: color-mix(in srgb, var(--paper-ink) 60%, transparent); }
+.record-subject { font: 600 18px/1.3 var(--font-display); }
+.record-fields { display: grid; margin: 0; }
+.record-field { display: grid; grid-template-columns: minmax(7.5em, 28%) 1fr; gap: var(--s-4); padding: var(--s-2) 0; border-bottom: 1px solid var(--paper-line); }
+.record-field:last-child { border-bottom: 0; }
+.record-field dt { font-size: 13px; color: color-mix(in srgb, var(--paper-ink) 62%, transparent); padding-top: 1px; }
+.record-field dd { margin: 0; }
+.record-notes { display: grid; gap: var(--s-2); padding: var(--s-3) var(--s-4); border-radius: var(--radius-s); background: color-mix(in srgb, var(--paper-ink) 4%, transparent); font-size: 14px; }
+.record-bullet { padding-left: 1em; text-indent: -1em; }
+.record-bullet::before { content: '– '; }
+.doc.small .record-field { grid-template-columns: 1fr; gap: 0; }
+@media (max-width: 560px) { .record-field { grid-template-columns: 1fr; gap: 0; } }
 
 /* A numbered list in the monospace (objectives, tips, steps). */
 .numbered { display: grid; gap: var(--s-3); counter-reset: n; }

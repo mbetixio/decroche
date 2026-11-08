@@ -82,7 +82,7 @@
             </div>
             <details class="block" open><summary>{{ 'call.sheet.context'|trans }}</summary><p class="small">{{ scenario.context }}</p></details>
             {% if scenario.material %}
-                <details class="block"><summary>{{ situation and situation.material ? situation.material : 'call.sheet.document'|trans }}</summary><div class="doc small">{{ scenario.material }}</div></details>
+                <details class="block"><summary>{{ situation and situation.material ? situation.material : 'call.sheet.document'|trans }}</summary><div class="doc small">{{ scenario.material|document }}</div></details>
             {% endif %}
             <div class="cs-options">
                 <label class="check"><input type="checkbox" data-call-target="barge" data-action="call#toggleBarge"> <span>{{ 'call.sheet.barge'|trans }}</span></label>

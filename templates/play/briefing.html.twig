@@ -30,7 +30,7 @@
         {% if scenario.material %}
             <section aria-labelledby="document-title">
                 <div class="section-head"><h2 id="document-title">{{ situation and situation.material ? situation.material : 'briefing.document'|trans }}</h2></div>
-                <div class="doc">{{ scenario.material }}</div>
+                <div class="doc">{{ scenario.material|document }}</div>
             </section>
         {% endif %}
         {% if scenario.objectives %}
