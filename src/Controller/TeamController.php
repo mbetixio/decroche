@@ -37,11 +37,14 @@ final class TeamController extends AbstractController
     public function __construct(
         private readonly TeamManager $team,
         private readonly MissionManager $missionManager,
+        private readonly ProgressReport $progress,
+        private readonly MissionTracker $missions,
+        private readonly CallRepository $calls,
     ) {
     }
 
-    #[Route('', name: 'team')]
-    public function board(#[CurrentUser] Member $me, Request $request, TeamReport $report, MissionTracker $missions, InvitationRepository $invitations): Response
+    #[Route('', name: 'team', methods: ['GET', 'POST'])]
+    public function board(#[CurrentUser] Member $me, Request $request, TeamReport $report, InvitationRepository $invitations): Response
     {
         $invite = new InvitationsData();
         $inviteForm = $this->createForm(InvitationsType::class, $invite);
@@ -75,22 +78,17 @@ final class TeamController extends AbstractController
 
         return $this->render('team/board.html.twig', [
             'board' => $report->build(),
-            'missions' => $missions->team(),
+            'missions' => $this->missions->team(),
             'invitations' => $invitations->pending(),
             'inviteForm' => $inviteForm,
             'missionForm' => $missionForm,
         ]);
     }
 
-    #[Route('/{id<\d+>}', name: 'team_member')]
-    public function member(Member $member, ProgressReport $progress, MissionTracker $missions, CallRepository $calls): Response
+    #[Route('/{id<\d+>}', name: 'team_member', methods: ['GET'])]
+    public function member(Member $member): Response
     {
-        return $this->render('team/member.html.twig', [
-            'member' => $member,
-            'stats' => $progress->of($member),
-            'missions' => $missions->of($member),
-            'recent' => $calls->history($member, 20),
-        ]);
+        return $this->memberPage($member);
     }
 
     #[Route('/{id<\d+>}/role', name: 'team_role', methods: ['POST'])]
@@ -112,15 +110,13 @@ final class TeamController extends AbstractController
      */
     #[Route('/{id<\d+>}/password', name: 'team_password', methods: ['POST'])]
     #[IsCsrfTokenValid(new Expression('"password-" ~ args["member"].id'))]
-    public function password(Member $member, ProgressReport $progress, MissionTracker $missions, CallRepository $calls): Response
+    public function password(Member $member): Response
     {
-        return $this->render('team/member.html.twig', [
-            'member' => $member,
-            'stats' => $progress->of($member),
-            'missions' => $missions->of($member),
-            'recent' => $calls->history($member, 20),
-            'password' => $this->team->resetPassword($member),
-        ]);
+        $response = $this->memberPage($member, $this->team->resetPassword($member));
+        // A secret: rendered rather than redirected to (it would have to wait in the session), and never cached.
+        $response->headers->set('Cache-Control', 'no-store');
+
+        return $response;
     }
 
     #[Route('/invitations/{id<\d+>}/withdraw', name: 'team_invitation_withdraw', methods: ['POST'])]
@@ -141,5 +137,18 @@ final class TeamController extends AbstractController
         $this->missionManager->remove($mission);
 
         return $this->redirectToRoute('team', ['_fragment' => 'missions']);
+    }
+
+    /**
+     * A member's figures, missions and last calls; with the temporary password just given to them, if any.
+     */
+    private function memberPage(Member $member, ?string $password = null): Response
+    {
+        return $this->render('team/member.html.twig', [
+            'member' => $member,
+            'stats' => $this->progress->of($member),
+            'missions' => $this->missions->of($member),
+            'recent' => $this->calls->history($member, 20),
+        ] + (null !== $password ? ['password' => $password] : []));
     }
 }

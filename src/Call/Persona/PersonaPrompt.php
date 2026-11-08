@@ -13,7 +13,7 @@ use App\Enum\BriefSection;
  * company's offer, their hidden brief, and the rules of the game (stay human, never give the brief away for nothing,
  * never propose the next step, mark what they reveal). Written in English; the persona speaks the company's language.
  */
-final class PersonaPrompt
+final readonly class PersonaPrompt
 {
     /** What the persona is told when the seller cut them off. */
     public const string INTERRUPTED = 'The seller has just cut you off: you did not finish your previous line (they only heard its beginning). React as on the phone: let them speak, and come back to what you were saying later only if it matters.';

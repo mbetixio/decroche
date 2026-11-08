@@ -28,7 +28,7 @@ final class AccountController extends AbstractController
     ) {
     }
 
-    #[Route('/me', name: 'profile')]
+    #[Route('/me', name: 'profile', methods: ['GET', 'POST'])]
     public function profile(#[CurrentUser] Member $me, Request $request): Response
     {
         $data = ProfileData::of($me);
@@ -36,8 +36,7 @@ final class AccountController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $first = !$me->hasProfile();
-            $me->name = trim($data->name);
-            $me->profile = trim($data->profile);
+            $data->applyTo($me);
             $this->team->save($me);
             $this->addFlash('success', $first ? 'account.welcome' : 'account.saved');
 
@@ -47,7 +46,7 @@ final class AccountController extends AbstractController
         return $this->render('account/profile.html.twig', ['form' => $form, 'first' => !$me->hasProfile()]);
     }
 
-    #[Route('/account', name: 'account')]
+    #[Route('/account', name: 'account', methods: ['GET', 'POST'])]
     public function account(#[CurrentUser] Member $me, Request $request): Response
     {
         $form = $this->createForm(ChangePasswordType::class);
@@ -69,6 +68,10 @@ final class AccountController extends AbstractController
     #[IsCsrfTokenValid('mcp-key')]
     public function mcpKey(#[CurrentUser] Member $me): Response
     {
-        return $this->render('account/index.html.twig', ['form' => $this->createForm(ChangePasswordType::class), 'key' => $this->team->newMcpKey($me)]);
+        $response = $this->render('account/index.html.twig', ['form' => $this->createForm(ChangePasswordType::class), 'key' => $this->team->newMcpKey($me)]);
+        // A secret: rendered rather than redirected to (it would have to wait in the session), and never cached.
+        $response->headers->set('Cache-Control', 'no-store');
+
+        return $response;
     }
 }

@@ -15,10 +15,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * A practice call: the conversation between a member and a persona, its clock, then its debrief.
+ *
+ * Indexed for what is asked of it: a member's calls, newest first, and the one they are in (by status).
  */
 #[ORM\Entity(repositoryClass: CallRepository::class)]
 #[ORM\Table(name: 'practice_call')]
-#[ORM\Index(columns: ['status'])]
+#[ORM\Index(name: 'practice_call_member_started', columns: ['member_id', 'started_at'])]
+#[ORM\Index(name: 'practice_call_member_status', columns: ['member_id', 'status'])]
 class Call
 {
     /** Beyond this many seller lines, the call stops whatever happens: a meeting is not a novel. */

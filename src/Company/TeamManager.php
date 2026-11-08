@@ -47,7 +47,7 @@ final readonly class TeamManager
     }
 
     /**
-     * Invites someone: a personal link to send them.
+     * Invites someone: a personal link to send them (the pending one, if they were already invited).
      *
      * @throws \DomainException when they already have an account
      */
@@ -56,10 +56,8 @@ final readonly class TeamManager
         if (null !== $this->members->findOneByEmail($email)) {
             throw new \DomainException('team.error.email_taken');
         }
-        foreach ($this->invitations->pending() as $pending) {
-            if ($pending->email === mb_strtolower(trim($email))) {
-                return $pending;
-            }
+        if (null !== $pending = $this->invitations->findPendingByEmail($email)) {
+            return $pending;
         }
         $invitation = new Invitation($email, $role, $by, $this->clock->now());
         $this->em->persist($invitation);
@@ -94,7 +92,7 @@ final readonly class TeamManager
     /**
      * Makes a seller a manager, or a manager a seller.
      *
-     * @throws \DomainException when a manager tries to change their own role, or the team would lose its last manager
+     * @throws \DomainException when a manager tries to change their own role (so the team always keeps a manager)
      */
     public function toggleRole(Member $member, Member $by): void
     {
@@ -122,8 +120,12 @@ final readonly class TeamManager
         $this->em->flush();
     }
 
+    /**
+     * Saves changes made to a member (their name, their profile).
+     */
     public function save(Member $member): void
     {
+        $this->em->persist($member);
         $this->em->flush();
     }
 

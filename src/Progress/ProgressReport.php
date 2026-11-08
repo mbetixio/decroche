@@ -7,6 +7,7 @@ namespace App\Progress;
 use App\Call\Coach\Debrief;
 use App\Entity\Call;
 use App\Entity\Member;
+use App\Enum\CallStatus;
 use App\Enum\ObjectiveStatus;
 use App\Model\Criterion;
 use App\Repository\CallRepository;
@@ -66,7 +67,7 @@ final readonly class ProgressReport
         return new Stats(
             calls: \count($calls),
             done: \count($done),
-            abandoned: \count(array_filter($calls, static fn (Call $c): bool => \App\Enum\CallStatus::Abandoned === $c->status)),
+            abandoned: \count(array_filter($calls, static fn (Call $c): bool => CallStatus::Abandoned === $c->status)),
             average: [] === $scores ? null : (int) round(array_sum($scores) / \count($scores)),
             best: [] === $scores ? null : max($scores),
             last: $scores[0] ?? null,

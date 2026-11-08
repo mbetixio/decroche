@@ -13,7 +13,7 @@ use App\Model\Line;
  * Measures how the seller talked, from the transcript and in the working language: talk share, questions (open ones), filler words, longest line,
  * speech rate when spoken, reply delay.
  */
-final class SpeechAnalyzer
+final readonly class SpeechAnalyzer
 {
     /** Filler words that weaken a pitch, by language (speech recognition keeps the "euh" and "um" when they are said). */
     public const array FILLERS = [

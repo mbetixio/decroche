@@ -38,7 +38,7 @@ final class LibraryController extends AbstractController
     ) {
     }
 
-    #[Route('/library', name: 'library')]
+    #[Route('/library', name: 'library', methods: ['GET'])]
     public function library(#[CurrentUser] Member $me, Request $request): Response
     {
         $type = MeetingType::tryFrom($request->query->getString('type'));
@@ -46,14 +46,14 @@ final class LibraryController extends AbstractController
         return $this->render('library/index.html.twig', ['scenarios' => $this->scenarios->library($me, $type), 'type' => $type, 'types' => MeetingType::cases()]);
     }
 
-    #[Route('/library/{id<\d+>}', name: 'scenario_show')]
+    #[Route('/library/{id<\d+>}', name: 'scenario_show', methods: ['GET'])]
     #[IsGranted(ScenarioVoter::VIEW, 'scenario')]
     public function show(Scenario $scenario, #[CurrentUser] Member $me, CallRepository $calls): Response
     {
         return $this->render('library/show.html.twig', ['scenario' => $scenario, 'calls' => $calls->ofScenario($scenario, $me)]);
     }
 
-    #[Route('/library/new', name: 'scenario_new')]
+    #[Route('/library/new', name: 'scenario_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MANAGER')]
     public function new(#[CurrentUser] Member $me, Request $request, ClockInterface $clock): Response
     {
@@ -71,7 +71,7 @@ final class LibraryController extends AbstractController
         return $this->render('library/form.html.twig', ['form' => $form, 'scenario' => null]);
     }
 
-    #[Route('/library/{id<\d+>}/edit', name: 'scenario_edit')]
+    #[Route('/library/{id<\d+>}/edit', name: 'scenario_edit', methods: ['GET', 'POST'])]
     #[IsGranted(ScenarioVoter::EDIT, 'scenario')]
     public function edit(Scenario $scenario, Request $request): Response
     {
@@ -107,7 +107,7 @@ final class LibraryController extends AbstractController
     /**
      * Rehearses a real meeting: a scenario written from what is known of the prospect (about a minute).
      */
-    #[Route('/prepare', name: 'prepare')]
+    #[Route('/prepare', name: 'prepare', methods: ['GET', 'POST'])]
     public function prepare(#[CurrentUser] Member $me, Request $request, ScenarioWriter $writer): Response
     {
         $data = new PrepareData();

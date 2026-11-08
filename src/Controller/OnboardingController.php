@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Company\DemoCompany;
 use App\Company\OfferAnalyst;
-use App\Company\SiteReader;
 use App\Company\TeamManager;
 use App\Entity\Company;
 use App\Entity\Member;
@@ -26,7 +25,6 @@ use App\Form\OfferType;
 use App\Form\ScorecardType;
 use App\Form\SituationsType;
 use App\Model\Criterion;
-use App\Model\Situation;
 use App\Onboarding\OnboardingStep;
 use App\Repository\CompanyRepository;
 use App\Repository\InvitationRepository;
@@ -42,6 +40,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -65,7 +64,7 @@ final class OnboardingController extends AbstractController
     ) {
     }
 
-    #[Route('/{step}', name: 'onboarding', requirements: ['step' => new EnumRequirement(OnboardingStep::class)], defaults: ['step' => 'welcome'])]
+    #[Route('/{step}', name: 'onboarding', requirements: ['step' => new EnumRequirement(OnboardingStep::class)], defaults: ['step' => 'welcome'], methods: ['GET', 'POST'])]
     public function step(OnboardingStep $step, Request $request): Response
     {
         $company = $this->companies->get();
@@ -90,10 +89,10 @@ final class OnboardingController extends AbstractController
      * The analysis of the website, run by the analysis screen (a minute or two): the offer sheet, then the situations.
      */
     #[Route('/analysis/run', name: 'onboarding_analyze', methods: ['POST'])]
+    #[IsGranted('ROLE_MANAGER')]
     #[IsCsrfTokenValid('onboarding-analysis', tokenKey: 'token')]
     public function analyze(OfferAnalyst $analyst): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_MANAGER');
         set_time_limit(400);
         $company = $this->companies->get();
         try {
@@ -113,7 +112,7 @@ final class OnboardingController extends AbstractController
     /**
      * While a manager sets the instance up, sellers wait here.
      */
-    #[Route('/wait', name: 'onboarding_waiting', priority: 1)]
+    #[Route('/wait', name: 'onboarding_waiting', methods: ['GET'], priority: 1)]
     public function waiting(): Response
     {
         return $this->render('onboarding/waiting.html.twig');
@@ -123,10 +122,10 @@ final class OnboardingController extends AbstractController
      * Completes the onboarding.
      */
     #[Route('/finish', name: 'onboarding_finish', methods: ['POST'], priority: 1)]
+    #[IsGranted('ROLE_MANAGER')]
     #[IsCsrfTokenValid('onboarding-finish')]
     public function finish(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_MANAGER');
         $company = $this->companies->get();
         $company->completeOnboarding($this->clock->now());
         $this->em->flush();
@@ -195,9 +194,7 @@ final class OnboardingController extends AbstractController
         $form = $this->createForm(CompanyType::class, $data);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $company->name = trim($data->name);
-            $company->website = null !== $data->website && '' !== trim($data->website) ? SiteReader::normalize($data->website) : null;
-            $company->about = trim($data->about);
+            $data->applyTo($company);
 
             // The example company: no analysis, its offer, situations and library are loaded at once.
             if ('example' === $request->request->getString('action')) {
@@ -227,8 +224,7 @@ final class OnboardingController extends AbstractController
         $form = $this->createForm(OfferType::class, $data);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $company->offer = trim($data->offer);
-            $company->setSectors(Situation::strings($data->sectors, 30));
+            $data->applyTo($company);
             $company->reach(OnboardingStep::Situations);
             $this->em->flush();
 

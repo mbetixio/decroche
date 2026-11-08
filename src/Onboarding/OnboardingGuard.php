@@ -29,7 +29,7 @@ final readonly class OnboardingGuard
     private const array ALWAYS_OPEN = ['login', 'logout', 'login_link_check', 'join'];
 
     /** Pages where one plays: a member must have described themself first. */
-    private const array PLAY = ['home', 'library', 'call_draw', 'call_briefing', 'scenario_start', 'prepare', 'call_talk'];
+    private const array PLAY = ['home', 'library', 'call_draw', 'call_briefing', 'call_start', 'prepare', 'call_talk'];
 
     public function __construct(
         private CompanyRepository $companies,

@@ -6,6 +6,7 @@ namespace App\Mcp;
 
 use App\Entity\Call;
 use App\Entity\Member;
+use App\Entity\Mission;
 use App\Progress\MissionTracker;
 use App\Progress\ProgressReport;
 use App\Repository\CallRepository;
@@ -59,7 +60,7 @@ final readonly class ProgressTools
     }
 
     /**
-     * @param array{mission: \App\Entity\Mission, done: int, complete: bool, overdue: bool} $row
+     * @param array{mission: Mission, done: int, complete: bool, overdue: bool} $row
      *
      * @return array<string, mixed>
      */

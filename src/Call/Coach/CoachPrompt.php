@@ -16,7 +16,7 @@ use App\Model\Line;
  * The coach's prompts: who the coach is and how it grades (the system prompt), and the call to grade (the user
  * prompt). Written in English; the coach writes in the company's language.
  */
-final class CoachPrompt
+final readonly class CoachPrompt
 {
     public function system(Call $call, Company $company): string
     {

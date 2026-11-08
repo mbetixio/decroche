@@ -12,7 +12,7 @@ use App\Enum\Language;
  * accent of the situation, and their name to break ties, so a persona always keeps the same voice; their tone sets its
  * rate and pitch.
  */
-final class VoiceCasting
+final readonly class VoiceCasting
 {
     /**
      * Voices by accent and gender. Only voices tied to one language: Edge's "Multilingual" voices guess the language

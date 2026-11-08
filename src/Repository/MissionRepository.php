@@ -20,11 +20,16 @@ final class MissionRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return list<Mission> every mission, newest first
+     * @return list<Mission> every mission, newest first, with its assignee
      */
     public function all(): array
     {
-        return $this->findBy([], ['createdAt' => 'DESC']);
+        /* @var list<Mission> */
+        return $this->createQueryBuilder('m')
+            ->addSelect('a')
+            ->leftJoin('m.assignee', 'a')
+            ->orderBy('m.createdAt', 'DESC')
+            ->getQuery()->getResult();
     }
 
     /**
@@ -32,6 +37,11 @@ final class MissionRepository extends ServiceEntityRepository
      */
     public function forMember(Member $member): array
     {
-        return array_values(array_filter($this->all(), static fn (Mission $m): bool => $m->concerns($member)));
+        /* @var list<Mission> */
+        return $this->createQueryBuilder('m')
+            ->where('m.assignee IS NULL OR m.assignee = :member')
+            ->setParameter('member', $member)
+            ->orderBy('m.createdAt', 'DESC')
+            ->getQuery()->getResult();
     }
 }

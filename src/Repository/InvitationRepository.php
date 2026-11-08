@@ -27,6 +27,14 @@ final class InvitationRepository extends ServiceEntityRepository
     }
 
     /**
+     * The pending invitation sent to this address, if any.
+     */
+    public function findPendingByEmail(string $email): ?Invitation
+    {
+        return $this->findOneBy(['email' => mb_strtolower(trim($email)), 'acceptedAt' => null]);
+    }
+
+    /**
      * A pending invitation by its link token.
      */
     public function findPendingByToken(string $token): ?Invitation

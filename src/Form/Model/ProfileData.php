@@ -26,4 +26,10 @@ final class ProfileData
 
         return $data;
     }
+
+    public function applyTo(Member $member): void
+    {
+        $member->name = trim($this->name);
+        $member->profile = trim($this->profile);
+    }
 }

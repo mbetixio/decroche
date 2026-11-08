@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Model;
 
 use App\Entity\Company;
+use App\Model\Situation;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -25,5 +26,14 @@ final class OfferData
         $data->sectors = implode("\n", $company->sectors);
 
         return $data;
+    }
+
+    /**
+     * Writes the offer sheet and the typical clients onto the company.
+     */
+    public function applyTo(Company $company): void
+    {
+        $company->offer = trim($this->offer);
+        $company->setSectors(Situation::strings($this->sectors, 30));
     }
 }

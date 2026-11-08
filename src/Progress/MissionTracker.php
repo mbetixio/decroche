@@ -50,15 +50,22 @@ final readonly class MissionTracker
      */
     public function team(): array
     {
-        $team = $this->members->team();
+        $missions = $this->missions->all();
+        if ([] === $missions) {
+            return [];
+        }
+        // The team's calls in one query, by member.
         $histories = [];
+        foreach ($this->calls->all() as $call) {
+            $histories[(int) $call->member->id][] = $call;
+        }
+        $team = $this->members->team();
         $rows = [];
-        foreach ($this->missions->all() as $mission) {
+        foreach ($missions as $mission) {
             $progress = [];
             foreach ($team as $member) {
                 if ($mission->concerns($member) && (null !== $mission->assignee || !$member->isManager())) {
-                    $histories[(int) $member->id] ??= $this->calls->history($member);
-                    $progress[] = ['member' => $member, 'done' => $mission->progress($histories[(int) $member->id])];
+                    $progress[] = ['member' => $member, 'done' => $mission->progress($histories[(int) $member->id] ?? [])];
                 }
             }
             $rows[] = ['mission' => $mission, 'members' => $progress];

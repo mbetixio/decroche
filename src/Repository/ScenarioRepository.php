@@ -27,7 +27,10 @@ final class ScenarioRepository extends ServiceEntityRepository
      */
     public function library(Member $member, ?MeetingType $type = null): array
     {
+        // The author is fetched along: whether the member may see a scenario depends on who wrote it.
         $qb = $this->createQueryBuilder('s')
+            ->addSelect('a')
+            ->leftJoin('s.author', 'a')
             ->where('s.active = true')
             ->andWhere('s.situation IS NULL')
             ->orderBy('s.difficulty', 'ASC')
@@ -36,7 +39,10 @@ final class ScenarioRepository extends ServiceEntityRepository
             $qb->andWhere('s.type = :type')->setParameter('type', $type);
         }
 
-        return array_values(array_filter($qb->getQuery()->getResult(), static fn (Scenario $s): bool => $s->visibleTo($member)));
+        /** @var list<Scenario> $scenarios */
+        $scenarios = $qb->getQuery()->getResult();
+
+        return array_values(array_filter($scenarios, static fn (Scenario $s): bool => $s->visibleTo($member)));
     }
 
     /**
@@ -46,6 +52,7 @@ final class ScenarioRepository extends ServiceEntityRepository
      */
     public function allLibrary(): array
     {
+        /* @var list<Scenario> */
         return $this->createQueryBuilder('s')->where('s.situation IS NULL')->orderBy('s.title', 'ASC')->getQuery()->getResult();
     }
 
@@ -56,6 +63,7 @@ final class ScenarioRepository extends ServiceEntityRepository
      */
     public function recentSurpriseCalls(Member $member, int $limit = 12): array
     {
+        /* @var list<Scenario> */
         return $this->createQueryBuilder('s')
             ->where('s.author = :member')
             ->andWhere('s.situation IS NOT NULL')
@@ -65,6 +73,9 @@ final class ScenarioRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * A scenario of the example library (written by nobody), by its title.
+     */
     public function findOneByTitle(string $title): ?Scenario
     {
         return $this->findOneBy(['title' => $title, 'author' => null]);

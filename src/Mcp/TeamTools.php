@@ -18,6 +18,7 @@ use Mcp\Exception\ToolCallException;
 use Mcp\Schema\ToolAnnotations;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * What a manager's AI can do: read the team board and a seller's figures, give missions, invite people.
@@ -35,6 +36,7 @@ final readonly class TeamTools
         private TeamManager $teamManager,
         private UrlGeneratorInterface $urls,
         private ClockInterface $clock,
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -112,10 +114,13 @@ final readonly class TeamTools
     public function invite(string $email, string $role = 'seller'): array
     {
         $manager = $this->me->manager();
+        if (false === filter_var(trim($email), \FILTER_VALIDATE_EMAIL)) {
+            throw new ToolCallException(\sprintf('"%s" is not an e-mail address.', $email));
+        }
         try {
             $invitation = $this->teamManager->invite($email, MemberRole::tryFrom($role) ?? MemberRole::Seller, $manager);
-        } catch (\DomainException|\InvalidArgumentException $e) {
-            throw new ToolCallException($e->getMessage());
+        } catch (\DomainException $e) {
+            throw new ToolCallException($this->translator->trans($e->getMessage(), domain: 'messages', locale: 'en'));
         }
 
         return ['email' => $invitation->email, 'role' => $invitation->role->value, 'link' => $this->urls->generate('join', ['token' => $invitation->token], UrlGeneratorInterface::ABSOLUTE_URL)];

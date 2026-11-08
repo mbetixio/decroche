@@ -22,13 +22,22 @@ final class CallRepository extends ServiceEntityRepository
     }
 
     /**
-     * A member's calls, newest first.
+     * A member's calls, newest first, with their scenario (every list shows its title).
      *
      * @return list<Call>
      */
     public function history(Member $member, int $limit = 500): array
     {
-        return $this->findBy(['member' => $member], ['startedAt' => 'DESC', 'id' => 'DESC'], $limit);
+        /* @var list<Call> */
+        return $this->createQueryBuilder('c')
+            ->addSelect('s')
+            ->join('c.scenario', 's')
+            ->where('c.member = :member')
+            ->setParameter('member', $member)
+            ->orderBy('c.startedAt', 'DESC')
+            ->addOrderBy('c.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
     }
 
     /**
@@ -48,21 +57,31 @@ final class CallRepository extends ServiceEntityRepository
     }
 
     /**
-     * Every call of the team, newest first.
+     * Every call of the team, newest first, with its member and scenario (the team board shows both).
      *
      * @return list<Call>
      */
     public function all(int $limit = 2000): array
     {
-        return $this->findBy([], ['startedAt' => 'DESC', 'id' => 'DESC'], $limit);
+        /* @var list<Call> */
+        return $this->createQueryBuilder('c')
+            ->addSelect('m', 's')
+            ->join('c.member', 'm')
+            ->join('c.scenario', 's')
+            ->orderBy('c.startedAt', 'DESC')
+            ->addOrderBy('c.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()->getResult();
     }
 
     /**
+     * A member's calls on one scenario, newest first.
+     *
      * @return list<Call>
      */
     public function ofScenario(Scenario $scenario, Member $member, int $limit = 10): array
     {
-        return $this->findBy(['scenario' => $scenario, 'member' => $member], ['startedAt' => 'DESC'], $limit);
+        return $this->findBy(['scenario' => $scenario, 'member' => $member], ['startedAt' => 'DESC', 'id' => 'DESC'], $limit);
     }
 
     public function save(Call $call): void

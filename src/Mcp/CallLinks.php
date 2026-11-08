@@ -16,8 +16,11 @@ use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
  */
 final readonly class CallLinks
 {
-    /** How long a call link stays valid, in seconds. */
+    /** How long a call link stays valid, in seconds (the firewall's login_link.lifetime). */
     public const int LIFETIME = 900;
+
+    /** How many times a call link can be opened (the firewall's login_link.max_uses). */
+    public const int MAX_USES = 3;
 
     public function __construct(
         #[Autowire(service: 'security.authenticator.login_link_handler.main')]
@@ -33,7 +36,7 @@ final readonly class CallLinks
 
     private function to(Member $member, string $path): string
     {
-        $url = $this->loginLinks->createLoginLink($member, lifetime: self::LIFETIME)->getUrl();
+        $url = $this->loginLinks->createLoginLink($member)->getUrl();
 
         return $url.(str_contains($url, '?') ? '&' : '?').http_build_query(['_target_path' => $path]);
     }

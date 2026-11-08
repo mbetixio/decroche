@@ -32,7 +32,7 @@ final class PlayController extends AbstractController
     /**
      * The home page: level, missions, the "new call" button, what may come up, the last calls.
      */
-    #[Route('/', name: 'home')]
+    #[Route('/', name: 'home', methods: ['GET'])]
     public function home(#[CurrentUser] Member $me, ProgressReport $progress, MissionTracker $missions, CallRepository $calls, CompanyRepository $companies): Response
     {
         return $this->render('play/home.html.twig', [
@@ -64,7 +64,7 @@ final class PlayController extends AbstractController
     /**
      * The briefing before the call: the situation, the document, the objectives, who is on the line.
      */
-    #[Route('/call/{id<\d+>}', name: 'call_briefing')]
+    #[Route('/call/{id<\d+>}', name: 'call_briefing', methods: ['GET'])]
     #[IsGranted(ScenarioVoter::VIEW, 'scenario')]
     public function briefing(Scenario $scenario): Response
     {

@@ -10,7 +10,7 @@ use App\Entity\Call;
 /**
  * Experience points and streaks.
  */
-final class Experience
+final readonly class Experience
 {
     /**
      * The XP a call brings: its score, plus a bonus per objective reached (10) or partly reached (4). A replay of a

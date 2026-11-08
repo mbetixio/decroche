@@ -69,7 +69,7 @@ final class CallController extends AbstractController
     /**
      * The call: the phone screen while it is live, then its debrief and transcript.
      */
-    #[Route('/{id<\d+>}', name: 'call_show')]
+    #[Route('/{id<\d+>}', name: 'call_show', methods: ['GET'])]
     #[IsGranted(CallVoter::VIEW, 'call')]
     public function show(Call $call, #[CurrentUser] Member $me, SpeechSynthesizer $synthesizer, VoiceCasting $casting, CompanyRepository $companies, ClockInterface $clock): Response
     {
@@ -208,7 +208,7 @@ final class CallController extends AbstractController
     /**
      * The member's calls.
      */
-    #[Route('', name: 'call_history')]
+    #[Route('', name: 'call_history', methods: ['GET'])]
     public function history(#[CurrentUser] Member $me, CallRepository $repository): Response
     {
         return $this->render('call/history.html.twig', ['calls' => $repository->history($me, 100)]);

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use function Symfony\Component\String\u;
 use App\Enum\CallDirection;
 use App\Enum\SituationFamily;
+
+use function Symfony\Component\String\u;
 
 /**
  * A kind of call the company's sellers run into ("a price request from the website", "an unhappy client"…). Each

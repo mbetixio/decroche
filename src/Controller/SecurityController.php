@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  */
 final class SecurityController extends AbstractController
 {
-    #[Route('/login', name: 'login')]
+    #[Route('/login', name: 'login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $auth, MemberRepository $members): Response
     {
         if ($this->getUser() instanceof Member) {
@@ -39,7 +39,7 @@ final class SecurityController extends AbstractController
     /**
      * Never reached: the firewall handles the sign-out.
      */
-    #[Route('/logout', name: 'logout')]
+    #[Route('/logout', name: 'logout', methods: ['GET'])]
     public function logout(): never
     {
         throw new \LogicException('Intercepted by the firewall.');
@@ -48,7 +48,7 @@ final class SecurityController extends AbstractController
     /**
      * Never reached: the firewall checks the signed link and signs the member in.
      */
-    #[Route('/login/link', name: 'login_link_check')]
+    #[Route('/login/link', name: 'login_link_check', methods: ['GET'])]
     public function loginLink(): never
     {
         throw new \LogicException('Intercepted by the firewall.');
@@ -57,7 +57,7 @@ final class SecurityController extends AbstractController
     /**
      * Joining the team through the link of an invitation: the account is created, then the member describes themself.
      */
-    #[Route('/join/{token<[a-f0-9]{48}>}', name: 'join')]
+    #[Route('/join/{token<[a-f0-9]{48}>}', name: 'join', methods: ['GET', 'POST'])]
     public function join(string $token, Request $request, InvitationRepository $invitations, TeamManager $team, Security $security): Response
     {
         $invitation = $invitations->findPendingByToken($token);

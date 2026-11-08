@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Model;
 
+use App\Company\SiteReader;
 use App\Entity\Company;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,5 +31,15 @@ final class CompanyData
         $data->about = $company->about;
 
         return $data;
+    }
+
+    /**
+     * Writes the identity onto the company, the website made an absolute address.
+     */
+    public function applyTo(Company $company): void
+    {
+        $company->name = trim($this->name);
+        $company->website = null !== $this->website && '' !== trim($this->website) ? SiteReader::normalize($this->website) : null;
+        $company->about = trim($this->about);
     }
 }

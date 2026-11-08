@@ -20,6 +20,10 @@ services:
             - '../src/Model/'
             - '../src/Kernel.php'
 
+    # SQLite leaves foreign keys unchecked unless asked: the mapping's ON DELETE CASCADE / SET NULL then apply.
+    Doctrine\DBAL\Driver\AbstractSQLiteDriver\Middleware\EnableForeignKeys:
+        tags: [doctrine.middleware]
+
 when@test:
     services:
         # Tests never reach the network: a scripted language model, and no voice synthesis.

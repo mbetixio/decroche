@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
  */
 final class ProgressController extends AbstractController
 {
-    #[Route('/progress', name: 'progress')]
+    #[Route('/progress', name: 'progress', methods: ['GET'])]
     public function progress(#[CurrentUser] Member $me, ProgressReport $progress, MissionTracker $missions, CallRepository $calls, CompanyRepository $companies): Response
     {
         return $this->render('progress/index.html.twig', [
@@ -31,7 +31,7 @@ final class ProgressController extends AbstractController
         ]);
     }
 
-    #[Route('/offer', name: 'offer')]
+    #[Route('/offer', name: 'offer', methods: ['GET'])]
     public function offer(CompanyRepository $companies): Response
     {
         return $this->render('progress/offer.html.twig', ['company' => $companies->get()]);

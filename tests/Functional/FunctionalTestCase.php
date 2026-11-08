@@ -30,8 +30,11 @@ abstract class FunctionalTestCase extends WebTestCase
         $em = $this->service(EntityManagerInterface::class);
         $schema = new SchemaTool($em);
         $metadata = $em->getMetadataFactory()->getAllMetadata();
+        // Foreign keys are enforced: they are set aside while the tables are dropped and created again.
+        $em->getConnection()->executeStatement('PRAGMA foreign_keys = OFF');
         $schema->dropSchema($metadata);
         $schema->createSchema($metadata);
+        $em->getConnection()->executeStatement('PRAGMA foreign_keys = ON');
         $em->clear();
         ScriptedModel::$prompts = [];
     }

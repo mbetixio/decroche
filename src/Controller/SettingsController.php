@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use App\Ai\ModelException;
 use App\Company\OfferAnalyst;
-use App\Company\SiteReader;
 use App\Form\CompanyType;
 use App\Form\Model\CompanyData;
 use App\Form\Model\OfferData;
@@ -15,7 +14,6 @@ use App\Form\Model\SituationsData;
 use App\Form\OfferType;
 use App\Form\ScorecardType;
 use App\Form\SituationsType;
-use App\Model\Situation;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,7 +37,7 @@ final class SettingsController extends AbstractController
     ) {
     }
 
-    #[Route('', name: 'settings')]
+    #[Route('', name: 'settings', methods: ['GET', 'POST'])]
     public function company(Request $request): Response
     {
         $company = $this->companies->get();
@@ -47,9 +45,7 @@ final class SettingsController extends AbstractController
         $identityForm = $this->createForm(CompanyType::class, $identity);
         $identityForm->handleRequest($request);
         if ($identityForm->isSubmitted() && $identityForm->isValid()) {
-            $company->name = trim($identity->name);
-            $company->website = null !== $identity->website && '' !== trim($identity->website) ? SiteReader::normalize($identity->website) : null;
-            $company->about = trim($identity->about);
+            $identity->applyTo($company);
             $this->em->flush();
             $this->addFlash('success', 'settings.saved');
 
@@ -60,8 +56,7 @@ final class SettingsController extends AbstractController
         $offerForm = $this->createForm(OfferType::class, $offer);
         $offerForm->handleRequest($request);
         if ($offerForm->isSubmitted() && $offerForm->isValid()) {
-            $company->offer = trim($offer->offer);
-            $company->setSectors(Situation::strings($offer->sectors, 30));
+            $offer->applyTo($company);
             $this->em->flush();
             $this->addFlash('success', 'settings.saved');
 
@@ -71,7 +66,7 @@ final class SettingsController extends AbstractController
         return $this->render('settings/company.html.twig', ['tab' => 'company', 'identityForm' => $identityForm, 'offerForm' => $offerForm]);
     }
 
-    #[Route('/situations', name: 'settings_situations')]
+    #[Route('/situations', name: 'settings_situations', methods: ['GET', 'POST'])]
     public function situations(Request $request): Response
     {
         $company = $this->companies->get();
@@ -93,7 +88,7 @@ final class SettingsController extends AbstractController
         return $this->render('settings/situations.html.twig', ['tab' => 'situations', 'form' => $form]);
     }
 
-    #[Route('/scorecard', name: 'settings_scorecard')]
+    #[Route('/scorecard', name: 'settings_scorecard', methods: ['GET', 'POST'])]
     public function scorecard(Request $request): Response
     {
         $company = $this->companies->get();

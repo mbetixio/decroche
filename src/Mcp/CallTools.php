@@ -72,7 +72,8 @@ final readonly class CallTools
         try {
             $scenario = $this->surpriseCalls->draw($member, '' !== $situation ? $situation : null);
         } catch (ModelException|\RuntimeException $e) {
-            throw new ToolCallException('The call could not be written ('.$e->getMessage().'). Try again.');
+            // An unreachable model's error (an address, a response body) stays on the server.
+            throw new ToolCallException($e instanceof ModelException ? 'The call could not be written ('.$e->getMessage().'). Try again.' : 'The model could not be reached. Try again in a moment.');
         }
 
         return $this->offer($scenario, $mode);
@@ -93,8 +94,12 @@ final readonly class CallTools
         $member = $this->me->member();
         try {
             $scenario = $this->writer->prepare($prospect, $member, MeetingType::tryFrom($type), Difficulty::tryFrom($difficulty) ?? Difficulty::Demanding, max(3, min(30, $minutes)));
-        } catch (ModelException|\InvalidArgumentException|\RuntimeException $e) {
+        } catch (ModelException $e) {
+            throw new ToolCallException('The rehearsal could not be written ('.$e->getMessage().'). Try again.');
+        } catch (\InvalidArgumentException $e) {
             throw new ToolCallException($this->translator->trans($e->getMessage()));
+        } catch (\RuntimeException) {
+            throw new ToolCallException('The model could not be reached. Try again in a moment.');
         }
         $this->scenarios->save($scenario);
 

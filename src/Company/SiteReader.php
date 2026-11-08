@@ -18,8 +18,15 @@ final readonly class SiteReader
     /** Pages about the offer, spotted by their address or link text. */
     private const string USEFUL = '/offre|service|solution|produit|product|tarif|prix|pricing|price|a-propos|about|qui-sommes|equipe|expertise|metier|reference|client|cas-|case|faq|accompagnement|prestation|methode|approche/i';
 
+    /** The most of a page read, in bytes: a bigger one is cut off rather than filling the memory. */
+    private const int MAX_BYTES = 2_000_000;
+
     private HttpClientInterface $http;
 
+    /**
+     * Every request goes through {@see NoPrivateNetworkHttpClient}, redirects included: no loopback, private or
+     * link-local address, whatever the host name resolves to.
+     */
     public function __construct(HttpClientInterface $http)
     {
         $this->http = new NoPrivateNetworkHttpClient($http);
@@ -75,12 +82,17 @@ final readonly class SiteReader
                 'timeout' => 10,
                 'max_duration' => 20,
                 'max_redirects' => 3,
+                'on_progress' => static function (int $downloaded): void {
+                    if ($downloaded > self::MAX_BYTES) {
+                        throw new \LengthException('The page is too large.');
+                    }
+                },
                 'headers' => ['User-Agent' => 'Mozilla/5.0 (compatible; Practicall/1.0; offer analysis)', 'Accept-Language' => 'fr,en;q=0.5'],
             ]);
             if (200 !== $response->getStatusCode() || !str_contains($response->getHeaders()['content-type'][0] ?? 'text/html', 'html')) {
                 return ['', []];
             }
-            $html = mb_substr($response->getContent(), 0, 2_000_000);
+            $html = $response->getContent();
         } catch (\Throwable) {
             return ['', []];
         }

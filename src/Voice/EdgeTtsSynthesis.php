@@ -9,12 +9,12 @@ use Symfony\Component\Process\Process;
 /**
  * An edge-tts process writing an MP3 to a temporary file, moved into the cache once done (or a cache hit).
  */
-final class EdgeTtsSynthesis implements Synthesis
+final readonly class EdgeTtsSynthesis implements Synthesis
 {
     public function __construct(
-        private readonly string $file,
-        private readonly ?Process $process,
-        private readonly string $part,
+        private string $file,
+        private ?Process $process,
+        private string $part,
     ) {
     }
 

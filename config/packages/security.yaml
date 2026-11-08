@@ -26,12 +26,13 @@ security:
                 check_path: login
                 default_target_path: home
                 enable_csrf: true
-            # The call links handed out over MCP sign the member in: signed, short-lived, usable a few times.
+            # The call links handed out over MCP sign the member in: signed (a changed email or password voids them),
+            # short-lived, usable a few times.
             login_link:
                 check_route: login_link_check
-                signature_properties: [id, email]
-                lifetime: 900
-                max_uses: 3
+                signature_properties: [id, email, password]
+                lifetime: !php/const App\Mcp\CallLinks::LIFETIME
+                max_uses: !php/const App\Mcp\CallLinks::MAX_USES
                 used_link_cache: cache.app
             logout:
                 path: logout
