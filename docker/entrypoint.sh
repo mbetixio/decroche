@@ -1,18 +1,26 @@
 #!/bin/sh
-# Au démarrage : les dossiers du volume, la base à jour (app:install est sans danger à chaque redémarrage), puis le
-# serveur. Le conteneur reste en HTTP simple sur le port 80 ; le domaine et le HTTPS sont gérés devant (Nginx Proxy
-# Manager).
+# On start: the volume's folders, the instance's own secrets (generated once, kept in the volume), the database
+# migrated, then the server. The first visit opens the onboarding; SPARRING_DEMO=1 loads the example company instead.
 set -e
 
-export SERVER_NAME=":80"
-# Le domaine public : les liens (invitations) et le MCP l'utilisent.
-if [ -n "${SPARRING_DOMAIN:-}" ]; then
-    export DEFAULT_URI="https://$SPARRING_DOMAIN"
-    export MCP_ALLOWED_HOSTS="$SPARRING_DOMAIN,localhost,127.0.0.1"
+mkdir -p /var/sparring/sessions /var/sparring/voices
+
+if [ ! -f /var/sparring/secrets.env ]; then
+    printf 'APP_SECRET=%s\nMCP_STATE_KEY=%s\n' "$(php -r 'echo bin2hex(random_bytes(16));')" "$(php -r 'echo bin2hex(random_bytes(24));')" > /var/sparring/secrets.env
+    chmod 600 /var/sparring/secrets.env
+fi
+set -a
+. /var/sparring/secrets.env
+set +a
+
+if [ -z "${AI_API_KEY:-}" ]; then
+    echo "Warning: AI_API_KEY is empty, the personas cannot answer. Set it in your environment or .env file." >&2
 fi
 
-mkdir -p /var/sparring/sessions /var/sparring/voices
-# --etixio : l'espace de démonstration Etixio (son offre, ses situations, sa bibliothèque).
-php bin/console app:install ${SPARRING_INSTALL_ARGS:---etixio} --no-interaction
+if [ "${SPARRING_DEMO:-0}" = "1" ]; then
+    php bin/console app:install --demo --language="${SPARRING_LANGUAGE:-en}" --no-interaction
+else
+    php bin/console app:install --no-interaction
+fi
 
 exec docker-php-entrypoint "$@"

@@ -1,17 +1,28 @@
-# Sparring en production : un seul service, en HTTP sur un port. Le domaine et le HTTPS sont gérés devant
-# (Nginx Proxy Manager : un Proxy Host vers http://<ip du serveur>:7077, websockets inutiles).
-#   docker compose up -d --build
-# La configuration est dans .env.prod (dont SPARRING_DOMAIN, le domaine public).
+# Sparring in one container, over plain HTTP on one port (put your own HTTPS reverse proxy in front for a public
+# domain). The model's key comes from your environment or a .env file next to this one, never from the repository:
+#   AI_API_KEY=… docker compose up -d --build        then open http://localhost:7077
 services:
   sparring:
     build: .
     image: sparring:latest
     restart: unless-stopped
-    env_file: .env.prod
     ports:
       - "${SPARRING_PORT:-7077}:80"
+    environment:
+      # Any OpenAI-compatible API (see .env for the defaults and examples).
+      AI_API_KEY: ${AI_API_KEY:?Set AI_API_KEY to your model provider key}
+      AI_BASE_URL: ${AI_BASE_URL:-https://opencode.ai/zen/go/v1}
+      AI_COMPLETIONS_PATH: ${AI_COMPLETIONS_PATH:-/chat/completions}
+      AI_MODEL: ${AI_MODEL:-deepseek-v4.1-flash}
+      AI_HEADERS: ${AI_HEADERS:-{}}
+      # The public address of the instance, for the links it generates (call links, invitations).
+      DEFAULT_URI: ${DEFAULT_URI:-http://localhost:7077}
+      MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-private_ranges}
+      # 1: skip the onboarding and load the example company (with a manager printed in the logs).
+      SPARRING_DEMO: ${SPARRING_DEMO:-0}
+      SPARRING_LANGUAGE: ${SPARRING_LANGUAGE:-en}
     volumes:
-      # La base SQLite, les sessions, les voix déjà générées.
       - sparring:/var/sparring
     healthcheck:
       test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 80) ? 0 : 1);"]
