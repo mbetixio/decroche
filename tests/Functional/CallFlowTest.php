@@ -8,6 +8,7 @@ use App\Entity\Call;
 use App\Enum\BriefSection;
 use App\Enum\CallStatus;
 use App\Repository\CallRepository;
+use App\Tests\Fake\ScriptedModel;
 
 /**
  * A whole call from the website: draw it, read the briefing, pick up, talk (a streamed reply), hang up, read the
@@ -76,6 +77,41 @@ final class CallFlowTest extends FunctionalTestCase
         self::assertSelectorTextContains('.verdict-score', (string) $call->score);
         self::assertTrue($call->isRevealed(BriefSection::Budget));
         self::assertTrue($call->isSpoken());
+    }
+
+    public function testTheWeakestCriterionCanBeTrainedRightAway(): void
+    {
+        $call = $this->pickUp();
+        $token = $this->client->getCrawler()->filter('[data-controller=call]')->attr('data-call-token-value');
+        $this->client->request('POST', '/calls/'.$call->id.'/talk', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => $token], content: json_encode(['message' => 'What budget have you set aside?']));
+        $this->hangUp($call);
+        $crawler = $this->client->followRedirect();
+
+        // The scripted coach grades closing 4/10, the lowest: only that criterion offers a training call.
+        $train = $crawler->filter('form.train');
+        self::assertCount(1, $train);
+        self::assertSame('closing', $train->filter('input[name=focus]')->attr('value'));
+        ScriptedModel::$prompts = [];
+
+        $this->client->request('POST', '/call/new', ['token' => $train->filter('input[name=token]')->attr('value'), 'focus' => 'closing'], server: ['HTTP_ACCEPT' => 'application/json']);
+        self::assertResponseIsSuccessful();
+        self::assertStringContainsString('The seller wants to train one skill, graded low in their last debrief: Closing', ScriptedModel::$prompts[0]);
+
+        $this->client->request('GET', json_decode((string) $this->client->getResponse()->getContent(), true)['url']);
+        self::assertSelectorTextContains('.facts', 'Training');
+        self::assertSelectorTextContains('.facts', 'Closing');
+    }
+
+    public function testAnUnknownFocusIsIgnored(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+        $token = $crawler->filter('form[action="/call/new"] input[name=token]')->attr('value');
+
+        $this->client->request('POST', '/call/new', ['token' => $token, 'focus' => 'juggling'], server: ['HTTP_ACCEPT' => 'application/json']);
+        self::assertResponseIsSuccessful();
+        self::assertStringNotContainsString('wants to train one skill', ScriptedModel::$prompts[0]);
+        $this->client->request('GET', json_decode((string) $this->client->getResponse()->getContent(), true)['url']);
+        self::assertSelectorTextNotContains('.facts', 'Training');
     }
 
     public function testThePersonaCanHangUp(): void

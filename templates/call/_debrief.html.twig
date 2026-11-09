@@ -38,14 +38,26 @@
     <div class="halves">
         <section aria-labelledby="criteria-title">
             <div class="section-head"><h2 id="criteria-title">{{ 'debrief.criteria'|trans }}</h2><p>{{ 'debrief.out_of_ten'|trans }}</p></div>
+            {# The weakest criterion, under 7, can be trained right away: a new call built to test it. #}
+            {% set weakest = null %}
+            {% for key, criterion in debrief.criteria|filter(c => c.score < 7) %}
+                {% if weakest is null or criterion.score < debrief.criteria[weakest].score %}{% set weakest = key %}{% endif %}
+            {% endfor %}
             <div class="criteria">
-                {% for criterion in debrief.criteria %}
+                {% for key, criterion in debrief.criteria %}
                     {% set ctone = criterion.score >= 7 ? 'good' : (criterion.score >= 5 ? 'warn' : 'bad') %}
                     <div class="criterion">
                         <b>{{ criterion.label }}</b>
                         <span class="score {{ ctone }}">{{ criterion.score }}<small> / 10</small></span>
                         <div class="bar {{ ctone }}" aria-hidden="true"><i style="--pct: {{ criterion.score * 10 }}%"></i></div>
                         <p>{{ criterion.comment }}</p>
+                        {% if key == weakest and (mine ?? false) and not call.isLive %}
+                            <form method="post" action="{{ path('call_draw') }}" class="train" data-controller="draw" data-action="draw#submit">
+                                <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
+                                <input type="hidden" name="focus" value="{{ key }}">
+                                <button class="btn sm"><twig:Icon name="target" />{{ 'debrief.train'|trans }}</button>
+                            </form>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

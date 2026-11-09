@@ -14,6 +14,7 @@ use App\Entity\Scenario;
 use App\Enum\BriefSection;
 use App\Enum\Difficulty;
 use App\Enum\MeetingType;
+use App\Model\Criterion;
 use App\Model\Situation;
 use App\Repository\CompanyRepository;
 use Psr\Clock\ClockInterface;
@@ -35,11 +36,12 @@ final readonly class ScenarioWriter
      * A surprise call: the company, the person on the line, the document the seller has in front of them, the call's
      * objectives and the hidden brief, all new.
      *
-     * @param list<string> $avoid names (people, companies) the seller met recently, not to be used again
+     * @param list<string>   $avoid names (people, companies) the seller met recently, not to be used again
+     * @param Criterion|null $focus the skill the seller wants to train: the situation is built to test it
      *
      * @throws ModelException when the model's answer cannot make a scenario
      */
-    public function surprise(Draw $draw, Member $author, array $avoid = []): Scenario
+    public function surprise(Draw $draw, Member $author, array $avoid = [], ?Criterion $focus = null): Scenario
     {
         $company = $this->companies->get();
         $situation = $draw->situation;
@@ -70,6 +72,7 @@ final readonly class ScenarioWriter
         $user = 'Today is '.$this->clock->now()->format('Y-m-d')." (the scenario's dates, budgets and deadlines start from there).\n"
             ."The situation: {$situation->label}.\n{$situation->pitch}\n\n"
             ."The random dressing: {$draw->size}, sector: {$draw->sector}, in {$draw->city}. The persona is {$draw->tone->describe()}: a believable, natural person, not a caricature.\n"
+            .$this->focus($focus)
             .([] !== $avoid ? 'Invent new names: use none of these names of people or companies, met recently: '.implode(', ', $avoid).".\n" : '')
             .\sprintf('Difficulty: %d/3.', $draw->difficulty->value);
 
@@ -144,6 +147,21 @@ final readonly class ScenarioWriter
         return $author->hasProfile()
             ? "\nThe seller who will play describes themself this way: ".trim($author->profile)."\nFit the situation to their job (the offers they sell, their clients, their level), without mentioning it."
             : '';
+    }
+
+    /**
+     * The skill the seller asked to work on, after a debrief: the situation must make it decisive, without saying so.
+     */
+    private function focus(?Criterion $focus): string
+    {
+        if (null === $focus) {
+            return '';
+        }
+        $hint = '' !== $focus->hint ? " ({$focus->hint})" : '';
+
+        return "The seller wants to train one skill, graded low in their last debrief: {$focus->label}{$hint}. Build the situation, "
+            .'the persona and the brief so that this skill decides how the call goes: without it, the seller cannot reach the '
+            ."objectives; with it, they can. The objectives test it. The public texts do not name the skill.\n";
     }
 
     private function direction(Situation $situation): string

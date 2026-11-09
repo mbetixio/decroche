@@ -30,12 +30,14 @@ final readonly class SurpriseCalls
      * is unusable.
      *
      * @param string|null $situation a given situation (a mission asks for one); null for a surprise
+     * @param string|null $focus     a criterion of the scorecard to train on (from a debrief); unknown keys are ignored
      *
      * @throws ModelException when the model fails twice
      */
-    public function draw(Member $member, ?string $situation = null): Scenario
+    public function draw(Member $member, ?string $situation = null, ?string $focus = null): Scenario
     {
         $company = $this->companies->get();
+        $criterion = null !== $focus ? ($company->scorecard()[$focus] ?? null) : null;
         $target = $this->progress->of($member)->challenge->difficulty;
         $recent = $this->scenarios->recentSurpriseCalls($member);
         $keys = array_values(array_unique(array_filter(array_map(static fn (Scenario $s): ?string => $s->situation()?->key, \array_slice($recent, 0, 3)))));
@@ -47,10 +49,11 @@ final readonly class SurpriseCalls
         $names = array_values(array_unique(array_filter($names)));
 
         try {
-            $scenario = $this->writer->surprise($this->drawer->draw($company, $target, $situation, $keys), $member, $names);
+            $scenario = $this->writer->surprise($this->drawer->draw($company, $target, $situation, $keys), $member, $names, $criterion);
         } catch (ModelException) {
-            $scenario = $this->writer->surprise($this->drawer->draw($company, $target, $situation, $keys), $member, $names);
+            $scenario = $this->writer->surprise($this->drawer->draw($company, $target, $situation, $keys), $member, $names, $criterion);
         }
+        $scenario->focus = $criterion?->key;
         $this->scenarios->save($scenario);
 
         return $scenario;

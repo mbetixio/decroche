@@ -618,6 +618,7 @@ td.num, th.num { text-align: right; }
 .criterion .bar { grid-column: 1 / -1; }
 .criterion p { grid-column: 1 / -1; font-size: var(--text-s); color: var(--ink-2); }
 .criterion .score small { color: var(--ink-3); font-weight: 400; font-size: var(--text-xs); }
+.criterion .train { grid-column: 1 / -1; }
 
 /* Outcome rows (objectives, the hidden brief): a status in words with its mark, then the text. */
 .outcomes > li { display: grid; grid-template-columns: 8.5em minmax(0, 1fr); gap: var(--s-4); padding: var(--s-3) 0; border-bottom: 1px solid var(--line); }

@@ -36,6 +36,10 @@ class Scenario
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $situation = null;
 
+    /** The scorecard criterion this call trains, when the seller asked to work on it ({@see \App\Model\Criterion::$key}) */
+    #[ORM\Column(length: 40, nullable: true)]
+    public ?string $focus = null;
+
     /** What the seller has in front of them before the call: the job ad, the form message, the client's email… */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $material = null;

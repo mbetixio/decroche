@@ -358,6 +358,7 @@ scenario:
     error:
         too_short: 'Give a little more to work with (a few lines at least).'
 debrief:
+    train: 'Train on this point'
     empty:
         comment: 'Not enough exchanges to judge.'
         outcome: 'The call stopped before it really started.'
@@ -436,6 +437,7 @@ play:
     no_calls_text: 'Start your first call: the debrief comes right after.'
     may_come_up: 'What may come up'
 briefing:
+    focus: 'Training'
     minutes: '{1} 1 min|]1,Inf[ %count% min'
     context: 'The situation'
     goal: 'Your goal:'

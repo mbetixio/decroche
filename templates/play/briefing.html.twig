@@ -12,6 +12,7 @@
         <h1>{{ scenario.title }}</h1>
         <dl class="facts">
             {% if situation %}<div><dt class="visually-hidden">{{ 'briefing.direction'|trans }}</dt><dd><twig:Icon :name="incoming ? 'phone-incoming' : 'phone-outgoing'" size="15" class="inline-icon" /> {{ situation.direction|trans }}</dd></div>{% endif %}
+            {% if focus %}<div><dt>{{ 'briefing.focus'|trans }}</dt><dd>{{ focus.label }}</dd></div>{% endif %}
             <div><dt>{{ 'briefing.difficulty'|trans }}</dt><dd>{{ scenario.difficulty|trans }}</dd></div>
             <div><dt>{{ 'briefing.length'|trans }}</dt><dd>{{ 'briefing.minutes'|trans({'%count%': scenario.minutes}) }}</dd></div>
         </dl>

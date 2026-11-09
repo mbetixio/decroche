@@ -45,7 +45,8 @@ final class PlayController extends AbstractController
     }
 
     /**
-     * Draws and writes a surprise call (some fifteen seconds), then gives the address of its briefing.
+     * Draws and writes a surprise call (some fifteen seconds), then gives the address of its briefing. A debrief may
+     * ask for a call that trains one criterion of the scorecard ("focus").
      */
     #[Route('/call/new', name: 'call_draw', methods: ['POST'])]
     #[IsCsrfTokenValid('call-draw', tokenKey: 'token')]
@@ -53,7 +54,7 @@ final class PlayController extends AbstractController
     {
         set_time_limit(300);
         try {
-            $scenario = $calls->draw($me, $request->request->getString('situation') ?: null);
+            $scenario = $calls->draw($me, $request->request->getString('situation') ?: null, $request->request->getString('focus') ?: null);
         } catch (ModelException|\RuntimeException) {
             return new JsonResponse(['error' => $translator->trans('play.draw_failed')], Response::HTTP_BAD_GATEWAY);
         }
@@ -66,8 +67,11 @@ final class PlayController extends AbstractController
      */
     #[Route('/call/{id<\d+>}', name: 'call_briefing', methods: ['GET'])]
     #[IsGranted(ScenarioVoter::VIEW, 'scenario')]
-    public function briefing(Scenario $scenario): Response
+    public function briefing(Scenario $scenario, CompanyRepository $companies): Response
     {
-        return $this->render('play/briefing.html.twig', ['scenario' => $scenario]);
+        return $this->render('play/briefing.html.twig', [
+            'scenario' => $scenario,
+            'focus' => null !== $scenario->focus ? ($companies->get()->scorecard()[$scenario->focus] ?? null) : null,
+        ]);
     }
 }
