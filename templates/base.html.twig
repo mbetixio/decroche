@@ -65,6 +65,7 @@
                 <span class="grow"><span class="me-name">{{ app.user.name }}</span><span class="me-role">{{ app.user.role|trans }}</span></span>
             </a>
             <a class="btn ghost sm" href="{{ logout_path() }}"><twig:Icon name="logout" />{{ 'nav.logout'|trans }}</a>
+            {% if source_url %}<a class="source-link" href="{{ source_url }}" rel="noopener">{{ 'meta.source'|trans }}</a>{% endif %}
         </div>
     </aside>
     <main class="main" id="main">

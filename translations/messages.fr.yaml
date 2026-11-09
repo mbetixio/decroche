@@ -566,5 +566,6 @@ log:
     line4: 'Vraie douleur découverte'
     line5: 'bonne question ouverte, prochaine étape à verrouiller'
 meta:
+    source: 'Code source (AGPL)'
     description: 'Practicall : entraînez-vous aux appels commerciaux à voix haute face à un client IA au brief caché, puis recevez un débrief noté par un coach.'
     skip: 'Aller au contenu'

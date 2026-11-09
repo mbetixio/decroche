@@ -13,6 +13,7 @@
             {{ include('_flashes.html.twig') }}
             {% block content %}{% endblock %}
         </div>
+        {% if source_url %}<a class="source-link" href="{{ source_url }}" rel="noopener">{{ 'meta.source'|trans }}</a>{% endif %}
     </main>
 </div>
 {% endblock %}

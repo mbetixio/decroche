@@ -6,7 +6,7 @@
 
 <p align="center">Symfony 8.1 · Symfony AI · MCP · Hugging Face Inference Providers · PHP 8.5</p>
 
-<p align="center">Open source (MIT) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
+<p align="center">Open source (AGPL-3.0) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
 
 <p align="center"><img src="docs/screenshots/phone.png" alt="The phone screen during a practice call" width="900"></p>
 
@@ -191,6 +191,7 @@ Put your values in `.env.local` (without Docker) or `.env.docker` (with Docker).
 | `DEFAULT_URI` | `http://127.0.0.1:8000` | The instance's public address, for the links it generates (call links, invitations). |
 | `MCP_ALLOWED_HOSTS` | `localhost,127.0.0.1,…` | Host names the MCP endpoint answers on: add your domain. |
 | `TRUSTED_PROXIES` | — | Your reverse proxy, e.g. `private_ranges`. |
+| `SOURCE_URL` | this repository | Where your users can get the source code, linked at the foot of every page (AGPL-3.0): point it at your fork if you modify Practicall. |
 | `PRACTICALL_DEMO`, `PRACTICALL_LANGUAGE` | `0`, `en` | Docker only: load the demo data instead of the onboarding. |
 | `PRACTICALL_PORT` | `7077` | Docker only: the port on your machine. |
 | `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | The neural voices and their cache. |
@@ -279,5 +280,8 @@ rehearsing tomorrow's client meeting from its e-mail thread.
 
 ## License
 
-Practicall is open source, released under the [MIT License](LICENSE). Contributions and forks are welcome.
+Practicall is free and open source software, released under the [GNU Affero General Public License v3](LICENSE)
+(AGPL-3.0-or-later). You may use it, study it, modify it and run your own instance, for free. If you modify it and
+offer it to others as a network service, you must make your modified source code available to them under the same
+license.
 

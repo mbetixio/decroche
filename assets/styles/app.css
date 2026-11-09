@@ -908,3 +908,8 @@ td.num, th.num { text-align: right; }
 /* Columns may shrink below their content's natural width; a full-width button wraps instead of widening its column. */
 .split > * { min-width: 0; }
 .btn.block { white-space: normal; text-align: center; }
+/* The link to the source code (AGPL): discreet, at the foot of the sidebar and of the sign-in pages. */
+.source-link { display: block; padding: var(--s-2) var(--s-3); font-size: var(--text-xs); color: var(--ink-3); text-decoration: none; }
+.source-link:hover { color: var(--ink-2); text-decoration: underline; }
+.auth-main { position: relative; }
+.auth-main .source-link { position: absolute; right: var(--s-5); bottom: var(--s-4); }

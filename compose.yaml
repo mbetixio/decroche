@@ -19,6 +19,8 @@ services:
       DEFAULT_URI: ${DEFAULT_URI:-http://localhost:7077}
       MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-localhost,127.0.0.1}
       TRUSTED_PROXIES: ${TRUSTED_PROXIES:-private_ranges}
+      # Where your users can get the source code (AGPL-3.0): your fork, if you modify Practicall.
+      SOURCE_URL: ${SOURCE_URL:-https://github.com/mbetixio/practicall}
       # 1: skip the onboarding and load the example company (with a manager printed in the logs).
       PRACTICALL_DEMO: ${PRACTICALL_DEMO:-0}
       PRACTICALL_LANGUAGE: ${PRACTICALL_LANGUAGE:-en}

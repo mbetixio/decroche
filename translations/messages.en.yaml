@@ -566,5 +566,6 @@ log:
     line4: 'Real pain uncovered'
     line5: 'good open question, now lock in the next step'
 meta:
+    source: 'Source code (AGPL)'
     description: 'Practicall: rehearse your sales calls out loud against an AI client with a hidden brief, then get a debrief graded by a coach.'
     skip: 'Skip to content'

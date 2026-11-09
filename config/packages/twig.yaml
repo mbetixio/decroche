@@ -1,6 +1,9 @@
 twig:
     file_name_pattern: '*.twig'
     form_themes: ['form/theme.html.twig']
+    globals:
+        # Where this instance's source code can be found (AGPL-3.0, section 13): shown at the foot of every page.
+        source_url: '%env(SOURCE_URL)%'
     # The stylesheet, inlined into the MCP app (which runs in the host's sandboxed iframe).
     paths:
         '%kernel.project_dir%/assets/styles': styles

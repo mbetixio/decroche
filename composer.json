@@ -1,6 +1,6 @@
 {
     "type": "project",
-    "license": "MIT",
+    "license": "AGPL-3.0-or-later",
     "description": "Rehearse sales calls out loud against an AI client with a hidden brief, then get graded by a coach. Symfony AI, MCP and Hugging Face.",
     "minimum-stability": "beta",
     "prefer-stable": true,
