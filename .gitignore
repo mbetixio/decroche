@@ -31,3 +31,9 @@
 
 # The model key for docker compose (see the README).
 /.env.docker
+
+# Local copies of environment files, which may hold keys.
+/.env*
+!/.env
+!/.env.dev
+!/.env.test
