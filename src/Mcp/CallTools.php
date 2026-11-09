@@ -62,15 +62,16 @@ final readonly class CallTools
     /**
      * @param string $situation the key of a situation (see the situations tool), or empty for a surprise
      * @param string $mode      "link" (default): a link to take the call out loud in the browser; "chat": play it here, in writing
+     * @param string $focus     a criterion of the scorecard to train on (its key, see my_progress or the scorecard resource): the call is built to test it
      *
      * @return array<string, mixed>
      */
-    #[McpTool(name: 'new_call', title: 'New call', description: 'The game: draws a call situation from the company\'s catalogue (at random unless a situation key is given), writes it for the seller at a difficulty that follows their latest scores (about fifteen seconds) and returns its briefing and a call link. By default (mode "link"), give the seller the link: it opens the phone screen in their browser, already signed in, to take the call out loud with a voice. With mode "chat", the call starts here: show the briefing and the persona\'s first line, then relay the seller\'s words with reply.')]
-    public function newCall(string $situation = '', string $mode = 'link'): array
+    #[McpTool(name: 'new_call', title: 'New call', description: 'The game: draws a call situation from the company\'s catalogue (at random unless a situation key is given), writes it for the seller at a difficulty that follows their latest scores (about fifteen seconds) and returns its briefing and a call link. With focus, the call is built to train one criterion of the scorecard. By default (mode "link"), give the seller the link: it opens the phone screen in their browser, already signed in, to take the call out loud with a voice. With mode "chat", the call starts here: show the briefing and the persona\'s first line, then relay the seller\'s words with reply.')]
+    public function newCall(string $situation = '', string $mode = 'link', string $focus = ''): array
     {
         $member = $this->me->member();
         try {
-            $scenario = $this->surpriseCalls->draw($member, '' !== $situation ? $situation : null);
+            $scenario = $this->surpriseCalls->draw($member, '' !== $situation ? $situation : null, '' !== $focus ? $focus : null);
         } catch (ModelException|\RuntimeException $e) {
             // An unreachable model's error (an address, a response body) stays on the server.
             throw new ToolCallException($e instanceof ModelException ? 'The call could not be written ('.$e->getMessage().'). Try again.' : 'The model could not be reached. Try again in a moment.');

@@ -6,6 +6,7 @@ namespace App\Tests\Functional;
 
 use App\Company\TeamManager;
 use App\Entity\Member;
+use App\Tests\Fake\ScriptedModel;
 
 /**
  * The MCP server, as an AI client uses it: authenticated by the member's personal key, it draws a call and hands over a
@@ -52,6 +53,42 @@ final class McpTest extends FunctionalTestCase
         self::assertResponseRedirects('/call/'.$result['scenario']['id']);
         $this->client->followRedirect();
         self::assertSelectorTextContains('h1', 'A price request from the website');
+    }
+
+    public function testTheReadyMadeRequestsChainTheTools(): void
+    {
+        $this->connect($this->member());
+        self::assertSame(['rehearse_meeting', 'review_my_calls', 'coach_my_team'], array_column($this->rpc('prompts/list')['prompts'], 'name'));
+
+        $prompt = $this->rpc('prompts/get', ['name' => 'rehearse_meeting', 'arguments' => (object) ['meeting' => 'Claire at Alpine, Thursday']]);
+        $text = $prompt['messages'][0]['content']['text'];
+        self::assertStringContainsString('Claire at Alpine, Thursday', $text);
+        self::assertStringContainsString('my e-mails, my calendar', $text);
+        self::assertStringContainsString('prepare_call', $text);
+    }
+
+    public function testTheOfferSituationsAndScorecardAreResources(): void
+    {
+        $this->connect($this->member());
+        $uris = array_column($this->rpc('resources/list')['resources'], 'uri');
+        foreach (['practicall://offer', 'practicall://situations', 'practicall://scorecard'] as $uri) {
+            self::assertContains($uri, $uris);
+        }
+
+        $offer = $this->rpc('resources/read', ['uri' => 'practicall://offer'])['contents'][0];
+        self::assertStringStartsWith("Etixio\n\n", $offer['text']);
+        self::assertStringContainsString('The classic objections to offshore', $offer['text']);
+        $scorecard = json_decode($this->rpc('resources/read', ['uri' => 'practicall://scorecard'])['contents'][0]['text'], true);
+        self::assertSame('closing', end($scorecard['criteria'])['key']);
+    }
+
+    public function testANewCallCanTrainOneCriterion(): void
+    {
+        $this->connect($this->member());
+        ScriptedModel::$prompts = [];
+        $this->tool('new_call', ['focus' => 'objections']);
+
+        self::assertStringContainsString('The seller wants to train one skill, graded low in their last debrief: Handling objections', ScriptedModel::$prompts[0]);
     }
 
     public function testACallPlayedInTheChat(): void

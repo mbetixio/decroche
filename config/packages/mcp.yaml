@@ -16,7 +16,11 @@ mcp:
                 do not coach during the call unless the seller explicitly asks. When they hang up: hang_up, then the debrief
                 app shows the graded debrief. prepare_call rehearses a real meeting from a prospect sheet. situations, library
                 and call_link give access to the catalogue and the managers' scenarios. my_progress gives the seller's
-                figures and missions; managers also have team, member_progress, give_mission and invite.
+                figures and missions; managers also have team, member_progress, give_mission and invite. new_call with a
+                focus (a criterion key) builds a call that trains that skill. The resources hold the offer sheet, the
+                situations and the scorecard; the prompts rehearse_meeting, review_my_calls and coach_my_team chain the
+                tools for the common requests (to rehearse a meeting, first gather what the seller's e-mails or calendar
+                say about it).
                 Answer in the seller's language.
             transports:
                 stdio: false
