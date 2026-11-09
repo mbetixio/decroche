@@ -6,6 +6,8 @@ namespace App\Company;
 
 use App\Ai\LanguageModel;
 use App\Ai\ModelException;
+use App\Ai\Output\OfferSheet;
+use App\Ai\Output\SituationCatalogue;
 use App\Entity\Company;
 use App\Model\Situation;
 use App\Scenario\SituationCanvas;
@@ -66,7 +68,7 @@ final readonly class OfferAnalyst
             ."\n\nIts declared name: {$company->name}"
             ."\n\nIts website".('' !== $site ? ":\n{$site}" : ': (no readable website)');
 
-        $data = $this->model->json($system, $user, 0.3);
+        $data = $this->model->structured($system, $user, OfferSheet::class, 0.3)->toArray();
         $offer = \is_string($data['offer'] ?? null) ? trim($data['offer']) : '';
         if (mb_strlen($offer) < 80) {
             throw new ModelException('The offer sheet the model wrote is too short.');
@@ -100,7 +102,7 @@ final readonly class OfferAnalyst
               "objectives": ["three concrete, checkable objectives for the call"]}]}
             PROMPT;
 
-        $data = $this->model->json($system, "The company: {$company->name}\n\nIts offer sheet:\n{$company->offer}", 0.7);
+        $data = $this->model->structured($system, "The company: {$company->name}\n\nIts offer sheet:\n{$company->offer}", SituationCatalogue::class, 0.7)->toArray();
         $situations = [];
         foreach (\is_array($data['situations'] ?? null) ? $data['situations'] : [] as $s) {
             if (\is_array($s) && null !== $situation = Situation::fromArray(\is_string($s['key'] ?? null) ? $s['key'] : '', $s)) {

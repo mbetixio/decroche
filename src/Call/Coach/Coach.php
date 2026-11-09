@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Call\Coach;
 
 use App\Ai\LanguageModel;
+use App\Ai\Output\CoachReport;
 use App\Call\Speech\SpeechAnalyzer;
 use App\Entity\Call;
 use App\Repository\CompanyRepository;
@@ -36,7 +37,7 @@ final readonly class Coach
         if (0 === $call->sellerTurns()) {
             return ['debrief' => $this->builder->empty($call, $scorecard, $figures, $company->language), 'score' => 0];
         }
-        $data = $this->model->json($this->prompt->system($call, $company), $this->prompt->user($call, $figures, $now), 0.4);
+        $data = $this->model->structured($this->prompt->system($call, $company), $this->prompt->user($call, $figures, $now), CoachReport::class, 0.4)->toArray();
         $result = $this->builder->build($call, $data, $scorecard, $figures);
         foreach ($result['discovered'] as $section) {
             $call->reveal($section);

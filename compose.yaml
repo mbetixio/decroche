@@ -13,7 +13,11 @@ services:
       AI_API_KEY: ${AI_API_KEY:?Set AI_API_KEY to a Hugging Face token (hf_…) or another provider key}
       AI_BASE_URL: ${AI_BASE_URL:-https://router.huggingface.co/v1}
       AI_COMPLETIONS_PATH: ${AI_COMPLETIONS_PATH:-/chat/completions}
-      AI_MODEL: ${AI_MODEL:-openai/gpt-oss-120b}
+      # The client on the phone, and the coach and writers (see .env): the same model twice is fine.
+      AI_PERSONA_MODEL: ${AI_PERSONA_MODEL:-deepseek-ai/DeepSeek-V4.1-Flash}
+      AI_PERSONA_REASONING: ${AI_PERSONA_REASONING:-low}
+      AI_COACH_MODEL: ${AI_COACH_MODEL:-deepseek-ai/DeepSeek-V4.1-Flash}
+      AI_COACH_REASONING: ${AI_COACH_REASONING:-low}
       AI_HEADERS: ${AI_HEADERS:-{}}
       # The public address of the instance, for the links it generates (call links, invitations).
       DEFAULT_URI: ${DEFAULT_URI:-http://localhost:7077}

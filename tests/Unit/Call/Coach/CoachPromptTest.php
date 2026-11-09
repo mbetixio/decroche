@@ -33,8 +33,8 @@ final class CoachPromptTest extends TestCase
         self::assertStringContainsString('a seller from Etix', $prompt);
         self::assertStringContainsString('Dedicated development teams.', $prompt);
         self::assertStringContainsString("- rapport: Rapport (builds trust)\n- closing: Closing\n", $prompt);
-        self::assertStringContainsString('{"criteria": {"rapport": {"score": 0', $prompt);
-        self::assertStringContainsString('the 2 criteria', $prompt);
+        self::assertStringContainsString('{"criteria": [{"key": "rapport", "score": 0', $prompt);
+        self::assertStringContainsString('the 2 of them', $prompt);
         self::assertStringContainsString('every text value is written in French', $prompt);
         self::assertStringContainsString('The seller describes themself this way (fit your advice to their experience and what they sell): Junior seller, sells dev teams.', $prompt);
     }
@@ -45,7 +45,7 @@ final class CoachPromptTest extends TestCase
 
         self::assertStringNotContainsString('describes themself', $prompt);
         self::assertStringContainsString('- discovery: Needs discovery (', $prompt);
-        self::assertStringContainsString('the 6 criteria', $prompt);
+        self::assertStringContainsString('the 6 of them', $prompt);
     }
 
     public function testUser(): void

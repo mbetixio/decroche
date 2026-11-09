@@ -6,6 +6,8 @@ namespace App\Scenario;
 
 use App\Ai\LanguageModel;
 use App\Ai\ModelException;
+use App\Ai\Output\CallScenario;
+use App\Ai\Output\MeetingScenario;
 use App\Entity\Company;
 use App\Entity\Member;
 use App\Entity\Scenario;
@@ -71,7 +73,7 @@ final readonly class ScenarioWriter
             .([] !== $avoid ? 'Invent new names: use none of these names of people or companies, met recently: '.implode(', ', $avoid).".\n" : '')
             .\sprintf('Difficulty: %d/3.', $draw->difficulty->value);
 
-        $data = $this->model->json($system, $user, 1.0);
+        $data = $this->model->structured($system, $user, CallScenario::class, 1.0)->toArray();
         $scenario = ScenarioFactory::fromArray([
             'difficulty' => $draw->difficulty->value,
             'minutes' => $draw->difficulty->minutes(),
@@ -124,7 +126,7 @@ final readonly class ScenarioWriter
             .(null !== $type ? "Meeting type: {$type->describe()}.\n" : '')
             .\sprintf('Difficulty: %d/3.', $difficulty->value);
 
-        $data = $this->model->json($system, $user, 0.9);
+        $data = $this->model->structured($system, $user, MeetingScenario::class, 0.9)->toArray();
 
         return ScenarioFactory::fromArray(['difficulty' => $difficulty->value, 'minutes' => $minutes] + (null !== $type ? ['type' => $type->value] : []) + $data, $author, $this->clock->now());
     }

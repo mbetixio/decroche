@@ -27,6 +27,8 @@ when@test:
         ai.platform.generic.practicall:
             class: Symfony\AI\Platform\Platform
             factory: ['App\Tests\Fake\ScriptedModel', 'platform']
+            # The dispatcher carries Symfony AI's structured output subscriber, as on the real platform.
+            arguments: ['@event_dispatcher']
         App\Voice\SpeechSynthesizer:
             class: App\Tests\Fake\SilentSynthesizer
 

@@ -7,6 +7,7 @@ namespace App\Tests\Fake;
 use Symfony\AI\Platform\Platform;
 use Symfony\AI\Platform\Result\TextResult;
 use Symfony\AI\Platform\Test\MockPlatformFactory;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The language model in tests: a Symfony AI mock platform that answers each kind of prompt (scenario writer, coach,
@@ -17,9 +18,9 @@ final class ScriptedModel
     /** Every prompt received, as JSON, for assertions. */
     public static array $prompts = [];
 
-    public static function platform(): Platform
+    public static function platform(?EventDispatcherInterface $dispatcher = null): Platform
     {
-        return MockPlatformFactory::createPlatform(static function ($model, array|string $payload): TextResult {
+        return MockPlatformFactory::createPlatform(eventDispatcher: $dispatcher, responses: static function ($model, array|string $payload): TextResult {
             $prompt = \is_string($payload) ? $payload : (string) json_encode($payload, \JSON_UNESCAPED_UNICODE);
             self::$prompts[] = $prompt;
 
@@ -77,19 +78,20 @@ final class ScriptedModel
      */
     private static function debrief(): array
     {
-        $criterion = ['score' => 7, 'comment' => 'Good questions.'];
+        $grade = static fn (string $key, int $score = 7, string $comment = 'Good questions.'): array => ['key' => $key, 'score' => $score, 'comment' => $comment];
 
         return [
-            'criteria' => ['discovery' => $criterion, 'questions' => $criterion, 'listening' => $criterion, 'objections' => $criterion, 'value' => $criterion, 'closing' => ['score' => 4, 'comment' => 'No next step.']],
+            'criteria' => [$grade('discovery'), $grade('questions'), $grade('listening'), $grade('objections'), $grade('value'), $grade('closing', 4, 'No next step.')],
             'summary' => 'A short but well led call.',
-            'next_step' => false,
+            'nextStep' => false,
             'outcome' => 'The deal is still open.',
             'result' => 'Budget found, no next step',
             'objectives' => [['objective' => 'Find the need', 'status' => 'partial', 'evidence' => 'She mentioned lost orders.']],
             'discovered' => ['budget'],
             'missed' => [['rubric' => 'pain', 'what' => 'Orders are lost', 'how' => 'What happens when an order goes wrong?']],
-            'best' => [['quote' => 'What budget have you set aside?', 'why' => 'Direct and useful.']],
+            'best' => [['quote' => 'What budget have you set aside?', 'why' => 'Direct and useful.', 'better' => '']],
             'worst' => [['quote' => 'Hello, it is about your request.', 'why' => 'Too vague.', 'better' => 'Hello Ana, you asked for our rates: may I ask what for?']],
+            'speech' => '',
             'tips' => ['Ask about the pain first.', 'Rephrase.', 'Propose a next step.'],
         ];
     }

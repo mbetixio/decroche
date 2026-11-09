@@ -4,45 +4,51 @@ declare(strict_types=1);
 
 namespace App\Ai;
 
+use App\Ai\Output\Output;
+use Symfony\AI\Platform\Exception\ExceptionInterface;
 use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
 use Symfony\AI\Platform\PlatformInterface;
 use Symfony\AI\Platform\Result\Stream\Delta\TextDelta;
 use Symfony\AI\Platform\Result\StreamResult;
+use Symfony\AI\Platform\StructuredOutput\PlatformSubscriber;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * The language model behind the personas, the coach and the writers, through Symfony AI: plain text, JSON, or a
- * stream of text. Reasoning ("thinking") is turned off: nobody waits minutes for a phone reply.
+ * The language models behind Practicall, through Symfony AI. Two jobs, two models (the same one twice is fine):
+ * - the persona speaks on the phone: its answer is streamed, so a fast model keeps the call lively (AI_PERSONA_MODEL);
+ * - the coach and the writers (debriefs, scenarios, offer sheet) answer in a fixed shape, a structured output, so a
+ *   model that reads closely and follows a JSON schema fits them (AI_COACH_MODEL).
+ * Each job has its own reasoning effort (none, low, medium or high): little on the phone, where every second of silence
+ * shows, more for the coach and the writers, who must read the whole call or offer closely (AI_*_REASONING).
  */
 final readonly class LanguageModel
 {
     public function __construct(
         #[Autowire(service: 'ai.platform.generic.practicall')]
         private PlatformInterface $platform,
-        #[Autowire(env: 'AI_MODEL')]
-        private string $model,
+        #[Autowire(env: 'AI_PERSONA_MODEL')]
+        private string $personaModel,
+        #[Autowire(env: 'AI_COACH_MODEL')]
+        private string $coachModel,
+        #[Autowire(env: 'AI_PERSONA_REASONING')]
+        private string $personaReasoning,
+        #[Autowire(env: 'AI_COACH_REASONING')]
+        private string $coachReasoning,
     ) {
     }
 
     /**
-     * @param list<array{role: 'user'|'assistant', content: string}> $messages the conversation after the system prompt
-     */
-    public function text(string $system, array $messages, float $temperature = 0.8): string
-    {
-        return trim($this->platform->invoke($this->model(), self::bag($system, $messages), $this->options($temperature))->asText());
-    }
-
-    /**
-     * The answer as it is written, piece by piece (a platform that cannot stream gives it in one piece).
+     * The persona's answer as it is written, piece by piece (a platform that cannot stream gives it in one piece).
      *
-     * @param list<array{role: 'user'|'assistant', content: string}> $messages
+     * @param list<array{role: 'user'|'assistant', content: string}> $messages the conversation after the system prompt
      *
      * @return \Generator<int, string>
      */
     public function stream(string $system, array $messages, float $temperature = 0.8): \Generator
     {
-        $result = $this->platform->invoke($this->model(), self::bag($system, $messages), ['stream' => true] + $this->options($temperature));
+        $model = self::name($this->personaModel, 'AI_PERSONA_MODEL');
+        $result = $this->platform->invoke($model, self::bag($system, $messages), ['stream' => true] + self::options($model, $temperature, $this->personaReasoning));
         if (!$result->getResult() instanceof StreamResult) {
             yield $result->asText();
 
@@ -58,49 +64,64 @@ final readonly class LanguageModel
     }
 
     /**
-     * A JSON object, read from the answer even when the model wraps it in a code fence or a sentence.
+     * An answer in the shape of the given class: Symfony AI sends the class as a strict JSON schema and turns the
+     * model's JSON back into an object of that class.
      *
-     * @return array<mixed>
+     * @template T of Output
      *
-     * @throws ModelException when the answer holds no JSON object
+     * @param class-string<T> $shape
+     *
+     * @return T
+     *
+     * @throws ModelException when the model fails or its answer does not fit the shape
      */
-    public function json(string $system, string $user, float $temperature = 0.9): array
+    public function structured(string $system, string $user, string $shape, float $temperature = 0.7): Output
     {
-        $text = $this->text($system, [['role' => 'user', 'content' => $user]], $temperature);
-        $text = (string) preg_replace('/^```(?:json)?\s*|\s*```$/m', '', $text);
-        $start = strpos($text, '{');
-        $end = strrpos($text, '}');
-        if (false !== $start && false !== $end) {
-            $data = json_decode(substr($text, $start, $end - $start + 1), true);
-            if (\is_array($data)) {
-                return $data;
-            }
+        $model = self::name($this->coachModel, 'AI_COACH_MODEL');
+        try {
+            $answer = $this->platform->invoke(
+                $model,
+                self::bag($system, [['role' => 'user', 'content' => $user]]),
+                [PlatformSubscriber::RESPONSE_FORMAT => $shape] + self::options($model, $temperature, $this->coachReasoning),
+            )->asObject();
+        } catch (ExceptionInterface $e) {
+            throw new ModelException('The model did not answer in the expected shape: '.$e->getMessage(), previous: $e);
         }
 
-        throw new ModelException('The model did not answer with a JSON object.');
+        return $answer instanceof $shape ? $answer : throw new ModelException(\sprintf('The model did not answer with a "%s".', $shape));
     }
 
     /**
-     * The model's name, which must be set.
+     * A model's name, which must be set.
      *
      * @return non-empty-string
      *
-     * @throws ModelException when AI_MODEL is empty
+     * @throws ModelException when the variable is empty
      */
-    private function model(): string
+    private static function name(string $model, string $variable): string
     {
-        return '' !== $this->model ? $this->model : throw new ModelException('No model is set: give AI_MODEL in .env.local.');
+        return '' !== $model ? $model : throw new ModelException("No model is set: give {$variable} in .env.local.");
     }
 
     /**
+     * The request's options. The reasoning effort is said the way each model family understands it, and left out for
+     * the others, which would reject it.
+     *
      * @return array<string, mixed>
      */
-    private function options(float $temperature): array
+    private static function options(string $model, float $temperature, string $reasoning): array
     {
-        // DeepSeek models reason before answering unless told not to, and cut long answers short by default.
-        $deepseek = str_contains(strtolower($this->model), 'deepseek') ? ['thinking' => ['type' => 'disabled'], 'max_tokens' => 32000] : [];
+        $model = strtolower($model);
+        $reasoning = \in_array($reasoning, ['none', 'low', 'medium', 'high'], true) ? $reasoning : 'low';
 
-        return ['temperature' => $temperature] + $deepseek;
+        return ['temperature' => $temperature] + match (true) {
+            // DeepSeek thinks or not, and cuts long answers short by default.
+            str_contains($model, 'deepseek') => ['max_tokens' => 32000] + (\in_array($reasoning, ['none', 'low'], true) ? ['thinking' => ['type' => 'disabled']] : []),
+            // gpt-oss always reasons a little: "low" is its least.
+            str_contains($model, 'gpt-oss') => ['reasoning_effort' => 'none' === $reasoning ? 'low' : $reasoning],
+            str_starts_with($model, 'gpt-5') || str_starts_with($model, 'openai/gpt-5') => ['reasoning_effort' => 'none' === $reasoning ? 'minimal' : $reasoning],
+            default => [],
+        };
     }
 
     /**

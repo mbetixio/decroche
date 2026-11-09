@@ -39,17 +39,17 @@ final readonly class CoachPrompt
             The criteria, graded 0 to 10 (5 = fair, 8 = very good, 10 = exemplary; 0 to 2 if the skill is missing):
             {$criteria}
             Answer only with a JSON object; every text value is written in {$language}:
-            {"criteria": {"{$first}": {"score": 0, "comment": "one factual sentence, based on the conversation"}, … the {$count} criteria, with these keys},
+            {"criteria": [{"key": "{$first}", "score": 0, "comment": "one factual sentence, based on the conversation"}, … one item per criterion, the {$count} of them, with these keys],
              "summary": "two or three sentences: what happened and the seller's level",
-             "next_step": true or false (was a concrete next step obtained?),
+             "nextStep": true or false (was a concrete next step obtained?),
              "outcome": "one sentence: where the deal stands at the end of the meeting",
              "result": "the result of the call in a few words, like a headline",
              "objectives": [{"objective": "the objective, as given", "status": "reached, partial or missed", "evidence": "what in the conversation shows it"}],
              "discovered": ["the keys of the brief sections the seller really got out in the conversation, even partly but on the essentials"],
              "missed": [{"rubric": "a brief key not discovered (budget, pain, decision, objections, yes, secret)", "what": "what was to be discovered", "how": "the question that would have brought it out"}],
-             "best": [{"quote": "a line of the seller, quoted word for word", "why": "why it is good"}],
+             "best": [{"quote": "a line of the seller, quoted word for word", "why": "why it is good", "better": ""}],
              "worst": [{"quote": "a line of the seller, quoted word for word", "why": "what is wrong", "better": "what they could have said instead"}],
-             "speech": "one sentence on the form of the call (talk share, questions, fillers, pace), only if the figures say something",
+             "speech": "one sentence on the form of the call (talk share, questions, fillers, pace), only if the figures say something, otherwise empty",
              "tips": ["three concrete, actionable tips for the next meeting"]}
             objectives: one item per objective of the call if any, in order; be strict, an objective is only reached if the
             conversation clearly shows it and thanks to the seller: if the client proposed the next step on their own without
