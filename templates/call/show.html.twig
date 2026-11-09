@@ -49,4 +49,5 @@
         {% endfor %}
     </div>
 </details>
+{% if mine %}{{ include('play/_draw_overlay.html.twig') }}{% endif %}
 {% endblock %}
