@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Company\DemoCalls;
 use App\Company\DemoCompany;
 use App\Company\TeamManager;
 use App\Enum\Language;
@@ -22,9 +23,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Installs the instance: the database schema, then either nothing more (the first visit opens the onboarding), or with
- * --demo the example company, its library and a first manager, ready to play.
+ * --demo the example company, its library, a team with debriefed calls and a first manager, ready to play.
  */
-#[AsCommand(name: 'app:install', description: 'Creates the database; with --demo, loads the example company and a manager.')]
+#[AsCommand(name: 'app:install', description: 'Creates the database; with --demo, loads the example company, its team and calls, and a manager.')]
 final readonly class InstallCommand
 {
     public function __construct(
@@ -32,6 +33,7 @@ final readonly class InstallCommand
         private CompanyRepository $companies,
         private MemberRepository $members,
         private DemoCompany $demo,
+        private DemoCalls $calls,
         private TeamManager $team,
         private EntityManagerInterface $em,
         private ClockInterface $clock,
@@ -48,7 +50,10 @@ final readonly class InstallCommand
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
         $io->section('Database');
-        $application->doRun(new ArrayInput(['command' => 'doctrine:migrations:migrate', '--no-interaction' => true, '--allow-no-migration' => true]), $io);
+        // Never asks for a confirmation: the install runs unattended (Docker, CI) as well as by hand.
+        $migrate = new ArrayInput(['command' => 'doctrine:migrations:migrate', '--allow-no-migration' => true]);
+        $migrate->setInteractive(false);
+        $application->doRun($migrate, $io);
 
         if (!$demo) {
             $io->success('Installed. Open the instance in a browser: the onboarding sets it up step by step.');
@@ -67,14 +72,16 @@ final readonly class InstallCommand
         $this->demo->apply($company);
         $scenarios = $this->demo->loadLibrary($company->language);
         $password ??= bin2hex(random_bytes(6));
-        $this->team->create('Demo Manager', $email, $password, MemberRole::Manager, 'Sales manager of the example company, I train the team and sell myself.');
+        $manager = $this->team->create('Demo Manager', $email, $password, MemberRole::Manager);
         $company->completeOnboarding($this->clock->now());
         $this->em->flush();
+        $calls = $this->calls->load($company->language, $manager);
 
         $io->definitionList(
             ['Company' => $company->name.' ('.$company->language->englishName().')'],
             ['Situations' => (string) \count($company->situations())],
             ['Library' => $scenarios.' scenarios'],
+            ['Team' => $calls.' debriefed calls, by the manager and a seller'],
             ['Manager' => $email],
             ['Password' => $password],
         );
