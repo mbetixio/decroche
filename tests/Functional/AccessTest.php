@@ -26,7 +26,7 @@ final class AccessTest extends FunctionalTestCase
         $this->onboardedCompany();
         $this->member();
         $this->client->request('GET', '/login');
-        $this->submit('Sign in', ['_username' => 'seller@practicall.test', '_password' => 'password-123']);
+        $this->submit('Sign in', ['_username' => 'seller@decroche.test', '_password' => 'password-123']);
         self::assertResponseRedirects('http://localhost/');
         $this->client->followRedirect();
         self::assertSelectorTextContains('h1', 'Ready for a call?');
@@ -37,7 +37,7 @@ final class AccessTest extends FunctionalTestCase
         $this->onboardedCompany();
         $this->member();
         $this->client->request('GET', '/login');
-        $this->submit('Sign in', ['_username' => 'seller@practicall.test', '_password' => 'wrong']);
+        $this->submit('Sign in', ['_username' => 'seller@decroche.test', '_password' => 'wrong']);
         $this->client->followRedirect();
         self::assertSelectorExists('.flash.error');
     }
@@ -71,7 +71,7 @@ final class AccessTest extends FunctionalTestCase
     public function testEveryPageRendersTranslated(Language $language): void
     {
         $this->onboardedCompany($language);
-        $this->signIn($this->member('boss@practicall.test', MemberRole::Manager));
+        $this->signIn($this->member('boss@decroche.test', MemberRole::Manager));
         foreach (['/', '/library', '/library/1', '/library/1/edit', '/library/new', '/prepare', '/progress', '/offer', '/calls', '/team', '/settings', '/settings/situations', '/settings/scorecard', '/account', '/me', '/call/1'] as $page) {
             $crawler = $this->client->request('GET', $page);
             self::assertResponseIsSuccessful($page);

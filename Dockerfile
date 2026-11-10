@@ -1,4 +1,4 @@
-# Practicall in a container: FrankenPHP (PHP 8.5 behind Caddy, which streams the persona's replies as they are written)
+# Décroche in a container: FrankenPHP (PHP 8.5 behind Caddy, which streams the persona's replies as they are written)
 # and edge-tts, which synthesizes Microsoft Edge's neural voices.
 FROM dunglas/frankenphp:1.13.5-php8.5-trixie
 
@@ -11,16 +11,16 @@ RUN install-php-extensions pdo_sqlite intl opcache zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-COPY docker/php.ini $PHP_INI_DIR/conf.d/zz-practicall.ini
+COPY docker/php.ini $PHP_INI_DIR/conf.d/zz-decroche.ini
 
 WORKDIR /app
 ENV APP_ENV=prod \
     APP_DEBUG=0 \
     COMPOSER_ALLOW_SUPERUSER=1 \
     EDGE_TTS=/opt/edge-tts/bin/edge-tts \
-    DATABASE_URL=sqlite:////var/practicall/data.db \
-    SESSION_SAVE_PATH=/var/practicall/sessions \
-    VOICES_DIR=/var/practicall/voices \
+    DATABASE_URL=sqlite:////var/decroche/data.db \
+    SESSION_SAVE_PATH=/var/decroche/sessions \
+    VOICES_DIR=/var/decroche/voices \
     SERVER_NAME=:80
 
 # The dependencies first (a layer cached as long as composer.lock does not change), then the code.
@@ -35,7 +35,7 @@ RUN composer dump-autoload --classmap-authoritative --no-dev \
     && chmod +x docker/entrypoint.sh
 
 # The database, the sessions, the voices already synthesized, and the secrets generated on first boot.
-VOLUME /var/practicall
+VOLUME /var/decroche
 EXPOSE 80
 ENTRYPOINT ["/app/docker/entrypoint.sh"]
 CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]

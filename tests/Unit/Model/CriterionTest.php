@@ -9,7 +9,7 @@ use App\Model\Criterion;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Practicall's default scorecard in each working language, and a criterion's array form.
+ * Décroche's default scorecard in each working language, and a criterion's array form.
  */
 final class CriterionTest extends TestCase
 {

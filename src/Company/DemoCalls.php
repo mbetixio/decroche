@@ -21,9 +21,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * The example team and its debriefed calls (config/practicall/{language}/calls.yaml): with them, a demo instance shows
+ * The example team and its debriefed calls (config/decroche/{language}/calls.yaml): with them, a demo instance shows
  * a team's progress, the manager's view and the MCP statistics from the first sign-in. The calls are real ones, played
- * and debriefed on Practicall; their dates count back from today.
+ * and debriefed on Décroche; their dates count back from today.
  *
  * @phpstan-type DemoPerson array{name: string, email?: string, profile: string}
  * @phpstan-type DemoCall array{seller: string, days_ago: int, scenario: array{situation?: array{key: string}&array<string, mixed>}&array<string, mixed>, lines: list<array{speaker: string, text: string, second: int, voice_ms?: int}>, ended_by: string, seconds: int, revealed: list<string>, score: int, debrief: array<string, mixed>}
@@ -35,7 +35,7 @@ final readonly class DemoCalls
         private UserPasswordHasherInterface $hasher,
         private EntityManagerInterface $em,
         private ClockInterface $clock,
-        #[Autowire('%kernel.project_dir%/config/practicall')]
+        #[Autowire('%kernel.project_dir%/config/decroche')]
         private string $directory,
     ) {
     }

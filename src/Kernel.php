@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
 /**
- * Practicall's kernel: the micro-kernel, with the application's time zone set on boot.
+ * Décroche's kernel: the micro-kernel, with the application's time zone set on boot.
  */
 final class Kernel extends BaseKernel
 {

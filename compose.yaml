@@ -1,13 +1,13 @@
-# Practicall in one container, over plain HTTP on one port (put your own HTTPS reverse proxy in front for a public
+# Décroche in one container, over plain HTTP on one port (put your own HTTPS reverse proxy in front for a public
 # domain). The model's key comes from your environment or a .env file next to this one, never from the repository:
 #   AI_API_KEY=… docker compose up -d --build        then open http://localhost:7077
 services:
-  practicall:
+  decroche:
     build: .
-    image: practicall:latest
+    image: decroche:latest
     restart: unless-stopped
     ports:
-      - "${PRACTICALL_PORT:-7077}:80"
+      - "${DECROCHE_PORT:-7077}:80"
     environment:
       # Hugging Face Inference Providers by default (a token hf_…); any OpenAI-compatible API works (see the README).
       AI_API_KEY: ${AI_API_KEY:?Set AI_API_KEY to a Hugging Face token (hf_…) or another provider key}
@@ -23,13 +23,13 @@ services:
       DEFAULT_URI: ${DEFAULT_URI:-http://localhost:7077}
       MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-localhost,127.0.0.1}
       TRUSTED_PROXIES: ${TRUSTED_PROXIES:-private_ranges}
-      # Where your users can get the source code (AGPL-3.0): your fork, if you modify Practicall.
-      SOURCE_URL: ${SOURCE_URL:-https://github.com/mbetixio/practicall}
+      # Where your users can get the source code (AGPL-3.0): your fork, if you modify Décroche.
+      SOURCE_URL: ${SOURCE_URL:-https://github.com/mbetixio/decroche}
       # 1: skip the onboarding and load the example company (with a manager printed in the logs).
-      PRACTICALL_DEMO: ${PRACTICALL_DEMO:-0}
-      PRACTICALL_LANGUAGE: ${PRACTICALL_LANGUAGE:-en}
+      DECROCHE_DEMO: ${DECROCHE_DEMO:-0}
+      DECROCHE_LANGUAGE: ${DECROCHE_LANGUAGE:-en}
     volumes:
-      - practicall:/var/practicall
+      - decroche:/var/decroche
     healthcheck:
       test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 80) ? 0 : 1);"]
       interval: 30s
@@ -38,4 +38,4 @@ services:
       retries: 3
 
 volumes:
-  practicall:
+  decroche:

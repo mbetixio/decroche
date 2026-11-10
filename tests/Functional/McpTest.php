@@ -71,14 +71,14 @@ final class McpTest extends FunctionalTestCase
     {
         $this->connect($this->member());
         $uris = array_column($this->rpc('resources/list')['resources'], 'uri');
-        foreach (['practicall://offer', 'practicall://situations', 'practicall://scorecard'] as $uri) {
+        foreach (['decroche://offer', 'decroche://situations', 'decroche://scorecard'] as $uri) {
             self::assertContains($uri, $uris);
         }
 
-        $offer = $this->rpc('resources/read', ['uri' => 'practicall://offer'])['contents'][0];
+        $offer = $this->rpc('resources/read', ['uri' => 'decroche://offer'])['contents'][0];
         self::assertStringStartsWith("Etixio\n\n", $offer['text']);
         self::assertStringContainsString('The classic objections to offshore', $offer['text']);
-        $scorecard = json_decode($this->rpc('resources/read', ['uri' => 'practicall://scorecard'])['contents'][0]['text'], true);
+        $scorecard = json_decode($this->rpc('resources/read', ['uri' => 'decroche://scorecard'])['contents'][0]['text'], true);
         self::assertSame('closing', end($scorecard['criteria'])['key']);
     }
 
@@ -126,11 +126,11 @@ final class McpTest extends FunctionalTestCase
         $team = $this->tool('team');
         self::assertCount(2, $team['members']);
 
-        $mission = $this->tool('give_mission', ['email' => 'seller@practicall.test', 'situation' => 'price_request', 'calls' => 2, 'target' => 70]);
+        $mission = $this->tool('give_mission', ['email' => 'seller@decroche.test', 'situation' => 'price_request', 'calls' => 2, 'target' => 70]);
         self::assertSame('Seller Test', $mission['for']);
-        self::assertSame(1, \count($this->tool('member_progress', ['email' => 'seller@practicall.test'])['missions']));
+        self::assertSame(1, \count($this->tool('member_progress', ['email' => 'seller@decroche.test'])['missions']));
 
-        $invitation = $this->tool('invite', ['email' => 'new@practicall.test']);
+        $invitation = $this->tool('invite', ['email' => 'new@decroche.test']);
         self::assertStringContainsString('/join/', $invitation['link']);
     }
 

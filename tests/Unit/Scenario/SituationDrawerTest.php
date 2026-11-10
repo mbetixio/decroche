@@ -18,7 +18,7 @@ use Random\Randomizer;
 
 /**
  * Drawing a surprise call with a seeded randomizer: a given situation, recent ones avoided, the dressing taken from
- * the company and the canvas (config/practicall), the tone from the situation and the difficulty around the target.
+ * the company and the canvas (config/decroche), the tone from the situation and the difficulty around the target.
  */
 final class SituationDrawerTest extends TestCase
 {
@@ -26,7 +26,7 @@ final class SituationDrawerTest extends TestCase
 
     private static function drawer(int $seed = 42): SituationDrawer
     {
-        return new SituationDrawer(new SituationCanvas(\dirname(__DIR__, 3).'/config/practicall'), new Randomizer(new Mt19937($seed)));
+        return new SituationDrawer(new SituationCanvas(\dirname(__DIR__, 3).'/config/decroche'), new Randomizer(new Mt19937($seed)));
     }
 
     private static function catalogue(Language $language = Language::English): Company
@@ -86,7 +86,7 @@ final class SituationDrawerTest extends TestCase
     public function testTheDressing(): void
     {
         $draw = self::drawer()->draw(self::catalogue(), key: 'unhappy_client');
-        $canvas = new SituationCanvas(\dirname(__DIR__, 3).'/config/practicall');
+        $canvas = new SituationCanvas(\dirname(__DIR__, 3).'/config/decroche');
 
         self::assertInstanceOf(Draw::class, $draw);
         self::assertContains($draw->sector, ['Retail', 'Banking']);

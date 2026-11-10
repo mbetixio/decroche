@@ -16,7 +16,7 @@ final class VoiceCachePrunerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dir = sys_get_temp_dir().'/practicall-voices-'.bin2hex(random_bytes(4));
+        $this->dir = sys_get_temp_dir().'/decroche-voices-'.bin2hex(random_bytes(4));
         mkdir($this->dir);
     }
 

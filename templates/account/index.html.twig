@@ -22,7 +22,7 @@
             {% if key %}
                 <div class="field" data-controller="copy">
                     <label for="mcp-url">{{ 'account.mcp_url'|trans }}</label>
-                    <div class="copy-field"><input id="mcp-url" readonly value="{{ url('_mcp_endpoint_practicall') }}?key={{ key }}" data-copy-target="source" aria-describedby="mcp-once"><button type="button" class="btn sm" data-action="copy#copy"><twig:Icon name="copy" /><span data-copy-target="label">{{ 'action.copy'|trans }}</span></button></div>
+                    <div class="copy-field"><input id="mcp-url" readonly value="{{ url('_mcp_endpoint_decroche') }}?key={{ key }}" data-copy-target="source" aria-describedby="mcp-once"><button type="button" class="btn sm" data-action="copy#copy"><twig:Icon name="copy" /><span data-copy-target="label">{{ 'action.copy'|trans }}</span></button></div>
                     <p class="help text-warn" id="mcp-once">{{ 'account.mcp_once'|trans }}</p>
                 </div>
             {% endif %}

@@ -9,15 +9,15 @@
     <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#14161b" media="(prefers-color-scheme: dark)">
     {# The page's own title (already escaped by its block), then the product's name. #}
-    {% set page_title = block('title') is defined and block('title')|trim != '' ? block('title')|trim ~ ' · Practicall' : 'Practicall' %}
+    {% set page_title = block('title') is defined and block('title')|trim != '' ? block('title')|trim ~ ' · Décroche' : 'Décroche' %}
     <title>{{ page_title|raw }}</title>
     <meta name="description" content="{{ 'meta.description'|trans }}">
     {# An instance holds a company's private calls: search engines stay out, links still get a rich preview. #}
     <meta name="robots" content="noindex, nofollow">
-    <meta name="application-name" content="Practicall">
-    <meta name="apple-mobile-web-app-title" content="Practicall">
+    <meta name="application-name" content="Décroche">
+    <meta name="apple-mobile-web-app-title" content="Décroche">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Practicall">
+    <meta property="og:site_name" content="Décroche">
     <meta property="og:title" content="{{ page_title|raw }}">
     <meta property="og:description" content="{{ 'meta.description'|trans }}">
     <meta property="og:image" content="{{ app.request.schemeAndHttpHost }}/brand/og-image.png">
@@ -42,7 +42,7 @@
     <aside class="sidebar">
         <a class="brand" href="{{ path('home') }}">
             <img class="brand-logo" src="/brand/logo.svg" alt="" width="34" height="34">
-            <span>Practicall<small>{{ company().name }}</small></span>
+            <span>Décroche<small>{{ company().name }}</small></span>
         </a>
         {# On phones the sidebar becomes a bottom bar: the secondary links ("desktop-only") are reached from their pages,
            and the account takes the last place. #}

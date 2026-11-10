@@ -1,6 +1,8 @@
-<p align="center"><img src="public/brand/logo.svg" width="110" alt="Practicall"></p>
+<p align="center"><img src="public/brand/logo.svg" width="110" alt="Décroche"></p>
 
-<h1 align="center">Practicall</h1>
+<h1 align="center">Décroche</h1>
+
+<p align="center"><i>décroche</i> /de.kʁɔʃ/ — French for <i>"pick up the phone"</i>.</p>
 
 <p align="center"><b>Rehearse your sales calls out loud, against an AI client who knows things you don't —<br>including the real client meeting you have tomorrow, straight from its e-mail thread in Claude.<br>Then get graded by a coach, and follow your progress.</b></p>
 
@@ -17,7 +19,7 @@
 Sales people learn on real prospects. Every fumbled discovery question, every price given too early, every
 "let me send you a brochure" costs a deal — and nobody tells them what went wrong.
 
-**Practicall is a flight simulator for sales calls.** A seller picks up the phone (a real phone screen, with a voice,
+**Décroche is a flight simulator for sales calls.** A seller picks up the phone (a real phone screen, with a voice,
 not a chatbot) and talks to an AI client built from *their own company's* offer and situations: a price request from
 the website, a furious client, a CTO who is about to leave, a renewal with a discount request… The client has a
 **hidden brief** — their real budget, their real pain, who decides, their objections, what would get a yes — and only
@@ -36,7 +38,7 @@ sheet and 14–18 call situations specific to its business, in English or French
 | 🎯 **A debrief that teaches** | A score out of 100 on your scorecard, the call's objectives judged one by one, the hidden brief revealed with what you missed and *the question that would have found it*, your best and worst lines quoted word for word with a better alternative, three tips, talk share and filler words. Replay the call from any of your lines, or *train on this point*: a new call built to test your weakest criterion. |
 | 📈 **Progress that means something** | No XP or badges: the difficulty of your next calls follows your last five scores, and the home page tells you why, your trend, and the one criterion to work on. |
 | 🧑‍💼 **Managers follow the team** | The team board (difficulty, average, trend, weakest criterion per seller), each seller's debriefs, missions ("3 price-request calls scored 70+ by Friday"), invitations, the company's own library of scenarios and scorecard. |
-| 🤖 **Rehearse your next real call, from Claude** | Got a client meeting tomorrow? Ask Claude (connected to your mailbox) to get you ready: it reads the meeting's e-mail thread, and Practicall turns it into a practice call with *that* client — their context, their likely objections, a hidden brief — ready to take out loud in one click. Then, still in conversation, read your debriefs, ask why you keep losing at closing, and (for managers) follow and coach the team. |
+| 🤖 **Rehearse your next real call, from Claude** | Got a client meeting tomorrow? Ask Claude (connected to your mailbox) to get you ready: it reads the meeting's e-mail thread, and Décroche turns it into a practice call with *that* client — their context, their likely objections, a hidden brief — ready to take out loud in one click. Then, still in conversation, read your debriefs, ask why you keep losing at closing, and (for managers) follow and coach the team. |
 
 <table>
 <tr>
@@ -57,7 +59,7 @@ sheet and 14–18 call situations specific to its business, in English or French
 </tr>
 </table>
 
-## Practicall in Claude (MCP)
+## Décroche in Claude (MCP)
 
 The MCP server turns Claude (or any MCP client) into a sales coach that knows your company, your calls and your team.
 Each member connects with a personal address, so Claude only ever sees what that member may see.
@@ -66,7 +68,7 @@ Each member connects with a personal address, so Claude only ever sees what that
 
 > *"Find the last e-mail from Satelis Mobile and get me ready for tomorrow's call with their CEO."*
 
-Claude reads the e-mail, passes it to `prepare_call`, and Practicall writes a rehearsal of *that* meeting — the person,
+Claude reads the e-mail, passes it to `prepare_call`, and Décroche writes a rehearsal of *that* meeting — the person,
 their context, their likely objections and a credible hidden brief you will have to uncover. Claude hands you a
 signed link: the phone screen opens in your browser, already signed in, and you rehearse out loud. A prospect sheet,
 meeting notes or a CRM export work just as well.
@@ -95,8 +97,8 @@ train that criterion; with `mode: chat` the call is even played in writing, in t
 | `review_my_calls` | Reads your figures and debriefs, names the skill that holds you back with your own quotes, and offers a call that trains it. |
 | `coach_my_team` | For managers: who progresses, who is stuck and on what, and missions to give once you approve them. |
 
-And *resources* a client can attach to a conversation: `practicall://offer` (the offer sheet),
-`practicall://situations` (the catalogue) and `practicall://scorecard` (the criteria the coach grades).
+And *resources* a client can attach to a conversation: `decroche://offer` (the offer sheet),
+`decroche://situations` (the catalogue) and `decroche://scorecard` (the criteria the coach grades).
 
 | Tool | |
 |---|---|
@@ -110,13 +112,13 @@ And *resources* a client can attach to a conversation: `practicall://offer` (the
 
 The persona's hidden brief never leaves the server before the debrief: the client's model cannot whisper the answers.
 
-**Connect it.** In Practicall, open *My account → Train from Claude → Create my MCP address*, then in Claude add a
+**Connect it.** In Décroche, open *My account → Train from Claude → Create my MCP address*, then in Claude add a
 custom connector with that address (`https://your-instance/mcp?key=pcl_…`). The MCP endpoint needs a public HTTPS
 address for Claude to reach it (see [Deploy](#deploy-on-a-server)).
 
 ## Run it
 
-You need **an API key for a language model**. Practicall uses [Hugging Face Inference Providers](https://huggingface.co/docs/inference-providers)
+You need **an API key for a language model**. Décroche uses [Hugging Face Inference Providers](https://huggingface.co/docs/inference-providers)
 by default — one token gives access to fast open models — and works with any OpenAI-compatible API.
 
 ### 1. Get a Hugging Face token (2 minutes)
@@ -132,7 +134,7 @@ debrief) costs a few cents with the default model.
 ### 2a. With Docker (recommended)
 
 ```bash
-git clone https://github.com/<you>/practicall.git && cd practicall
+git clone https://github.com/<you>/decroche.git && cd decroche
 echo "AI_API_KEY=hf_your_token" > .env.docker
 docker compose --env-file .env.docker up -d --build
 ```
@@ -142,20 +144,20 @@ Open <http://localhost:7077>. Then choose:
 - **A real instance, set up from your company** (default): the onboarding starts. Pick the language, create the first
   manager account, give your website (analysed in a minute or two), review the offer, the situations and the
   scorecard, invite your team.
-- **A demo instance, with test data**: add `PRACTICALL_DEMO=1` to `.env.docker` before starting.
+- **A demo instance, with test data**: add `DECROCHE_DEMO=1` to `.env.docker` before starting.
 
   ```bash
-  echo "PRACTICALL_DEMO=1" >> .env.docker
+  echo "DECROCHE_DEMO=1" >> .env.docker
   docker compose --env-file .env.docker up -d --build
-  docker compose logs practicall | grep -A1 Manager     # the demo manager's e-mail and password
+  docker compose logs decroche | grep -A1 Manager     # the demo manager's e-mail and password
   ```
 
   The onboarding is skipped: an example company (a software services firm), its 24 situations, a library of 7
   scenarios, and a small team are created. You sign in as its manager, Alex Morgan, who already has four debriefed
   calls (scores climbing from 1 to 70) next to a junior seller's two, so the home page, the progress, the team board
-  and the MCP statistics are full from the start. `PRACTICALL_LANGUAGE=fr` gives the same in French.
+  and the MCP statistics are full from the start. `DECROCHE_LANGUAGE=fr` gives the same in French.
 
-The database, the sessions, the synthesized voices and the instance's own secrets live in the `practicall` volume:
+The database, the sessions, the synthesized voices and the instance's own secrets live in the `decroche` volume:
 `docker compose down` keeps them, `docker compose down -v` starts over.
 
 ### 2b. Without Docker
@@ -163,7 +165,7 @@ The database, the sessions, the synthesized voices and the instance's own secret
 Requires PHP 8.5 with `pdo_sqlite` and `intl`, [Composer](https://getcomposer.org), and Python 3 for the voices.
 
 ```bash
-git clone https://github.com/<you>/practicall.git && cd practicall
+git clone https://github.com/<you>/decroche.git && cd decroche
 composer install
 echo "AI_API_KEY=hf_your_token" > .env.local     # never committed
 python3 -m venv var/edge-tts && var/edge-tts/bin/pip install edge-tts==7.3.1   # optional: neural voices
@@ -206,9 +208,9 @@ Put your values in `.env.local` (without Docker) or `.env.docker` (with Docker).
 | `DEFAULT_URI` | `http://127.0.0.1:8000` | The instance's public address, for the links it generates (call links, invitations). |
 | `MCP_ALLOWED_HOSTS` | `localhost,127.0.0.1,…` | Host names the MCP endpoint answers on: add your domain. |
 | `TRUSTED_PROXIES` | — | Your reverse proxy, e.g. `private_ranges`. |
-| `SOURCE_URL` | this repository | Where your users can get the source code, linked at the foot of every page (AGPL-3.0): point it at your fork if you modify Practicall. |
-| `PRACTICALL_DEMO`, `PRACTICALL_LANGUAGE` | `0`, `en` | Docker only: load the demo data instead of the onboarding. |
-| `PRACTICALL_PORT` | `7077` | Docker only: the port on your machine. |
+| `SOURCE_URL` | this repository | Where your users can get the source code, linked at the foot of every page (AGPL-3.0): point it at your fork if you modify Décroche. |
+| `DECROCHE_DEMO`, `DECROCHE_LANGUAGE` | `0`, `en` | Docker only: load the demo data instead of the onboarding. |
+| `DECROCHE_PORT` | `7077` | Docker only: the port on your machine. |
 | `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | The neural voices and their cache. |
 
 **Choosing a model.** The persona answers in one to four sentences and must start *fast* (it is a phone call); the
@@ -279,7 +281,7 @@ src/
   Controller/   thin controllers; Form/ typed models validated with constraints; Twig/ the CRM-style document
   Entity/ Enum/ Model/ Repository/  the domain
 templates/      Twig with anonymous Twig components; assets/ Stimulus controllers and one CSS design system (light and dark)
-translations/   English and French; config/practicall/{en,fr}/ the example company, its calls and the situation canvas
+translations/   English and French; config/decroche/{en,fr}/ the example company, its calls and the situation canvas
 ```
 
 ## Quality
@@ -301,14 +303,14 @@ A company's instance stays out of search engines (`noindex`, `robots.txt`).
 
 ## Built for the Symfony AI & MCP Hackathon
 
-Practicall was built for the [Symfony AI & MCP Hackathon](https://symfony.com/hackathon) (26 October – 22 November
+Décroche was built for the [Symfony AI & MCP Hackathon](https://symfony.com/hackathon) (26 October – 22 November
 2026), to show what Symfony AI and the PHP MCP SDK make possible in a real product: a model playing a person on the
 phone in real time, a coach grading structured feedback, and the same product reachable from Claude — down to
 rehearsing tomorrow's client meeting from its e-mail thread.
 
 ## License
 
-Practicall is free and open source software, released under the [GNU Affero General Public License v3](LICENSE)
+Décroche is free and open source software, released under the [GNU Affero General Public License v3](LICENSE)
 (AGPL-3.0-or-later). You may use it, study it, modify it and run your own instance, for free. If you modify it and
 offer it to others as a network service, you must make your modified source code available to them under the same
 license.

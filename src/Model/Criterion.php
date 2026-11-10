@@ -19,7 +19,7 @@ final readonly class Criterion
     }
 
     /**
-     * Practicall's own scorecard, in the working language, used until the company writes its own.
+     * Décroche's own scorecard, in the working language, used until the company writes its own.
      *
      * @return array<string, self>
      */

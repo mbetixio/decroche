@@ -24,7 +24,7 @@ final class DemoCallsTest extends FunctionalTestCase
         self::assertSame(6, $this->service(DemoCalls::class)->load(Language::English, $manager));
 
         self::assertSame('Alex Morgan', $manager->name, 'The signed-in manager plays the example lead.');
-        $junior = $this->service(MemberRepository::class)->findOneByEmail('jordan.lee@practicall.test');
+        $junior = $this->service(MemberRepository::class)->findOneByEmail('jordan.lee@decroche.test');
         self::assertNotNull($junior);
         $calls = $this->service(CallRepository::class)->all();
         self::assertCount(6, $calls);

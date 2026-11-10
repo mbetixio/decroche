@@ -12,7 +12,7 @@ use App\Tests\Unit\Fixtures;
 use PHPUnit\Framework\TestCase;
 
 /**
- * The company: its catalogue of situations, its sectors, its scorecard (Practicall's or its own), readiness and the
+ * The company: its catalogue of situations, its sectors, its scorecard (Décroche's or its own), readiness and the
  * onboarding steps it reached.
  */
 final class CompanyTest extends TestCase

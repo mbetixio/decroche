@@ -1,4 +1,4 @@
-# Practicall's interface in English. Keys are grouped by page; enums use enum.<name>.<value>.
+# Décroche's interface in English. Keys are grouped by page; enums use enum.<name>.<value>.
 nav:
     main: 'Main navigation'
     play: 'Play'
@@ -83,7 +83,7 @@ onboarding:
     step_of: 'Step %n% of %total%'
     welcome:
         title: 'Train your sellers for the hard calls'
-        lead: 'Practicall puts your sellers on the phone with AI personas that play your real clients: they pick up, push back and hide their budget. After each call, a debrief graded against your own scorecard.'
+        lead: 'Décroche puts your sellers on the phone with AI personas that play your real clients: they pick up, push back and hide their budget. After each call, a debrief graded against your own scorecard.'
         f1_title: 'Situations drawn from your offer'
         f1: 'A price request, an unhappy client, a quote follow-up… drawn at random, as in real life.'
         f2_title: 'A real call, out loud'
@@ -105,7 +105,7 @@ onboarding:
         analyze: 'Analyse'
     analysis:
         title: 'Analysing'
-        lead: 'Practicall is getting to know %company%: a minute or two.'
+        lead: 'Décroche is getting to know %company%: a minute or two.'
         read: 'Reading %site%'
         offer: 'Writing the offer sheet'
         clients: 'Finding your typical clients'
@@ -130,7 +130,7 @@ onboarding:
         later: 'Later'
     done:
         title: 'You''re all set'
-        lead: 'Practicall now knows %company%.'
+        lead: 'Décroche now knows %company%.'
         offer: 'Offer sheet'
         situations: 'Situations'
         criteria: 'Criteria'
@@ -138,7 +138,7 @@ onboarding:
         first_call: 'A situation is waiting for you.'
         first_call_text: 'You won''t know which until you pick up: as in real life. Talk into the microphone, as on the phone.'
         go: 'Go to the home page'
-        flash: 'Welcome to Practicall!'
+        flash: 'Welcome to Décroche!'
     waiting:
         title: 'Just a little longer'
         text: 'A manager is setting %company% up. Come back in a few minutes.'
@@ -242,7 +242,7 @@ account:
     mcp_how: 'How to add it to Claude'
     mcp_step1: 'In Claude, open Settings → Connectors → Add custom connector.'
     mcp_step2: 'Paste your MCP address and save.'
-    mcp_step3: 'Ask: "Start a Practicall call for me" or "How is my team doing?".'
+    mcp_step3: 'Ask: "Start a Décroche call for me" or "How is my team doing?".'
 call:
     error:
         archived: 'This scenario is archived.'
@@ -483,12 +483,12 @@ library:
     scenarios: 'The scenarios'
 prepare:
     title: 'Rehearse a real meeting'
-    lead: 'Paste what you know of the prospect: Practicall writes the persona and their hidden brief, then you rehearse.'
+    lead: 'Paste what you know of the prospect: Décroche writes the persona and their hidden brief, then you rehearse.'
     submit: 'Write the rehearsal'
     failed: 'The rehearsal could not be written (the model is unreachable): try again.'
     how_title: 'How it works'
     how: 'In a minute, the AI writes a credible persona with a budget, a pain, a decision-maker and objections from your information. You don''t see the brief: you uncover it by calling.'
-    mcp: 'Also from Claude: "rehearse my meeting tomorrow with…" through Practicall''s MCP server (see My account).'
+    mcp: 'Also from Claude: "rehearse my meeting tomorrow with…" through Décroche''s MCP server (see My account).'
 progress:
     difficulty: 'Call difficulty'
     warming_up: 'warming up'
@@ -550,7 +550,7 @@ security:
     lost: 'Lost your password? A manager can give you a new one.'
     join: 'Join'
     join_title: 'Join %company%'
-    join_lead: '%name% invites you to train on Practicall (%email%). Choose your password.'
+    join_lead: '%name% invites you to train on Décroche (%email%). Choose your password.'
     join_submit: 'Join the team'
     join_invalid: 'This invitation is no longer valid'
     join_invalid_text: 'It was already used or withdrawn: ask your manager for a new one.'
@@ -569,5 +569,5 @@ log:
     line5: 'good open question, now lock in the next step'
 meta:
     source: 'Source code (AGPL)'
-    description: 'Practicall: rehearse your sales calls out loud against an AI client with a hidden brief, then get a debrief graded by a coach.'
+    description: 'Décroche: rehearse your sales calls out loud against an AI client with a hidden brief, then get a debrief graded by a coach.'
     skip: 'Skip to content'

@@ -15,7 +15,7 @@ use Symfony\AI\Platform\StructuredOutput\PlatformSubscriber;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * The language models behind Practicall, through Symfony AI. Two jobs, two models (the same one twice is fine):
+ * The language models behind Décroche, through Symfony AI. Two jobs, two models (the same one twice is fine):
  * - the persona speaks on the phone: its answer is streamed, so a fast model keeps the call lively (AI_PERSONA_MODEL);
  * - the coach and the writers (debriefs, scenarios, offer sheet) answer in a fixed shape, a structured output, so a
  *   model that reads closely and follows a JSON schema fits them (AI_COACH_MODEL).
@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final readonly class LanguageModel
 {
     public function __construct(
-        #[Autowire(service: 'ai.platform.generic.practicall')]
+        #[Autowire(service: 'ai.platform.generic.decroche')]
         private PlatformInterface $platform,
         #[Autowire(env: 'AI_PERSONA_MODEL')]
         private string $personaModel,

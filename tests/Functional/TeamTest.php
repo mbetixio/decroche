@@ -28,7 +28,7 @@ final class TeamTest extends FunctionalTestCase
     public function testAnInvitedSellerJoinsTheTeam(): void
     {
         $this->client->request('GET', '/team');
-        $this->submit('Create the links', ['invitations[emails]' => "alex@practicall.test, not-an-email\ncamille@practicall.test"]);
+        $this->submit('Create the links', ['invitations[emails]' => "alex@decroche.test, not-an-email\ncamille@decroche.test"]);
         self::assertResponseRedirects();
         $invitations = $this->service(InvitationRepository::class)->pending();
         self::assertCount(2, $invitations);
@@ -50,7 +50,7 @@ final class TeamTest extends FunctionalTestCase
         $this->client->request('GET', '/team');
         $this->submit('Give the mission', ['mission[assignee]' => (string) $seller->id, 'mission[situation]' => 'price_request', 'mission[calls]' => '3', 'mission[target]' => '70']);
         self::assertResponseRedirects();
-        $seller = $this->service(MemberRepository::class)->findOneByEmail('seller@practicall.test');
+        $seller = $this->service(MemberRepository::class)->findOneByEmail('seller@decroche.test');
         $missions = $this->service(MissionRepository::class)->forMember($seller);
         self::assertCount(1, $missions);
         self::assertSame('price_request', $missions[0]->situation);
@@ -65,7 +65,7 @@ final class TeamTest extends FunctionalTestCase
         $seller = $this->member();
         $crawler = $this->client->request('GET', '/team/'.$seller->id);
         $this->client->submit($crawler->filter('form[action$="/role"]')->form());
-        self::assertSame(MemberRole::Manager, $this->service(MemberRepository::class)->findOneByEmail('seller@practicall.test')?->role);
+        self::assertSame(MemberRole::Manager, $this->service(MemberRepository::class)->findOneByEmail('seller@decroche.test')?->role);
         self::assertSelectorNotExists('form[action="/team/'.$this->manager->id.'/role"]');
     }
 

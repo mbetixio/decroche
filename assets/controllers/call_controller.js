@@ -19,8 +19,8 @@ const HANGING = {
 
 const norm = (text) => (text || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]+/g, ' ');
 const mmss = (n) => String(Math.floor(n / 60)).padStart(2, '0') + ':' + String(n % 60).padStart(2, '0');
-const pref = (key, fallback) => { try { return localStorage.getItem('practicall-' + key) ?? fallback; } catch { return fallback; } };
-const keep = (key, value) => { try { localStorage.setItem('practicall-' + key, value); } catch { /* private mode */ } };
+const pref = (key, fallback) => { try { return localStorage.getItem('decroche-' + key) ?? fallback; } catch { return fallback; } };
+const keep = (key, value) => { try { localStorage.setItem('decroche-' + key, value); } catch { /* private mode */ } };
 
 export default class extends Controller {
     static targets = ['state', 'since', 'clock', 'caption', 'hint', 'keypad', 'input', 'keys', 'pickup', 'finish', 'sheet', 'dot', 'avatar', 'barge', 'voiceNote'];

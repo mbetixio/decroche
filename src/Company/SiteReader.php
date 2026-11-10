@@ -87,7 +87,7 @@ final readonly class SiteReader
                         throw new \LengthException('The page is too large.');
                     }
                 },
-                'headers' => ['User-Agent' => 'Mozilla/5.0 (compatible; Practicall/1.0; offer analysis)', 'Accept-Language' => 'fr,en;q=0.5'],
+                'headers' => ['User-Agent' => 'Mozilla/5.0 (compatible; Décroche/1.0; offer analysis)', 'Accept-Language' => 'fr,en;q=0.5'],
             ]);
             if (200 !== $response->getStatusCode() || !str_contains($response->getHeaders()['content-type'][0] ?? 'text/html', 'html')) {
                 return ['', []];

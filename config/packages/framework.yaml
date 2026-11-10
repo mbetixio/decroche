@@ -6,10 +6,10 @@ framework:
     trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
 
     # Note that the session will be started ONLY if you read or write from it.
-    # A cookie name of Practicall's own: cookies on 127.0.0.1 do not tell ports apart, so another local Symfony project
+    # A cookie name of Décroche's own: cookies on 127.0.0.1 do not tell ports apart, so another local Symfony project
     # would otherwise overwrite the session (and sign the member out).
     session:
-        name: PRACTICALL_SESSION
+        name: DECROCHE_SESSION
     csrf_protection: true
 
     #esi: true
