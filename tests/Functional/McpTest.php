@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Company\DemoCompany;
 use App\Company\TeamManager;
 use App\Entity\Member;
+use App\Enum\Language;
 use App\Tests\Fake\ScriptedModel;
 
 /**
@@ -89,6 +91,20 @@ final class McpTest extends FunctionalTestCase
         $this->tool('new_call', ['focus' => 'objections']);
 
         self::assertStringContainsString('The seller wants to train one skill, graded low in their last debrief: Handling objections', ScriptedModel::$prompts[0]);
+    }
+
+    public function testALibraryScenarioIsPlayedInTheChat(): void
+    {
+        $this->service(DemoCompany::class)->loadLibrary(Language::English);
+        $this->connect($this->member());
+        $scenarios = $this->tool('library')['scenarios'];
+        self::assertNotEmpty($scenarios);
+        self::assertArrayNotHasKey('brief', $scenarios[0], 'The hidden brief never leaves the server.');
+
+        $started = $this->tool('start_call', ['scenario' => $scenarios[0]['id']]);
+        self::assertSame($scenarios[0]['title'], $started['scenario']['title']);
+        self::assertNotSame('', $started['persona_says']);
+        self::assertIsInt($started['call']);
     }
 
     public function testACallPlayedInTheChat(): void

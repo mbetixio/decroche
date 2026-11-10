@@ -60,6 +60,34 @@ final class TeamTest extends FunctionalTestCase
         self::assertSelectorTextContains('main', 'My missions');
     }
 
+    public function testAnInvitationCanBeWithdrawn(): void
+    {
+        $this->client->request('GET', '/team');
+        $this->submit('Create the links', ['invitations[emails]' => 'sam@decroche.test']);
+        $token = $this->service(InvitationRepository::class)->pending()[0]->token;
+
+        $crawler = $this->client->request('GET', '/team');
+        $this->client->submit($crawler->filter('form[action$="/withdraw"]')->form());
+        self::assertResponseRedirects();
+        self::assertSame([], $this->service(InvitationRepository::class)->pending());
+
+        $this->client->request('GET', '/logout');
+        $this->client->request('GET', '/join/'.$token);
+        self::assertResponseStatusCodeSame(404, 'A withdrawn invitation no longer opens.');
+    }
+
+    public function testAMissionCanBeRemoved(): void
+    {
+        $seller = $this->member();
+        $this->client->request('GET', '/team');
+        $this->submit('Give the mission', ['mission[assignee]' => (string) $seller->id, 'mission[situation]' => 'price_request', 'mission[calls]' => '3', 'mission[target]' => '70']);
+
+        $crawler = $this->client->request('GET', '/team');
+        $this->client->submit($crawler->filter('form[action^="/team/missions/"]')->form());
+        self::assertResponseRedirects();
+        self::assertSame([], $this->service(MissionRepository::class)->all());
+    }
+
     public function testAManagerCannotChangeTheirOwnRole(): void
     {
         $seller = $this->member();
