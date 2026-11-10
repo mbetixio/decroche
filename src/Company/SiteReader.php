@@ -11,12 +11,15 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * Reads a company's website for the analysis: the home page and up to five pages about the offer (services, pricing,
  * references…), stripped of their code. Only the public web: an address given by a user never reaches the internal
- * network.
+ * network. A site that cannot be read (an error, a timeout, a bot check such as Cloudflare's) gives an empty text.
  */
 final readonly class SiteReader
 {
     /** Pages about the offer, spotted by their address or link text. */
     private const string USEFUL = '/offre|service|solution|produit|product|tarif|prix|pricing|price|a-propos|about|qui-sommes|equipe|expertise|metier|reference|client|cas-|case|faq|accompagnement|prestation|methode|approche/i';
+
+    /** A bot check instead of the page (Cloudflare and the like): nothing of the company to read there. */
+    private const string BOT_CHECK = '#/cdn-cgi/challenge-platform/|cf-chl-|<title>\s*(Just a moment|Attention Required|Access denied|DDoS-Guard)|captcha-delivery\.com|_Incapsula_Resource#i';
 
     /** The most of a page read, in bytes: a bigger one is cut off rather than filling the memory. */
     private const int MAX_BYTES = 2_000_000;
@@ -94,6 +97,10 @@ final readonly class SiteReader
             }
             $html = $response->getContent();
         } catch (\Throwable) {
+            return ['', []];
+        }
+        // A blocked site reads as no site: the analysis then works from the company's own description.
+        if (preg_match(self::BOT_CHECK, $html)) {
             return ['', []];
         }
         $crawler = new Crawler($html, $url);
