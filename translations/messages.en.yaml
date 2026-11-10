@@ -324,7 +324,7 @@ company:
         invalid_website: 'This does not look like a website address.'
         nothing_to_analyze: 'Give a readable website or describe the company in a few lines.'
         no_situation: 'Keep at least one situation.'
-        scorecard_size: 'The scorecard has 3 to 10 criteria.'
+        scorecard_size: 'The scorecard has 2 to 8 criteria.'
 team:
     error:
         email_taken: 'This address already has an account.'
@@ -541,7 +541,7 @@ settings:
         edit: 'Edit'
     scorecard:
         add: 'Add a criterion'
-        limits: 'From 3 to 10 criteria.'
+        limits: 'From 2 to 8 criteria.'
 security:
     login: 'Sign in'
     login_title: 'Welcome back'

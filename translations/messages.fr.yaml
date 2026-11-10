@@ -324,7 +324,7 @@ company:
         invalid_website: 'Cette adresse ne ressemble pas à un site web.'
         nothing_to_analyze: 'Donnez un site lisible ou décrivez la société en quelques lignes.'
         no_situation: 'Gardez au moins une situation.'
-        scorecard_size: 'La grille compte de 3 à 10 critères.'
+        scorecard_size: 'La grille compte de 2 à 8 critères.'
 team:
     error:
         email_taken: 'Cette adresse a déjà un compte.'
@@ -541,7 +541,7 @@ settings:
         edit: 'Modifier'
     scorecard:
         add: 'Ajouter un critère'
-        limits: 'De 3 à 10 critères.'
+        limits: 'De 2 à 8 critères.'
 security:
     login: 'Se connecter'
     login_title: 'Bon retour'

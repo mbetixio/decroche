@@ -1,3 +1,5 @@
 # Validation messages given as keys by Décroche's constraints.
 'account.error.wrong_password': 'This is not your current password.'
 'company.error.invalid_website': 'This does not look like a website address.'
+'company.error.no_situation': 'Keep at least one situation.'
+'company.error.scorecard_size': 'The scorecard has 2 to 8 criteria.'
