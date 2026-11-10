@@ -33,7 +33,7 @@ sheet and 14–18 call situations specific to its business, in English or French
 |---|---|
 | 🎲 **Calls drawn from your own business** | The onboarding analyses your website into an offer sheet and a catalogue of situations. Each *New call* draws one at random and writes a unique scenario around it: a person, a company, the document you have in front of you (laid out like a CRM record), three objectives, and a hidden brief. |
 | 📞 **A real call, out loud** | Speech recognition in the browser, neural voices generated server-side, the reply streamed and voiced sentence by sentence, interruptions (barge-in), a timer. No text box unless you want the keypad. |
-| 🎯 **A debrief that teaches** | A score out of 100 on your scorecard, the call's objectives judged one by one, the hidden brief revealed with what you missed and *the question that would have found it*, your best and worst lines quoted word for word with a better alternative, three tips, talk share and filler words. Replay the call from any of your lines. |
+| 🎯 **A debrief that teaches** | A score out of 100 on your scorecard, the call's objectives judged one by one, the hidden brief revealed with what you missed and *the question that would have found it*, your best and worst lines quoted word for word with a better alternative, three tips, talk share and filler words. Replay the call from any of your lines, or *train on this point*: a new call built to test your weakest criterion. |
 | 📈 **Progress that means something** | No XP or badges: the difficulty of your next calls follows your last five scores, and the home page tells you why, your trend, and the one criterion to work on. |
 | 🧑‍💼 **Managers follow the team** | The team board (difficulty, average, trend, weakest criterion per seller), each seller's debriefs, missions ("3 price-request calls scored 70+ by Friday"), invitations, the company's own library of scenarios and scorecard. |
 | 🤖 **Rehearse your next real call, from Claude** | Got a client meeting tomorrow? Ask Claude (connected to your mailbox) to get you ready: it reads the meeting's e-mail thread, and Practicall turns it into a practice call with *that* client — their context, their likely objections, a hidden brief — ready to take out loud in one click. Then, still in conversation, read your debriefs, ask why you keep losing at closing, and (for managers) follow and coach the team. |
@@ -84,13 +84,24 @@ trend, your criteria and your missions to reason on.
 > *"Who on my team struggles with objections? Give Jordan three objection calls scored 70+ before Friday."* ·
 > *"Invite our new hire, sam@acme.com."*
 
-**Or just practise.** *"Give me a call"* draws a surprise situation; with `mode: chat` the call is even played in
-writing, in the conversation.
+**Or just practise.** *"Give me a call"* draws a surprise situation, *"Give me a call on objections"* one built to
+train that criterion; with `mode: chat` the call is even played in writing, in the conversation.
+
+**Ready-made requests.** The server also offers MCP *prompts*, in the client's "/" menu:
+
+| Prompt | |
+|---|---|
+| `rehearse_meeting` | Gathers what your e-mails, calendar or notes say about an upcoming meeting, shows you the prospect sheet, then has `prepare_call` write the rehearsal. |
+| `review_my_calls` | Reads your figures and debriefs, names the skill that holds you back with your own quotes, and offers a call that trains it. |
+| `coach_my_team` | For managers: who progresses, who is stuck and on what, and missions to give once you approve them. |
+
+And *resources* a client can attach to a conversation: `practicall://offer` (the offer sheet),
+`practicall://situations` (the catalogue) and `practicall://scorecard` (the criteria the coach grades).
 
 | Tool | |
 |---|---|
 | `prepare_call` | Writes a rehearsal of a real meeting from any text (an e-mail, notes, a prospect sheet); returns a call link or starts it in the chat. |
-| `new_call`, `situations` | A surprise call drawn from the company's catalogue (or a given situation). |
+| `new_call`, `situations` | A surprise call drawn from the company's catalogue (or a given situation), optionally built to train one criterion (`focus`). |
 | `library`, `call_link`, `start_call` | The managers' scenarios, a signed link to one, or playing it in the chat. |
 | `reply`, `hang_up` | A call played in the chat: the seller's words relayed word for word, then the coach's debrief. |
 | `debrief` | **MCP App**: the graded debrief, rendered in the conversation. |
@@ -140,7 +151,9 @@ Open <http://localhost:7077>. Then choose:
   ```
 
   The onboarding is skipped: an example company (a software services firm), its 24 situations, a library of 7
-  scenarios and a manager account are created. `PRACTICALL_LANGUAGE=fr` gives the same in French.
+  scenarios, and a small team are created. You sign in as its manager, Alex Morgan, who already has four debriefed
+  calls (scores climbing from 1 to 70) next to a junior seller's two, so the home page, the progress, the team board
+  and the MCP statistics are full from the start. `PRACTICALL_LANGUAGE=fr` gives the same in French.
 
 The database, the sessions, the synthesized voices and the instance's own secrets live in the `practicall` volume:
 `docker compose down` keeps them, `docker compose down -v` starts over.
@@ -165,7 +178,7 @@ php bin/console app:install            # creates the database; the first visit o
 or the demo data:
 
 ```bash
-php bin/console app:install --demo --language=en    # prints the demo manager's e-mail and password
+php bin/console app:install --demo --language=en    # the example company, team and calls; prints the manager's e-mail and password
 ```
 
 and serve it:
@@ -185,7 +198,9 @@ Put your values in `.env.local` (without Docker) or `.env.docker` (with Docker).
 |---|---|---|
 | `AI_API_KEY` | — | **Required.** Your model provider's key: a Hugging Face token `hf_…` by default. |
 | `AI_BASE_URL` | `https://router.huggingface.co/v1` | Any OpenAI-compatible endpoint (see below). |
-| `AI_MODEL` | `openai/gpt-oss-120b` | The model. A fast one keeps the calls lively. |
+| `AI_PERSONA_MODEL` | `deepseek-ai/DeepSeek-V4.1-Flash` | The client on the phone: its reply is streamed, so it must start fast. |
+| `AI_COACH_MODEL` | `deepseek-ai/DeepSeek-V4.1-Flash` | The coach and the writers (debriefs, scenarios, offer sheet), as structured output. The same model twice is fine. |
+| `AI_PERSONA_REASONING`, `AI_COACH_REASONING` | `low`, `low` | Reasoning effort, `none` to `high`, sent the way the model family expects it (gpt-oss, gpt-5, DeepSeek). |
 | `AI_COMPLETIONS_PATH` | `/chat/completions` | |
 | `AI_HEADERS` | `{}` | Extra HTTP headers for the model's API, as JSON. |
 | `DEFAULT_URI` | `http://127.0.0.1:8000` | The instance's public address, for the links it generates (call links, invitations). |
@@ -196,13 +211,22 @@ Put your values in `.env.local` (without Docker) or `.env.docker` (with Docker).
 | `PRACTICALL_PORT` | `7077` | Docker only: the port on your machine. |
 | `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | The neural voices and their cache. |
 
-**Choosing a model.** The persona answers in one to four sentences and must answer *fast* (it is a phone call); the
-coach and the scenario writer produce long structured JSON. On Hugging Face, `openai/gpt-oss-120b` answers in about
-0.6 s and handles both well; `Qwen/Qwen3-235B-A22B-Instruct-2507` is a good alternative in French. Other providers:
+**Choosing a model.** The persona answers in one to four sentences and must start *fast* (it is a phone call); the
+coach reads the whole call against the offer and must be precise. We compared three set-ups on six real calls, with
+the app's own prompts:
 
-| Provider | `AI_BASE_URL` | `AI_MODEL` |
+| | First word on the phone (median) | Debrief | Debrief quality |
+|---|---|---|---|
+| `deepseek-ai/DeepSeek-V4.1-Flash` on Hugging Face (**default**) | **1.5 s**, steady (0.6–1.9 s) | 7–12 s | **The most precise**: notices a question asked twice, quotes the offer's real arguments |
+| `openai/gpt-oss-120b` on Hugging Face | 2.1 s, uneven (up to 5.5 s) | **2–3 s** | Correct but more generic |
+| DeepSeek V4.1 Flash on another provider | 1.8 s | 9–12 s | As precise as the default |
+
+Reasoning made the debriefs slower (about 20 s) without making them better, so it is off by default. For instant
+debriefs, set `AI_COACH_MODEL=openai/gpt-oss-120b`. Other providers:
+
+| Provider | `AI_BASE_URL` | Both models |
 |---|---|---|
-| Hugging Face (default) | `https://router.huggingface.co/v1` | `openai/gpt-oss-120b` |
+| Hugging Face (default) | `https://router.huggingface.co/v1` | `deepseek-ai/DeepSeek-V4.1-Flash` |
 | OpenAI | `https://api.openai.com/v1` | `gpt-5.4-mini` |
 | DeepSeek | `https://api.deepseek.com/v1` | `deepseek-chat` |
 | A local Ollama | `http://localhost:11434/v1` | `qwen3:32b` |
@@ -216,42 +240,46 @@ start.
 
 ## How Symfony AI, MCP and Hugging Face are used
 
-- **One model behind every role, through Symfony AI.** `App\Ai\LanguageModel` wraps a Symfony AI *generic* platform
-  declared in `config/packages/ai.yaml`, pointed at Hugging Face Inference Providers by default. The same model plays
-  the persona (streamed), writes scenarios and offer sheets (JSON) and coaches (JSON, low temperature);
-  `App\Ai\Data` reads the model's loose JSON into exact types.
+- **Two jobs, two models, through Symfony AI.** `App\Ai\LanguageModel` wraps a Symfony AI *generic* platform declared
+  in `config/packages/ai.yaml`, pointed at Hugging Face Inference Providers by default: one model plays the persona
+  (streamed), the other coaches and writes, each with its own reasoning effort.
+- **Structured output.** The coach, the scenario writers and the offer analyst answer into classes
+  (`src/Ai/Output/`, described with `#[Schema]` attributes): Symfony AI sends each class as a strict JSON schema
+  (`response_format`) and turns the model's JSON back into the object (`asObject()`). The criteria come as a list,
+  since every company writes its own scorecard.
 - **Streaming end to end.** The persona's reply is a stream of `TextDelta`s (`Persona::reply()`), filtered of its
   control markers (`[devoiler:budget]` when a brief section is given away, `[fin]` when the persona hangs up), cut into
   sentences (`SentenceSplitter`), each voiced in parallel by edge-tts (`TurnStreamer`) and sent to the browser as NDJSON
   as soon as its voice is ready.
-- **MCP tools as plain Symfony services.** `src/Mcp/*Tools.php` methods carry `#[McpTool]`; schemas come from the
-  signatures. A stateless firewall authenticates each member by a personal key (`McpKeyAuthenticator`), redacted from
+- **MCP tools, prompts and resources as plain Symfony services.** `src/Mcp/*Tools.php` methods carry `#[McpTool]`,
+  `Prompts` `#[McpPrompt]` and `CompanyResources` `#[McpResource]`; schemas come from the signatures. A stateless firewall authenticates each member by a personal key (`McpKeyAuthenticator`), redacted from
   the logs.
 - **Call links.** `CallLinks` uses Symfony's login links (signed with the member's password hash, 15 minutes, a few
   uses) with a target path: the model hands the seller a link, and the phone screen opens already signed in.
 - **An MCP App.** `DebriefApp` (`#[AsMcpApp]`) renders the debrief with the site's own Twig partial and stylesheet.
 - **Tests without the network.** `tests/Fake/ScriptedModel` builds a Symfony AI `MockPlatformFactory` platform that
-  answers each kind of prompt, so the whole suite — onboarding, a streamed call, the MCP server — runs offline.
+  answers each kind of prompt, with the structured output subscriber, so the whole suite — onboarding, a streamed
+  call, the MCP server — runs offline.
 
 ## Architecture
 
 ```
 src/
-  Ai/           LanguageModel (Symfony AI), Data (typed reading of the model's JSON)
+  Ai/           LanguageModel (Symfony AI), Output/ (the structured answers), Data (typed reading of stored JSON)
   Call/         CallManager (start, talk, expire, finish, abandon, replay), TurnStreamer, SentenceSplitter
     Persona/    the persona's prompt, its streamed reply and marker filter
     Coach/      the coach's prompt, the debrief and its scoring
     Speech/     talk share, questions, filler words, pace
   Scenario/     situation canvas and drawer, scenario writer and factory, surprise calls
-  Company/      website reader (private networks refused), offer analyst, example company, team and missions
+  Company/      website reader (private networks refused), offer analyst, example company and calls, team and missions
   Progress/     a member's figures, the difficulty that follows their scores, the team board, missions
   Voice/        edge-tts synthesis and its cache pruning, voice casting per language, gender and tone
-  Mcp/          the MCP tools, the debrief app, call links
+  Mcp/          the MCP tools, prompts and resources, the debrief app, call links
   Onboarding/   the steps and the guard that steers first-boot visitors
   Controller/   thin controllers; Form/ typed models validated with constraints; Twig/ the CRM-style document
   Entity/ Enum/ Model/ Repository/  the domain
 templates/      Twig with anonymous Twig components; assets/ Stimulus controllers and one CSS design system (light and dark)
-translations/   English and French; config/practicall/{en,fr}/ the example company and the situation canvas
+translations/   English and French; config/practicall/{en,fr}/ the example company, its calls and the situation canvas
 ```
 
 ## Quality
