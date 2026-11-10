@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Décroche">
+  <!-- Décroche: a handset being picked up, and the accent of the "é" as the ring. On a dark page, a light edge keeps
+       the tile apart from the background. -->
+  <style>@media (prefers-color-scheme: dark) { .tile { stroke: #2b3550; } }</style>
+  <rect class="tile" x="0.5" y="0.5" width="63" height="63" rx="15" fill="#10172a" stroke="#10172a"/>
+  <g transform="translate(30 37.5) rotate(-32) scale(0.94) translate(-32 -33)" fill="#fff">
+    <path d="M16.5 31.5C20 21 44 21 47.5 31.5" fill="none" stroke="#fff" stroke-width="6.4" stroke-linecap="round"/>
+    <rect x="9" y="29" width="15" height="10.5" rx="4.2"/>
+    <rect x="40" y="29" width="15" height="10.5" rx="4.2"/>
+  </g>
+  <path d="M47 15.5 53.5 10.5" stroke="#f2542d" stroke-width="4.6" stroke-linecap="round"/>
+</svg>

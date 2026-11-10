@@ -8,7 +8,7 @@
 
 <p align="center">Symfony 8.1 · Symfony AI · MCP · Hugging Face Inference Providers · PHP 8.5</p>
 
-<p align="center">Open source (AGPL-3.0) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
+<p align="center"><a href="https://mbetixio.github.io/decroche/">Website</a> · Open source (AGPL-3.0) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
 
 <p align="center"><img src="docs/screenshots/phone.png" alt="The phone screen during a practice call" width="900"></p>
 
@@ -239,6 +239,9 @@ debriefs, set `AI_COACH_MODEL=openai/gpt-oss-120b`. Other providers:
 pointing at port 7077. Set `DEFAULT_URI=https://your-domain` and add the domain to `MCP_ALLOWED_HOSTS` so that call
 links, invitations and the MCP endpoint use it. The container migrates the database and prunes old voices at each
 start.
+
+**The landing page** is a single static file, `docs/index.html` (English and French, the same design as the app). To
+publish it with GitHub Pages: *Settings → Pages → Deploy from a branch → `main`, `/docs`*.
 
 ## How Symfony AI, MCP and Hugging Face are used
 

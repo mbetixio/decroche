@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Décroche — rehearse your sales calls out loud</title>
+<meta name="description" content="Décroche puts sellers on the phone with an AI client who plays their real prospects, then a coach grades the call. Open source, built with Symfony AI and MCP.">
+<meta property="og:title" content="Décroche — rehearse your sales calls out loud">
+<meta property="og:description" content="An AI client with a hidden brief picks up the phone. A coach grades the call. Built with Symfony AI and MCP.">
+<meta property="og:image" content="brand/og-image.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="brand/favicon-32.png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!--
+  The landing page of Décroche, published with GitHub Pages from this docs/ folder. One file, no build: the same
+  colours and type as the application (assets/styles/app.css), English and French side by side (the toggle shows one).
+-->
+<style>
+    :root {
+        --font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+        --brand: #f2542d;
+        --action: #cf4019;
+        --action-hover: #b5360f;
+        --brand-text: #bf3a14;
+        --bg: #f6f5f1;
+        --surface: #ffffff;
+        --sunken: #efede7;
+        --ink: #1c1e23;
+        --ink-2: #4b4f58;
+        --ink-3: #6a6e77;
+        --line: #e3e0d8;
+        --good: #167a4a;
+        --night: #10172a;
+        --radius: 6px;
+        --radius-l: 10px;
+        --shadow: 0 1px 2px rgb(20 22 27 / .06), 0 18px 40px -20px rgb(20 22 27 / .35);
+        --wrap: 1160px;
+        --gutter: clamp(16px, 4vw, 40px);
+        color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --action: #cf4019;
+            --action-hover: #e04a22;
+            --brand-text: #ff8a65;
+            --bg: #14161b;
+            --surface: #1c1f26;
+            --sunken: #101216;
+            --ink: #e9e7e2;
+            --ink-2: #b3b6bd;
+            --ink-3: #8c9099;
+            --line: #2a2e36;
+            --good: #4cc38a;
+        }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+    h1, h2, h3 { font-family: var(--font-display); letter-spacing: -.025em; line-height: 1.08; margin: 0; text-wrap: balance; }
+    p { margin: 0; }
+    :focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 2px; }
+
+    /* One language at a time: every text exists in both, the toggle (or the browser's language) picks one. */
+    html[data-lang="en"] [lang="fr"], html[data-lang="fr"] [lang="en"] { display: none !important; }
+
+    .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+    .eyebrow { font: 500 13px/1.4 var(--font-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); }
+    .lead { font-size: clamp(18px, 1.6vw, 20px); color: var(--ink-2); max-width: 36em; }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px 22px; border-radius: var(--radius); font: 600 16px/1 var(--font); text-decoration: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink); transition: background .15s, border-color .15s; }
+    .btn:hover { background: var(--sunken); }
+    .btn.primary { background: var(--action); border-color: var(--action); color: #fff; }
+    .btn.primary:hover { background: var(--action-hover); border-color: var(--action-hover); }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+
+    /* The bar: the name, the sections, the language and the source. */
+    .bar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .bar .wrap { display: flex; align-items: center; gap: 28px; min-height: 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; font: 700 20px/1 var(--font-display); letter-spacing: -.02em; text-decoration: none; }
+    .brand img { width: 32px; height: 32px; }
+    .bar nav { display: flex; gap: 24px; margin-left: auto; }
+    .bar nav a { font-size: 15px; color: var(--ink-2); text-decoration: none; }
+    .bar nav a:hover { color: var(--ink); }
+    .lang { font: 500 13px/1 var(--font-mono); background: none; border: 1px solid var(--line); color: var(--ink-2); border-radius: var(--radius); padding: 8px 10px; cursor: pointer; }
+    .lang:hover { color: var(--ink); border-color: var(--ink-3); }
+    .bar .btn { min-height: 38px; padding: 8px 14px; font-size: 14px; }
+    @media (max-width: 860px) { .bar nav { display: none; } .bar .lang { margin-left: auto; } }
+    @media (max-width: 420px) { .bar .btn span { display: none; } }
+
+    /* The opening: the promise, the two ways in, and the phone in use. */
+    .hero { padding-top: clamp(48px, 8vw, 96px); padding-bottom: clamp(40px, 6vw, 72px); }
+    .hero h1 { font-size: clamp(42px, 6.2vw, 80px); max-width: 11.5em; margin: 18px 0 24px; }
+    .hero h1 em { font-style: normal; color: var(--brand); }
+    .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .hero .note { margin-top: 16px; font-size: 14px; color: var(--ink-3); }
+    .hero .shot { margin-top: clamp(40px, 6vw, 72px); }
+
+    .shot { border-radius: var(--radius-l); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow); background: var(--surface); }
+
+    /* A few true figures, set in a row. */
+    .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .facts > div { padding: 28px 24px 28px 0; }
+    .facts > div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+    .facts b { display: block; font: 600 clamp(26px, 3vw, 34px)/1.1 var(--font-display); letter-spacing: -.02em; }
+    .facts span { display: block; margin-top: 6px; font-size: 15px; color: var(--ink-2); }
+    @media (max-width: 760px) {
+        .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .facts > div:nth-child(3) { padding-left: 0; border-left: 0; }
+        .facts > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+    }
+
+    section { padding: clamp(64px, 9vw, 120px) 0; scroll-margin-top: 64px; }
+    .head { max-width: 760px; margin-bottom: clamp(36px, 5vw, 56px); }
+    .head h2 { font-size: clamp(32px, 4.2vw, 52px); margin: 14px 0 18px; }
+
+    /* How it works: three steps, each with what you see. */
+    .step { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+    .step + .step { margin-top: clamp(56px, 8vw, 104px); }
+    .step:nth-child(even) .step-text { order: 2; }
+    .step .num { font: 500 14px/1 var(--font-mono); color: var(--brand-text); }
+    .step h3 { font-size: clamp(26px, 2.8vw, 34px); margin: 14px 0 14px; }
+    .step p + p { margin-top: 12px; }
+    .step .step-text > p { color: var(--ink-2); }
+    @media (max-width: 860px) { .step { grid-template-columns: minmax(0, 1fr); } .step:nth-child(even) .step-text { order: 0; } }
+
+    /* The call log: the product's signature, a call written as it happens. */
+    .log { font: 400 14px/1.65 var(--font-mono); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-l); overflow: hidden; }
+    .log header { display: flex; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--line); color: var(--ink-3); font-size: 13px; }
+    .log header span:first-child::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 10px; background: var(--brand); vertical-align: 1px; }
+    .log ol { list-style: none; margin: 0; padding: 14px 18px 16px; }
+    .log li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 14px; padding: 5px 0; }
+    .log .who { color: var(--ink-3); }
+    .log .you { color: var(--brand-text); }
+    .log .found { color: var(--good); }
+    .log .coach { border-top: 1px dashed var(--line); margin-top: 8px; padding-top: 12px; }
+    .log .score { color: var(--brand); font-weight: 500; }
+
+    /* Claude: a conversation, then the ready-made requests. */
+    .dark { background: var(--night); color: #eef0f5; }
+    .dark .eyebrow { color: #9aa3b8; }
+    .dark .lead, .dark .step-text > p { color: #c3c9d6; }
+    .chat { display: grid; gap: 14px; max-width: 760px; }
+    .msg { padding: 16px 20px; border-radius: var(--radius-l); line-height: 1.55; }
+    .msg.user { background: #232c44; justify-self: end; max-width: 88%; }
+    .msg.ai { background: #182036; border: 1px solid #2a3450; max-width: 94%; }
+    .msg .tool { display: block; margin-bottom: 8px; font: 500 12px/1.4 var(--font-mono); color: #8f9ab3; }
+    .msg .link { display: inline-block; margin-top: 12px; padding: 9px 14px; border-radius: var(--radius); background: var(--action); color: #fff; font-weight: 600; font-size: 15px; text-decoration: none; }
+    .claude { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 64px); align-items: start; }
+    .prompts { border-top: 1px solid #2a3450; }
+    .prompts > div { padding: 18px 0; border-bottom: 1px solid #2a3450; }
+    .prompts code { font: 500 14px/1 var(--font-mono); color: #ffb39c; }
+    .prompts p { margin-top: 8px; color: #c3c9d6; font-size: 15px; }
+    @media (max-width: 920px) { .claude { grid-template-columns: minmax(0, 1fr); } }
+
+    /* Managers and progress: two screens side by side. */
+    .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); }
+    .pair h3 { font-size: 24px; margin: 22px 0 10px; }
+    .pair p { color: var(--ink-2); }
+    @media (max-width: 760px) { .pair { grid-template-columns: minmax(0, 1fr); } }
+
+    /* Run it: the commands, copied as they are. */
+    .run { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 64px); align-items: start; }
+    .run ol { margin: 20px 0 0; padding-left: 1.2em; color: var(--ink-2); }
+    .run li + li { margin-top: 10px; }
+    pre { margin: 0; padding: 20px 22px; overflow-x: auto; background: var(--night); color: #e6e9f0; border-radius: var(--radius-l); font: 400 14px/1.75 var(--font-mono); }
+    pre .c { color: #8792aa; }
+    @media (max-width: 860px) { .run { grid-template-columns: minmax(0, 1fr); } }
+
+    /* Under the hood: what each piece of the stack does here. */
+    .stack { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+    .stack > div { padding: 28px 28px 28px 0; border-bottom: 1px solid var(--line); }
+    .stack > div:not(:nth-child(3n+1)) { padding-left: 28px; border-left: 1px solid var(--line); }
+    .stack h3 { font-size: 20px; margin-bottom: 10px; }
+    .stack p { font-size: 15px; color: var(--ink-2); }
+    @media (max-width: 860px) {
+        .stack { grid-template-columns: minmax(0, 1fr); }
+        .stack > div:not(:nth-child(3n+1)) { padding-left: 0; border-left: 0; }
+    }
+
+    .end { text-align: center; }
+    .end h2 { font-size: clamp(36px, 5vw, 60px); max-width: 14em; margin: 0 auto 28px; }
+    .end .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+
+    footer { border-top: 1px solid var(--line); padding: 32px 0 48px; font-size: 14px; color: var(--ink-3); }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+    footer a { color: var(--ink-2); }
+</style>
+</head>
+<body>
+
+<header class="bar">
+    <div class="wrap">
+        <a class="brand" href="#top"><img src="brand/logo.svg" alt="" width="32" height="32">Décroche</a>
+        <nav aria-label="Sections">
+            <a href="#how"><span lang="en">How it works</span><span lang="fr">Comment ça marche</span></a>
+            <a href="#claude"><span lang="en">In Claude</span><span lang="fr">Dans Claude</span></a>
+            <a href="#managers"><span lang="en">Managers</span><span lang="fr">Managers</span></a>
+            <a href="#run"><span lang="en">Run it</span><span lang="fr">L’installer</span></a>
+        </nav>
+        <button class="lang" type="button" data-toggle-lang aria-label="Français / English"><span lang="en">FR</span><span lang="fr">EN</span></button>
+        <a class="btn" href="https://github.com/mbetixio/decroche"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.4-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg><span>GitHub</span></a>
+    </div>
+</header>
+
+<main id="top">
+    <div class="hero wrap">
+        <p class="eyebrow"><span lang="en">Open source · Symfony AI · MCP</span><span lang="fr">Open source · Symfony AI · MCP</span></p>
+        <h1><span lang="en">Fumble your calls <em>here</em>, not in front of clients.</span><span lang="fr">Ratez vos appels <em>ici</em>, pas devant vos clients.</span></h1>
+        <p class="lead">
+            <span lang="en">Décroche puts your sellers on the phone with an AI client who plays your real prospects: they pick up, push back, hide their budget. Talk out loud, then a coach grades what you said, quote by quote.</span>
+            <span lang="fr">Décroche met vos commerciaux au téléphone face à un client IA qui joue vos vrais prospects : il décroche, il objecte, il cache son budget. Vous parlez à voix haute, puis un coach note ce que vous avez dit, citation par citation.</span>
+        </p>
+        <div class="actions">
+            <a class="btn primary" href="#run"><span lang="en">Try the demo</span><span lang="fr">Essayer la démo</span></a>
+            <a class="btn" href="#claude"><span lang="en">See it in Claude</span><span lang="fr">Voir dans Claude</span></a>
+        </div>
+        <p class="note"><span lang="en">Self-hosted in two minutes with Docker. English and French.</span><span lang="fr">Installé en deux minutes avec Docker. En français et en anglais.</span></p>
+        <div class="shot"><img src="screenshots/phone.png" width="1440" height="900" alt="The phone screen during a practice call: the client's line, the timer, and the seller's sheet"></div>
+    </div>
+
+    <div class="wrap">
+        <div class="facts">
+            <div><b>1.5 s</b><span lang="en">before the client answers you</span><span lang="fr">avant que le client vous réponde</span></div>
+            <div><b>14–18</b><span lang="en">call situations written from your website</span><span lang="fr">situations d’appel écrites depuis votre site</span></div>
+            <div><b>6</b><span lang="en">criteria graded, on a scorecard you can rewrite</span><span lang="fr">critères notés, sur une grille modifiable</span></div>
+            <div><b>2 min</b><span lang="en">to run your own instance</span><span lang="fr">pour lancer votre instance</span></div>
+        </div>
+    </div>
+
+    <section id="how">
+        <div class="wrap">
+            <div class="head">
+                <p class="eyebrow"><span lang="en">How it works</span><span lang="fr">Comment ça marche</span></p>
+                <h2><span lang="en">A real call, then the truth about it.</span><span lang="fr">Un vrai appel, puis la vérité dessus.</span></h2>
+                <p class="lead"><span lang="en">No multiple choice, no role-play with a colleague who goes easy on you. A person you have never met, a phone, and a few minutes.</span><span lang="fr">Pas de QCM, pas de jeu de rôle avec un collègue qui vous ménage. Quelqu’un que vous ne connaissez pas, un téléphone, et quelques minutes.</span></p>
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <span class="num">01</span>
+                    <h3><span lang="en">A call drawn from your own business</span><span lang="fr">Un appel tiré de votre métier</span></h3>
+                    <p><span lang="en">At setup, Décroche reads your website and writes your offer sheet and a catalogue of situations: a price request, a furious client, a referral, a switchboard that blocks you.</span><span lang="fr">À l’installation, Décroche lit votre site et rédige votre fiche d’offre et un catalogue de situations : une demande de tarifs, un client furieux, une recommandation, un standard qui fait barrage.</span></p>
+                    <p><span lang="en">Each new call draws one and writes it fresh: a person, a company, the document in front of you, three objectives. And a hidden brief you will have to uncover.</span><span lang="fr">Chaque nouvel appel en tire une et l’écrit sur mesure : une personne, une entreprise, le document sous vos yeux, trois objectifs. Et un brief caché qu’il faudra découvrir.</span></p>
+                </div>
+                <div class="shot"><img src="screenshots/briefing.png" width="1440" height="900" loading="lazy" alt="The briefing before the call: the situation, the client file, the objectives and who is on the line"></div>
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <span class="num">02</span>
+                    <h3><span lang="en">You talk. They answer, out loud.</span><span lang="fr">Vous parlez. Il répond, à voix haute.</span></h3>
+                    <p><span lang="en">Speech recognition in the browser, a natural voice in return, sentence by sentence as it is written. Cut them off, they stop. Ask the right question, they let the budget slip. Pitch too early, they hang up.</span><span lang="fr">Reconnaissance vocale dans le navigateur, une voix naturelle en retour, phrase par phrase dès qu’elle est écrite. Coupez-le, il s’arrête. Posez la bonne question, il lâche son budget. Pitchez trop tôt, il raccroche.</span></p>
+                </div>
+                <div class="log" aria-label="An excerpt of a practice call">
+                    <header><span lang="en">Practice call · live</span><span lang="fr">Appel d’entraînement · en cours</span><span>04:12</span></header>
+                    <ol>
+                        <li><span class="who">00:02 AI</span><span lang="en">“Antoine Roussel, hello? I’ve got ten minutes.”</span><span lang="fr">« Antoine Roussel, allô ? J’ai dix minutes. »</span></li>
+                        <li><span class="who you">00:06 <span lang="en">You</span><span lang="fr">Vous</span></span><span lang="en">“Then let’s use them well. What made you ask for our rates?”</span><span lang="fr">« Alors utilisons-les bien. Qu’est-ce qui vous a fait demander nos tarifs ? »</span></li>
+                        <li><span class="who">00:11 AI</span><span lang="en">“Our last provider delivered four months late.”</span><span lang="fr">« Notre dernier prestataire a livré avec quatre mois de retard. »</span></li>
+                        <li><span class="who found">brief</span><span class="found" lang="en">Real pain uncovered</span><span class="found" lang="fr">Vraie douleur découverte</span></li>
+                        <li class="coach"><span class="who">coach</span><span><span class="score">78</span>/100 · <span lang="en">good open question, now lock in the next step</span><span lang="fr">bonne question ouverte, verrouillez la suite</span></span></li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-text">
+                    <span class="num">03</span>
+                    <h3><span lang="en">A debrief that teaches</span><span lang="fr">Un débrief qui fait progresser</span></h3>
+                    <p><span lang="en">A score out of 100 on your own scorecard, each objective judged, the hidden brief revealed with what you missed and the question that would have found it. Your best and worst lines, quoted word for word, with what to say instead.</span><span lang="fr">Une note sur 100 selon votre grille, chaque objectif jugé, le brief caché révélé avec ce que vous avez manqué et la question qui l’aurait trouvé. Vos meilleures et pires répliques, citées mot pour mot, avec quoi dire à la place.</span></p>
+                    <p><span lang="en">Then one click: replay the call from any line, or train on your weakest point with a call built to test it.</span><span lang="fr">Puis un clic : rejouez l’appel depuis n’importe quelle réplique, ou entraînez-vous sur votre point faible avec un appel construit pour le tester.</span></p>
+                </div>
+                <div class="shot"><img src="screenshots/debrief.png" width="1440" height="900" loading="lazy" alt="The graded debrief: the score, the verdict, the criteria and the objectives"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="claude" class="dark">
+        <div class="wrap">
+            <div class="head">
+                <p class="eyebrow"><span lang="en">In Claude, through MCP</span><span lang="fr">Dans Claude, via MCP</span></p>
+                <h2><span lang="en">Rehearse tomorrow’s meeting, from its e-mail thread.</span><span lang="fr">Répétez le rendez-vous de demain, à partir de ses e-mails.</span></h2>
+                <p class="lead"><span lang="en">Connect Décroche to Claude next to your mailbox and calendar. Claude gathers what you know about the client, Décroche turns it into a call with that client, and you take it out loud.</span><span lang="fr">Branchez Décroche à Claude, à côté de votre messagerie et de votre agenda. Claude rassemble ce que vous savez du client, Décroche en fait un appel avec ce client, et vous le passez à voix haute.</span></p>
+            </div>
+            <div class="claude">
+                <div class="chat" aria-label="A conversation in Claude">
+                    <div class="msg user"><span lang="en">Find the last e-mail from Satelis Mobile and get me ready for tomorrow’s call with their CEO.</span><span lang="fr">Retrouve le dernier e-mail de Satelis Mobile et prépare-moi à l’appel de demain avec leur PDG.</span></div>
+                    <div class="msg ai">
+                        <span class="tool">gmail · search_threads → decroche · prepare_call</span>
+                        <span lang="en">I found Julie Marchand’s e-mail from Tuesday: two developers leaving, a release in March, and a worry about offshore quality. I gave Décroche this prospect sheet. Your rehearsal is ready, with a client who knows things you don’t.</span>
+                        <span lang="fr">J’ai trouvé l’e-mail de Julie Marchand de mardi : deux développeurs qui partent, une mise en production en mars, et une inquiétude sur la qualité offshore. J’ai transmis cette fiche prospect à Décroche. Votre répétition est prête, avec une cliente qui en sait plus que vous.</span>
+                        <br><a class="link" href="#run"><span lang="en">Take the call</span><span lang="fr">Prendre l’appel</span></a>
+                    </div>
+                    <div class="msg user"><span lang="en">Done. Why do I keep losing at closing?</span><span lang="fr">C’est fait. Pourquoi je perds toujours à la conclusion ?</span></div>
+                    <div class="msg ai">
+                        <span class="tool">decroche · my_progress → decroche · debrief</span>
+                        <span lang="en">Closing averages 3.2 / 10 over your last five calls. Each time, you describe the next step without dating it: “we could plan a demo”. Want a call built to train exactly that?</span>
+                        <span lang="fr">La conclusion est à 3,2 / 10 sur vos cinq derniers appels. À chaque fois, vous décrivez la suite sans la dater : « on pourrait prévoir une démo ». Je vous lance un appel construit pour travailler exactement ça ?</span>
+                    </div>
+                </div>
+                <div>
+                    <p class="eyebrow" style="margin-bottom:14px"><span lang="en">Ready-made requests</span><span lang="fr">Requêtes toutes prêtes</span></p>
+                    <div class="prompts">
+                        <div><code>rehearse_meeting</code><p><span lang="en">Gathers what your e-mails and calendar say about a meeting, shows you the prospect sheet, then writes the rehearsal.</span><span lang="fr">Rassemble ce que vos e-mails et votre agenda disent d’un rendez-vous, vous montre la fiche prospect, puis écrit la répétition.</span></p></div>
+                        <div><code>review_my_calls</code><p><span lang="en">Names the skill that holds you back, with your own quotes, and offers a call that trains it.</span><span lang="fr">Nomme la compétence qui vous freine, avec vos propres citations, et propose un appel pour la travailler.</span></p></div>
+                        <div><code>coach_my_team</code><p><span lang="en">For managers: who progresses, who is stuck and on what, and the missions to give.</span><span lang="fr">Pour les managers : qui progresse, qui bloque et sur quoi, et les missions à donner.</span></p></div>
+                    </div>
+                    <p style="margin-top:20px;color:#c3c9d6;font-size:15px"><span lang="en">The graded debrief opens right in the conversation, as an MCP App. The client’s hidden brief never leaves the server: Claude cannot whisper you the answers.</span><span lang="fr">Le débrief noté s’ouvre directement dans la conversation, en MCP App. Le brief caché du client ne quitte jamais le serveur : Claude ne peut pas vous souffler les réponses.</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="managers">
+        <div class="wrap">
+            <div class="head">
+                <p class="eyebrow"><span lang="en">Progress and managers</span><span lang="fr">Progression et managers</span></p>
+                <h2><span lang="en">Progress you can see, a team you can coach.</span><span lang="fr">Une progression visible, une équipe qu’on peut coacher.</span></h2>
+                <p class="lead"><span lang="en">No points or badges. The people you call get tougher as your scores rise, and the home page tells you the one thing to work on.</span><span lang="fr">Ni points ni badges. Vos interlocuteurs se durcissent à mesure que vos notes montent, et l’accueil vous dit la seule chose à travailler.</span></p>
+            </div>
+            <div class="pair">
+                <div>
+                    <div class="shot"><img src="screenshots/progress.png" width="1440" height="900" loading="lazy" alt="A seller's progress: scores over time, criteria and results by situation"></div>
+                    <h3><span lang="en">For each seller</span><span lang="fr">Pour chaque commercial</span></h3>
+                    <p><span lang="en">Scores over time, the average of each criterion, results by situation, and the missions their manager gave them.</span><span lang="fr">Les notes dans le temps, la moyenne de chaque critère, les résultats par situation, et les missions données par le manager.</span></p>
+                </div>
+                <div>
+                    <div class="shot"><img src="screenshots/team.png" width="1440" height="900" loading="lazy" alt="The team board: each seller's difficulty, average, trend and weakest criterion"></div>
+                    <h3><span lang="en">For the manager</span><span lang="fr">Pour le manager</span></h3>
+                    <p><span lang="en">Who progresses and who is stuck, on what. Give a mission (“three price requests scored 70+ by Friday”), invite the team, write your own scenarios and scorecard.</span><span lang="fr">Qui progresse, qui bloque, et sur quoi. Donnez une mission (« trois demandes de tarifs à 70+ d’ici vendredi »), invitez l’équipe, écrivez vos propres scénarios et votre grille.</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="run" style="background:var(--sunken)">
+        <div class="wrap run">
+            <div>
+                <p class="eyebrow"><span lang="en">Run it</span><span lang="fr">L’installer</span></p>
+                <h2 style="font-size:clamp(32px,4.2vw,52px);margin:14px 0 18px"><span lang="en">Your own instance in two minutes.</span><span lang="fr">Votre instance en deux minutes.</span></h2>
+                <ol>
+                    <li><span lang="en">Create a free Hugging Face token with the “Inference Providers” permission.</span><span lang="fr">Créez un jeton Hugging Face gratuit avec la permission « Inference Providers ».</span></li>
+                    <li><span lang="en">Start the container. With the demo, an example company and its team are already there.</span><span lang="fr">Lancez le conteneur. Avec la démo, une entreprise d’exemple et son équipe sont déjà là.</span></li>
+                    <li><span lang="en">Open the page, sign in, take your first call.</span><span lang="fr">Ouvrez la page, connectez-vous, passez votre premier appel.</span></li>
+                </ol>
+            </div>
+            <pre><code><span class="c"># the code</span>
+git clone https://github.com/mbetixio/decroche.git
+cd decroche
+
+<span class="c"># your Hugging Face token, and the demo data</span>
+echo "AI_API_KEY=hf_your_token" &gt; .env.docker
+echo "DECROCHE_DEMO=1" &gt;&gt; .env.docker
+
+<span class="c"># start, then open http://localhost:7077</span>
+docker compose --env-file .env.docker up -d --build
+docker compose logs decroche | grep -A1 Manager</code></pre>
+        </div>
+    </section>
+
+    <section>
+        <div class="wrap">
+            <div class="head">
+                <p class="eyebrow"><span lang="en">Under the hood</span><span lang="fr">Sous le capot</span></p>
+                <h2><span lang="en">Built on Symfony, open to read.</span><span lang="fr">Construit sur Symfony, ouvert à la lecture.</span></h2>
+            </div>
+            <div class="stack">
+                <div><h3>Symfony 8.1</h3><p><span lang="en">PHP 8.5, Doctrine, AssetMapper and Stimulus, Twig components. 330+ tests, PHPStan at its strictest level.</span><span lang="fr">PHP 8.5, Doctrine, AssetMapper et Stimulus, composants Twig. Plus de 330 tests, PHPStan au niveau le plus strict.</span></p></div>
+                <div><h3>Symfony AI</h3><p><span lang="en">The client’s reply streamed as it is written; the coach and the writers answer as structured output, into PHP classes.</span><span lang="fr">La réponse du client diffusée au fil de l’écriture ; le coach et les rédacteurs répondent en sortie structurée, dans des classes PHP.</span></p></div>
+                <div><h3>MCP</h3><p><span lang="en">Tools, prompts, resources and an MCP App, as plain Symfony services. Each member connects with a personal key.</span><span lang="fr">Outils, prompts, ressources et une MCP App, en simples services Symfony. Chaque membre se connecte avec sa clé personnelle.</span></p></div>
+                <div><h3>Hugging Face</h3><p><span lang="en">Inference Providers by default, with DeepSeek V4.1 Flash; any OpenAI-compatible API works, one model for the client and one for the coach.</span><span lang="fr">Inference Providers par défaut, avec DeepSeek V4.1 Flash ; toute API compatible OpenAI fonctionne, un modèle pour le client et un pour le coach.</span></p></div>
+                <div><h3><span lang="en">Your data</span><span lang="fr">Vos données</span></h3><p><span lang="en">One instance per company, on your own server: calls, debriefs and voices stay there.</span><span lang="fr">Une instance par entreprise, sur votre serveur : les appels, les débriefs et les voix y restent.</span></p></div>
+                <div><h3>AGPL-3.0</h3><p><span lang="en">Free and open source. Modify it, host it; share your changes with your users.</span><span lang="fr">Libre et open source. Modifiez-le, hébergez-le ; partagez vos changements avec vos utilisateurs.</span></p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="end">
+        <div class="wrap">
+            <h2><span lang="en">The next call is the one that counts. Rehearse it first.</span><span lang="fr">Le prochain appel est celui qui compte. Répétez-le avant.</span></h2>
+            <div class="actions">
+                <a class="btn primary" href="#run"><span lang="en">Try the demo</span><span lang="fr">Essayer la démo</span></a>
+                <a class="btn" href="https://github.com/mbetixio/decroche"><span lang="en">Read the code</span><span lang="fr">Lire le code</span></a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="wrap">
+        <p><span lang="en"><i>Décroche</i> is French for “pick up the phone”. Built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026.</span><span lang="fr">Construit pour le <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026.</span></p>
+        <p><a href="https://github.com/mbetixio/decroche">GitHub</a> · AGPL-3.0</p>
+    </div>
+</footer>
+
+<script>
+    // The language: the visitor's choice if they made one, else their browser's (French or English).
+    (() => {
+        const root = document.documentElement;
+        const set = (lang) => { root.dataset.lang = lang; root.lang = lang; };
+        let saved = null;
+        try { saved = localStorage.getItem('decroche-lang'); } catch { /* storage blocked */ }
+        set(saved ?? ((navigator.language || '').toLowerCase().startsWith('fr') ? 'fr' : 'en'));
+        document.querySelector('[data-toggle-lang]').addEventListener('click', () => {
+            const next = root.dataset.lang === 'fr' ? 'en' : 'fr';
+            set(next);
+            try { localStorage.setItem('decroche-lang', next); } catch { /* storage blocked */ }
+        });
+    })();
+</script>
+</body>
+</html>
