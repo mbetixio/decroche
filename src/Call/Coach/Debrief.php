@@ -46,6 +46,21 @@ final readonly class Debrief
     }
 
     /**
+     * The key of the criterion to train next: the lowest graded under 7, the first one on a tie; null when all are good.
+     */
+    public function weakest(): ?string
+    {
+        $weakest = null;
+        foreach ($this->criteria as $key => $criterion) {
+            if ($criterion['score'] < 7 && (null === $weakest || $criterion['score'] < $this->criteria[$weakest]['score'])) {
+                $weakest = $key;
+            }
+        }
+
+        return $weakest;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function toArray(): array

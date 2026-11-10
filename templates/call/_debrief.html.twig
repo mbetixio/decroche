@@ -39,10 +39,7 @@
         <section aria-labelledby="criteria-title">
             <div class="section-head"><h2 id="criteria-title">{{ 'debrief.criteria'|trans }}</h2><p>{{ 'debrief.out_of_ten'|trans }}</p></div>
             {# The weakest criterion, under 7, can be trained right away: a new call built to test it. #}
-            {% set weakest = null %}
-            {% for key, criterion in debrief.criteria|filter(c => c.score < 7) %}
-                {% if weakest is null or criterion.score < debrief.criteria[weakest].score %}{% set weakest = key %}{% endif %}
-            {% endfor %}
+            {% set weakest = debrief.weakest %}
             <div class="criteria">
                 {% for key, criterion in debrief.criteria %}
                     {% set ctone = criterion.score >= 7 ? 'good' : (criterion.score >= 5 ? 'warn' : 'bad') %}

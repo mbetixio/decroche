@@ -37,6 +37,16 @@ final class DebriefTest extends TestCase
         );
     }
 
+    public function testTheWeakestCriterionIsTheLowestUnderSeven(): void
+    {
+        $grade = static fn (int $score): array => ['label' => 'A criterion', 'score' => $score, 'comment' => ''];
+        $with = static fn (array $criteria): Debrief => Debrief::fromArray(['criteria' => $criteria] + self::debrief()->toArray());
+
+        self::assertSame('closing', $with(['discovery' => $grade(6), 'closing' => $grade(3), 'value' => $grade(3)])->weakest(), 'The first one on a tie.');
+        self::assertSame('discovery', $with(['discovery' => $grade(6), 'closing' => $grade(8)])->weakest());
+        self::assertNull($with(['discovery' => $grade(7), 'closing' => $grade(9)])->weakest(), 'Nothing to train when all are good.');
+    }
+
     public function testToArray(): void
     {
         $data = self::debrief()->toArray();
