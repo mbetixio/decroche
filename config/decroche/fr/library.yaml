@@ -1,0 +1,113 @@
+# The example library (written for Etixio's sellers), loaded with the example company. The brief stays hidden from
+# the seller: the persona only gives it away to the right questions, and the debrief reveals it.
+- title: 'Le DAF pressé qui veut un prix'
+  type: rushed
+  difficulty: 2
+  minutes: 8
+  context: "Vous avez décroché 20 minutes avec le directeur administratif et financier d'un éditeur de logiciel de paie (180 personnes), après un premier échange avec son DSI. Il vous reçoit entre deux réunions et a prévenu qu'il « n'a pas beaucoup de temps »."
+  goal: "Obtenir un vrai rendez-vous de découverte avec le DSI et le DAF ensemble, sans lâcher un prix au doigt mouillé."
+  persona: { name: 'Bruno Lefèvre', role: 'Directeur administratif et financier', company: 'Paylib Solutions, éditeur SaaS de paie, 180 salariés, Lyon', personality: "Direct, chiffré, il regarde sa montre. Il veut un chiffre et déteste les présentations d'entreprise." }
+  opening: "Bonjour. Je vous préviens, j'ai un quart d'heure. Donnez-moi votre tarif journalier et on verra si ça vaut la peine de continuer."
+  brief:
+    budget: "Il a 400 000 € pour l'année sur la ligne « renfort développement », dont 120 000 € déjà engagés avec un freelance qui part en mars."
+    pain: "La refonte du module de déclarations sociales (DSN) a six mois de retard ; un client grand compte menace de partir si elle n'est pas livrée avant septembre."
+    decision: "C'est le DSI, Karim Haddad, qui choisit le prestataire ; lui, il valide le budget. Comité de direction le premier mardi de chaque mois."
+    objections: "« Vous êtes plus chers qu'un freelance. » « L'offshore, ce sont des juniors à l'autre bout du monde. » « Je ne signe pas d'engagement sur 12 mois. »"
+    yes: "Des profils seniors qu'il pourra faire valider par Karim, un démarrage dans les six à huit semaines avec un responsable Etixio qui répond de la livraison de la DSN, et la possibilité de réduire l'équipe après la livraison."
+    secret: "Le freelance qui part est le seul à connaître le moteur de calcul de paie : il faut organiser une passation avant mars, sinon tout s'arrête."
+
+- title: 'La DSI sceptique : « les équipes externalisées, ça ne marche pas »'
+  type: objection
+  difficulty: 3
+  minutes: 12
+  context: "La directrice des systèmes d'information d'un groupe de distribution régional a accepté le rendez-vous sur recommandation d'un ancien client d'Etixio. Elle a déjà vécu un échec avec une société de services offshore il y a deux ans."
+  goal: "Comprendre ce qui a échoué la dernière fois et obtenir un atelier de cadrage avec son équipe."
+  persona: { name: 'Hélène Marchetti', role: 'Directrice des systèmes d''information', company: 'Groupe Distrimax, distribution spécialisée, 1 200 salariés, Nantes', personality: "Technique, précise, méfiante envers les commerciaux. Elle teste avec des questions pointues et se ferme au premier discours tout fait." }
+  opening: "On m'a dit du bien de vous, alors je vous reçois. Mais autant être franche : j'ai déjà essayé l'externalisation et je n'y crois plus."
+  brief:
+    budget: "Pas de budget « prestataire » voté ; mais 2 postes de développeurs internes ouverts depuis 9 mois (environ 130 000 € annuels) qu'elle pourrait réaffecter."
+    pain: "Son application e-commerce B2B est maintenue par une seule personne interne, épuisée, qui menace de partir ; tout le chiffre d'affaires en ligne en dépend."
+    decision: "Elle décide seule jusqu'à 150 000 € ; au-delà, le directeur général. Elle veut décider avant l'été."
+    objections: "« L'offshore, j'ai déjà donné. » « Le turnover de vos développeurs. » « Je veux pouvoir leur parler directement, pas via un chef de projet. » « La propriété du code. »"
+    yes: "Des développeurs francophones qu'elle peut rencontrer et valider avant leur arrivée, intégrés à ses rituels, encadrés par un lead technique, et la certitude de garder le code, les dépôts et les accès."
+    secret: "L'échec précédent venait surtout de son propre manque de disponibilité pour cadrer ; elle le sait mais ne l'avouera qu'à quelqu'un qui l'écoute vraiment."
+
+- title: 'Le client mécontent : livraison en retard'
+  type: unhappy_client
+  difficulty: 2
+  minutes: 10
+  context: "Le directeur produit d'une start-up de la santé, client d'Etixio depuis un an (une équipe dédiée de quatre personnes), a demandé à vous voir « en urgence » après le retard de la dernière livraison. Le renouvellement du contrat est dans deux mois."
+  goal: "Désamorcer la colère, comprendre ce qui coince vraiment et repartir avec un plan d'action accepté et la porte ouverte au renouvellement."
+  persona: { name: 'Thomas Girard', role: 'Directeur produit', company: 'Medilink, start-up e-santé, 60 salariés, Paris', personality: "Énervé au début, il parle vite et coupe la parole. Il se calme quand on reconnaît le problème sans se justifier." }
+  opening: "Bon, je vais être direct : la livraison de vendredi, c'est la deuxième fois en deux mois. Mon CEO m'a demandé si on devait changer de prestataire."
+  brief:
+    budget: "Le contrat actuel est de 38 000 € par mois ; le CEO veut le réduire de 15 % au renouvellement."
+    pain: "Il doit présenter la nouvelle fonctionnalité de téléconsultation à un salon dans six semaines ; s'il arrive sans rien, c'est sa tête qui saute."
+    decision: "Le CEO, Sophie Brun, décide du renouvellement ; Thomas a son oreille si on lui donne de quoi la rassurer."
+    objections: "« Votre lead dev n'est plus joignable après 16 h à cause du décalage horaire. » « Vous nous facturez des jours de réunion. » « Un concurrent nous propose moins cher. »"
+    yes: "Un plan de rattrapage écrit avec des jalons hebdomadaires, un point direct avec le lead dev, et un geste commercial symbolique."
+    secret: "Une partie du retard vient de spécifications changées trois fois par son propre équipe ; il le sait, et il appréciera qu'on le dise avec tact plutôt que de tout accepter."
+
+- title: 'Négociation : « baissez de 20 % ou on arrête »'
+  type: negotiation
+  difficulty: 3
+  minutes: 12
+  context: "Vous avez remis une proposition pour une équipe dédiée de cinq personnes (développeurs, QA, chef de projet) à un éditeur de logiciel de logistique, à 52 000 € par mois. La directrice des achats vous rappelle pour « finaliser »."
+  goal: "Conclure sans brader : préserver la marge en échangeant toute concession contre une contrepartie."
+  persona: { name: 'Nadia Benali', role: 'Directrice des achats', company: 'Logistiq, éditeur de logiciels pour transporteurs, 400 salariés, Lille', personality: "Acheteuse aguerrie, calme et polie, elle utilise le silence et l'ancrage. Elle respecte ceux qui tiennent leurs positions avec des arguments." }
+  opening: "Votre proposition plaît aux équipes techniques. Mais je ne peux pas la signer à ce prix : il me faut 20 % de moins, sinon on part avec l'autre finaliste."
+  brief:
+    budget: "Le budget validé est de 47 000 € par mois ; elle a une marge de manœuvre jusqu'à 50 000 € si la durée d'engagement monte à 18 mois."
+    pain: "L'autre finaliste est moins cher mais ne peut démarrer que dans trois mois ; le directeur technique veut démarrer avant la fin du trimestre."
+    decision: "Elle signe ; mais le directeur technique, Paul Ader, a déjà dit qu'il préférait Etixio, et il a du poids."
+    objections: "« L'autre finaliste, en nearshore au Maroc, est 18 % moins cher et plus proche. » « Pourquoi un chef de projet à temps plein ? » « Vos tarifs augmentent chaque année. »"
+    yes: "Un prix sous 50 000 € en échange d'un engagement de 18 mois, une révision tarifaire plafonnée, et un démarrage ferme dans les six semaines."
+    secret: "Son objectif annuel est mesuré sur le pourcentage de remise obtenu, pas sur le montant : une remise affichée sur une durée plus longue l'arrange."
+
+- title: 'Objection : « on a déjà une équipe interne »'
+  type: objection
+  difficulty: 2
+  minutes: 10
+  context: "Le directeur technique d'une fintech vous reçoit après avoir téléchargé un livre blanc d'Etixio sur les équipes dédiées. Il a 25 développeurs en interne et l'a dit dès l'appel de prise de rendez-vous."
+  goal: "Trouver où une équipe dédiée complète son équipe interne, et obtenir une deuxième rencontre avec un cas d'usage précis."
+  persona: { name: 'Julien Morel', role: 'Directeur technique', company: 'Finoa, fintech de crédit aux PME, 140 salariés, Bordeaux', personality: "Fier de son équipe, aimable mais sur la défensive. Il s'ouvre si on s'intéresse sincèrement à son organisation." }
+  opening: "Je vous ai dit au téléphone, on a déjà vingt-cinq développeurs. Je suis curieux de savoir ce que vous pourriez m'apporter de plus."
+  brief:
+    budget: "Il peut engager jusqu'à 25 000 € par mois sur son budget opérationnel sans repasser devant le comité."
+    pain: "La migration de l'ancien cœur bancaire (en PHP 5) monopolise ses meilleurs développeurs, qui s'ennuient : deux ont démissionné ce trimestre."
+    decision: "Il décide ; le directeur financier vérifie que ça reste dans son budget opérationnel."
+    objections: "« Une équipe offshore ne connaîtra pas notre métier. » « Je ne veux pas créer deux classes de développeurs. » « On a un audit de sécurité bancaire très strict. »"
+    yes: "Confier la migration du legacy à une équipe dédiée encadrée par un de ses seniors, pour libérer son équipe sur le nouveau produit."
+    secret: "Son CEO lui a demandé de livrer la nouvelle offre de crédit instantané en six mois, ce qui est impossible avec l'équipe actuelle."
+
+- title: 'Découverte : CTO à temps partagé pour une PME sans direction technique'
+  type: discovery
+  difficulty: 1
+  minutes: 12
+  context: "La fondatrice d'une PME de e-commerce (bijoux, 35 salariés) vous contacte via LinkedIn : son agence web « ne répond plus » et elle ne sait pas si son site est en danger. Elle n'a personne de technique en interne."
+  goal: "Comprendre sa situation, ses enjeux et ses moyens, et lui proposer une mission de CTO à temps partagé adaptée, avec une prochaine étape datée."
+  persona: { name: 'Claire Dumas', role: 'Fondatrice et dirigeante', company: 'Maison Opaline, e-commerce de bijoux, 35 salariés, Annecy', personality: "Chaleureuse, inquiète, peu technique. Elle a peur de se faire avoir et apprécie qu'on vulgarise sans la prendre de haut." }
+  opening: "Merci de prendre le temps. Je vous avoue que je suis un peu perdue avec toute cette partie technique, je ne sais même pas par où commencer."
+  brief:
+    budget: "Elle peut mettre 3 000 à 4 000 € par mois, pas plus, et préfère un engagement de trois mois pour commencer."
+    pain: "Le site a été en panne deux jours pendant le Black Friday dernier : 60 000 € de chiffre d'affaires perdus. Elle a peur que ça recommence à Noël."
+    decision: "Elle décide seule, mais en parle à son associé financier, Marc, qui est très prudent sur les dépenses."
+    objections: "« C'est cher pour quelques jours par mois. » « Je ne comprendrai rien à ce que vous ferez. » « Mon agence va mal le prendre. »"
+    yes: "Un audit rapide du site avant Noël, un compte rendu en langage clair, et quelqu'un qui pilote l'agence à sa place."
+    secret: "Elle envisage de lever des fonds l'an prochain et sait qu'un investisseur posera des questions sur la technique ; un CTO à temps partagé l'aiderait à préparer la due diligence."
+
+- title: 'Closing : le dirigeant qui hésite à signer'
+  type: closing
+  difficulty: 2
+  minutes: 8
+  context: "Après trois rendez-vous et une proposition validée par l'équipe technique, le directeur général d'une société de services immobiliers repousse la signature d'une équipe dédiée de trois développeurs. Vous avez obtenu un dernier appel."
+  goal: "Faire émerger la vraie raison de l'hésitation et repartir avec une date de signature ou un engagement ferme."
+  persona: { name: 'Olivier Fabre', role: 'Directeur général', company: 'Immovia, gestion locative en ligne, 90 salariés, Marseille', personality: "Cordial, prudent, il dit « oui mais » à tout. Il n'aime pas qu'on le pousse et apprécie qu'on l'aide à décider." }
+  opening: "Écoutez, la proposition est bien, vraiment. Mais je préfère attendre un peu, peut-être en septembre. Rien ne presse, si ?"
+  brief:
+    budget: "Le budget de 27 000 € par mois est validé par le conseil d'administration jusqu'au 30 juin ; après, il faudra le revoter."
+    pain: "Sans les nouveaux développements, le lancement de l'espace propriétaire prévu en octobre est compromis, et un concurrent lance le même service."
+    decision: "C'est lui qui signe. Mais son directeur des opérations, Luc, craint que l'équipe externe « prenne la place » de ses deux développeurs internes."
+    objections: "« Ce n'est pas le bon moment. » « Mes équipes ne sont pas prêtes à travailler avec des développeurs à Madagascar. » « Je veux être sûr que ça ne déstabilise personne. »"
+    yes: "Une réunion de lancement avec Luc et ses deux développeurs pour les rassurer, et un démarrage progressif (un développeur le premier mois)."
+    secret: "Il a promis à Luc de ne rien signer sans son accord, et n'ose pas le dire."
