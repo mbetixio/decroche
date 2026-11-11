@@ -292,8 +292,8 @@ translations/   English and French; config/decroche/{en,fr}/ the example company
 ## Quality
 
 ```bash
-php vendor/bin/phpunit                    # 350 unit and functional tests, offline, in a few seconds
-php vendor/bin/phpunit --coverage-text    # 91 % of the lines covered (needs pcov or Xdebug)
+php vendor/bin/phpunit                    # about 400 unit and functional tests, offline, in about twenty seconds
+php vendor/bin/phpunit --coverage-text    # 100 % of the classes, methods and lines (needs pcov or Xdebug)
 vendor/bin/phpstan analyse                # level max, with the Symfony and Doctrine extensions
 vendor/bin/php-cs-fixer fix --dry-run     # Symfony coding standard, strict types everywhere
 ```
