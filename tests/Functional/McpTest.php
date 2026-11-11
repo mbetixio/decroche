@@ -7,8 +7,10 @@ namespace App\Tests\Functional;
 use App\Company\DemoCompany;
 use App\Company\TeamManager;
 use App\Entity\Member;
+use App\Entity\Scenario;
 use App\Enum\Language;
 use App\Tests\Fake\ScriptedModel;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * The MCP server, as an AI client uses it: authenticated by the member's personal key, it draws a call and hands over a
@@ -150,6 +152,103 @@ final class McpTest extends FunctionalTestCase
         $app = $this->tool('debrief');
         self::assertStringContainsString('Orders are lost', $app['html']);
         self::assertArrayNotHasKey('member', $app);
+    }
+
+    public function testAChatCallEndedByThePersonaIsDebriefedWhenAsked(): void
+    {
+        $this->connect($this->member());
+        $started = $this->tool('new_call', ['mode' => 'chat']);
+
+        // The persona leaves: the call waits for its debrief, which the debrief app writes when opened.
+        $this->tool('reply', ['message' => 'Alright, goodbye.', 'call' => $started['call']]);
+        $refused = $this->rpc('tools/call', ['name' => 'reply', 'arguments' => (object) ['message' => 'Wait!']]);
+        self::assertTrue($refused['isError']);
+        self::assertStringContainsString('hang_up', $refused['content'][0]['text']);
+        self::assertStringContainsString('Orders are lost', $this->tool('debrief', ['call' => $started['call']])['html']);
+
+        $other = $this->rpc('tools/call', ['name' => 'debrief', 'arguments' => (object) ['call' => 9999]]);
+        self::assertStringContainsString('No call #9999 in your name.', $other['content'][0]['text']);
+    }
+
+    public function testAnAbandonedChatCallHasNoGrade(): void
+    {
+        $this->connect($this->member());
+        $this->tool('new_call', ['mode' => 'chat']);
+
+        $dropped = $this->tool('hang_up', ['abandon' => true]);
+        self::assertSame('abandoned', $dropped['status']);
+        self::assertSame($dropped, $this->tool('hang_up', ['abandon' => true]), 'Abandoning twice changes nothing.');
+        $graded = $this->rpc('tools/call', ['name' => 'hang_up', 'arguments' => new \stdClass()]);
+        self::assertStringContainsString('no graded debrief', $graded['content'][0]['text']);
+    }
+
+    public function testTheModelFailingIsToldToTheClient(): void
+    {
+        $this->connect($this->member());
+        ScriptedModel::$unreachable = true;
+        foreach (['new_call' => [], 'prepare_call' => ['prospect' => 'Ana Diaz, Freshcart, wants our rates before Thursday.']] as $tool => $arguments) {
+            $failed = $this->rpc('tools/call', ['name' => $tool, 'arguments' => (object) $arguments]);
+            self::assertTrue($failed['isError']);
+            self::assertStringContainsString('could not be reached', $failed['content'][0]['text']);
+        }
+
+        ScriptedModel::$unreachable = false;
+        ScriptedModel::$garbled = 2;
+        foreach (['new_call' => [], 'prepare_call' => ['prospect' => 'Ana Diaz, Freshcart, wants our rates before Thursday.']] as $tool => $arguments) {
+            ScriptedModel::$garbled = 2;
+            $failed = $this->rpc('tools/call', ['name' => $tool, 'arguments' => (object) $arguments]);
+            self::assertStringContainsString('could not be written', $failed['content'][0]['text']);
+        }
+    }
+
+    public function testAnArchivedScenarioCannotBeStarted(): void
+    {
+        $this->service(DemoCompany::class)->loadLibrary(Language::English);
+        $this->connect($this->member());
+        $id = $this->tool('library')['scenarios'][0]['id'];
+        $em = $this->service(EntityManagerInterface::class);
+        $em->find(Scenario::class, $id)->active = false;
+        $em->flush();
+
+        $refused = $this->rpc('tools/call', ['name' => 'start_call', 'arguments' => (object) ['scenario' => $id]]);
+        self::assertTrue($refused['isError']);
+    }
+
+    public function testTheRemainingRequestsAndResources(): void
+    {
+        $this->connect($this->member());
+        foreach (['review_my_calls' => 'my_progress', 'coach_my_team' => 'give_mission'] as $prompt => $tool) {
+            self::assertStringContainsString($tool, $this->rpc('prompts/get', ['name' => $prompt])['messages'][0]['content']['text']);
+        }
+        $situations = json_decode($this->rpc('resources/read', ['uri' => 'decroche://situations'])['contents'][0]['text'], true);
+        self::assertNotEmpty($situations['situations']);
+    }
+
+    public function testTheKeyMayComeAsABearerToken(): void
+    {
+        $this->key = $this->service(TeamManager::class)->newMcpKey($this->member());
+        $this->client->request('POST', '/mcp', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json, text/event-stream', 'HTTP_AUTHORIZATION' => 'Bearer '.$this->key], content: '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"test","version":"1"}}}');
+        self::assertResponseIsSuccessful();
+
+        $this->client->request('POST', '/mcp', server: ['CONTENT_TYPE' => 'application/json'], content: '{}');
+        self::assertResponseStatusCodeSame(401);
+    }
+
+    public function testAManagersMistakesAreToldPlainly(): void
+    {
+        $this->member();
+        $this->connect($this->manager());
+        $calls = [
+            ['give_mission', ['email' => 'seller@decroche.test', 'situation' => 'juggling'], 'No situation "juggling"'],
+            ['give_mission', ['email' => 'seller@decroche.test', 'situation' => 'price_request', 'due' => '2001-01-01'], 'future date'],
+            ['invite', ['email' => 'not an address'], 'is not an e-mail address'],
+            ['invite', ['email' => 'seller@decroche.test'], 'already has an account'],
+        ];
+        foreach ($calls as [$tool, $arguments, $message]) {
+            $result = $this->rpc('tools/call', ['name' => $tool, 'arguments' => (object) $arguments]);
+            self::assertTrue($result['isError'], $tool);
+            self::assertStringContainsString($message, $result['content'][0]['text']);
+        }
     }
 
     public function testSellersReadTheirFiguresButNotTheTeam(): void

@@ -48,6 +48,14 @@ final class SiteReaderTest extends TestCase
         self::assertSame('', new SiteReader($forbidden)->read('93.184.215.14'));
     }
 
+    public function testAPageTooLargeIsNotRead(): void
+    {
+        $huge = '<html><body>'.str_repeat('<p>Filler text.</p>', 130_000).'</body></html>';
+        $http = new MockHttpClient(new MockResponse($huge, ['response_headers' => ['content-type' => 'text/html']]));
+
+        self::assertSame('', new SiteReader($http)->read('93.184.215.14'));
+    }
+
     public function testAnAddressOnThePrivateNetworkIsNeverReached(): void
     {
         $asked = 0;
