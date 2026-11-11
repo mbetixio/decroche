@@ -8,6 +8,8 @@
 
 <p align="center">Symfony 8.1 · Symfony AI · MCP · Hugging Face Inference Providers · PHP 8.5</p>
 
+<p align="center">By Mathieu Bernard · <a href="https://etixio.com">Etixio</a></p>
+
 <p align="center"><a href="https://mbetixio.github.io/decroche/">Website</a> · Open source (AGPL-3.0) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
 
 <p align="center"><img src="docs/screenshots/phone.png" alt="The phone screen during a practice call" width="900"></p>
@@ -311,7 +313,12 @@ Décroche was built for the [Symfony AI & MCP Hackathon](https://symfony.com/hac
 phone in real time, a coach grading structured feedback, and the same product reachable from Claude — down to
 rehearsing tomorrow's client meeting from its e-mail thread.
 
+It was made by **Mathieu Bernard**, CTO at [Etixio](https://etixio.com), a software services company whose sellers
+needed somewhere to practise before the real call.
+
 ## License
+
+Copyright © 2026 Mathieu Bernard, Etixio.
 
 Décroche is free and open source software, released under the [GNU Affero General Public License v3](LICENSE)
 (AGPL-3.0-or-later). You may use it, study it, modify it and run your own instance, for free. If you modify it and

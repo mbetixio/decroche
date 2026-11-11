@@ -2,6 +2,13 @@
     "name": "mbetixio/decroche",
     "type": "project",
     "license": "AGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Mathieu Bernard",
+            "homepage": "https://etixio.com",
+            "role": "Author"
+        }
+    ],
     "description": "Rehearse sales calls out loud against an AI client with a hidden brief, then get graded by a coach. Symfony AI, MCP and Hugging Face.",
     "minimum-stability": "beta",
     "prefer-stable": true,
