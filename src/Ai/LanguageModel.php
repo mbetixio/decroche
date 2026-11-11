@@ -57,8 +57,6 @@ final readonly class LanguageModel
         foreach ($result->asStream() as $delta) {
             if ($delta instanceof TextDelta) {
                 yield $delta->getText();
-            } elseif (\is_string($delta)) {
-                yield $delta;
             }
         }
     }

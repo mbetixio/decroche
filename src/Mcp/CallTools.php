@@ -234,11 +234,8 @@ final readonly class CallTools
      */
     private function start(Scenario $scenario): array
     {
-        try {
-            $call = $this->calls->start($this->me->member(), $scenario);
-        } catch (CallException $e) {
-            throw new ToolCallException($this->translator->trans($e->getMessage(), domain: 'messages', locale: 'en'));
-        }
+        // The scenario is an active one (see scenario() and new_call): the call can always start.
+        $call = $this->calls->start($this->me->member(), $scenario);
 
         return [
             'call' => $call->id,

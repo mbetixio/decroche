@@ -14,6 +14,7 @@ use App\Entity\Call;
 use App\Entity\Member;
 use App\Entity\Scenario;
 use App\Enum\Speaker;
+use App\Http\OutputBuffers;
 use App\Repository\CallRepository;
 use App\Repository\CompanyRepository;
 use App\Security\Voter\CallVoter;
@@ -118,13 +119,8 @@ final class CallController extends AbstractController
         $translator = $this->translator;
 
         return new StreamedResponse(static function () use ($events, $translator): void {
-            // Each sentence must leave at once: no output buffer may hold it back (except the test client's, which
-            // collects the whole stream).
-            if ('cli' !== \PHP_SAPI) {
-                while (ob_get_level() > 0) {
-                    ob_end_flush();
-                }
-            }
+            // Each sentence must leave at once: no output buffer may hold it back.
+            OutputBuffers::release();
             foreach ($events as $event) {
                 if ('error' === $event['t']) {
                     $event['error'] = $translator->trans(Data::string($event['error']));

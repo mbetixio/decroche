@@ -25,6 +25,8 @@ final readonly class EdgeTtsSynthesizer implements SpeechSynthesizer
         #[Autowire('%env(default:voices_dir:VOICES_DIR)%')]
         private string $cache,
         private VoiceCachePruner $pruner,
+        /** The cache is pruned once in so many new lines: no cron needed. */
+        private int $pruneOneIn = 200,
     ) {
     }
 
@@ -60,8 +62,8 @@ final readonly class EdgeTtsSynthesizer implements SpeechSynthesizer
 
             return new EdgeTtsSynthesis($file, null, '');
         }
-        // Now and then (one new line in two hundred), the cache is pruned: no cron needed.
-        if (1 === random_int(1, 200)) {
+        // Now and then, the cache is pruned.
+        if (1 === random_int(1, max(1, $this->pruneOneIn))) {
             $this->pruner->prune();
         }
         if (!is_dir($this->cache)) {
