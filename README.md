@@ -314,7 +314,7 @@ Décroche was built for the [Symfony AI & MCP Hackathon](https://symfony.com/hac
 phone in real time, a coach grading structured feedback, and the same product reachable from Claude — down to
 rehearsing tomorrow's client meeting from its e-mail thread.
 
-It was made by **Mathieu Bernard**, CTO at [Etixio](https://etixio.com), a software services company whose sellers
+It was made by **Mathieu Bernard**, CTO and AI expert at [Etixio](https://etixio.com), a software services company whose sellers
 needed somewhere to practise before the real call.
 
 ## License
