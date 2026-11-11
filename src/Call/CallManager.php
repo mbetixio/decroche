@@ -129,6 +129,8 @@ final readonly class CallManager
         $this->expire($call);
         if ($call->isLive()) {
             $call->stop(CallEnd::Seller, $this->clock->now());
+            // Hung up for good, even if the coach fails now: the debrief is written again on the next visit.
+            $this->calls->save($call);
         }
         if (!$call->isDone()) {
             $result = $this->coach->debrief($call, $this->clock->now());
