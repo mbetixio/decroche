@@ -11,6 +11,7 @@ use App\Enum\Language;
 use App\Enum\MemberRole;
 use App\Repository\CompanyRepository;
 use App\Tests\Fake\ScriptedModel;
+use App\Tests\Fake\SilentSynthesizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Psr\Clock\ClockInterface;
@@ -36,7 +37,8 @@ abstract class FunctionalTestCase extends WebTestCase
         $schema->createSchema($metadata);
         $em->getConnection()->executeStatement('PRAGMA foreign_keys = ON');
         $em->clear();
-        ScriptedModel::$prompts = [];
+        ScriptedModel::reset();
+        SilentSynthesizer::reset();
     }
 
     /**
@@ -72,6 +74,21 @@ abstract class FunctionalTestCase extends WebTestCase
         $this->client->loginUser($member);
 
         return $member;
+    }
+
+    /**
+     * A CSRF token stored in the client's session, for a request no page offers a form for. A page must have been
+     * requested first.
+     */
+    protected function csrfToken(string $id): string
+    {
+        $request = $this->client->getRequest();
+        $container = $this->client->getContainer();
+        $container->get('request_stack')->push($request);
+        $token = (string) $container->get('security.csrf.token_manager')->getToken($id)->getValue();
+        $request->getSession()->save();
+
+        return $token;
     }
 
     /**

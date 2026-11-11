@@ -22,6 +22,9 @@ services:
 
 
 when@test:
+    parameters:
+        # The tests' own voice cache, apart from the one used in development.
+        voices_dir: '%kernel.project_dir%/var/voices_test'
     services:
         # Tests never reach the network: a scripted language model, and no voice synthesis.
         ai.platform.generic.decroche:

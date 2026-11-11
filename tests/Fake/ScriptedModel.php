@@ -5,35 +5,99 @@ declare(strict_types=1);
 namespace App\Tests\Fake;
 
 use Symfony\AI\Platform\Platform;
+use Symfony\AI\Platform\Result\Stream\Delta\TextDelta;
+use Symfony\AI\Platform\Result\StreamResult;
 use Symfony\AI\Platform\Result\TextResult;
 use Symfony\AI\Platform\Test\MockPlatformFactory;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * The language model in tests: a Symfony AI mock platform that answers each kind of prompt (scenario writer, coach,
- * offer analyst, persona) with a fixed, valid answer, so that every flow runs without the network.
+ * offer analyst, persona) with a fixed, valid answer, so that every flow runs without the network. The persona's
+ * answer comes as a stream, as from a real provider. A test can also make it fail: unreachable, garbled for the next
+ * answers, or answering a given kind of prompt its own way.
  */
 final class ScriptedModel
 {
     /** Every prompt received, as JSON, for assertions. */
     public static array $prompts = [];
 
+    /** The provider cannot be reached: every call fails as on a network error. */
+    public static bool $unreachable = false;
+
+    /** The connection drops in the middle of the next streamed answer. */
+    public static bool $cutOff = false;
+
+    /** How many of the next answers come garbled (not the JSON asked for). */
+    public static int $garbled = 0;
+
+    /** @var array<string, string> answers of a test's own, by a phrase of the prompt they answer */
+    public static array $answers = [];
+
+    /**
+     * Back to the well-behaved model, before each test.
+     */
+    public static function reset(): void
+    {
+        self::$prompts = [];
+        self::$unreachable = false;
+        self::$cutOff = false;
+        self::$garbled = 0;
+        self::$answers = [];
+    }
+
     public static function platform(?EventDispatcherInterface $dispatcher = null): Platform
     {
-        return MockPlatformFactory::createPlatform(eventDispatcher: $dispatcher, responses: static function ($model, array|string $payload): TextResult {
+        return MockPlatformFactory::createPlatform(eventDispatcher: $dispatcher, responses: static function ($model, array|string $payload, array $options = []): TextResult|StreamResult {
             $prompt = \is_string($payload) ? $payload : (string) json_encode($payload, \JSON_UNESCAPED_UNICODE);
             self::$prompts[] = $prompt;
+            if (self::$unreachable) {
+                throw new \RuntimeException('Connection refused.');
+            }
+            if (self::$garbled > 0) {
+                --self::$garbled;
 
-            return new TextResult(match (true) {
-                str_contains($prompt, 'You write phone call situations') => (string) json_encode(self::scenario() + ['material' => "The web form:\nName: Ana Diaz\nMessage: we need a quote.", 'objectives' => ['Find the need', 'Explain the pricing', 'Book a meeting']]),
-                str_contains($prompt, 'You write role-play scenarios') => (string) json_encode(self::scenario() + ['type' => 'discovery']),
-                str_contains($prompt, 'experienced sales coach') => (string) json_encode(self::debrief()),
-                str_contains($prompt, 'sales training tool') => (string) json_encode(['name' => 'Acme', 'offer' => "Who: Acme builds software for retailers.\n\nThe offers:\n- Dedicated teams\n- Technical audits\n\nThe terms: to be specified.", 'sectors' => ['retail', 'logistics']]),
-                str_contains($prompt, 'catalogue of situations') => (string) json_encode(['situations' => array_map(self::situation(...), ['price_request', 'unhappy_client', 'cold_call', 'renewal', 'referral'], ['Price request', 'Unhappy client', 'Cold call', 'Renewal', 'Referral'])]),
-                str_contains($prompt, 'You are playing a part in a sales training') => self::persona($prompt),
-                default => 'Hm.',
-            });
+                return new TextResult('Sorry, I cannot help with that.');
+            }
+            foreach (self::$answers as $phrase => $answer) {
+                if (str_contains($prompt, $phrase)) {
+                    return new TextResult($answer);
+                }
+            }
+            $answer = self::answer($prompt);
+
+            return true === ($options['stream'] ?? false) ? new StreamResult(self::stream($answer)) : new TextResult($answer);
         });
+    }
+
+    private static function answer(string $prompt): string
+    {
+        return match (true) {
+            str_contains($prompt, 'You write phone call situations') => (string) json_encode(self::scenario() + ['material' => "The web form:\nName: Ana Diaz\nMessage: we need a quote.", 'objectives' => ['Find the need', 'Explain the pricing', 'Book a meeting']]),
+            str_contains($prompt, 'You write role-play scenarios') => (string) json_encode(self::scenario() + ['type' => 'discovery']),
+            str_contains($prompt, 'experienced sales coach') => (string) json_encode(self::debrief()),
+            str_contains($prompt, 'sales training tool') => (string) json_encode(['name' => 'Acme', 'offer' => "Who: Acme builds software for retailers.\n\nThe offers:\n- Dedicated teams\n- Technical audits\n\nThe terms: to be specified.", 'sectors' => ['retail', 'logistics']]),
+            str_contains($prompt, 'catalogue of situations') => (string) json_encode(['situations' => array_map(self::situation(...), ['price_request', 'unhappy_client', 'cold_call', 'renewal', 'referral'], ['Price request', 'Unhappy client', 'Cold call', 'Renewal', 'Referral'])]),
+            str_contains($prompt, 'You are playing a part in a sales training') => self::persona($prompt),
+            default => 'Hm.',
+        };
+    }
+
+    /**
+     * An answer as a provider streams it: a few words at a time.
+     *
+     * @return \Generator<int, TextDelta>
+     */
+    private static function stream(string $answer): \Generator
+    {
+        foreach (str_split($answer, 12) as $i => $piece) {
+            if (self::$cutOff && $i > 0) {
+                self::$cutOff = false;
+
+                throw new \RuntimeException('Connection reset.');
+            }
+            yield new TextDelta($piece);
+        }
     }
 
     /**
