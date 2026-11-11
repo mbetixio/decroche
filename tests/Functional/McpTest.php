@@ -107,6 +107,32 @@ final class McpTest extends FunctionalTestCase
         self::assertIsInt($started['call']);
     }
 
+    public function testAMeetingFromAnEmailIsRehearsedThroughMcp(): void
+    {
+        $this->connect($this->member());
+        $situations = $this->tool('situations');
+        self::assertSame('Etixio', $situations['company']);
+        self::assertContains('price_request', array_column($situations['situations'], 'key'));
+
+        $result = $this->tool('prepare_call', ['prospect' => "From: Ana Diaz <ana@freshcart.example>\nWe lose orders between our tools and would like your rates before Thursday's call."]);
+        self::assertStringContainsString('/login/link', $result['link']);
+        self::assertArrayNotHasKey('brief', $result['scenario'], 'The hidden brief never leaves the server.');
+
+        $link = $this->tool('call_link', ['scenario' => $result['scenario']['id']]);
+        self::assertSame(15, $link['valid_minutes']);
+    }
+
+    public function testMcpErrorsAreToldPlainly(): void
+    {
+        $this->connect($this->member());
+
+        $tooShort = $this->rpc('tools/call', ['name' => 'prepare_call', 'arguments' => (object) ['prospect' => 'Ana']]);
+        self::assertTrue($tooShort['isError']);
+        $unknown = $this->rpc('tools/call', ['name' => 'call_link', 'arguments' => (object) ['scenario' => 999]]);
+        self::assertTrue($unknown['isError']);
+        self::assertStringContainsString('No scenario #999', $unknown['content'][0]['text']);
+    }
+
     public function testACallPlayedInTheChat(): void
     {
         $this->connect($this->member());

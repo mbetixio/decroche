@@ -88,6 +88,30 @@ final class TeamTest extends FunctionalTestCase
         self::assertSame([], $this->service(MissionRepository::class)->all());
     }
 
+    public function testAManagerGivesANewPasswordThatSignsTheSellerIn(): void
+    {
+        $seller = $this->member();
+        $crawler = $this->client->request('GET', '/team/'.$seller->id);
+        $crawler = $this->client->submit($crawler->filter('form[action$="/password"]')->form());
+        self::assertResponseIsSuccessful();
+        self::assertStringContainsString('no-store', (string) $this->client->getResponse()->headers->get('Cache-Control'), 'The password is never cached.');
+        $password = (string) $crawler->filter('.copy-field input')->attr('value');
+        self::assertMatchesRegularExpression('/^[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}$/', $password);
+
+        $this->client->getCookieJar()->clear();
+        $crawler = $this->client->request('GET', '/login');
+        $this->client->submit($crawler->filter('form[action="/login"]')->form(), ['_username' => 'seller@decroche.test', '_password' => $password]);
+        self::assertResponseRedirects('http://localhost/');
+    }
+
+    public function testAMemberCannotBeInvitedTwice(): void
+    {
+        $this->member();
+        $this->client->request('GET', '/team');
+        $this->submit('Create the links', ['invitations[emails]' => 'seller@decroche.test']);
+        self::assertSame([], $this->service(InvitationRepository::class)->pending());
+    }
+
     public function testAManagerCannotChangeTheirOwnRole(): void
     {
         $seller = $this->member();
