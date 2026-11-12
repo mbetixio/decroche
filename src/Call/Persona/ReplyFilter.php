@@ -51,7 +51,8 @@ final class ReplyFilter
      */
     public function text(): string
     {
-        return trim((string) preg_replace('/[ \t]{2,}/', ' ', $this->said));
+        // One spoken line: the line breaks between a tool's rounds become a space, like any other run of spaces.
+        return trim((string) preg_replace('/\s{2,}|\n/u', ' ', $this->said));
     }
 
     private function flush(bool $final): string
