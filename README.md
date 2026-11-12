@@ -37,6 +37,7 @@ sheet and 14–18 call situations specific to its business, in English or French
 |---|---|
 | 🎲 **Calls drawn from your own business** | The onboarding analyses your website into an offer sheet and a catalogue of situations. Each *New call* draws one at random and writes a unique scenario around it: a person, a company, the document you have in front of you (laid out like a CRM record), three objectives, and a hidden brief. |
 | 📞 **A real call, out loud** | Speech recognition in the browser, neural voices generated server-side, the reply streamed and voiced sentence by sentence, interruptions (barge-in), a timer. No text box unless you want the keypad. |
+| 🗂️ **A client with their own files** | The client is a Symfony AI agent with tools. Each call comes with their workspace, written for their business: a calendar and two to four sources (support tickets, stock levels, suppliers, orders, e-mails, contracts… whatever fits). Ask about an incident and they say *"let me check…"* and quote their own records; propose a meeting and they open their calendar, then book it if they are free; mention last week's call and they remember it. The debrief shows what they did and what their files held. |
 | 🎯 **A debrief that teaches** | A score out of 100 on your scorecard, the call's objectives judged one by one, the hidden brief revealed with what you missed and *the question that would have found it*, your best and worst lines quoted word for word with a better alternative, three tips, talk share and filler words. Replay the call from any of your lines, or *train on this point*: a new call built to test your weakest criterion. |
 | 📈 **Progress that means something** | No XP or badges: the difficulty of your next calls follows your last five scores, and the home page tells you why, your trend, and the one criterion to work on. |
 | 🧑‍💼 **Managers follow the team** | The team board (difficulty, average, trend, weakest criterion per seller), each seller's debriefs, missions ("3 price-request calls scored 70+ by Friday"), invitations, the company's own library of scenarios and scorecard. |
@@ -156,8 +157,9 @@ Open <http://localhost:7077>. Then choose:
 
   The onboarding is skipped: an example company (a software services firm), its 24 situations, a library of 7
   scenarios, and a small team are created. You sign in as its manager, Alex Morgan, who already has four debriefed
-  calls (scores climbing from 1 to 70) next to a junior seller's two, so the home page, the progress, the team board
-  and the MCP statistics are full from the start. `DECROCHE_LANGUAGE=fr` gives the same in French.
+  calls (scores climbing from 0 to 60, the coach naming the flaw that keeps coming back) next to a junior seller's
+  two, so the home page, the progress, the team board and the MCP statistics are full from the start. Every scenario
+  comes with its client's files. `DECROCHE_LANGUAGE=fr` gives the same in French.
 
 The database, the sessions, the synthesized voices and the instance's own secrets live in the `decroche` volume:
 `docker compose down` keeps them, `docker compose down -v` starts over.
@@ -203,8 +205,9 @@ Put your values in `.env.local` (without Docker) or `.env.docker` (with Docker).
 | `AI_API_KEY` | — | **Required.** Your model provider's key: a Hugging Face token `hf_…` by default. |
 | `AI_BASE_URL` | `https://router.huggingface.co/v1` | Any OpenAI-compatible endpoint (see below). |
 | `AI_PERSONA_MODEL` | `deepseek-ai/DeepSeek-V4.1-Flash` | The client on the phone: its reply is streamed, so it must start fast. |
-| `AI_COACH_MODEL` | `deepseek-ai/DeepSeek-V4.1-Flash` | The coach and the writers (debriefs, scenarios, offer sheet), as structured output. The same model twice is fine. |
-| `AI_PERSONA_REASONING`, `AI_COACH_REASONING` | `low`, `low` | Reasoning effort, `none` to `high`, sent the way the model family expects it (gpt-oss, gpt-5, DeepSeek). |
+| `AI_COACH_MODEL` | `deepseek-ai/DeepSeek-V4.1-Flash` | The coach, who investigates the call then grades it, and the offer sheet. |
+| `AI_WRITER_MODEL` | `openai/gpt-oss-120b` | The writer of each call and of its client's files: a long text, so it must write fast. The same model several times is fine. |
+| `AI_PERSONA_REASONING`, `AI_COACH_REASONING`, `AI_WRITER_REASONING` | `low` | Reasoning effort, `none` to `high`, sent the way the model family expects it (gpt-oss, gpt-5, DeepSeek). |
 | `AI_COMPLETIONS_PATH` | `/chat/completions` | |
 | `AI_HEADERS` | `{}` | Extra HTTP headers for the model's API, as JSON. |
 | `DEFAULT_URI` | `http://127.0.0.1:8000` | The instance's public address, for the links it generates (call links, invitations). |
@@ -226,9 +229,12 @@ the app's own prompts:
 | DeepSeek V4.1 Flash on another provider | 1.8 s | 9–12 s | As precise as the default |
 
 Reasoning made the debriefs slower (about 20 s) without making them better, so it is off by default. For instant
-debriefs, set `AI_COACH_MODEL=openai/gpt-oss-120b`. Other providers:
+debriefs, set `AI_COACH_MODEL=openai/gpt-oss-120b`.
 
-| Provider | `AI_BASE_URL` | Both models |
+The writer is the other way round: a call and its client's files are a long text, and gpt-oss writes it in about
+5 seconds where DeepSeek takes 30 or more, so gpt-oss writes by default. Other providers:
+
+| Provider | `AI_BASE_URL` | All three models |
 |---|---|---|
 | Hugging Face (default) | `https://router.huggingface.co/v1` | `deepseek-ai/DeepSeek-V4.1-Flash` |
 | OpenAI | `https://api.openai.com/v1` | `gpt-5.4-mini` |
@@ -247,10 +253,22 @@ publish it with GitHub Pages: *Settings → Pages → Deploy from a branch → `
 
 ## How Symfony AI, MCP and Hugging Face are used
 
-- **Two jobs, two models, through Symfony AI.** `App\Ai\LanguageModel` wraps a Symfony AI *generic* platform declared
-  in `config/packages/ai.yaml`, pointed at Hugging Face Inference Providers by default: one model plays the persona
-  (streamed), the other coaches and writes, each with its own reasoning effort.
-- **Structured output.** The coach, the scenario writers and the offer analyst answer into classes
+- **Three agents with tools.** `config/packages/ai.yaml` declares three Symfony AI agents on a *generic* platform
+  (Hugging Face Inference Providers by default), each with its model, its reasoning effort and its tools, plain
+  services marked `#[AsTool]` (`src/Agent/`):
+  - **the persona** (`look_up`, `check_calendar`, `book_meeting`, `previous_calls`) talks on the phone, streamed: a
+    line said while a tool runs, then the rest, across the agent's rounds;
+  - **the coach** (`previous_debriefs`, `find_in_transcript`, `client_actions`, `read_offer`) investigates the call:
+    a mistake that keeps coming back, the exact lines, a meeting the client really booked, a promise checked
+    against the offer;
+  - **the writer** (`recent_calls`, `read_offer`) writes each call and its client's workspace.
+
+  The tools know what they work on through `AgentContext`. Providers refuse, or ignore, tools next to a JSON schema,
+  so the coach and the writer work in two steps (`LanguageModel::work()`): they investigate and write down notes,
+  then the notes feed a strict structured answer.
+- **A generic workspace.** `App\Model\Workspace` holds the client's calendar and sources of free records (a title, a
+  date, fields, a note): no business is built in, the writer picks what fits the situation.
+- **Structured output.** The coach, the writer and the offer analyst answer into classes
   (`src/Ai/Output/`, described with `#[Schema]` attributes): Symfony AI sends each class as a strict JSON schema
   (`response_format`) and turns the model's JSON back into the object (`asObject()`). The criteria come as a list,
   since every company writes its own scorecard.
@@ -272,12 +290,13 @@ publish it with GitHub Pages: *Settings → Pages → Deploy from a branch → `
 
 ```
 src/
-  Ai/           LanguageModel (Symfony AI), Output/ (the structured answers), Data (typed reading of stored JSON)
+  Agent/        the agents' tools: the persona's (files, calendar, booking, memory), the coach's, the writer's
+  Ai/           LanguageModel (the three agents), Output/ (the structured answers), Data (typed reading of stored JSON)
   Call/         CallManager (start, talk, expire, finish, abandon, replay), TurnStreamer, SentenceSplitter
     Persona/    the persona's prompt, its streamed reply and marker filter
     Coach/      the coach's prompt, the debrief and its scoring
     Speech/     talk share, questions, filler words, pace
-  Scenario/     situation canvas and drawer, scenario writer and factory, surprise calls
+  Scenario/     situation canvas and drawer, scenario and workspace writers, factory, surprise calls
   Company/      website reader (private networks refused), offer analyst, example company and calls, team and missions
   Progress/     a member's figures, the difficulty that follows their scores, the team board, missions
   Voice/        edge-tts synthesis and its cache pruning, voice casting per language, gender and tone
