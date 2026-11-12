@@ -1,113 +1,1661 @@
 # The example library (written for Etixio's sellers), loaded with the example company. The brief stays hidden from
 # the seller: the persona only gives it away to the right questions, and the debrief reveals it.
-- title: 'The rushed CFO who wants a price'
+-
+  title: 'The rushed CFO who wants a price'
   type: rushed
   difficulty: 2
   minutes: 8
   context: "You've landed 20 minutes with the chief financial officer of a payroll software vendor (180 people), after an initial conversation with his CIO. He's seeing you between two meetings and has warned you that he 'doesn't have much time.'"
-  goal: "Secure a real discovery meeting with the CIO and the CFO together, without blurting out a made-up price."
-  persona: { name: 'Bruno Lefèvre', role: 'Chief Financial Officer', company: 'Paylib Solutions, payroll SaaS vendor, 180 employees, Lyon', personality: "Direct, numbers-driven, he keeps checking his watch. He wants a figure and hates company presentations." }
+  goal: 'Secure a real discovery meeting with the CIO and the CFO together, without blurting out a made-up price.'
+  persona:
+    name: 'Bruno Lefèvre'
+    role: 'Chief Financial Officer'
+    company: 'Paylib Solutions, payroll SaaS vendor, 180 employees, Lyon'
+    personality: 'Direct, numbers-driven, he keeps checking his watch. He wants a figure and hates company presentations.'
   opening: "Hello. Fair warning, I've got fifteen minutes. Give me your day rate and we'll see if it's worth continuing."
   brief:
     budget: "He has €400,000 for the year on the 'development reinforcement' line, of which €120,000 is already committed to a freelancer who's leaving in March."
     pain: "The overhaul of the social security reporting module (DSN) is six months behind; a major enterprise client is threatening to leave if it isn't delivered before September."
     decision: "It's the CIO, Karim Haddad, who picks the vendor; he approves the budget. Executive committee on the first Tuesday of every month."
     objections: "'You're more expensive than a freelancer.' 'Offshore means juniors on the other side of the world.' 'I don't sign 12-month commitments.'"
-    yes: "Senior profiles he can have Karim sign off on, a start within six to eight weeks with an Etixio lead who's accountable for the DSN delivery, and the option to scale the team down after delivery."
-    secret: "The departing freelancer is the only one who knows the payroll calculation engine: a handover has to be organized before March, or everything grinds to a halt."
-
-- title: 'The skeptical CIO: "outsourced teams just don''t work"'
+    'yes': "Senior profiles he can have Karim sign off on, a start within six to eight weeks with an Etixio lead who's accountable for the DSN delivery, and the option to scale the team down after delivery."
+    secret: 'The departing freelancer is the only one who knows the payroll calculation engine: a handover has to be organized before March, or everything grinds to a halt.'
+  workspace:
+    calendar:
+      -
+        when: '2026-11-16 09:00'
+        minutes: 60
+        what: 'Comité de direction — monthly review (Lyon HQ, salle Rhône)'
+      -
+        when: '2026-11-16 14:30'
+        minutes: 60
+        what: 'Budget reforecast Q4 — with controlling (Marie-Anne Perrot)'
+      -
+        when: '2026-11-17 08:30'
+        minutes: 90
+        what: 'Steering committee — DSN overhaul programme (with Karim Haddad)'
+      -
+        when: '2026-11-18 11:00'
+        minutes: 60
+        what: 'Vendor negotiation — cloud hosting contract renewal'
+      -
+        when: '2026-11-19 15:00'
+        minutes: 60
+        what: 'Cash flow forecast — FY2027 planning kick-off'
+      -
+        when: '2026-11-20 09:30'
+        minutes: 60
+        what: 'Board prep — November pack review'
+      -
+        when: '2026-11-23 10:00'
+        minutes: 60
+        what: 'Audit committee — statutory accounts review'
+      -
+        when: '2026-11-23 16:00'
+        minutes: 60
+        what: 'Escalation — major enterprise client (DSN delivery risk)'
+      -
+        when: '2026-11-24 09:00'
+        minutes: 60
+        what: 'Monthly closing review — November'
+      -
+        when: '2026-11-25 14:00'
+        minutes: 60
+        what: 'Pricing committee — 2027 rate card'
+      -
+        when: '2026-11-26 11:30'
+        minutes: 60
+        what: 'Procurement — freelancer contract renewal discussion'
+      -
+        when: '2026-11-27 09:00'
+        minutes: 60
+        what: 'Weekly CFO/CIO sync — Karim Haddad'
+    sources:
+      -
+        key: budget_lines_fy2026
+        label: 'Budget lines FY2026'
+        description: 'Finance department budget tracking file, FY2026, by line and commitment.'
+        entries:
+          -
+            title: 'DEV-STRENGTH — Development reinforcement'
+            when: '2026-01-01'
+            details:
+              - { name: annual_budget, value: '€400,000' }
+              - { name: committed, value: '€120,000' }
+              - { name: committed_to, value: 'Freelancer — DSN module (contract ends 31/03/2026)' }
+              - { name: remaining, value: '€280,000' }
+              - { name: owner, value: 'Karim Haddad (CIO) — budget approval' }
+            note: 'Line covers external development capacity for the DSN overhaul and the payroll calculation engine. Freelancer is the only external resource currently engaged.'
+          -
+            title: 'DSN-OVERHAUL — DSN module overhaul'
+            when: '2026-01-01'
+            details:
+              - { name: planned_spend_fy2026, value: '€260,000' }
+              - { name: spent_to_date, value: '€148,000' }
+              - { name: status, value: '6 months behind schedule' }
+              - { name: target_delivery, value: 'Before September 2026 (client commitment)' }
+            note: 'Monthly burn ~€18,500. Delivery slippage flagged in steering committee as critical.'
+          -
+            title: 'CLOUD-INFRA — Cloud hosting and infrastructure'
+            when: '2026-01-01'
+            details:
+              - { name: annual_budget, value: '€210,000' }
+              - { name: committed, value: '€196,000' }
+              - { name: renewal_date, value: '2026-12-31' }
+            note: 'Renewal under negotiation; no headroom for reallocation.'
+          -
+            title: 'PROF-SERV — Professional services / external contractors'
+            when: '2026-01-01'
+            details:
+              - { name: annual_budget, value: '€95,000' }
+              - { name: committed, value: '€95,000' }
+              - { name: status, value: 'Fully committed' }
+            note: 'No flexibility left on this line for FY2026.'
+      -
+        key: dsn_programme_status
+        label: 'DSN programme status'
+        description: 'Programme tracking sheet for the DSN overhaul, maintained by the PMO.'
+        entries:
+          -
+            title: 'DSN-2026 — Social security reporting module overhaul'
+            when: '2026-11-17'
+            details:
+              - { name: rag_status, value: Red }
+              - { name: planned_go_live, value: '2026-03-31' }
+              - { name: forecast_go_live, value: '2026-09-30' }
+              - { name: slippage, value: '6 months' }
+              - { name: budget_consumed, value: 57% }
+              - { name: critical_dependency, value: 'Payroll calculation engine (single expert)' }
+            note: 'A major enterprise client has formally notified that they will exit if DSN is not delivered before September. Escalated to executive committee.'
+          -
+            title: 'Client escalation — DSN delivery commitment'
+            when: '2026-11-23'
+            details:
+              - { name: client, value: 'Major enterprise client (top 3 by ARR)' }
+              - { name: arr_at_risk, value: '€1,400,000' }
+              - { name: condition, value: 'DSN module delivered before September 2026' }
+              - { name: notice, value: 'Formal written notice received 2026-11-10' }
+            note: 'CFO and CIO jointly accountable for the recovery plan. Executive committee reviews progress on the first Tuesday of each month.'
+          -
+            title: 'Handover risk — payroll calculation engine'
+            when: '2026-11-26'
+            details:
+              - { name: expert, value: 'Freelancer (departing 31/03/2026)' }
+              - { name: knowledge_area, value: 'Payroll calculation engine — sole expert' }
+              - { name: documentation, value: Incomplete }
+              - { name: handover_plan, value: 'None in place' }
+            note: 'If handover is not organised before March, payroll calculation and DSN delivery both stall. Flagged internally as a critical risk.'
+          -
+            title: 'Team capacity — internal developers on DSN'
+            when: '2026-11-17'
+            details:
+              - { name: internal_devs_assigned, value: '4' }
+              - { name: capacity, value: 'Fully allocated to maintenance and other projects' }
+              - { name: available_for_dsn, value: '0 FTE' }
+            note: 'No internal capacity to absorb the DSN backlog. External reinforcement required.'
+      -
+        key: incoming_vendor_proposals
+        label: 'Incoming vendor proposals'
+        description: 'Summary of external proposals and quotes received for development reinforcement.'
+        entries:
+          -
+            title: 'Freelancer — DSN module (current engagement)'
+            when: '2025-10-01'
+            details:
+              - { name: vendor, value: 'Independent freelancer' }
+              - { name: rate, value: €700/day }
+              - { name: commitment, value: 'Contract ends 31/03/2026' }
+              - { name: scope, value: 'DSN module development and payroll engine knowledge' }
+            note: 'Only external resource with hands-on knowledge of the payroll calculation engine. Departure creates a critical single point of failure.'
+          -
+            title: 'Etixio — development reinforcement proposal'
+            when: '2026-11-10'
+            details:
+              - { name: vendor, value: Etixio }
+              - { name: introduced_by, value: 'Karim Haddad (CIO)' }
+              - { name: status, value: 'Initial conversation held; pricing not yet received' }
+              - { name: scope_discussed, value: 'DSN module delivery, senior profiles, Etixio lead accountable' }
+            note: 'CIO is the decision-maker on vendor selection and budget approval. CFO holds budget line DEV-STRENGTH.'
+          -
+            title: 'Offshore development vendor — indicative quote'
+            when: '2026-10-15'
+            details:
+              - { name: vendor, value: 'Offshore provider (unnamed)' }
+              - { name: rate, value: €250/day }
+              - { name: profiles, value: 'Junior developers' }
+              - { name: status, value: 'Rejected by CIO — quality and IP concerns' }
+            note: 'Rejected due to lack of seniority and concern about knowledge transfer on the payroll engine.'
+          -
+            title: 'Local agency — senior developer quote'
+            when: '2026-10-20'
+            details:
+              - { name: vendor, value: 'Local Lyon agency' }
+              - { name: rate, value: €850/day }
+              - { name: commitment, value: '12-month minimum' }
+              - { name: status, value: 'On hold — commitment term too long for CFO' }
+            note: 'CFO objected to the 12-month minimum commitment; no flexibility offered.'
+-
+  title: 'The skeptical CIO: "outsourced teams just don''t work"'
   type: objection
   difficulty: 3
   minutes: 12
-  context: "The chief information officer of a regional retail group agreed to the meeting on the recommendation of a former Etixio client. She already lived through a failed engagement with an offshore services firm two years ago."
-  goal: "Understand what went wrong last time and secure a scoping workshop with her team."
-  persona: { name: 'Hélène Marchetti', role: 'Chief Information Officer', company: 'Groupe Distrimax, specialty retail, 1,200 employees, Nantes', personality: "Technical, precise, wary of salespeople. She probes with pointed questions and shuts down at the first canned pitch." }
+  context: 'The chief information officer of a regional retail group agreed to the meeting on the recommendation of a former Etixio client. She already lived through a failed engagement with an offshore services firm two years ago.'
+  goal: 'Understand what went wrong last time and secure a scoping workshop with her team.'
+  persona:
+    name: 'Hélène Marchetti'
+    role: 'Chief Information Officer'
+    company: 'Groupe Distrimax, specialty retail, 1,200 employees, Nantes'
+    personality: 'Technical, precise, wary of salespeople. She probes with pointed questions and shuts down at the first canned pitch.'
   opening: "I've heard good things about you, so I'm taking the meeting. But let me be blunt: I've already tried outsourcing and I no longer believe in it."
   brief:
     budget: "No approved 'vendor' budget; but 2 in-house developer positions open for 9 months (about €130,000 a year) that she could reallocate."
-    pain: "Her B2B e-commerce application is maintained by a single in-house person, exhausted, who is threatening to leave; all online revenue depends on it."
-    decision: "She decides alone up to €150,000; above that, the CEO. She wants to decide before the summer."
+    pain: 'Her B2B e-commerce application is maintained by a single in-house person, exhausted, who is threatening to leave; all online revenue depends on it.'
+    decision: 'She decides alone up to €150,000; above that, the CEO. She wants to decide before the summer.'
     objections: "'Offshore, been there, done that.' 'Your developer turnover.' 'I want to be able to talk to them directly, not through a project manager.' 'Code ownership.'"
-    yes: "French-speaking developers she can meet and approve before they come on board, integrated into her rituals, led by a tech lead, and the certainty of keeping the code, the repositories and the access."
-    secret: "The previous failure was mostly due to her own lack of availability to scope it; she knows it but will only admit it to someone who truly listens."
-
-- title: 'The unhappy client: late delivery'
+    'yes': 'French-speaking developers she can meet and approve before they come on board, integrated into her rituals, led by a tech lead, and the certainty of keeping the code, the repositories and the access.'
+    secret: 'The previous failure was mostly due to her own lack of availability to scope it; she knows it but will only admit it to someone who truly listens.'
+  workspace:
+    calendar:
+      -
+        when: '2026-11-16 08:30'
+        minutes: 60
+        what: 'Weekly COMEX — IT roadmap point with CEO (Nantes HQ, salle Loire)'
+      -
+        when: '2026-11-16 14:00'
+        minutes: 90
+        what: 'Vendor steering committee — outsourced L1/L2 support contract (helpdesk)'
+      -
+        when: '2026-11-17 09:00'
+        minutes: 60
+        what: '1:1 with Marc Levasseur, B2B e-commerce app maintainer'
+      -
+        when: '2026-11-17 11:00'
+        minutes: 45
+        what: 'Recruitment review — 2 open developer positions (HR + hiring manager)'
+      -
+        when: '2026-11-18 10:00'
+        minutes: 60
+        what: 'Cybersecurity posture review — CISO and external auditor'
+      -
+        when: '2026-11-19 15:00'
+        minutes: 60
+        what: 'Retail ops meeting — peak season readiness (store systems)'
+      -
+        when: '2026-11-20 09:30'
+        minutes: 90
+        what: 'ERP upgrade steering — phase 2 go/no-go with integrator'
+      -
+        when: '2026-11-23 08:30'
+        minutes: 60
+        what: 'Weekly COMEX — IT roadmap point with CEO'
+      -
+        when: '2026-11-23 14:00'
+        minutes: 60
+        what: 'Budget forecast 2027 — IT envelope with CFO'
+      -
+        when: '2026-11-24 09:00'
+        minutes: 60
+        what: '1:1 with Marc Levasseur, B2B e-commerce app maintainer'
+      -
+        when: '2026-11-24 11:00'
+        minutes: 60
+        what: 'Interview — senior developer candidate (in-house position #1)'
+      -
+        when: '2026-11-25 10:00'
+        minutes: 60
+        what: 'Data & GDPR committee — customer data processing review'
+      -
+        when: '2026-11-25 14:30'
+        minutes: 90
+        what: 'E-commerce platform incident post-mortem (checkout outage)'
+      -
+        when: '2026-11-26 09:00'
+        minutes: 60
+        what: 'IT services review — contract renewals and SLAs'
+      -
+        when: '2026-11-26 16:00'
+        minutes: 45
+        what: 'Prep call — board IT update (December)'
+      -
+        when: '2026-11-27 10:00'
+        minutes: 60
+        what: 'Architecture committee — integration patterns for B2B portal'
+    sources:
+      -
+        key: b2b_ecommerce_app
+        label: 'B2B E-Commerce Application — Asset & Risk File'
+        description: 'Technical and operational file on the B2B e-commerce application on which all online revenue depends, maintained by a single in-house developer.'
+        entries:
+          -
+            title: 'APP-DISTRIB2B-01 — B2B e-commerce platform — asset record'
+            when: '2026-11-10'
+            details:
+              - { name: application, value: 'Distrimax Pro (B2B e-commerce portal)' }
+              - { name: stack, value: 'Java 17 / Spring Boot / PostgreSQL / React front-end' }
+              - { name: hosting, value: 'OVHcloud private cloud, Roubaix' }
+              - { name: 'sole maintainer', value: 'Marc Levasseur (senior developer, 11 years tenure)' }
+              - { name: 'online revenue dependency', value: '100% of B2B online orders — €46M annual revenue' }
+              - { name: criticality, value: 'Critical — no redundancy on knowledge' }
+            note: 'Single point of failure: all functional and technical knowledge of Distrimax Pro is held by one person. No documented runbook for the order-to-cash flow. Succession risk rated high.'
+          -
+            title: 'INC-2026-1042 — Checkout outage — post-incident summary'
+            when: '2026-10-28'
+            details:
+              - { name: duration, value: '3h20 on a business day' }
+              - { name: impact, value: 'approx. 640 B2B orders blocked' }
+              - { name: 'root cause', value: 'payment connector regression after patch' }
+              - { name: 'resolved by', value: 'Marc Levasseur, alone, outside working hours' }
+              - { name: 'estimated revenue at risk', value: '€380,000 in pending orders' }
+            note: "Resolution depended entirely on one individual's availability. No second-line support existed. Escalation to the outsourced L1/L2 provider produced no result."
+          -
+            title: 'HR-EXIT-RISK-07 — Retention risk — Marc Levasseur'
+            when: '2026-11-17'
+            details:
+              - { name: employee, value: 'Marc Levasseur, senior developer' }
+              - { name: tenure, value: '11 years' }
+              - { name: signal, value: 'Verbal resignation threat, stated 2026-11-03' }
+              - { name: cause, value: 'Isolation, on-call fatigue, no backup' }
+              - { name: 'last 1:1', value: '2026-11-17 — asked for structural relief before year-end' }
+            note: 'Marc has said he cannot continue as the only person able to maintain Distrimax Pro. If he leaves, the application has no maintainer. Retention is the top operational priority for IT.'
+          -
+            title: 'ROADMAP-DISTRIB2B-2026 — Planned evolutions'
+            when: '2026-09-15'
+            details:
+              - { name: 'backlog size', value: 'approx. 14 months of queued work' }
+              - { name: 'priority 1', value: 'Payment connector modernisation' }
+              - { name: 'priority 2', value: 'B2B customer portal self-service' }
+              - { name: 'priority 3', value: 'ERP integration hardening' }
+              - { name: constraint, value: 'Delayed repeatedly — no capacity beyond run/maintain' }
+            note: 'No capacity for evolution work. The team is in pure maintenance mode. Business requests from sales and retail ops are piling up unaddressed.'
+      -
+        key: it_budget_headcount
+        label: 'IT Budget & Headcount Plan 2026–2027'
+        description: 'IT budget lines, open positions and reallocation options available to the CIO.'
+        entries:
+          -
+            title: 'BUD-IT-2026 — IT budget summary'
+            when: '2026-11-23'
+            details:
+              - { name: 'total IT envelope 2026', value: €4.2M }
+              - { name: 'run/maintain share', value: 71% }
+              - { name: 'build/evolve share', value: 12% }
+              - { name: "approved 'vendor services' budget", value: '€0 — no new external services line approved for 2026' }
+              - { name: 'decision threshold (CIO alone)', value: '€150,000' }
+              - { name: 'above threshold', value: 'CEO approval required' }
+            note: 'There is no approved budget line for an external vendor. Any engagement must be funded by reallocating existing internal capacity or via the open positions.'
+          -
+            title: 'POS-2026-014 / POS-2026-015 — Open developer positions'
+            when: '2026-02-16'
+            details:
+              - { name: positions, value: '2 in-house developer roles (Java / full-stack)' }
+              - { name: 'open since', value: 'February 2026 — 9 months unfilled' }
+              - { name: 'annual cost per position', value: 'approx. €65,000 fully loaded' }
+              - { name: 'total annual cost', value: 'approx. €130,000' }
+              - { name: status, value: 'Recruitment failing — no accepted offer' }
+              - { name: 'candidate interview', value: '2026-11-24 — senior developer candidate' }
+            note: 'The two positions have been open for nine months with no hires. The €130k/year attached to them is the only realistic funding source for an alternative solution.'
+          -
+            title: 'REALLOC-OPT-2026 — Funding options considered'
+            when: '2026-11-23'
+            details:
+              - { name: 'option A', value: 'Continue in-house recruitment (2 positions)' }
+              - { name: 'option B', value: 'Reallocate the €130k/year to an external integrated team' }
+              - { name: 'option C', value: 'Hybrid — 1 hire + external capacity' }
+              - { name: constraint, value: 'Must stay within €150k to avoid CEO approval' }
+              - { name: 'target decision date', value: 'before summer 2027' }
+            note: "Option B keeps the decision within the CIO's own authority. The €130k attached to the unfilled positions can be redirected without going to the CEO."
+      -
+        key: vendor_history
+        label: 'External Providers — Contracts & History'
+        description: 'Record of external IT service providers, including the failed offshore engagement of 2024.'
+        entries:
+          -
+            title: 'CONTRACT-OFFSHORE-2024 — Offshore development engagement — closed'
+            when: '2024-06-30'
+            details:
+              - { name: provider, value: 'Offshore services firm (India-based, via European intermediary)' }
+              - { name: scope, value: 'B2B portal module development' }
+              - { name: duration, value: '7 months (Dec 2023 – Jun 2024)' }
+              - { name: value, value: '€118,000' }
+              - { name: outcome, value: 'Terminated — deliverables rejected' }
+              - { name: 'rework cost', value: 'approx. €40,000 internal rework' }
+            note: 'Failed engagement. Delivered code did not meet requirements, was poorly documented and had to be largely rewritten internally. Cited by Hélène Marchetti as the reference point for her scepticism toward outsourced teams.'
+          -
+            title: 'POSTMORTEM-OFFSHORE-2024 — Lessons learned'
+            when: '2024-07-12'
+            details:
+              - { name: 'root cause 1', value: 'Requirements were not scoped in enough detail before kick-off' }
+              - { name: 'root cause 2', value: 'No direct access to the developers — all communication via a project manager' }
+              - { name: 'root cause 3', value: 'Client-side availability during scoping was insufficient' }
+              - { name: 'root cause 4', value: 'High developer turnover on the provider side' }
+              - { name: consequence, value: 'Loss of confidence in outsourced delivery' }
+            note: "Internal post-mortem. Notably records that the client's own availability during the scoping phase was insufficient — a factor Hélène Marchetti acknowledges internally but has not stated publicly."
+          -
+            title: 'CONTRACT-L1L2-2025 — Outsourced support contract'
+            when: '2025-03-01'
+            details:
+              - { name: provider, value: 'European managed services provider' }
+              - { name: scope, value: 'L1/L2 helpdesk support' }
+              - { name: value, value: '€210,000/year' }
+              - { name: SLA, value: '85% first-line resolution' }
+              - { name: performance, value: 'Below target — 68% first-line resolution' }
+              - { name: 'next steering', value: '2026-11-16' }
+            note: "Current outsourced support contract underperforming. Reinforces the CIO's view that outsourced teams are hard to hold accountable. Renewal under review."
+          -
+            title: 'REF-ETIXIO-2026 — Referral note'
+            when: '2026-11-05'
+            details:
+              - { name: source, value: 'Former Etixio client (peer CIO, retail sector)' }
+              - { name: recommendation, value: 'French-speaking developers, direct access to the team, client retains code ownership' }
+              - { name: context, value: 'Agreed to a first meeting on this basis' }
+              - { name: meeting, value: 'Scheduled with Etixio' }
+            note: 'Hélène Marchetti accepted the meeting only on the strength of this referral. She remains wary and will test the claims made.'
+      -
+        key: governance_security
+        label: 'IT Governance, Security & Code Ownership'
+        description: 'Governance rules, security requirements and code ownership policy that any engagement must satisfy.'
+        entries:
+          -
+            title: 'POL-CODEOWN-2025 — Code ownership and IP policy'
+            when: '2025-01-15'
+            details:
+              - { name: policy, value: 'All source code, repositories and access credentials remain the property of Groupe Distrimax' }
+              - { name: repositories, value: 'Self-hosted GitLab, hosted in France' }
+              - { name: requirement, value: 'No external party may hold exclusive access to code or environments' }
+              - { name: requirement, value: 'Full IP assignment to Groupe Distrimax on all deliverables' }
+              - { name: requirement, value: 'Access revoked immediately on engagement end' }
+            note: "Non-negotiable. Any provider must work in the client's own repositories and environments, with the client retaining ownership and control at all times."
+          -
+            title: 'POL-ACCESS-2025 — Access and integration rules'
+            when: '2025-01-15'
+            details:
+              - { name: rule, value: 'External contributors are integrated into existing client rituals (daily stand-up, sprint review)' }
+              - { name: rule, value: 'Direct communication with developers is required — no intermediary-only model' }
+              - { name: rule, value: 'All contributors must be fluent in French' }
+              - { name: rule, value: 'Named individuals must be approved by the CIO before onboarding' }
+              - { name: rule, value: 'A technical lead must be identified and accountable' }
+            note: 'Reflects the exact conditions under which Hélène Marchetti would accept an external team. Direct access to French-speaking, individually approved developers is a hard requirement.'
+          -
+            title: 'SEC-REQ-2026 — Security requirements for external parties'
+            when: '2026-10-01'
+            details:
+              - { name: requirement, value: 'Background checks on named contributors' }
+              - { name: requirement, value: 'NDA signed before any access' }
+              - { name: requirement, value: 'Access limited to the minimum required' }
+              - { name: requirement, value: 'No production access without CIO approval' }
+              - { name: review, value: 'Cybersecurity posture review — 2026-11-18' }
+            note: 'Security requirements are strict and applied uniformly. Any provider must accept named-contributor vetting and least-privilege access.'
+          -
+            title: 'GOV-RITUALS-2026 — Team rituals and cadence'
+            when: '2026-09-01'
+            details:
+              - { name: daily, value: 'Stand-up 09:15, all developers including external' }
+              - { name: sprint, value: 'Two-week cadence, review every second Thursday' }
+              - { name: tooling, value: 'Jira, GitLab, Confluence' }
+              - { name: language, value: 'French — working language of the IT team' }
+              - { name: 'tech lead', value: 'To be named and accountable for delivery' }
+            note: 'External contributors are expected to join the same rituals as in-house staff. Hélène Marchetti wants to see them in her stand-ups, not in a separate reporting channel.'
+-
+  title: 'The unhappy client: late delivery'
   type: unhappy_client
   difficulty: 2
   minutes: 10
   context: "The head of product at a healthcare start-up, an Etixio client for a year (a dedicated team of four), has asked to see you 'urgently' after the latest delivery slipped. The contract renewal is in two months."
   goal: "Defuse the anger, understand what's really wrong, and leave with an agreed action plan and the door open to renewal."
-  persona: { name: 'Thomas Girard', role: 'Head of Product', company: 'Medilink, e-health start-up, 60 employees, Paris', personality: "Angry at first, he talks fast and cuts you off. He calms down when the problem is acknowledged without excuses." }
+  persona:
+    name: 'Thomas Girard'
+    role: 'Head of Product'
+    company: 'Medilink, e-health start-up, 60 employees, Paris'
+    personality: 'Angry at first, he talks fast and cuts you off. He calms down when the problem is acknowledged without excuses.'
   opening: "Right, I'll be direct: Friday's delivery is the second slip in two months. My CEO asked me whether we should change vendors."
   brief:
-    budget: "The current contract is €38,000 a month; the CEO wants it cut by 15% at renewal."
-    pain: "He has to present the new teleconsultation feature at a trade show in six weeks; if he shows up empty-handed, his head is on the block."
+    budget: 'The current contract is €38,000 a month; the CEO wants it cut by 15% at renewal.'
+    pain: 'He has to present the new teleconsultation feature at a trade show in six weeks; if he shows up empty-handed, his head is on the block.'
     decision: "The CEO, Sophie Brun, decides on the renewal; Thomas has her ear if he's given something to reassure her with."
     objections: "'Your lead dev is unreachable after 4 p.m. because of the time difference.' 'You bill us for meeting days.' 'A competitor is offering us a lower price.'"
-    yes: "A written recovery plan with weekly milestones, a direct line to the lead dev, and a symbolic goodwill gesture."
+    'yes': 'A written recovery plan with weekly milestones, a direct line to the lead dev, and a symbolic goodwill gesture.'
     secret: "Part of the delay comes from specs his own team changed three times; he knows it, and he'll appreciate it being said tactfully rather than having everything accepted."
-
-- title: 'Negotiation: "cut 20% or we walk"'
+  workspace:
+    calendar:
+      -
+        when: '2026-11-16 09:00'
+        minutes: 60
+        what: 'Sprint 42 review - teleconsultation module'
+      -
+        when: '2026-11-16 14:00'
+        minutes: 60
+        what: '1:1 with Sophie Brun (CEO)'
+      -
+        when: '2026-11-17 10:00'
+        minutes: 60
+        what: 'Roadmap arbitrage - Q1 2027'
+      -
+        when: '2026-11-17 15:00'
+        minutes: 60
+        what: 'Call with Etixio account team'
+      -
+        when: '2026-11-18 09:00'
+        minutes: 60
+        what: 'Medilink product committee'
+      -
+        when: '2026-11-19 11:00'
+        minutes: 60
+        what: 'Preparation - Santé Expo trade show'
+      -
+        when: '2026-11-20 14:00'
+        minutes: 60
+        what: 'Sprint 42 demo to internal stakeholders'
+      -
+        when: '2026-11-23 09:30'
+        minutes: 60
+        what: 'Sprint 43 planning'
+      -
+        when: '2026-11-23 16:00'
+        minutes: 60
+        what: 'Budget review with Sophie Brun'
+      -
+        when: '2026-11-24 10:00'
+        minutes: 60
+        what: 'Etixio - contract renewal prep (internal)'
+      -
+        when: '2026-11-25 11:00'
+        minutes: 60
+        what: 'Trade show logistics - stand and demos'
+      -
+        when: '2026-11-26 09:00'
+        minutes: 60
+        what: 'Sprint 43 mid-sprint check'
+      -
+        when: '2026-11-26 15:00'
+        minutes: 60
+        what: 'Customer advisory board - teleconsultation'
+      -
+        when: '2026-11-27 10:00'
+        minutes: 60
+        what: 'Steering committee - Etixio renewal'
+      -
+        when: '2026-11-27 14:00'
+        minutes: 60
+        what: 'Medilink all-hands'
+    sources:
+      -
+        key: etixio_contract
+        label: 'Etixio contract file'
+        description: 'Contract documents and renewal terms with Etixio'
+        entries:
+          -
+            title: 'Master Services Agreement - Etixio / Medilink'
+            when: '2025-12-01'
+            details:
+              - { name: Reference, value: MSA-2025-118 }
+              - { name: 'Monthly fee', value: '€38,000' }
+              - { name: 'Dedicated team', value: '4 people (1 lead dev, 2 devs, 1 QA)' }
+              - { name: 'Renewal date', value: '2027-01-31' }
+              - { name: 'Notice period', value: '60 days' }
+            note: 'Renewal decision to be confirmed by CEO Sophie Brun. Thomas Girard is the operational contact and has her ear.'
+          -
+            title: 'Renewal budget instruction - internal note'
+            when: '2026-11-10'
+            details:
+              - { name: Author, value: 'Sophie Brun, CEO' }
+              - { name: Target, value: '15% reduction on €38,000/month' }
+              - { name: 'Target monthly fee', value: '€32,300' }
+              - { name: Constraint, value: 'No reduction in team size without written justification' }
+            note: 'Sophie wants a defensible number before the steering committee on 27 November. Thomas must bring something concrete.'
+          -
+            title: 'Etixio invoice - October 2026'
+            when: '2026-10-31'
+            details:
+              - { name: 'Invoice number', value: ETX-2026-1044 }
+              - { name: Amount, value: '€38,000' }
+              - { name: 'Line item', value: 'Dedicated team - monthly' }
+              - { name: 'Line item', value: 'Meeting days billed: 4 x €1,200 = €4,800' }
+            note: 'Thomas flagged the meeting-day billing as a recurring irritation.'
+          -
+            title: 'Competitor proposal - received by Thomas'
+            when: '2026-11-05'
+            details:
+              - { name: Vendor, value: NordSoft }
+              - { name: 'Monthly fee', value: '€31,000' }
+              - { name: Team, value: '3 people, nearshore' }
+              - { name: Note, value: 'No healthcare-specific references provided' }
+            note: 'Thomas has not shared this with Etixio yet. Used as leverage in negotiation.'
+      -
+        key: delivery_tracker
+        label: 'Delivery tracker - teleconsultation'
+        description: 'Sprint status and delivery milestones for the teleconsultation feature'
+        entries:
+          -
+            title: 'Sprint 41 - teleconsultation core'
+            when: '2026-10-30'
+            details:
+              - { name: Planned, value: 'Video session, appointment booking' }
+              - { name: Delivered, value: 'Appointment booking only' }
+              - { name: Status, value: 'Late - 8 days' }
+              - { name: Cause, value: 'Spec change #2 from Medilink product team' }
+            note: "Thomas's team requested a change to the booking flow on 12 October, then again on 19 October."
+          -
+            title: 'Sprint 42 - teleconsultation module'
+            when: '2026-11-13'
+            details:
+              - { name: Planned, value: 'Video session, prescription upload' }
+              - { name: Delivered, value: 'Not delivered' }
+              - { name: Status, value: 'Slipped - 12 days' }
+              - { name: Cause, value: 'Spec change #3 and lead dev availability after 4 p.m.' }
+            note: 'Etixio lead dev is in Montreal (UTC-5). Medilink is in Paris (UTC+1). Overlap ends at 4 p.m. Paris time.'
+          -
+            title: 'Trade show - Santé Expo'
+            when: '2026-12-08'
+            details:
+              - { name: Event, value: 'Santé Expo, Paris' }
+              - { name: 'Medilink commitment', value: 'Live demo of teleconsultation feature' }
+              - { name: 'Days remaining', value: '22' }
+              - { name: Risk, value: 'High if Sprint 43 not delivered' }
+            note: "Thomas is personally responsible for the demo. 'If I show up empty-handed, my head is on the block.'"
+          -
+            title: 'Sprint 43 - planned'
+            when: '2026-11-23'
+            details:
+              - { name: Scope, value: 'Video session, prescription upload, demo mode' }
+              - { name: Dependency, value: 'Etixio lead dev availability' }
+              - { name: Milestone, value: 'Demo-ready build by 2026-12-01' }
+            note: 'Weekly milestones requested by Thomas to reassure Sophie Brun.'
+      -
+        key: crm_notes
+        label: 'CRM notes - Etixio account'
+        description: 'Account history and meeting notes for the Etixio relationship'
+        entries:
+          -
+            title: 'Etixio - account review'
+            when: '2026-09-15'
+            details:
+              - { name: Attendees, value: 'Thomas Girard, Etixio account lead' }
+              - { name: Sentiment, value: Positive }
+              - { name: Note, value: 'Team praised for quality; lead dev highlighted as strong' }
+            note: 'No issues raised at this meeting.'
+          -
+            title: 'Etixio - escalation call'
+            when: '2026-11-06'
+            details:
+              - { name: Attendees, value: 'Thomas Girard, Etixio account lead, Etixio lead dev' }
+              - { name: Sentiment, value: Negative }
+              - { name: Issue, value: 'Late delivery of Sprint 41' }
+              - { name: Issue, value: 'Lead dev unreachable after 4 p.m. Paris time' }
+            note: 'Thomas asked for an urgent meeting. Meeting scheduled for 2026-11-17.'
+          -
+            title: 'Etixio - internal note'
+            when: '2026-11-10'
+            details:
+              - { name: Author, value: 'Thomas Girard' }
+              - { name: Note, value: 'Spec changed 3 times by Medilink product team' }
+              - { name: Note, value: "Thomas aware of his team's role in the delay" }
+              - { name: Note, value: 'Wants Etixio to acknowledge the delay without excuses' }
+            note: 'Thomas will appreciate the spec changes being mentioned tactfully, not used as a defence.'
+          -
+            title: 'Etixio - renewal prep'
+            when: '2026-11-24'
+            details:
+              - { name: Attendees, value: 'Thomas Girard, Sophie Brun' }
+              - { name: Objective, value: 'Agree renewal position' }
+              - { name: Requirement, value: 'Written recovery plan with weekly milestones' }
+              - { name: Requirement, value: 'Direct line to Etixio lead dev' }
+              - { name: Requirement, value: 'Symbolic goodwill gesture' }
+            note: 'Sophie Brun decides on the renewal. Thomas needs something to reassure her.'
+-
+  title: 'Negotiation: "cut 20% or we walk"'
   type: negotiation
   difficulty: 3
   minutes: 12
   context: "You've submitted a proposal for a dedicated team of five (developers, QA, project manager) to a logistics software vendor, at €52,000 a month. Their head of procurement is calling you back to 'finalize.'"
-  goal: "Close without giving it away: protect the margin by trading every concession for something in return."
-  persona: { name: 'Nadia Benali', role: 'Head of Procurement', company: 'Logistiq, software vendor for carriers, 400 employees, Lille', personality: "A seasoned buyer, calm and polite, she uses silence and anchoring. She respects those who hold their positions with arguments." }
+  goal: 'Close without giving it away: protect the margin by trading every concession for something in return.'
+  persona:
+    name: 'Nadia Benali'
+    role: 'Head of Procurement'
+    company: 'Logistiq, software vendor for carriers, 400 employees, Lille'
+    personality: 'A seasoned buyer, calm and polite, she uses silence and anchoring. She respects those who hold their positions with arguments.'
   opening: "Your proposal appeals to the technical teams. But I can't sign it at this price: I need 20% less, or we go with the other finalist."
   brief:
-    budget: "The approved budget is €47,000 a month; she has room to go up to €50,000 if the commitment term goes to 18 months."
+    budget: 'The approved budget is €47,000 a month; she has room to go up to €50,000 if the commitment term goes to 18 months.'
     pain: "The other finalist is cheaper but can't start for three months; the CTO wants to start before the end of the quarter."
-    decision: "She signs; but the CTO, Paul Ader, has already said he prefers Etixio, and he carries weight."
+    decision: 'She signs; but the CTO, Paul Ader, has already said he prefers Etixio, and he carries weight.'
     objections: "'The other finalist, nearshore in Morocco, is 18% cheaper and closer.' 'Why a full-time project manager?' 'Your rates go up every year.'"
-    yes: "A price under €50,000 in exchange for an 18-month commitment, a capped rate review, and a firm start within six weeks."
-    secret: "Her annual objective is measured on the discount percentage she obtains, not the amount: a discount shown over a longer term suits her."
-
-- title: 'Objection: "we already have an in-house team"'
+    'yes': 'A price under €50,000 in exchange for an 18-month commitment, a capped rate review, and a firm start within six weeks.'
+    secret: 'Her annual objective is measured on the discount percentage she obtains, not the amount: a discount shown over a longer term suits her.'
+  workspace:
+    calendar:
+      -
+        when: '2026-11-16 09:00'
+        minutes: 60
+        what: 'Procurement team weekly — pipeline review and savings tracker'
+      -
+        when: '2026-11-16 14:00'
+        minutes: 90
+        what: 'Steering committee — Carrier Platform v3 (Paul Ader chairing)'
+      -
+        when: '2026-11-17 10:30'
+        minutes: 60
+        what: 'Renewal: cloud infrastructure contract — legal review'
+      -
+        when: '2026-11-17 16:00'
+        minutes: 45
+        what: 'Call with reference account (Nordfret) — vendor diligence'
+      -
+        when: '2026-11-18 08:30'
+        minutes: 60
+        what: 'Budget committee — Q1 2027 envelope arbitration'
+      -
+        when: '2026-11-19 11:00'
+        minutes: 90
+        what: 'Negotiation: TMS licence renewal (incumbent)'
+      -
+        when: '2026-11-20 09:00'
+        minutes: 60
+        what: 'One-to-one with Paul Ader (CTO) — roadmap and vendor shortlist'
+      -
+        when: '2026-11-23 10:00'
+        minutes: 60
+        what: 'Vendor day — nearshore finalist presentation (Morocco team)'
+      -
+        when: '2026-11-24 13:30'
+        minutes: 120
+        what: 'Legal & DPO review — data processing agreement, offshoring'
+      -
+        when: '2026-11-25 09:30'
+        minutes: 60
+        what: 'Savings committee — November discount reporting to CFO'
+      -
+        when: '2026-11-25 15:00'
+        minutes: 45
+        what: 'Internal: contract signature circuit (Docusign) walkthrough'
+      -
+        when: '2026-11-26 11:00'
+        minutes: 60
+        what: 'Etixio call-back — finalization of dedicated team proposal'
+      -
+        when: '2026-11-27 09:00'
+        minutes: 90
+        what: 'Q4 procurement review — closing and 2027 objectives'
+    sources:
+      -
+        key: negotiation_tracker
+        label: 'Negotiation Tracker 2026'
+        description: 'Live log of vendor negotiations, target vs achieved savings, and status. Maintained by procurement.'
+        entries:
+          -
+            title: 'NEG-2026-041 — Etixio — Dedicated team (5 FTE)'
+            when: '2026-11-26'
+            details:
+              - { name: vendor, value: Etixio }
+              - { name: scope, value: '5 FTE dedicated: 3 developers, 1 QA, 1 project manager' }
+              - { name: proposal_monthly_eur, value: '52000' }
+              - { name: term_months, value: '12' }
+              - { name: target_monthly_eur, value: '47000' }
+              - { name: ceiling_monthly_eur, value: '50000' }
+              - { name: target_discount_pct, value: 20% }
+              - { name: status, value: 'Open — call-back scheduled 26/11 11:00' }
+            note: "Anchor at 20% reduction. Floor is 47k; can go to 50k if term extends to 18 months. Discount % is the metric that counts, so spread any concession over a longer term. Do not reveal budget envelope or Paul's preference."
+          -
+            title: 'NEG-2026-039 — TMS licence renewal (incumbent)'
+            when: '2026-11-19'
+            details:
+              - { name: vendor, value: 'TransFleet Solutions' }
+              - { name: annual_eur, value: '310000' }
+              - { name: target_discount_pct, value: 12% }
+              - { name: achieved_discount_pct, value: 9.5% }
+              - { name: status, value: 'Closed — signed 4/11' }
+            note: 'Renewal negotiation closed at 9.5% discount. Used multi-year commitment as lever. Reference for how term extension converts to headline discount.'
+          -
+            title: 'NEG-2026-044 — Nearshore finalist (Morocco) — Dedicated team'
+            when: '2026-11-23'
+            details:
+              - { name: vendor, value: 'AtlasDev (nearshore, Casablanca)' }
+              - { name: monthly_eur, value: '42640' }
+              - { name: discount_vs_etixio_pct, value: 18% }
+              - { name: earliest_start, value: '2027-02-15' }
+              - { name: status, value: 'Finalist — presentation 23/11' }
+            note: 'Cheaper by 18% but cannot start before mid-February. CTO wants delivery before end of Q4/Q1. Use as leverage only on price, not on timing.'
+          -
+            title: 'NEG-2026-045 — Cloud infrastructure renewal'
+            when: '2026-11-17'
+            details:
+              - { name: vendor, value: 'Cirrus Hosting' }
+              - { name: annual_eur, value: '96000' }
+              - { name: target_discount_pct, value: 15% }
+              - { name: status, value: Open }
+            note: 'Second negotiation in parallel. Keep separate from Etixio file.'
+      -
+        key: budget_2027
+        label: 'Budget 2027 — IT & External Services'
+        description: 'Approved budget lines for 2027, including the dedicated development team envelope.'
+        entries:
+          -
+            title: 'BL-IT-07 — Dedicated development team (external)'
+            when: '2026-11-18'
+            details:
+              - { name: approved_monthly_eur, value: '47000' }
+              - { name: annual_eur, value: '564000' }
+              - { name: contingency_pct, value: 6% }
+              - { name: owner, value: 'Nadia Benali' }
+              - { name: status, value: 'Approved in budget committee 18/11' }
+            note: 'Approved monthly envelope is 47,000. Contingency of 6% available (~2,820/month) only with CFO sign-off. Do not state the ceiling as a budget figure.'
+          -
+            title: 'BL-IT-11 — Nearshore outsourcing pilot'
+            when: '2026-11-18'
+            details:
+              - { name: approved_annual_eur, value: '120000' }
+              - { name: status, value: 'On hold — start date conflict' }
+            note: 'Pilot budget on hold because the nearshore team cannot start before February.'
+          -
+            title: 'BL-IT-03 — Project management tools & PMO'
+            when: '2026-11-18'
+            details:
+              - { name: approved_annual_eur, value: '48000' }
+              - { name: status, value: Approved }
+            note: 'PMO tooling already funded; internal PM function is thin — rationale for keeping a vendor-side PM.'
+          -
+            title: 'BL-LEG-02 — Legal & DPO review (offshoring)'
+            when: '2026-11-24'
+            details:
+              - { name: approved_annual_eur, value: '30000' }
+              - { name: status, value: 'In use — nearshore DPA review 24/11' }
+            note: 'Offshoring review consumes legal budget; adds friction to nearshore option.'
+      -
+        key: vendor_dossier
+        label: 'Vendor Dossier — Etixio'
+        description: 'Diligence file on Etixio: references, team, rate history, and risk notes.'
+        entries:
+          -
+            title: 'Etixio — Company profile'
+            when: '2026-11-10'
+            details:
+              - { name: headcount, value: '180' }
+              - { name: hq, value: 'Lyon, France' }
+              - { name: references, value: 'Nordfret, Transports Delcourt' }
+              - { name: frameworks, value: 'Socle numérique, UGAP' }
+            note: 'Solid references in logistics. Framework supplier status is a plus for compliance.'
+          -
+            title: 'Etixio — Dedicated team composition (proposed)'
+            when: '2026-11-10'
+            details:
+              - { name: developers, value: '3' }
+              - { name: qa, value: '1' }
+              - { name: project_manager, value: '1' }
+              - { name: location, value: 'Lyon / 2 days on-site per month' }
+            note: 'Full-time PM questioned internally — but PMO function is thin, and integration with carrier platform is complex.'
+          -
+            title: 'Etixio — Rate history 2023–2026'
+            when: '2026-11-10'
+            details:
+              - { name: 2023_rate_index, value: '100' }
+              - { name: '2024', value: +4.5% }
+              - { name: '2025', value: +3.8% }
+              - { name: '2026', value: +3.2% }
+              - { name: avg_annual_increase_pct, value: 3.8% }
+            note: 'Rates increase every year. Buyer objection is factual — any cap must be indexed and bounded (e.g. max +2%/year or CPI-linked).'
+          -
+            title: 'Reference call — Nordfret (Etixio client)'
+            when: '2026-11-17'
+            details:
+              - { name: contact, value: 'IT Director' }
+              - { name: satisfaction, value: High }
+              - { name: comment, value: 'Ramped up in 5 weeks; PM was key for coordination' }
+            note: "Nordfret confirms ramp-up in five weeks and that the PM was decisive. Supports Etixio's timing advantage."
+          -
+            title: 'Internal risk note — start date'
+            when: '2026-11-17'
+            details:
+              - { name: constraint, value: 'Delivery must start before end of Q4/Q1' }
+              - { name: nearshore_start, value: '2027-02-15' }
+              - { name: etixio_capacity, value: 'Can start within 6 weeks' }
+            note: 'CTO Paul Ader insists on kicking off before end of the quarter. Etixio is the only finalist able to do so.'
+-
+  title: 'Objection: "we already have an in-house team"'
   type: objection
   difficulty: 2
   minutes: 10
-  context: "The CTO of a fintech is meeting you after downloading an Etixio white paper on dedicated teams. He has 25 developers in-house and said so on the scheduling call."
-  goal: "Find where a dedicated team complements his in-house team, and secure a second meeting around a specific use case."
-  persona: { name: 'Julien Morel', role: 'Chief Technology Officer', company: 'Finoa, SME lending fintech, 140 employees, Bordeaux', personality: "Proud of his team, friendly but defensive. He opens up if you take a genuine interest in his organization." }
+  context: 'The CTO of a fintech is meeting you after downloading an Etixio white paper on dedicated teams. He has 25 developers in-house and said so on the scheduling call.'
+  goal: 'Find where a dedicated team complements his in-house team, and secure a second meeting around a specific use case.'
+  persona:
+    name: 'Julien Morel'
+    role: 'Chief Technology Officer'
+    company: 'Finoa, SME lending fintech, 140 employees, Bordeaux'
+    personality: 'Proud of his team, friendly but defensive. He opens up if you take a genuine interest in his organization.'
   opening: "I told you on the phone, we already have twenty-five developers. I'm curious to know what you could bring me on top of that."
   brief:
-    budget: "He can commit up to €25,000 a month from his operating budget without going back to the committee."
-    pain: "Migrating the old banking core (in PHP 5) is monopolizing his best developers, who are getting bored: two quit this quarter."
-    decision: "He decides; the CFO checks that it stays within his operating budget."
+    budget: 'He can commit up to €25,000 a month from his operating budget without going back to the committee.'
+    pain: 'Migrating the old banking core (in PHP 5) is monopolizing his best developers, who are getting bored: two quit this quarter.'
+    decision: 'He decides; the CFO checks that it stays within his operating budget.'
     objections: "'An offshore team won't know our business.' 'I don't want to create two classes of developers.' 'We have a very strict banking security audit.'"
-    yes: "Entrust the legacy migration to a dedicated team led by one of his seniors, to free up his team for the new product."
-    secret: "His CEO has asked him to ship the new instant credit offering in six months, which is impossible with the current team."
-
-- title: 'Discovery: part-time CTO for an SMB with no technical leadership'
+    'yes': 'Entrust the legacy migration to a dedicated team led by one of his seniors, to free up his team for the new product.'
+    secret: 'His CEO has asked him to ship the new instant credit offering in six months, which is impossible with the current team.'
+  workspace:
+    calendar:
+      -
+        when: '2026-11-16 08:30'
+        minutes: 60
+        what: 'Weekly CTO staff meeting (team leads)'
+      -
+        when: '2026-11-16 14:00'
+        minutes: 90
+        what: 'Legacy core migration steering committee'
+      -
+        when: '2026-11-17 09:00'
+        minutes: 60
+        what: 'Interview: senior PHP developer candidate'
+      -
+        when: '2026-11-17 11:00'
+        minutes: 60
+        what: 'Exit interview - Thomas R.'
+      -
+        when: '2026-11-18 10:00'
+        minutes: 90
+        what: 'Architecture review: instant credit offering'
+      -
+        when: '2026-11-18 15:00'
+        minutes: 60
+        what: 'DSP2/ISO 27001 audit prep with CISO'
+      -
+        when: '2026-11-19 09:30'
+        minutes: 60
+        what: '1:1 with Léa Fontaine (lead, payments)'
+      -
+        when: '2026-11-19 14:00'
+        minutes: 120
+        what: 'Vendor review: core banking migration partners'
+      -
+        when: '2026-11-20 08:30'
+        minutes: 60
+        what: 'Weekly CTO staff meeting (team leads)'
+      -
+        when: '2026-11-20 11:00'
+        minutes: 60
+        what: 'Product committee - instant credit roadmap'
+      -
+        when: '2026-11-23 09:00'
+        minutes: 60
+        what: 'Interview: senior PHP developer candidate'
+      -
+        when: '2026-11-23 14:00'
+        minutes: 90
+        what: 'Legacy core migration steering committee'
+      -
+        when: '2026-11-24 10:00'
+        minutes: 60
+        what: 'Banking security audit - kickoff with external auditors'
+      -
+        when: '2026-11-24 15:00'
+        minutes: 60
+        what: 'Budget review with CFO (operating budget)'
+      -
+        when: '2026-11-25 09:00'
+        minutes: 90
+        what: 'Architecture review: instant credit offering'
+      -
+        when: '2026-11-25 14:00'
+        minutes: 60
+        what: '1:1 with Karim B. (lead, core banking)'
+      -
+        when: '2026-11-26 08:30'
+        minutes: 60
+        what: 'Weekly CTO staff meeting (team leads)'
+      -
+        when: '2026-11-26 11:00'
+        minutes: 60
+        what: 'Exit interview - Nadia K.'
+      -
+        when: '2026-11-27 10:00'
+        minutes: 60
+        what: 'Quarterly all-hands (engineering)'
+      -
+        when: '2026-11-27 14:00'
+        minutes: 90
+        what: 'Legacy core migration steering committee'
+    sources:
+      -
+        key: staffing_and_recruitment
+        label: 'Staffing & Recruitment Tracker'
+        description: 'Headcount, open roles, contractor positions and recruitment pipeline for the engineering department.'
+        entries:
+          -
+            title: 'ENG-HEADCOUNT-2026-11: Engineering headcount'
+            when: '2026-11-02'
+            details:
+              - { name: total_developers, value: '25' }
+              - { name: in_house, value: '23' }
+              - { name: contractors, value: '2' }
+              - { name: open_roles, value: '4' }
+              - { name: attrition_ytd, value: '2 developers (Q4)' }
+            note: "Two senior developers resigned in Q4; both cited 'boredom / lack of challenge' in exit interviews. Backfills are proving slow."
+          -
+            title: 'ROLE-SR-PHP-001: Senior PHP Developer (legacy core)'
+            when: '2026-10-15'
+            details:
+              - { name: status, value: 'Open - 6 weeks' }
+              - { name: salary_range, value: €55k-€65k }
+              - { name: candidates_screened, value: '11' }
+              - { name: interviews_done, value: '3' }
+              - { name: offers_made, value: '0' }
+            note: 'Hard to fill. Candidates are put off by the PHP 5 legacy work. Hiring manager: Julien Morel.'
+          -
+            title: 'ROLE-SR-PHP-002: Senior PHP Developer (legacy core)'
+            when: '2026-10-15'
+            details:
+              - { name: status, value: 'Open - 6 weeks' }
+              - { name: salary_range, value: €55k-€65k }
+              - { name: candidates_screened, value: '9' }
+              - { name: interviews_done, value: '2' }
+              - { name: offers_made, value: '0' }
+            note: "Second backfill for the Q4 resignations. Recruiter flagged 'very thin pipeline' for legacy PHP."
+          -
+            title: 'CONTRACT-EXT-2026-03: External contractor - payments'
+            when: '2026-03-01'
+            details:
+              - { name: supplier, value: Atos }
+              - { name: scope, value: 'PCI-DSS remediation support' }
+              - { name: monthly_cost, value: '€14,000' }
+              - { name: end_date, value: '2026-12-31' }
+            note: 'Two contractors embedded in the payments team. Renewal decision due in December.'
+          -
+            title: 'EXIT-2026-10-TR: Exit interview - Thomas R.'
+            when: '2026-10-24'
+            details:
+              - { name: role, value: 'Senior developer, core banking' }
+              - { name: tenure, value: '4 years' }
+              - { name: reason, value: 'Boredom - no new feature work' }
+              - { name: risk_to_team, value: 'High - was informal mentor' }
+            note: "Thomas spent his last 8 months almost exclusively on legacy core migration. Said he wanted to 'build something new again'."
+          -
+            title: 'EXIT-2026-11-NK: Exit interview - Nadia K.'
+            when: '2026-11-12'
+            details:
+              - { name: role, value: 'Senior developer, core banking' }
+              - { name: tenure, value: '5 years' }
+              - { name: reason, value: 'Boredom - legacy maintenance only' }
+              - { name: risk_to_team, value: Medium }
+            note: 'Second Q4 resignation. Both leavers were on the PHP 5 migration. Escalated to Julien by HR.'
+      -
+        key: legacy_migration_project
+        label: 'Legacy Core Migration - Project Status'
+        description: 'Status, schedule, risks and resourcing for the migration of the PHP 5 banking core to the target platform.'
+        entries:
+          -
+            title: 'MIG-PLAN-2026: Migration master plan'
+            when: '2026-09-30'
+            details:
+              - { name: scope, value: 'PHP 5 banking core -> Java/Spring Boot microservices' }
+              - { name: modules_total, value: '14' }
+              - { name: modules_migrated, value: '3' }
+              - { name: start_date, value: '2025-06-02' }
+              - { name: target_end_date, value: '2027-06-30' }
+              - { name: current_forecast, value: '2027-12-31' }
+            note: 'Forecast slipped by 6 months at the October steering committee. Main cause: developer availability.'
+          -
+            title: 'MIG-RES-2026-11: Migration resourcing'
+            when: '2026-11-02'
+            details:
+              - { name: developers_assigned, value: '7' }
+              - { name: senior_developers, value: '5' }
+              - { name: capacity_used, value: '80% of core banking team' }
+              - { name: planned_end, value: '2027-06-30' }
+            note: "7 of the 25 developers are on the migration, including 5 of the most senior. This is the team's main frustration point: they were hired for product work."
+          -
+            title: 'MIG-RISK-004: Risk - key person dependency'
+            when: '2026-10-24'
+            details:
+              - { name: risk, value: 'Loss of senior developers on the migration' }
+              - { name: likelihood, value: High }
+              - { name: impact, value: 'High - 2 resignations already' }
+              - { name: owner, value: 'Julien Morel' }
+            note: 'Mitigation currently: none beyond backfill recruitment. Julien asked for options at the November steering committee.'
+          -
+            title: 'MIG-VENDOR-2026: Vendor shortlist - migration partners'
+            when: '2026-11-05'
+            details:
+              - { name: candidates, value: 'Atos, Sopra Steria, Etixio' }
+              - { name: criteria, value: 'Banking security, French/English, knowledge transfer' }
+              - { name: decision_meeting, value: '2026-11-19 14:00' }
+            note: 'Julien added Etixio after reading their white paper on dedicated teams. Wants to compare with the big integrators.'
+          -
+            title: 'MIG-MOD-05: Module 05 - loan servicing'
+            when: '2026-11-09'
+            details:
+              - { name: status, value: 'In progress' }
+              - { name: assigned, value: '2 developers (1 senior)' }
+              - { name: estimated_remaining, value: '5 weeks' }
+              - { name: risk, value: 'Medium - tight coupling with payments' }
+            note: 'On the critical path for the instant credit offering: the new product needs the migrated loan servicing API.'
+      -
+        key: product_roadmap
+        label: 'Product Roadmap - Engineering'
+        description: 'Committed product deliverables, key dates and engineering dependencies.'
+        entries:
+          -
+            title: 'ROAD-2026-IC: Instant credit offering'
+            when: '2026-11-15'
+            details:
+              - { name: target_launch, value: '2027-05-31' }
+              - { name: committed_by, value: 'CEO, board meeting 2026-11-15' }
+              - { name: owner, value: 'Julien Morel' }
+              - { name: engineering_status, value: 'At risk - team not yet allocated' }
+            note: "CEO wants first instant credit customers in six months. Julien's assessment: impossible with the current team while the migration continues."
+          -
+            title: 'ROAD-DEP-IC-01: Instant credit dependency - loan servicing API'
+            when: '2026-11-09'
+            details:
+              - { name: dependency, value: 'Module 05 migration (loan servicing)' }
+              - { name: needed_by, value: '2027-01-15' }
+              - { name: current_forecast, value: '2027-03-01' }
+            note: 'The new product cannot be built until the migrated loan servicing API is stable. This is the hard constraint behind the six-month deadline.'
+          -
+            title: 'ROAD-Q1-2027: Q1 2027 engineering priorities'
+            when: '2026-11-20'
+            details:
+              - { name: priority_1, value: 'Instant credit offering (new build)' }
+              - { name: priority_2, value: 'Legacy core migration (maintenance)' }
+              - { name: capacity_gap, value: 'Estimated 8-10 developers' }
+            note: 'Draft for the product committee. The capacity gap is the central topic; Julien is looking for external capacity to close it.'
+          -
+            title: 'ROAD-TEAM-2026: Team allocation plan (draft)'
+            when: '2026-11-13'
+            details:
+              - { name: new_product_team, value: '8 developers (to be confirmed)' }
+              - { name: migration_team, value: '7 developers' }
+              - { name: platform_and_run, value: '8 developers' }
+              - { name: contractors, value: '2' }
+            note: "Julien's draft: free the strongest seniors from the migration so they can lead the new product. Not yet discussed with the team."
+      -
+        key: security_and_audit
+        label: 'Security & Audit Register'
+        description: 'Audits, certifications, security requirements and access rules for engineering.'
+        entries:
+          -
+            title: 'AUDIT-2026-BANK: Banking security audit'
+            when: '2026-11-24'
+            details:
+              - { name: auditor, value: Deloitte }
+              - { name: scope, value: 'Core banking platform, payments, access management' }
+              - { name: standard, value: 'DSP2 / ISO 27001 / PCI-DSS' }
+              - { name: duration, value: '3 weeks' }
+              - { name: previous_result, value: 'Compliant with 2 minor findings' }
+            note: 'Annual audit. External developers on the core require a documented access framework and security training before any production access.'
+          -
+            title: 'SEC-ACCESS-2026: External access policy'
+            when: '2026-06-01'
+            details:
+              - { name: production_access, value: 'Forbidden for external staff' }
+              - { name: staging_access, value: 'Allowed with VPN + 2FA + CISO approval' }
+              - { name: code_review, value: 'Mandatory: 1 internal reviewer per merge' }
+              - { name: training_required, value: 'Banking security awareness (half-day)' }
+            note: 'Written by the CISO. Any dedicated team would work on staging only, under internal review; this is how the two existing contractors operate.'
+          -
+            title: 'SEC-FIND-2026-02: Audit finding - access reviews'
+            when: '2026-06-20'
+            details:
+              - { name: finding, value: 'Quarterly access reviews partially documented' }
+              - { name: severity, value: Minor }
+              - { name: remediation, value: 'New process live since 2026-09-01' }
+              - { name: owner, value: CISO }
+            note: 'Closed. Julien uses this as proof that the security framework is strict and audited.'
+          -
+            title: 'SEC-REQ-EXT-2026: Requirements for external development teams'
+            when: '2026-10-10'
+            details:
+              - { name: nda, value: 'Required, per developer' }
+              - { name: background_check, value: Required }
+              - { name: data_residency, value: 'EU only' }
+              - { name: code_ownership, value: 'Finoa owns all IP' }
+              - { name: knowledge_transfer, value: 'Documented handover required' }
+            note: 'Prepared by the CISO for the vendor evaluation. Applies to any dedicated team arrangement.'
+-
+  title: 'Discovery: part-time CTO for an SMB with no technical leadership'
   type: discovery
   difficulty: 1
   minutes: 12
   context: "The founder of an e-commerce SMB (jewelry, 35 employees) contacts you via LinkedIn: her web agency 'stopped responding' and she doesn't know if her site is in danger. She has no one technical in-house."
-  goal: "Understand her situation, her stakes and her means, and offer her a suitable part-time CTO engagement, with a dated next step."
-  persona: { name: 'Claire Dumas', role: 'Founder and CEO', company: 'Maison Opaline, jewelry e-commerce, 35 employees, Annecy', personality: "Warm, worried, not very technical. She's afraid of being taken advantage of and appreciates plain language without being talked down to." }
+  goal: 'Understand her situation, her stakes and her means, and offer her a suitable part-time CTO engagement, with a dated next step.'
+  persona:
+    name: 'Claire Dumas'
+    role: 'Founder and CEO'
+    company: 'Maison Opaline, jewelry e-commerce, 35 employees, Annecy'
+    personality: "Warm, worried, not very technical. She's afraid of being taken advantage of and appreciates plain language without being talked down to."
   opening: "Thanks for taking the time. I'll be honest, I'm a bit lost with all this technical stuff, I don't even know where to start."
   brief:
-    budget: "She can put in €3,000 to €4,000 a month, no more, and prefers a three-month commitment to start."
+    budget: 'She can put in €3,000 to €4,000 a month, no more, and prefers a three-month commitment to start.'
     pain: "The site was down for two days during last Black Friday: €60,000 in lost revenue. She's afraid it will happen again at Christmas."
-    decision: "She decides alone, but discusses it with her financial partner, Marc, who is very cautious about spending."
+    decision: 'She decides alone, but discusses it with her financial partner, Marc, who is very cautious about spending.'
     objections: "'That's expensive for a few days a month.' 'I won't understand anything you do.' 'My agency will take it badly.'"
-    yes: "A quick audit of the site before Christmas, a report in plain language, and someone to manage the agency on her behalf."
+    'yes': 'A quick audit of the site before Christmas, a report in plain language, and someone to manage the agency on her behalf.'
     secret: "She's considering raising funds next year and knows an investor will ask technical questions; a part-time CTO would help her prepare for due diligence."
-
-- title: 'Closing: the executive who hesitates to sign'
+  workspace:
+    calendar:
+      -
+        when: '2026-11-16 09:00'
+        minutes: 60
+        what: 'Weekly team meeting (all departments)'
+      -
+        when: '2026-11-16 14:00'
+        minutes: 90
+        what: 'Christmas collection photo shoot review with studio'
+      -
+        when: '2026-11-17 10:30'
+        minutes: 60
+        what: 'Call with packaging supplier (Atelier Carton)'
+      -
+        when: '2026-11-17 15:00'
+        minutes: 45
+        what: 'Interview – customer service assistant candidate'
+      -
+        when: '2026-11-18 11:00'
+        minutes: 60
+        what: 'Monthly review with accountant (Cabinet Perrin)'
+      -
+        when: '2026-11-19 09:30'
+        minutes: 45
+        what: 'Standing call with web agency (Nova Web) – if they answer'
+      -
+        when: '2026-11-19 14:00'
+        minutes: 120
+        what: 'Christmas campaign creative validation with marketing'
+      -
+        when: '2026-11-20 08:30'
+        minutes: 60
+        what: 'Coffee with Marc (financial partner) – budget check'
+      -
+        when: '2026-11-20 13:00'
+        minutes: 60
+        what: 'Lunch with key wholesale client (Bijouterie Lausanne)'
+      -
+        when: '2026-11-23 10:00'
+        minutes: 60
+        what: 'Q4 stock planning meeting with logistics'
+      -
+        when: '2026-11-23 16:00'
+        minutes: 45
+        what: 'Call with insurance broker (site liability)'
+      -
+        when: '2026-11-24 09:00'
+        minutes: 60
+        what: 'Weekly team meeting'
+      -
+        when: '2026-11-24 11:30'
+        minutes: 90
+        what: 'Shooting of new earrings for website'
+      -
+        when: '2026-11-25 14:00'
+        minutes: 60
+        what: 'Meeting with SEO freelancer (Léa Fontaine)'
+      -
+        when: '2026-11-26 10:00'
+        minutes: 120
+        what: 'Board prep with Marc – fundraising documents'
+      -
+        when: '2026-11-26 15:30'
+        minutes: 45
+        what: 'Call with payment provider (Stripe) – unresolved issue'
+      -
+        when: '2026-11-27 09:00'
+        minutes: 60
+        what: 'Weekly team meeting'
+      -
+        when: '2026-11-27 11:00'
+        minutes: 90
+        what: 'Christmas logistics coordination (warehouse + carriers)'
+    sources:
+      -
+        key: support_tickets
+        label: 'Customer Support Inbox'
+        description: 'Recent customer emails and tickets logged by the team, mostly about the website and orders.'
+        entries:
+          -
+            title: 'TKT-1042 – Website checkout error'
+            when: '2026-11-14'
+            details:
+              - { name: channel, value: Email }
+              - { name: customer, value: sophie.martin@example.fr }
+              - { name: status, value: Open }
+              - { name: assigned_to, value: 'Julie (CS)' }
+            note: "Customer tried to buy a necklace three times; payment page showed 'Error 500'. She gave up and bought elsewhere. She asks if we are still in business."
+          -
+            title: 'TKT-1039 – Slow website on mobile'
+            when: '2026-11-13'
+            details:
+              - { name: channel, value: 'Instagram DM' }
+              - { name: customer, value: '@claire.bijoux' }
+              - { name: status, value: 'Closed – no fix' }
+              - { name: assigned_to, value: 'Julie (CS)' }
+            note: 'Says the site takes more than 10 seconds to load on her phone. We replied we would look into it but no action taken.'
+          -
+            title: 'TKT-1035 – Missing order confirmation'
+            when: '2026-11-12'
+            details:
+              - { name: channel, value: Email }
+              - { name: customer, value: lucas.bernard@example.com }
+              - { name: status, value: Resolved }
+              - { name: assigned_to, value: 'Julie (CS)' }
+            note: 'Order #ORD-8821 confirmed but no email received. Customer worried. We manually sent confirmation; suspected email deliverability issue.'
+          -
+            title: 'TKT-1028 – Black Friday outage complaint'
+            when: '2026-11-11'
+            details:
+              - { name: channel, value: Email }
+              - { name: customer, value: marie.dubois@example.fr }
+              - { name: status, value: Open }
+              - { name: assigned_to, value: 'Claire (CEO)' }
+            note: "Customer angry: site was down on Black Friday, she couldn't order the bracelet she wanted. Asks for compensation. Escalated to Claire."
+          -
+            title: 'TKT-1021 – Stock discrepancy on website'
+            when: '2026-11-10'
+            details:
+              - { name: channel, value: Phone }
+              - { name: customer, value: nadia.k@example.ch }
+              - { name: status, value: Closed }
+              - { name: assigned_to, value: 'Julie (CS)' }
+            note: "Website showed 'in stock' for a ring that was sold out. Customer ordered and had to be refunded. Suggests sync issue between warehouse and site."
+      -
+        key: web_agency_emails
+        label: 'Emails – Nova Web Agency'
+        description: 'Threads with the web agency Nova Web, including unanswered messages and invoices.'
+        entries:
+          -
+            title: 'Re: Urgent – site down again?'
+            when: '2026-11-15'
+            details:
+              - { name: from, value: claire.dumas@maisonopaline.fr }
+              - { name: to, value: contact@novaweb.fr }
+              - { name: status, value: 'No reply' }
+            note: 'Claire asks why the site was slow all weekend and whether it is stable for Christmas. Sent 15 Nov, no answer as of 20 Nov.'
+          -
+            title: 'Invoice NW-2026-089 – Monthly maintenance'
+            when: '2026-11-01'
+            details:
+              - { name: amount_eur, value: '1,450.00' }
+              - { name: period, value: 'November 2026' }
+              - { name: status, value: Paid }
+            note: 'Monthly maintenance fee for website hosting, updates, and support. Paid on 5 Nov.'
+          -
+            title: 'Re: Black Friday incident report'
+            when: '2026-11-08'
+            details:
+              - { name: from, value: contact@novaweb.fr }
+              - { name: to, value: claire.dumas@maisonopaline.fr }
+              - { name: status, value: Received }
+            note: "Nova Web says the outage was due to 'unexpected traffic spike and server overload'. No preventive plan proposed. Claire replied asking for details, no response."
+          -
+            title: 'Request for quote – Christmas readiness audit'
+            when: '2026-11-12'
+            details:
+              - { name: from, value: claire.dumas@maisonopaline.fr }
+              - { name: to, value: contact@novaweb.fr }
+              - { name: status, value: 'No reply' }
+            note: 'Claire asks for a quote to test the site before Christmas and ensure it can handle traffic. No answer.'
+          -
+            title: 'Contract renewal reminder'
+            when: '2026-10-20'
+            details:
+              - { name: from, value: contact@novaweb.fr }
+              - { name: to, value: claire.dumas@maisonopaline.fr }
+              - { name: status, value: Received }
+            note: "Nova Web reminds that the annual contract renews on 1 Jan 2027. Includes hosting, maintenance, and minor updates. Claire hasn't signed yet."
+      -
+        key: crm_notes
+        label: 'CRM – Sales & Ops Notes'
+        description: 'Internal notes from the team on orders, revenue, and site performance.'
+        entries:
+          -
+            title: 'Black Friday 2026 – sales impact'
+            when: '2026-11-27'
+            details:
+              - { name: lost_revenue_eur, value: '60000' }
+              - { name: downtime_days, value: '2' }
+              - { name: source, value: "Claire's estimate" }
+            note: 'Site was down Thursday 26 and Friday 27 Nov. Estimated lost sales: €60,000. Team reports many angry customers. Claire fears repeat at Christmas.'
+          -
+            title: 'Christmas 2026 revenue target'
+            when: '2026-12-01'
+            details:
+              - { name: target_eur, value: '450000' }
+              - { name: period, value: 'December 2026' }
+              - { name: last_year_actual_eur, value: '380000' }
+            note: 'Company aims for €450k in December. If site fails, target is at risk. Claire mentioned this in a team meeting.'
+          -
+            title: "Note – Marc's concern about spend"
+            when: '2026-11-18'
+            details:
+              - { name: author, value: 'Claire Dumas' }
+              - { name: topic, value: 'Budget approval' }
+            note: 'Marc (financial partner) is very cautious. He wants to see clear ROI before approving any new recurring expense. Claire needs to justify any new hire or service.'
+          -
+            title: 'Fundraising preparation – technical due diligence'
+            when: '2026-11-22'
+            details:
+              - { name: author, value: 'Claire Dumas' }
+              - { name: topic, value: 'Investor questions' }
+            note: 'Claire is considering raising funds in 2027. She knows investors will ask about tech stack, scalability, security, and team. She has no technical person to answer. Wants to be prepared.'
+          -
+            title: 'Website performance metrics (from Google Analytics)'
+            when: '2026-11-15'
+            details:
+              - { name: avg_load_time_sec, value: '8.2' }
+              - { name: bounce_rate, value: 67% }
+              - { name: mobile_speed_score, value: 32/100 }
+            note: 'Site is slow, especially on mobile. Bounce rate high. Team suspects the site is not optimised for traffic spikes.'
+      -
+        key: financials
+        label: 'Financial Overview – Nov 2026'
+        description: 'Key financial figures Claire reviews with her accountant and Marc.'
+        entries:
+          -
+            title: 'Monthly revenue – October 2026'
+            when: '2026-10-31'
+            details:
+              - { name: revenue_eur, value: '210000' }
+              - { name: online_share, value: 78% }
+              - { name: monthly_budget_available_eur, value: '4000' }
+            note: 'Online sales are the majority. Claire has set aside up to €4,000/month for external help if justified.'
+          -
+            title: 'Cash flow forecast – Q4 2026'
+            when: '2026-11-10'
+            details:
+              - { name: projected_december_eur, value: '450000' }
+              - { name: cash_reserve_eur, value: '80000' }
+              - { name: risk_note, value: 'Site outage could reduce December by 15%' }
+            note: 'Accountant warns that a repeat of Black Friday outage could cut December revenue by 15%. Claire is worried.'
+          -
+            title: 'Current tech spend – monthly'
+            when: '2026-11-05'
+            details:
+              - { name: web_agency_eur, value: '1450' }
+              - { name: hosting_eur, value: '300' }
+              - { name: software_eur, value: '250' }
+              - { name: total_eur, value: '2000' }
+            note: 'Claire already spends €2,000/month on tech. She can add up to €2,000 more but needs to see value.'
+          -
+            title: "Marc's note on new spend"
+            when: '2026-11-20'
+            details:
+              - { name: author, value: 'Marc Lefèvre' }
+              - { name: topic, value: 'Budget approval' }
+            note: "Marc wrote to Claire: 'Any new recurring cost must be clearly tied to protecting revenue. I need a simple one-page summary before we commit.'"
+-
+  title: 'Closing: the executive who hesitates to sign'
   type: closing
   difficulty: 2
   minutes: 8
   context: "After three meetings and a proposal approved by the technical team, the CEO of a real estate services company keeps postponing the signature for a dedicated team of three developers. You've secured one last call."
-  goal: "Surface the real reason for the hesitation and leave with a signing date or a firm commitment."
-  persona: { name: 'Olivier Fabre', role: 'Chief Executive Officer', company: 'Immovia, online rental management, 90 employees, Marseille', personality: "Cordial, cautious, he says 'yes, but' to everything. He doesn't like being pushed and appreciates being helped to decide." }
+  goal: 'Surface the real reason for the hesitation and leave with a signing date or a firm commitment.'
+  persona:
+    name: 'Olivier Fabre'
+    role: 'Chief Executive Officer'
+    company: 'Immovia, online rental management, 90 employees, Marseille'
+    personality: "Cordial, cautious, he says 'yes, but' to everything. He doesn't like being pushed and appreciates being helped to decide."
   opening: "Listen, the proposal is good, really. But I'd rather wait a bit, maybe until September. There's no rush, is there?"
   brief:
-    budget: "The €27,000-a-month budget is approved by the board until June 30; after that, it will have to be voted on again."
-    pain: "Without the new development work, the launch of the owner portal planned for October is compromised, and a competitor is launching the same service."
+    budget: 'The €27,000-a-month budget is approved by the board until June 30; after that, it will have to be voted on again.'
+    pain: 'Without the new development work, the launch of the owner portal planned for October is compromised, and a competitor is launching the same service.'
     decision: "He's the one who signs. But his head of operations, Luc, fears the external team will 'take the place' of his two in-house developers."
     objections: "'It's not the right time.' 'My teams aren't ready to work with developers in Madagascar.' 'I want to be sure it doesn't destabilize anyone.'"
-    yes: "A kickoff meeting with Luc and his two developers to reassure them, and a gradual start (one developer the first month)."
+    'yes': 'A kickoff meeting with Luc and his two developers to reassure them, and a gradual start (one developer the first month).'
     secret: "He promised Luc he wouldn't sign anything without his agreement, and doesn't dare say so."
+  workspace:
+    calendar:
+      -
+        when: '2026-11-16 09:00'
+        minutes: 60
+        what: 'Comité de direction — arbitrage budget Q1 (avec Luc et la DAF)'
+      -
+        when: '2026-11-16 14:00'
+        minutes: 90
+        what: "Revue produit — portail propriétaire, jalon d'octobre"
+      -
+        when: '2026-11-17 08:30'
+        minutes: 60
+        what: 'Point hebdo avec Luc (opérations)'
+      -
+        when: '2026-11-17 11:00'
+        minutes: 60
+        what: 'Entretien candidat — futur responsable data'
+      -
+        when: '2026-11-18 10:00'
+        minutes: 120
+        what: "Conseil d'administration — budget prévisionnel"
+      -
+        when: '2026-11-19 09:30'
+        minutes: 60
+        what: 'Comité de pilotage portail propriétaire (Luc, CTO, marketing)'
+      -
+        when: '2026-11-19 15:00'
+        minutes: 45
+        what: "Point hebdo avec l'équipe développement interne"
+      -
+        when: '2026-11-20 08:00'
+        minutes: 90
+        what: 'Revue de performance — acquisition et rétention'
+      -
+        when: '2026-11-23 09:00'
+        minutes: 60
+        what: 'Comité de direction'
+      -
+        when: '2026-11-23 14:30'
+        minutes: 60
+        what: 'Rendez-vous avocat — contrat partenaire assurance'
+      -
+        when: '2026-11-24 10:00'
+        minutes: 60
+        what: "Point Luc — charge de l'équipe technique et recrutements"
+      -
+        when: '2026-11-25 11:00'
+        minutes: 90
+        what: 'Revue produit — démo portail propriétaire à la direction'
+      -
+        when: '2026-11-25 16:00'
+        minutes: 60
+        what: 'Entretien annuel — responsable marketing'
+      -
+        when: '2026-11-26 09:00'
+        minutes: 120
+        what: 'Séminaire interne — feuille de route 2027 (direction élargie)'
+      -
+        when: '2026-11-26 14:00'
+        minutes: 60
+        what: 'Point fournisseur — hébergement et infogérance'
+      -
+        when: '2026-11-27 10:00'
+        minutes: 60
+        what: 'Comité de direction — clôture du mois et priorités décembre'
+    sources:
+      -
+        key: crm_opportunites
+        label: 'CRM — Opportunités et comptes'
+        description: 'Suivi commercial des comptes et opportunités en cours'
+        entries:
+          -
+            title: 'Etixio — Équipe dédiée 3 développeurs'
+            when: '2026-11-27'
+            details:
+              - { name: Référence, value: OPP-2026-147 }
+              - { name: Montant, value: '27 000 €/mois' }
+              - { name: Étape, value: 'Négociation — signature en attente (CEO)' }
+              - { name: Décideur, value: 'Olivier Fabre, CEO' }
+              - { name: 'Date de clôture prévue', value: '2026-11-30' }
+              - { name: Probabilité, value: '70 %' }
+            note: "Trois réunions tenues. Proposition validée par l'équipe technique d'Immovia. En attente de la signature d'Olivier. Luc (opérations) a émis des réserves sur l'intégration de l'équipe externe."
+          -
+            title: 'Refonte du back-office propriétaire — phase 2'
+            when: '2026-11-20'
+            details:
+              - { name: Référence, value: OPP-2026-132 }
+              - { name: Montant, value: '45 000 €' }
+              - { name: Étape, value: Qualification }
+              - { name: Contact, value: 'Sophie Marchand, directrice produit' }
+              - { name: 'Prochaine action', value: 'Atelier de cadrage à planifier' }
+            note: "Sophie a évoqué un besoin d'API pour connecter les outils internes. À relancer après l'arbitrage sur l'équipe dédiée."
+          -
+            title: 'Immovia — Application mobile locataires'
+            when: ''
+            details:
+              - { name: Référence, value: OPP-2026-118 }
+              - { name: Montant, value: '60 000 €' }
+              - { name: Étape, value: Reporté }
+              - { name: Contact, value: 'Luc Perrin, responsable opérations' }
+              - { name: 'Motif du report', value: 'Priorité portail propriétaire' }
+            note: "Luc souhaite d'abord sécuriser la charge de l'équipe interne avant d'engager un nouveau chantier."
+          -
+            title: 'Immovia — Audit technique et sécurité'
+            when: '2026-11-10'
+            details:
+              - { name: Référence, value: OPP-2026-109 }
+              - { name: Montant, value: '12 000 €' }
+              - { name: Étape, value: 'Clôturée — gagnée' }
+              - { name: Contact, value: 'Nadia Benali, CTO' }
+              - { name: Livrable, value: "Rapport d'audit remis le 2026-11-06" }
+            note: "Audit livré dans les délais. Nadia a indiqué que le portail propriétaire devait être sécurisé avant la mise en production d'octobre."
+      -
+        key: contrats_factures
+        label: 'Contrats et factures'
+        description: 'Contrats signés, échéances et factures émises'
+        entries:
+          -
+            title: 'Contrat-cadre Etixio — audit technique'
+            when: '2026-10-15'
+            details:
+              - { name: Référence, value: CTR-2026-082 }
+              - { name: 'Montant facturé', value: '12 000 €' }
+              - { name: Statut, value: 'Signé et payé' }
+              - { name: Échéance, value: '2026-11-15' }
+            note: "Première prestation d'Etixio chez Immovia. Satisfaction confirmée par Nadia Benali."
+          -
+            title: 'Licence portail propriétaire — fournisseur SaaS'
+            when: '2026-12-31'
+            details:
+              - { name: Référence, value: CTR-2026-071 }
+              - { name: 'Montant annuel', value: '38 000 €' }
+              - { name: Statut, value: 'En cours' }
+              - { name: Renouvellement, value: '2027-01-01' }
+            note: 'Préavis de résiliation de trois mois. La licence actuelle ne couvre pas les fonctionnalités attendues pour octobre.'
+          -
+            title: 'Facture Etixio — proposition équipe dédiée (acompte)'
+            when: ''
+            details:
+              - { name: Référence, value: FAC-2026-311 }
+              - { name: Montant, value: '27 000 €' }
+              - { name: Statut, value: 'En attente de bon de commande' }
+              - { name: Échéance, value: 'À réception de la signature' }
+            note: 'Facture préparée mais non émise : la direction financière attend la signature du CEO.'
+          -
+            title: 'Contrat support et maintenance — infogérance'
+            when: '2026-09-01'
+            details:
+              - { name: Référence, value: CTR-2026-056 }
+              - { name: 'Montant mensuel', value: '4 500 €' }
+              - { name: Statut, value: Signé }
+              - { name: Échéance, value: '2027-08-31' }
+            note: "Contrat reconduit tacitement. Inclut l'hébergement des environnements de préproduction."
+      -
+        key: notes_equipe_technique
+        label: 'Notes — équipe technique et gouvernance'
+        description: 'Comptes rendus de réunions internes et notes de suivi'
+        entries:
+          -
+            title: 'Comité de pilotage portail propriétaire — 2026-11-19'
+            when: '2026-11-19'
+            details:
+              - { name: Participants, value: 'Olivier Fabre, Luc Perrin, Nadia Benali, Sophie Marchand' }
+              - { name: Jalon, value: 'Mise en production prévue en octobre 2027' }
+              - { name: Décision, value: 'Renfort externe nécessaire pour tenir le jalon' }
+              - { name: 'Risque identifié', value: "Charge de l'équipe interne déjà à 90 %" }
+            note: "Luc a rappelé que ses deux développeurs sont mobilisés sur la migration de base. Il craint que l'équipe externe ne prenne leurs sujets."
+          -
+            title: 'Note interne — arbitrage budget équipe dédiée'
+            when: '2026-11-18'
+            details:
+              - { name: Auteur, value: 'Direction financière' }
+              - { name: 'Budget validé', value: "27 000 €/mois jusqu'au 2026-06-30" }
+              - { name: Au-delà, value: 'Nouveau vote du conseil requis' }
+              - { name: Statut, value: 'Enveloppe confirmée par le conseil' }
+            note: "L'enveloppe est disponible. Toute prolongation au-delà du 30 juin devra être représentée au conseil."
+          -
+            title: 'Point Luc — charge et recrutements'
+            when: '2026-11-24'
+            details:
+              - { name: 'Effectif développement', value: '2 développeurs internes' }
+              - { name: 'Recrutement en cours', value: '1 développeur senior (offre en cours)' }
+              - { name: Charge, value: '90 % sur la migration de base' }
+              - { name: "Position sur l'externe", value: "Réservée — demande des garanties d'intégration" }
+            note: 'Luc souhaite un démarrage progressif et un point de suivi régulier pour éviter tout sentiment de substitution.'
+          -
+            title: 'Échange avec un concurrent — veille'
+            when: '2026-11-12'
+            details:
+              - { name: Concurrent, value: Locagest }
+              - { name: Offre, value: 'Portail propriétaire annoncé pour le printemps' }
+              - { name: Menace, value: 'Avance commerciale possible sur le segment propriétaires' }
+              - { name: Source, value: 'Veille marché — Sophie Marchand' }
+            note: "Locagest communique déjà sur son portail. Un retard d'Immovia fragiliserait sa position sur les appels d'offres."
+          -
+            title: 'Note Olivier — promesse faite à Luc'
+            when: '2026-11-20'
+            details:
+              - { name: Objet, value: "Engagement de ne rien signer sans l'accord de Luc" }
+              - { name: Statut, value: Confidentiel }
+              - { name: Contexte, value: 'Réunion de direction du 2026-11-20' }
+            note: "Olivier a promis à Luc de ne pas engager l'équipe externe sans son aval. Il ne l'a pas mentionné à Etixio."

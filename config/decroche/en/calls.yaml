@@ -63,6 +63,107 @@ calls:
           - 'Detect a new need'
           - 'Identify who owns that need'
           - 'Get a meeting on that topic'
+      workspace:
+        calendar:
+          -
+            when: '2026-11-16 08:30'
+            minutes: 60
+            what: 'Weekly shop-floor walk with production leads (Line 2 CNC review)'
+          -
+            when: '2026-11-16 11:00'
+            minutes: 60
+            what: 'ERP integration steering committee with Etixio team'
+          -
+            when: '2026-11-17 09:00'
+            minutes: 90
+            what: 'IoT sensor pilot review – fault-log backlog and downtime numbers'
+          -
+            when: '2026-11-17 14:00'
+            minutes: 60
+            what: 'Interview – CTO succession candidate (external, Annecy office)'
+          -
+            when: '2026-11-18 10:00'
+            minutes: 60
+            what: 'Budget checkpoint with Pierre Léger (FY2027 envelope)'
+          -
+            when: '2026-11-19 09:30'
+            minutes: 90
+            what: 'Architecture review – current maintenance application stack'
+          -
+            when: '2026-11-19 15:00'
+            minutes: 60
+            what: 'GDPR / data-security deep dive on sensor data flows'
+          -
+            when: '2026-11-20 08:00'
+            minutes: 60
+            what: 'Production planning – March 2027 cycle kickoff prep'
+          -
+            when: '2026-11-23 09:00'
+            minutes: 60
+            what: 'Vendor call – predictive-maintenance platform RFP drafting'
+          -
+            when: '2026-11-24 10:30'
+            minutes: 60
+            what: 'Etixio maintenance (TMA) monthly service review'
+          -
+            when: '2026-11-25 08:30'
+            minutes: 90
+            what: 'CNC machine data workshop with operators (manual troubleshooting pain)'
+          -
+            when: '2026-11-25 14:00'
+            minutes: 60
+            what: 'CEO update – CTO transition and interim leadership options'
+          -
+            when: '2026-11-26 11:00'
+            minutes: 60
+            what: 'Hiring panel – short-term technical support profiles'
+          -
+            when: '2026-11-27 09:00'
+            minutes: 60
+            what: 'AI proof-of-concept scoping – internal draft with engineering leads'
+          -
+            when: '2026-11-27 15:00'
+            minutes: 60
+            what: 'Ski-weekend logistics call with family (Chamonix chalet)'
+        sources:
+          -
+            key: support_tickets
+            label: 'Support Tickets'
+            description: 'Internal IT/OT support queue for shop-floor and application issues, maintained by Alpine Manufacturing IT.'
+            entries:
+              - { title: 'TICK-4821 – CNC Line 2 fault-log export failure', when: '2026-11-10', details: [{ name: priority, value: High }, { name: reported_by, value: 'Marc Perrin, production lead' }, { name: downtime_minutes, value: '95' }, { name: root_cause, value: 'Manual CSV export from sensor gateway times out; operator re-runs by hand' }], note: 'Third occurrence this month. Operator spent 40 min manually reconstructing the fault log before maintenance could act. Escalated to Claire.' }
+              - { title: 'TICK-4799 – Maintenance application slow query on asset history', when: '2026-11-06', details: [{ name: priority, value: Medium }, { name: reported_by, value: 'Sylvie Roux, IT' }, { name: downtime_minutes, value: '0' }, { name: root_cause, value: 'Index growth on maintenance history table; Etixio TMA patched temporarily' }], note: 'Temporary fix applied by Etixio maintenance team. Permanent fix pending architecture review.' }
+              - { title: 'TICK-4850 – Sensor gateway certificate expiry warning', when: '2026-11-13', details: [{ name: priority, value: Medium }, { name: reported_by, value: 'Monitoring alert' }, { name: downtime_minutes, value: '0' }, { name: root_cause, value: 'Certificate renewal procedure still manual; no owner after CTO departure' }], note: 'Claire flagged this as a risk: no clear owner for OT security tasks once the CTO role is vacant.' }
+              - { title: 'TICK-4765 – Manual troubleshooting log entry backlog', when: '2026-11-03', details: [{ name: priority, value: Low }, { name: reported_by, value: 'Engineering team' }, { name: downtime_minutes, value: '0' }, { name: root_cause, value: 'Operators logging faults in spreadsheet; no automated ingestion' }], note: 'Backlog of 312 unparsed fault entries. Engineering estimates 6 hours/week lost to manual analysis.' }
+          -
+            key: purchase_orders
+            label: 'Purchase Orders'
+            description: 'Alpine Manufacturing procurement records for external services and equipment, FY2026–FY2027.'
+            entries:
+              - { title: 'PO-2026-118 – Etixio dedicated team (ERP integration)', when: '2026-03-01', details: [{ name: supplier, value: Etixio }, { name: amount_eur, value: '210000' }, { name: period, value: 'March 2024 – ongoing' }, { name: status, value: 'Active, renewed July 2025' }], note: '5 senior Java/Spring developers. On-time delivery, no major defects, positive internal feedback.' }
+              - { title: 'PO-2026-142 – Etixio application maintenance (TMA)', when: '2026-07-01', details: [{ name: supplier, value: Etixio }, { name: amount_eur, value: '48000' }, { name: period, value: 'July 2025 – June 2026' }, { name: status, value: Active }], note: 'Monthly service reviews held; SLA met. Claire is satisfied but wants faster incident turnaround on OT side.' }
+              - { title: 'PO-2026-155 – IoT sensor hardware pilot (10 CNC machines)', when: '2026-09-15', details: [{ name: supplier, value: 'SensorTech GmbH' }, { name: amount_eur, value: '27000' }, { name: period, value: 'September 2026' }, { name: status, value: 'Delivered, pilot running' }], note: 'Pilot covers 10 of 34 CNC machines. Data currently lands in a local gateway; no predictive layer yet.' }
+              - { title: 'PO-2027-003 – AI proof-of-concept budget earmark', when: '2026-11-18', details: [{ name: supplier, value: TBD }, { name: amount_eur, value: '80000' }, { name: period, value: '6 months, starting Q1 2027' }, { name: status, value: 'Draft – pending CEO approval' }], note: 'Earmarked for a six-month AI proof-of-concept. Additional €30,000 possible for a short technical audit, but total must stay under €100,000 for the fiscal year.' }
+              - { title: 'PO-2027-004 – Technical audit allocation', when: '2026-11-18', details: [{ name: supplier, value: TBD }, { name: amount_eur, value: '30000' }, { name: period, value: 'Short engagement, Q1 2027' }, { name: status, value: 'Draft – contingent on PO-2027-003' }], note: 'Claire wants an architecture audit to prepare the predictive-maintenance roadmap before the March 2027 production cycle.' }
+          -
+            key: crm_notes
+            label: 'CRM Notes'
+            description: 'Account notes and contact history for Alpine Manufacturing, maintained by the Etixio account team.'
+            entries:
+              - { title: 'Contact – Claire Dupont, CTO', when: '2026-11-12', details: [{ name: role, value: 'Chief Technology Officer' }, { name: email, value: claire.dupont@alpine-mfg.fr }, { name: phone, value: '+33 4 50 12 34 56' }, { name: preferences, value: 'Warm, chatty; loves ski stories; values transparency and long-term partnerships' }], note: 'Claire drives technical specifications; final approval rests with CEO Pierre Léger. Decision timeline is four weeks.' }
+              - { title: 'Contact – Pierre Léger, CEO', when: '2026-11-05', details: [{ name: role, value: 'Chief Executive Officer' }, { name: email, value: pierre.leger@alpine-mfg.fr }, { name: phone, value: '+33 4 50 98 76 54' }, { name: preferences, value: 'Data-driven; wants clear ROI and fiscal discipline' }], note: 'Pierre approves budget. Claire mentioned he is cautious about offshore quality and GDPR.' }
+              - { title: 'Initiative – IoT sensor pilot on CNC machines', when: '2026-10-20', details: [{ name: status, value: 'Pilot running on 10 CNC machines' }, { name: pain, value: 'Manual fault-log analysis; growing downtime' }, { name: goal, value: 'Reduce manual troubleshooting, move toward predictive maintenance' }], note: "Claire: 'Our engineers are drowning in fault logs. We need a roadmap to turn sensor data into predictive insights.'" }
+              - { title: 'Risk – CTO departure in one month', when: '2026-11-10', details: [{ name: impact, value: 'Technical leadership gap during AI pilot ramp-up' }, { name: mitigation, value: 'Considering CTO-as-a-Service interim support' }, { name: timeline, value: 'Vacancy starts December 2026' }], note: 'Claire is open to interim technical leadership. She wants continuity for the March 2027 production cycle.' }
+              - { title: 'Opportunity – Competitive RFP for predictive-maintenance platform', when: '2026-11-15', details: [{ name: value_eur, value: '200000' }, { name: scope, value: 'End-to-end predictive-maintenance platform' }, { name: status, value: 'Drafting – not yet public' }], note: 'Confidential: Alpine Manufacturing is about to launch an RFP. Etixio could position as strategic partner for the AI component and provide interim CTO-as-a-Service.' }
+          -
+            key: emails
+            label: Emails
+            description: "Recent relevant email threads in Claire's mailbox."
+            entries:
+              - { title: 'RE: IoT pilot – fault-log backlog', when: '2026-11-11', details: [{ name: from, value: 'Marc Perrin' }, { name: to, value: 'Claire Dupont' }, { name: subject, value: 'RE: IoT pilot – fault-log backlog' }], note: "Marc: 'We had another 95-minute stop on Line 2. The operator rebuilt the fault log by hand. We need automation, not more spreadsheets.'" }
+              - { title: 'Budget FY2027 – AI proof-of-concept', when: '2026-11-14', details: [{ name: from, value: 'Pierre Léger' }, { name: to, value: 'Claire Dupont' }, { name: subject, value: 'Budget FY2027 – AI proof-of-concept' }], note: "Pierre: '€80k for the PoC is fine, and €30k for an audit if needed, but total must stay under €100k this fiscal year. I want a clear ROI before we commit to the full platform.'" }
+              - { title: 'CTO transition – interim options', when: '2026-11-13', details: [{ name: from, value: 'Claire Dupont' }, { name: to, value: 'Pierre Léger' }, { name: subject, value: 'CTO transition – interim options' }], note: "Claire: 'I'm leaving in a month. We need short-term technical support to keep the AI pilot on track. I'd like to explore CTO-as-a-Service.'" }
+              - { title: 'Etixio – follow-up call request', when: '2026-11-15', details: [{ name: from, value: 'Etixio Account Team' }, { name: to, value: 'Claire Dupont' }, { name: subject, value: 'Etixio – follow-up call request' }], note: "Claire replied: 'Happy to talk. We have new needs around IoT and predictive maintenance. Let's find time this week.'" }
     lines:
       -
         speaker: seller
@@ -96,81 +197,85 @@ calls:
     revealed:
       - objections
       - 'yes'
-    score: 1
+    score: 0
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
           score: 0
-          comment: 'Seller did not ask any questions about the client’s situation, needs or context.'
+          comment: 'The seller never asked about the IoT sensor pilots, the manual troubleshooting, the CTO departure or the current engagement; the client volunteered all of it and none of it was picked up.'
         questions:
           label: 'Open questions'
           score: 0
-          comment: "Only a closed question ('do you want a quote?') was asked; no open, probing questions."
+          comment: "One question in the whole call, closed ('So, do you want a quote?'), zero open questions, and it came before any discovery."
         listening:
           label: 'Listening and rephrasing'
-          score: 1
-          comment: 'Seller gave generic statements and never re‑phrased or built on the client’s concerns.'
+          score: 0
+          comment: "The client asked two direct questions ('How do you make sure the code stays solid when you're working offshore?' and the free AI diagnostic request) and neither was answered or even acknowledged."
         objections:
           label: 'Handling objections'
           score: 0
-          comment: 'Seller did not acknowledge or address the client’s quality, onboarding or GDPR worries.'
+          comment: "The quality and onboarding-speed concerns were met with 'we are cheap', which confirms the low-cost offshore fear instead of answering it with Etixio's code review, automated tests, CI and named-access guarantees."
         value:
           label: 'Value proposition'
           score: 0
-          comment: "Seller made unsupported claims ('best on the market, cheap') that are not part of Etixio’s official offer."
+          comment: "No link to the existing dedicated team and TMA relationship, no mention of the free AI diagnostic, the technical audit or CTO-as-a-Service; the offer was reduced to 'offshore teams, best on the market, cheap'."
         closing:
           label: 'Closing / next step'
           score: 0
-          comment: 'No concrete next step was proposed; the call ended without booking a meeting.'
-      summary: 'The seller failed to uncover any new need, asked no open questions, gave a vague pitch, and left the call without securing a next step. Overall performance is far below expectations.'
+          comment: 'No next step proposed, no date, no CTO video call; the seller ended the call while the client was still asking questions.'
+      summary: "A one-minute follow-up call on an account Etixio already serves, where the client handed over the new need (IoT sensors on CNCs), the CTO vacancy and the exact yes-condition (free AI diagnostic + 30-min CTO call) — and the seller answered with 'we are cheap' and 'do you want a quote?'. Nothing was discovered, no objection was handled, no next step was taken; this is the fourth consecutive call where objections are the weakest criterion."
       next_step: false
-      outcome: 'No appointment booked; the conversation ended without progress toward the objectives.'
-      result: 'Call stalled – no discovery, no commitment.'
+      outcome: 'The deal is where it was before the call, minus credibility: the client asked for a free AI diagnostic and a fast CTO call and got a price question instead, with no meeting booked.'
+      result: 'Existing account, zero discovery, no next step — a warm lead left cold'
       objectives:
         -
           objective: 'Detect a new need beyond the current maintenance contract'
           status: missed
-          evidence: 'Seller never asked about new challenges or projects.'
+          evidence: "The client raised it herself ('those new IoT sensors on the CNCs', 'manual troubleshooting'), but the seller never explored it and moved straight to a quote."
         -
           objective: 'Identify the person(s) who own the new need and who can authorize a project'
           status: missed
-          evidence: 'Seller did not inquire about decision‑makers or owners.'
+          evidence: "Pierre Léger (CEO, final approver) was never mentioned, and the client's own CTO departure next month was ignored rather than used to map the decision."
         -
           objective: 'Book a dedicated discovery meeting (video call) within the next two weeks'
           status: missed
-          evidence: 'Seller ended the call without proposing a date or time.'
+          evidence: "No meeting proposed or booked; the seller ended the call and the client's request for a free AI diagnostic went unanswered."
       goal: missed
       missed:
         -
-          section: budget
-          what: 'Client’s allocated budget for AI PoC and audit'
-          how: 'Ask: "What budget have you set aside for a pilot or technical audit?"'
-        -
           section: pain
-          what: 'Specific pain points from manual fault‑log analysis and sensor data handling'
-          how: 'Ask: "Can you describe the biggest challenge your engineers face with the current troubleshooting process?"'
+          what: 'The engineering team is drowning in manual fault-log analysis, causing longer downtimes, and there is no roadmap to turn sensor data into predictive insights.'
+          how: "'You mentioned the IoT sensors on the CNCs — what's happening today with the fault logs, and where does it hurt most?'"
+        -
+          section: budget
+          what: '€80k earmarked for a six-month AI POC plus €30k for a short technical audit, total under €100k for the fiscal year.'
+          how: "'If we scoped a six-month AI POC, what envelope have you set aside for this fiscal year?'"
         -
           section: decision
-          what: 'Decision‑making process and final approver'
-          how: 'Ask: "Who will need to sign off on a project like this and what is the approval timeline?"'
+          what: 'Pierre Léger (CEO) gives final approval, Claire drives the specs, decision in four weeks to start before the March 2027 production cycle.'
+          how: "'Who signs off on a project like this, and what timeline are you working with before the next production cycle?'"
         -
           section: secret
-          what: 'Potential upcoming RFP for a €200k predictive‑maintenance platform'
-          how: 'Ask: "Do you have any upcoming initiatives or RFPs where you might need a partner for AI components?"'
+          what: 'A €200k end-to-end predictive-maintenance RFP is coming, and Etixio could win the whole thing by positioning on AI plus interim CTO-as-a-Service.'
+          how: "'Beyond the POC, is this part of a broader predictive-maintenance programme we should be positioning for?'"
       best:
         -
-          quote: 'So, do you want a quote?'
-          why: 'It is the only attempt to move the conversation toward a next step, even though it is a closed question.'
+          quote: 'Hello, I am calling from Etixio about our offshore teams.'
+          why: 'It at least identifies the caller and the company, which is the minimum for a cold opening line.'
       worst:
         -
           quote: 'We are the best on the market, really, and we are cheap.'
-          why: 'Makes an unsupported claim that Etixio does not guarantee and ignores client concerns about quality and security.'
-          better: 'We focus on delivering high‑quality code with rigorous reviews, GDPR‑compliant processes, and a proven track record in industrial projects.'
+          why: "Unsubstantiated superlative plus price-led positioning, and it lands exactly on the client's stated fear about offshore quality — it makes the objection worse instead of answering it."
+          better: 'On quality: every delivery goes through systematic code review, automated tests and continuous integration, the code and repositories belong to you, and you can take back control at any time. On cost, the price depends on the seniority and format — I can send you a catalogue within 24 business hours.'
+        -
+          quote: 'So, do you want a quote?'
+          why: "The only question of the call, closed, asked before any discovery, and it ignores the client's quality question and her request for a free AI diagnostic."
+          better: "Before any quote — you mentioned the IoT sensors on the CNCs and the CTO transition. Can you tell me what's happening with the fault logs today, and what you'd want to have in place before the next production cycle?"
       tips:
-        - 'Start the call with open discovery questions to surface the client’s pain, budget and decision‑making process.'
-        - 'Re‑phrase the client’s concerns (quality, GDPR, onboarding) and align Etixio’s real strengths (code reviews, data protection, dedicated teams) to those concerns.'
-        - 'Close the call by proposing a concrete 30‑minute video meeting with the CTO, confirming date and time.'
+        - "Open every follow-up by naming the existing relationship (dedicated team since March 2024, TMA renewed July 2025) and ask one open question about what has changed — here, 'what's happening with the IoT sensors on the CNCs?' would have opened the whole call."
+        - "When the client raises quality, GDPR or ramp-up, answer with Etixio's documented facts before anything else: code review, automated tests, CI, client-owned code and repos, GDPR governed by contract with SCCs, named role access, separate environments, start in 4 to 8 weeks — never 'we are cheap'."
+        - 'Close every call with a dated next step you propose yourself: the free AI diagnostic plus the 30-minute video call with the CTO, free and no commitment, followed by a written summary with a ballpark figure — and lock the slot before hanging up.'
       speech:
         voice: true
         talk_share: 19
@@ -183,7 +288,7 @@ calls:
         longest: 12
         wpm: 138
         reply_delay: 0
-      speech_comment: 'Seller spoke only 19% of the words, giving a very low talk‑share and providing no substantive information.'
+      speech_comment: '19% talk share (28 words against 123), one closed question, zero open questions, longest line 12 words: the seller barely spoke and asked nothing, so the problem is not pace or fillers but silence and absence of questions.'
   -
     seller: manager
     days_ago: 13
@@ -246,6 +351,104 @@ calls:
           - 'Defuse the anger without making excuses'
           - 'Understand the real problem'
           - 'Get agreement on a concrete action plan'
+      workspace:
+        calendar:
+          -
+            when: '2026-11-16 08:30'
+            minutes: 60
+            what: 'Weekly digital commerce stand-up'
+          -
+            when: '2026-11-16 10:00'
+            minutes: 60
+            what: 'Checkout bug triage with Etixio team'
+          -
+            when: '2026-11-16 14:00'
+            minutes: 60
+            what: 'Holiday collection launch steering committee'
+          -
+            when: '2026-11-17 09:00'
+            minutes: 60
+            what: 'CFO budget review – Q4 digital spend'
+          -
+            when: '2026-11-17 11:00'
+            minutes: 60
+            what: 'CTO review – checkout architecture'
+          -
+            when: '2026-11-18 10:00'
+            minutes: 60
+            what: 'Marketing sync – campaign readiness'
+          -
+            when: '2026-11-18 15:00'
+            minutes: 60
+            what: 'Vendor call – near-shore partner exploratory discussion'
+          -
+            when: '2026-11-19 09:30'
+            minutes: 60
+            what: 'Etixio escalation call'
+          -
+            when: '2026-11-20 11:00'
+            minutes: 60
+            what: 'Weekly status with Etixio PM'
+          -
+            when: '2026-11-23 08:30'
+            minutes: 60
+            what: 'Weekly digital commerce stand-up'
+          -
+            when: '2026-11-23 13:00'
+            minutes: 60
+            what: 'Legal review – contract amendment'
+          -
+            when: '2026-11-24 10:00'
+            minutes: 60
+            what: 'CFO/CTO decision meeting on vendor contracts'
+          -
+            when: '2026-11-25 15:00'
+            minutes: 60
+            what: 'Holiday launch go/no-go checkpoint'
+          -
+            when: '2026-11-26 09:00'
+            minutes: 60
+            what: 'Customer service readiness review'
+          -
+            when: '2026-11-27 11:00'
+            minutes: 60
+            what: 'Pre-launch all-hands'
+        sources:
+          -
+            key: support_tickets
+            label: 'Support tickets'
+            description: 'Open and recent support tickets logged with Etixio'
+            entries:
+              - { title: 'TKT-4512 – Checkout bug blocking orders', when: '2026-11-10', details: [{ name: status, value: 'Open – escalated' }, { name: priority, value: Critical }, { name: assigned_to, value: 'Etixio support' }, { name: hours_since_opened, value: '72' }], note: "Customers cannot complete checkout on mobile. Error message: 'Payment authorization failed'. Approximately 30% of orders failing. No response from Etixio for 3 days." }
+              - { title: 'TKT-4508 – Missing checkout module deployment', when: '2026-11-05', details: [{ name: status, value: 'In progress – delayed' }, { name: priority, value: High }, { name: expected_delivery, value: '2026-11-15' }], note: 'New checkout module was scheduled for 2026-11-10. Etixio has not provided a revised date.' }
+              - { title: 'TKT-4499 – Time zone communication delay', when: '2026-10-28', details: [{ name: status, value: Closed }, { name: priority, value: Medium }, { name: resolution, value: 'Acknowledged but recurring' }], note: 'Response time to tickets averages 24-48 hours due to Madagascar time zone. Client requests a French-speaking PM to bridge.' }
+              - { title: 'TKT-4490 – Invoice discrepancy query', when: '2026-10-20', details: [{ name: status, value: Open }, { name: priority, value: High }, { name: assigned_to, value: 'Finance/Etixio billing' }], note: 'Overtime hours billed: 120 hours. Hours logged by Maison Élégance: 80 hours. Discrepancy of 40 hours at €150/hour = €6,000. CFO disputes.' }
+          -
+            key: crm_notes
+            label: 'CRM notes – Etixio account'
+            description: 'Notes from account management and internal discussions'
+            entries:
+              - { title: 'Initial contract signed', when: '2026-06-15', details: [{ name: team_size, value: '6 developers (4 senior, 2 junior)' }, { name: location, value: 'Antananarivo, Madagascar' }, { name: monthly_rate, value: '€22,000 per developer' }, { name: contract_term, value: '12 months' }], note: 'Dedicated team for e-commerce checkout overhaul. Start date 2026-06-15. Delivery scheduled 2026-11-30.' }
+              - { title: 'Escalation from Alexandre Moreau', when: '2026-11-13', details: [{ name: contact, value: 'Alexandre Moreau, Head of Digital Commerce' }, { name: sentiment, value: 'Angry, demanding solution' }, { name: deadline, value: '2026-11-24 for contract changes' }], note: 'Alexandre called to complain about missed deadlines, production bug, developer departure, and invoice dispute. Wants concrete plan. Mentioned evaluating alternatives if not resolved within 2 weeks.' }
+              - { title: 'Developer departure notice', when: '2026-11-12', details: [{ name: developer_name, value: 'Rakoto Andrianarivo' }, { name: role, value: 'Senior developer' }, { name: last_day, value: '2026-11-14' }, { name: reason, value: 'Personal reasons' }], note: 'Rakoto was key on checkout module. His departure leaves a senior gap. Etixio must propose replacement urgently.' }
+              - { title: 'Near-shore partner evaluation', when: '2026-11-10', details: [{ name: partner, value: 'Lusitania Tech, Portugal' }, { name: rate, value: '€18,000 per developer/month' }, { name: advantage, value: 'Same time zone, cheaper' }, { name: status, value: Exploratory }], note: 'Internal discussion about moving to near-shore. CFO Sophie Lambert pushing for cost-cutting. Decision pending Etixio response.' }
+          -
+            key: invoices
+            label: 'Invoices and billing'
+            description: 'Recent invoices from Etixio and payment status'
+            entries:
+              - { title: 'Invoice ETX-2026-10', when: '2026-10-01', details: [{ name: amount, value: '€132,000' }, { name: period, value: 'October 2026' }, { name: overtime_hours, value: '120' }, { name: overtime_rate, value: €150/hour }, { name: status, value: Disputed }], note: 'Base monthly rate for 6 developers. Overtime billed for 120 hours, but Maison Élégance logged only 80 hours. Discrepancy of €6,000. CFO demands credit note.' }
+              - { title: 'Invoice ETX-2026-09', when: '2026-09-01', details: [{ name: amount, value: '€132,000' }, { name: period, value: 'September 2026' }, { name: status, value: Paid }], note: 'No overtime billed. Paid on time.' }
+              - { title: 'Invoice ETX-2026-11', when: '2026-11-01', details: [{ name: amount, value: '€132,000' }, { name: period, value: 'November 2026' }, { name: overtime_hours, value: '80' }, { name: status, value: 'Pending dispute resolution' }], note: 'Includes 80 overtime hours. Client withholding payment until October dispute resolved.' }
+          -
+            key: project_status
+            label: 'Project status – checkout overhaul'
+            description: 'Milestones and current status of the checkout overhaul project'
+            entries:
+              - { title: 'Milestone 1 – Discovery and design', when: '2026-07-15', details: [{ name: status, value: Completed }, { name: deliverable, value: 'Technical specification and UX design' }], note: 'Delivered on time.' }
+              - { title: 'Milestone 2 – Core development', when: '2026-09-30', details: [{ name: status, value: 'Completed with delay' }, { name: delay, value: '2 weeks' }, { name: deliverable, value: 'Checkout module backend' }], note: 'Delayed due to integration issues. Client accepted revised date.' }
+              - { title: 'Milestone 3 – Checkout module deployment', when: '2026-11-10', details: [{ name: status, value: 'Not started' }, { name: expected_delivery, value: '2026-11-30' }, { name: blocker, value: 'Production bug TKT-4512' }], note: 'New checkout module not yet live. Show-stopper bug breaking orders. Developer departure adds risk.' }
+              - { title: 'Milestone 4 – Go-live and hypercare', when: '2026-12-15', details: [{ name: status, value: Planned }, { name: deliverable, value: 'Full launch and 2 weeks hypercare' }], note: 'Tied to holiday collection launch. Marketing campaign starts 2026-12-01. Cannot slip.' }
     lines:
       -
         speaker: seller
@@ -288,65 +491,82 @@ calls:
     revealed:
       - budget
       - pain
-    score: 11
+      - decision
+    score: 13
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
           score: 2
-          comment: 'Seller asked only one situational question after the client had already described the problem.'
+          comment: 'The client volunteered the whole situation (bug, departure, three-day silence, disputed invoice, €150k, decision by 24 Nov) and the seller''s only open question, "What is your current situation with your developers?", came after the client had already laid it all out.'
         questions:
           label: 'Open questions'
-          score: 3
-          comment: 'Two questions were asked, only one was open‑ended and it duplicated information the client had already given.'
+          score: 2
+          comment: 'Two questions in the whole call, one open and one late; nothing on the root cause of the bug, the ticket process, the invoicing discrepancy, or who decides.'
         listening:
           label: 'Listening and rephrasing'
           score: 1
-          comment: 'Seller never paraphrased or reflected the client’s concerns, showing minimal active listening.'
+          comment: 'The client asked the same question three times (senior replacement by tomorrow, French-speaking PM with daily updates) and never got an answer; the seller replied with a brochure instead of rephrasing what he had just heard.'
         objections:
           label: 'Handling objections'
           score: 1
-          comment: 'Seller responded with generic statements about developer quality and price, not addressing the bug, turnover, or invoice dispute.'
+          comment: 'The three objections (lost confidence in offshore quality, unpredictable communication due to the time zone, unapproved invoice charges) were neither acknowledged nor dug into; the answer was "we are cheaper than agencies in Paris", which is the exact opposite of what a burned client needs to hear.'
         value:
           label: 'Value proposition'
           score: 1
-          comment: 'Seller offered a brochure and price list instead of linking Etixio’s concrete remediation capabilities to the client’s urgent needs.'
+          comment: 'No use of the real offer: no mention of the supervised handover and organized replacement, no French-speaking lead (Madagascar is French-speaking), no visible-work/demo/written-alert mechanism, no CTO call; instead a brochure and a price list, which the offer only sends on request.'
         closing:
           label: 'Closing / next step'
-          score: 1
-          comment: 'No concrete, dated next step was secured; the only proposal was to send marketing material.'
-      summary: 'The call was dominated by the client’s complaints, and the seller failed to defuse anger, uncover deeper issues, or propose a concrete remediation plan. Performance was very weak across all sales skills.'
+          score: 0
+          comment: 'No next step proposed, no date, no booking; the seller ended the call himself while the client was still asking when the replacement would be onboarded.'
+      summary: 'A one-minute escalation call in which the client handed over the entire brief — bug, departing senior dev, three-day ticket silence, disputed overtime, €150k budget, CFO decision on 24 November — and the seller answered with a company pitch, a price comparison and a brochure. Nothing was acknowledged, nothing was committed, no next step was set: the client is now more likely to test the Portugal alternative than to stay.'
       next_step: false
-      outcome: 'The client remains unsatisfied and has not committed to any corrective action; the relationship is at risk.'
-      result: 'Call ends without resolution; client demands immediate concrete actions.'
+      outcome: 'The deal is at high risk: the client still wants a solution but has received no plan, no date and no owner, and the 24 November decision deadline is now the only clock running.'
+      result: 'Escalation call wasted: complaint heard, no plan given, no next step booked'
       objectives:
         -
           objective: 'Defuse the anger without making excuses, acknowledging the impact on their business.'
           status: missed
-          evidence: 'Seller responded with generic statements about developer quality and cost, which did not acknowledge the impact on the brand.'
+          evidence: 'The client opened with "nous avons un gros problème" and the seller answered with "Hi, it''s Alex from Etixio, we build dedicated development teams. Did you have a minute?" — no acknowledgement of the failing orders or the December 1 launch.'
         -
           objective: 'Understand the real problem, including technical, communication, and billing issues.'
-          status: missed
-          evidence: 'Seller asked a redundant situational question but never probed the invoice dispute or the time‑zone communication issue.'
+          status: partial
+          evidence: 'The seller asked "What is your current situation with your developers?" and the client listed the bug, the departure, the time-zone lag and the launch date — but the seller never explored the invoicing dispute or the three-day ticket silence.'
         -
           objective: 'Get agreement on a concrete action plan (developer replacement, dedicated project manager, invoice correction) and schedule a follow‑up meeting with the CTO.'
           status: missed
-          evidence: 'Seller only offered to send a brochure and price list; no timeline, replacement developer, or project manager was confirmed.'
-      goal: missed
-      missed: []
+          evidence: 'The client asked three times for a senior replacement and a French-speaking PM with daily updates; the seller answered "OK. I can send you our brochure and a price list by email." No plan, no CTO call, no date.'
+      goal: partial
+      missed:
+        -
+          section: secret
+          what: 'Maison Élégance is already evaluating a near-shore partner in Portugal, cheaper and closer, under cost-cutting pressure from leadership.'
+          how: '"Beyond this incident, what would make you reconsider the whole setup — is anyone internally pushing for a different sourcing model?"'
+        -
+          section: 'yes'
+          what: 'The four conditions that would make Alexandre say yes: immediate senior replacement, French-speaking PM, 10% off the disputed invoice, revised milestone plan guaranteeing the 30 November checkout launch.'
+          how: '"If we get this right, what exactly would you need to see in the next two weeks to keep us on the project?"'
+        -
+          section: objections
+          what: 'The depth of the confidence loss on offshore quality and the exact nature of the unapproved overtime charges.'
+          how: '"On the invoice, which lines exactly are disputed — the hours, the rate, or the approval process?"'
       best:
         -
           quote: 'What is your current situation with your developers?'
-          why: 'It attempts to open the conversation for the client to describe the issue in his own words.'
+          why: 'The only open question of the call: it let the client lay out the team composition, the bug, the departure and the launch constraint in his own words.'
       worst:
         -
           quote: 'We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris.'
-          why: 'It ignores the client’s urgent complaints, offers no solution, and focuses on price rather than value.'
-          better: 'I understand the bug and the developer departure are critical. We can assign a senior replacement by tomorrow and a French‑speaking project manager who will give you daily updates. Let me send you a concrete remediation plan within the next hour.'
+          why: "On an escalation call, answering a confidence crisis with a price argument confirms the client's fear that he bought low-cost offshore; it also ignores the bug, the departure and the invoice."
+          better: "\"I hear you — orders failing and a senior leaving three weeks before your launch is not acceptable. Let me take the three points one by one: the bug, the replacement, the invoice. On the replacement, our commitment is documentation, a supervised handover and an organized replacement — I'll come back to you with named profiles and a date, not 'tomorrow' that I can't guarantee.\""
+        -
+          quote: 'OK. I can send you our brochure and a price list by email.'
+          why: 'Catalogue push on a client who has already bought and is asking for a remediation plan; the offer sends a price catalogue only on request, and it answers none of the three questions asked.'
+          better: '"No brochure — you don''t need one. Here is what I propose: I open a remediation plan today with a French-speaking lead as your single point of contact and daily written updates, I get the invoice lines verified internally and come back with a position, and I book a 30-minute call with our CTO this week so you have a written summary and a revised milestone plan before your 24 November decision."'
       tips:
-        - 'Practice active listening: repeat back the client’s key concerns (bug, turnover, invoice) before responding.'
-        - 'Address each objection directly with Etixio’s real capabilities (e.g., replacement timeline, French‑speaking PM, transparent invoicing).'
-        - 'Close with a specific, dated action plan (e.g., "Senior dev onboarded by tomorrow, PM assigned today, follow‑up call on 15 Nov").'
+        - 'Open every escalation call with an excuse-free acknowledgement of the impact before any company pitch: name the failing orders, the December 1 launch and the three-day silence, then ask "what has this cost you so far?" — the client gave you the pain, the budget and the decision in one minute, you only had to take them.'
+        - 'Answer the client''s question before asking yours: on the replacement, commit only to what the offer allows (documentation, supervised handover, organized replacement, named profiles with a date), and on the French-speaking PM say yes — Madagascar is French-speaking and a T&M lead is in the offer; never promise "by tomorrow", which the offer explicitly excludes.'
+        - "Never leave an escalation call without a dated next step: book the free 30-minute CTO video call before hanging up, with a written summary and a revised milestone plan, and take the invoice dispute internally (no discount promised on the spot) with a named owner and a date — the client's CFO decides on 24 November, so the calendar is your closing tool."
       speech:
         voice: true
         talk_share: 14
@@ -359,7 +579,7 @@ calls:
         longest: 17
         wpm: 152
         reply_delay: 0
-      speech_comment: 'Seller spoke very little (14% of words), asked few questions, used no filler, and delivered a rapid 152 wpm, resulting in a one‑sided conversation dominated by the client.'
+      speech_comment: 'Seller spoke only 14% of the words (54 vs 319) with 2 questions and no fillers — but the silence was not listening, it was absence: the client asked the same question three times and the seller ended the call without ever answering it.'
   -
     seller: junior
     days_ago: 10
@@ -413,6 +633,96 @@ calls:
           - 'Understand the reason for the silence'
           - 'Address the real objection'
           - 'Get a decision date'
+      workspace:
+        calendar:
+          -
+            when: '2026-11-16 09:00'
+            minutes: 60
+            what: 'Sprint planning – équipe produit (Property Search squad)'
+          -
+            when: '2026-11-16 14:00'
+            minutes: 60
+            what: 'Point CFO – revue budget Q4/Q1 (hold dépenses externes)'
+          -
+            when: '2026-11-17 10:30'
+            minutes: 60
+            what: 'Demo interne – recherche IA (RAG) v0.3'
+          -
+            when: '2026-11-18 08:30'
+            minutes: 60
+            what: 'Comité de direction – lancement Property Search AI (go/no-go)'
+          -
+            when: '2026-11-19 15:00'
+            minutes: 60
+            what: 'Entretien candidat – Lead Backend PHP/Symfony'
+          -
+            when: '2026-11-20 11:00'
+            minutes: 60
+            what: 'Revue fournisseurs – options offshore (comparatif coûts/preuve)'
+          -
+            when: '2026-11-23 09:30'
+            minutes: 60
+            what: 'Roadmap AI Q1 2027 – atelier cadrage produit'
+          -
+            when: '2026-11-24 13:30'
+            minutes: 60
+            what: 'Point juridique – DPA/SCC sous-traitants & NDA'
+          -
+            when: '2026-11-25 16:00'
+            minutes: 60
+            what: 'Point partenaire – intégration portails (données annonces)'
+          -
+            when: '2026-11-26 10:00'
+            minutes: 60
+            what: '1:1 CEO (visio) – validation roadmap et budget'
+          -
+            when: '2026-11-27 14:30'
+            minutes: 60
+            what: 'Comité produit – priorisation backlog (fin de sprint)'
+          -
+            when: '2026-11-27 16:30'
+            minutes: 60
+            what: 'Revue sécurité – conformité RGPD (assistant documentaire)'
+        sources:
+          -
+            key: emails
+            label: 'Boîte e-mail – Claire Dubois'
+            description: 'Fils e-mail internes et externes liés au lancement produit et aux prestataires.'
+            entries:
+              - { title: 'RE: Etixio Proposal – Dedicated Team & CTO as a Service', when: '2026-10-21', details: [{ name: from, value: 'Claire Dubois <claire.dubois@immonova.fr>' }, { name: to, value: 'finance@immonova.fr; cto@immonova.fr' }, { name: subject, value: 'RE: Etixio Proposal – Dedicated Team & CTO as a Service' }, { name: proposal_ref, value: ETX-2026-1018 }, { name: amount, value: '€55,000/month estimate' }], note: 'Bonjour, merci de relire la proposition. Le coût mensuel estimé dépasse notre plafond externe. Merci de vérifier les options et les garanties avant tout engagement. Claire' }
+              - { title: 'Hold temporaire – dépenses externes nouvelles', when: '2026-11-02', details: [{ name: from, value: 'CFO (intérim) <cfo@immonova.fr>' }, { name: to, value: direction@immonova.fr }, { name: scope, value: 'Toutes nouvelles dépenses externes > €10k' }, { name: effective, value: '2026-11-02' }, { name: review_date, value: '2027-01-05' }], note: 'Bonjour à tous, dans l’attente de l’arbitrage budgétaire du conseil, merci de suspendre toute nouvelle dépense externe supérieure à 10 k€. Les renouvellements critiques restent possibles avec justification écrite. — CFO' }
+              - { title: 'Préparation comité – options offshore et pilote', when: '2026-11-05', details: [{ name: from, value: 'Claire Dubois <claire.dubois@immonova.fr>' }, { name: to, value: 'cfo@immonova.fr; cto@immonova.fr' }, { name: options, value: 'Etixio (€55k/mois) vs offshore low-cost (€38k/mois)' }, { name: request, value: 'Pilote court (6–8 semaines) avec critères de sortie' }], note: 'Pour le comité : je veux une recommandation avec un pilote limité et des indicateurs clairs. On ne signe pas un engagement long sans visibilité.' }
+              - { title: 'Feedback interne – qualité et communication offshore', when: '2026-11-12', details: [{ name: from, value: 'Sophie Martin <sophie.martin@immonova.fr>' }, { name: to, value: 'Claire Dubois <claire.dubois@immonova.fr>' }, { name: concern, value: 'Décalage horaire et communication en anglais' }, { name: requirement, value: 'Garantie senior + plan de passation' }], note: 'J’ai eu un retour mitigé sur un prestataire à Madagascar chez un confrère. Il faut des seniors identifiés, des rituels de suivi et un plan de continuité si une personne change.' }
+              - { title: 'Annulation déplacement salon – Immobilier & Data (Paris)', when: '2026-11-06', details: [{ name: from, value: 'Claire Dubois <claire.dubois@immonova.fr>' }, { name: to, value: events@immonova.fr }, { name: event, value: 'Salon Immobilier & Data – Paris' }, { name: dates, value: '2026-11-17 to 2026-11-18' }], note: 'Je n’irai finalement pas au salon, le comité de direction est prioritaire cette semaine.' }
+          -
+            key: internal_notes
+            label: 'Notes internes – Produit & Direction'
+            description: 'Notes de réunion et mémos internes sur la roadmap, les recrutements et les prestataires.'
+            entries:
+              - { title: 'Note interne – Retard de recrutement Lead Backend', when: '2026-11-10', details: [{ name: role, value: 'Lead Backend PHP/Symfony' }, { name: status, value: 'Ouvert depuis 2026-09-01' }, { name: candidates, value: '2 entretiens, 0 offre' }, { name: impact, value: 'Risque de glissement sur la recherche IA (S1 2027)' }], note: 'Sans renfort senior backend, la feature de recherche IA ne pourra pas sortir pour le lancement prévu. L’équipe interne est déjà surchargée.' }
+              - { title: 'Mémo – Contraintes budgétaires Q4 2026', when: '2026-11-03', details: [{ name: plafond_externe, value: '€50,000 / mois' }, { name: statut, value: 'Gelé jusqu’au début Q1 2027 (validation conseil)' }, { name: prochaine_revue, value: '2027-01-05' }], note: 'Aucun engagement long ne peut être signé avant la revue du conseil. Un pilote court peut être envisagé s’il reste sous le seuil de dépense et démontre la valeur.' }
+              - { title: 'Compte-rendu – Démo interne RAG v0.3', when: '2026-11-17', details: [{ name: scope, value: 'Assistant documentaire (RAG)' }, { name: statut, value: 'Prototype fonctionnel, qualité de réponse 70%' }, { name: estimation_restante, value: '220–300 h' }, { name: risque, value: 'Dérive du coût en T&M sans jalons fermes' }], note: 'Le prototype est prometteur mais nécessite un encadrement senior pour l’industrialisation et la qualité. Il faut des jalons et un plafond.' }
+              - { title: 'Note – Départ CEO champion de l’offshore', when: '2026-10-30', details: [{ name: evenement, value: 'Départ de la CEO (congé maternité) le 2026-10-30' }, { name: impact, value: 'Décision finale transférée au CFO (intérim) et au conseil' }, { name: orientation, value: 'Revue de prix et gel temporaire des dépenses' }], note: 'La CEO qui portait le sujet offshore n’est plus là pour arbitrer. Le CFO veut une revue de prix et une approche par étapes.' }
+              - { title: 'Comparatif fournisseurs – options offshore', when: '2026-11-20', details: [{ name: etixio, value: '€55,000/mois (équipe dédiée + CTO + AI)' }, { name: alternative_low_cost, value: '€38,000/mois, équipe mixte (Tunisie/Maroc)' }, { name: critere, value: 'Qualité senior, communication, garanties' }], note: 'L’option low-cost est plus proche géographiquement et moins chère, mais les garanties senior et le plan de continuité sont flous. À challenger.' }
+          -
+            key: crm_notes
+            label: 'CRM – Historique des échanges (ImmoNova)'
+            description: 'Fiches et activités CRM liées aux prestataires et aux opportunités.'
+            entries:
+              - { title: 'Échange vidéo technique – Etixio CTO', when: '2026-10-13', details: [{ name: participants, value: 'Claire Dubois, CTO ImmoNova, CTO Etixio' }, { name: duree, value: '30 min' }, { name: sujets, value: 'Architecture RAG, équipe dédiée, CTO as a Service' }, { name: suite, value: 'Proposition à envoyer' }], note: 'Bon échange technique. Le CTO d’Etixio a montré une bonne compréhension de nos enjeux. En attente de la proposition détaillée.' }
+              - { title: 'Proposition Etixio reçue', when: '2026-10-20', details: [{ name: reference, value: ETX-2026-1018 }, { name: date, value: '2026-10-20' }, { name: montant_estime, value: '€55,000/mois' }, { name: statut, value: 'En revue interne' }], note: 'Proposition complète. À challenger sur le coût et les garanties. Le CFO veut un pilote avant tout engagement long.' }
+              - { title: 'Relance Etixio – sans réponse', when: '2026-11-09', details: [{ name: canal, value: E-mail }, { name: statut, value: 'Pas de réponse' }, { name: raison_probable, value: 'Lancement produit + revue budgétaire' }], note: 'Nous n’avons pas encore répondu formellement. La priorité est le lancement et la revue budgétaire.' }
+              - { title: 'Concurrent – offre low-cost reçue', when: '2026-11-15', details: [{ name: fournisseur, value: 'Offshore low-cost (Tunisie/Maroc)' }, { name: montant, value: '€38,000/mois' }, { name: points_faibles, value: 'Pas de garantie senior, communication à préciser' }], note: 'Offre moins chère et plus proche. À comparer sur la qualité et la continuité. Le CFO pourrait être tenté.' }
+              - { title: 'Objectifs Q1 2027 – Recherche IA', when: '2026-11-23', details: [{ name: objectif, value: 'Lancer la recherche IA (property search)' }, { name: echeance, value: 'Fin Q1 2027' }, { name: besoin, value: 'Renfort senior backend + encadrement CTO' }], note: 'Pour tenir l’échéance, il faut une équipe senior rapidement mobilisable et un plan de hand-over clair.' }
+          -
+            key: finance_tracker
+            label: 'Suivi budgétaire – Dépenses externes'
+            description: 'Tableau de suivi des dépenses externes et des engagements fournisseurs.'
+            entries:
+              - { title: 'Plafond dépenses externes', when: '2026-11-03', details: [{ name: plafond_mensuel, value: '€50,000' }, { name: engagé_actuel, value: '€12,000' }, { name: disponible, value: '€38,000' }, { name: statut, value: 'Gelé jusqu’au 2027-01-05' }], note: 'Toute nouvelle dépense externe > €10k nécessite une validation CFO et une justification écrite.' }
+              - { title: 'Engagement fournisseur – Cloud & infra', when: '2026-11-01', details: [{ name: fournisseur, value: 'CloudInfra SAS' }, { name: montant_mensuel, value: '€8,500' }, { name: echeance, value: '2026-12-31' }], note: 'Renouvellement critique, maintenu malgré le gel.' }
+              - { title: 'Engagement fournisseur – Support & maintenance', when: '2026-10-15', details: [{ name: fournisseur, value: SupportPro }, { name: montant_mensuel, value: '€3,500' }, { name: echeance, value: '2027-03-31' }], note: 'Contrat en cours, pas de renouvellement prévu avant Q2 2027.' }
+              - { title: 'Budget prévisionnel Q1 2027 – Projets IA', when: '2026-11-23', details: [{ name: enveloppe_IA, value: '€45,000 / mois' }, { name: conditions, value: 'Validation conseil + pilote concluant' }, { name: revue, value: '2027-01-05' }], note: 'Une enveloppe pourrait être débloquée en Q1 2027 si un pilote court démontre la valeur et reste sous le plafond.' }
     lines:
       -
         speaker: seller
@@ -456,77 +766,81 @@ calls:
       - pain
       - objections
       - 'yes'
-    score: 13
+    score: 9
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
           score: 2
-          comment: "The seller asked a single situational question but did not explore the client's broader context, budget, or decision process"
+          comment: 'One generic question ("What is your current situation with your developers?") surfaced the senior Symfony bottleneck, but budget, decision process, timeline and the competing offshore offer were never explored.'
         questions:
           label: 'Open questions'
-          score: 3
-          comment: 'One open question was asked, but the seller missed many opportunities to probe deeper'
+          score: 2
+          comment: 'Only two questions in the whole call, one open and one generic; nothing on the frozen budget, the CEO/CFO sign-off, the Q1 2027 horizon or the competitor.'
         listening:
           label: 'Listening and rephrasing'
           score: 2
-          comment: 'The seller did not paraphrase or build on the client’s statements and quickly shifted to sending a brochure'
+          comment: 'The seller let Claire talk (20% talk share) but never rephrased and never picked up the two explicit asks she made in the same breath as his brochure line.'
         objections:
           label: 'Handling objections'
           score: 1
-          comment: 'The client’s concerns about senior‑senior guarantee, turnover and discount were not addressed'
+          comment: "The quality/communication objection and the turnover/senior-guarantee question were both left unanswered, and the cheaper 'closer' competitor was never surfaced or addressed."
         value:
           label: 'Value proposition'
-          score: 2
-          comment: 'Only a generic cost advantage was mentioned; no tie to the client’s need for senior Symfony expertise or AI feature'
+          score: 1
+          comment: 'Pitched on cost alone ("cheaper than agencies in Paris") and offered a brochure and a price list instead of the offer''s real arguments: client interviews and approves each profile, documented handover and organized replacement, French-speaking Madagascar, bilingual Mauritius.'
         closing:
           label: 'Closing / next step'
-          score: 1
-          comment: 'No concrete next‑step date was set; the seller only offered to email a brochure'
-      summary: 'The call was brief and the seller mostly listened without adding value, missing key discovery and objection handling. As a junior rep, the performance is below expectations.'
+          score: 0
+          comment: "No next step proposed, no date, no meeting booked; the seller ended the call on a brochure promise and ignored Claire's direct questions."
+      summary: "A short follow-up call on a proposal that had been silent for three weeks, where the seller opened on a generic cost pitch, asked one useful question, then answered Claire's two direct asks with a brochure and a price list. Nothing was discovered about budget, decision or competition, no objection was handled, and the call ended with no next step. Junior level, and the same pattern flagged in the previous debrief."
       next_step: false
-      outcome: 'The prospect remains silent and no commitment has been secured.'
-      result: 'No decision, proposal still pending'
+      outcome: 'The deal is stalled exactly where it was three weeks ago: Claire is still waiting for answers on senior-level guarantee, turnover and first-month terms, and no meeting or decision date exists.'
+      result: 'Unanswered proposal stays unanswered: brochure promised, no next step'
       objectives:
         -
           objective: 'Identify the real reason for the lack of response'
           status: missed
-          evidence: 'The seller never asked why the client had not replied to the proposal'
+          evidence: "The seller never asked why the proposal had gone silent; the frozen budget, the CEO's departure and the CFO's hold on external spend were never mentioned or discovered."
         -
           objective: 'Address the prospect’s main objection(s) about offshore development'
           status: missed
-          evidence: 'The client raised quality and turnover concerns, which the seller did not answer'
+          evidence: 'Claire asked twice about quality, schedule sync, turnover and a senior-senior guarantee; the seller replied "I can send you our brochure and a price list by email" and never used the offer''s handover/replacement or profile-approval arguments.'
         -
           objective: 'Obtain a firm date for a decision or next meeting'
           status: missed
-          evidence: 'The seller only offered to send a brochure, without scheduling a follow‑up call'
+          evidence: 'No meeting was booked, no date proposed; the seller ended the call after promising a brochure.'
       goal: missed
       missed:
         -
           section: budget
-          what: 'The monthly budget cap of €50,000 and the freeze until Q1 2027'
-          how: 'Ask: "What budget have you allocated for external engineering and when will it be released?"'
+          what: 'The €50,000/month cap and the freeze until Q1 2027 pending board approval'
+          how: '"Before I send anything, what budget envelope have you set for this, and is it already approved for this year?"'
         -
           section: decision
-          what: 'The internal approval process involving the CEO (on maternity leave) and the CFO'
-          how: 'Ask: "Who needs to sign off on the contract and what is the timeline for their decision?"'
+          what: 'Sign-off by the CEO (on maternity leave) and the new CFO, who wants a short pilot before committing'
+          how: '"Who else needs to be comfortable before you can sign, and what would a first step look like for your CFO?"'
         -
           section: secret
-          what: 'The recent departure of the CEO championing offshore and the CFO’s price review'
-          how: 'Ask: "Has any recent change in leadership affected your offshore strategy or budget approval?"'
+          what: 'The CEO who championed the offshore move left two weeks ago; the interim CFO froze all new external spend and wants a price review'
+          how: '"Has anything changed internally since our CTO call that I should factor in?"'
       best:
         -
           quote: 'What is your current situation with your developers?'
-          why: 'It opens the client to describe their pain and creates space for discovery'
+          why: 'The one open question of the call, and it worked: it surfaced the senior Symfony bottleneck, the AI search feature and the launch pressure.'
       worst:
         -
+          quote: 'We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris.'
+          why: 'Opens on cost and offshore geography, exactly the two things Claire is wary of, and ignores the proposal already on her desk (dedicated team, RAG project, CTO as a Service).'
+          better: '"I''m calling about the proposal we sent three weeks ago. Before anything else, what''s been blocking your side since our CTO call?"'
+        -
           quote: 'OK. I can send you our brochure and a price list by email.'
-          why: 'It ignores the client’s objection and provides no value or next step'
-          better: 'I understand the need for senior expertise; let me explain how we guarantee senior‑senior developers and our turnover mitigation plan, and then we can schedule a short call next Tuesday to review the details'
+          why: 'A catalogue instead of an answer, and it drops the two questions Claire asked in the same sentence; it also leaves the call with no next step.'
+          better: '"On turnover: you see and interview every profile and approve each arrival, and if someone leaves we document, hand over under supervision and organize the replacement. On the first month, I can''t commit alone but I''ll put it to our CTO. Can we take 30 minutes Thursday at 10 to go through it with him?"'
       tips:
-        - 'Prepare a concise answer that outlines Etixio’s senior‑senior guarantee, turnover handling, and possible first‑month discount.'
-        - 'Use targeted discovery questions to uncover budget limits, decision‑maker availability, and hidden concerns about recent leadership changes.'
-        - 'Close each call with a specific follow‑up date and invite the CFO (or other decision‑maker) to the next conversation.'
+        - 'Open every follow-up by naming the proposal and asking what has blocked it since: "What''s happened on your side since our CTO call?" — that is how you find the frozen budget and the CFO hold.'
+        - "Answer the objection before moving on: use the offer's real arguments — client interviews and approves each profile, documented handover and organized replacement, French-speaking Madagascar (+2h), bilingual Mauritius — and never promise a discount or a free trial yourself; take the 10% request to the CTO as a commercial lever."
+        - 'Never end on "I''ll send a brochure": propose a dated slot yourself ("Thursday 10am, 30 minutes with our CTO") and lock it before hanging up; the price catalogue only goes out paired with a call.'
       speech:
         voice: true
         talk_share: 20
@@ -539,7 +853,7 @@ calls:
         longest: 17
         wpm: 152
         reply_delay: 0
-      speech_comment: 'The seller spoke very little, offering few questions and no substantive response to objections.'
+      speech_comment: 'Talk share is good (20%, 54 words against 213) and there are no fillers, but with only two questions in the call the seller mostly stayed silent rather than steering; pace of 152 wpm is fine.'
   -
     seller: manager
     days_ago: 6
@@ -595,6 +909,117 @@ calls:
           - 'Use the referral without abusing it'
           - 'Surface a need'
           - 'Get a concrete next step'
+      workspace:
+        calendar:
+          -
+            when: '2026-11-16 09:00'
+            minutes: 60
+            what: 'Sprint planning – e-learning platform rollout (internal dev team + QA)'
+          -
+            when: '2026-11-16 14:00'
+            minutes: 60
+            what: 'Vendor risk review with CFO – offshore engagement model'
+          -
+            when: '2026-11-17 10:30'
+            minutes: 60
+            what: 'Architecture review – AI assessment scoring module'
+          -
+            when: '2026-11-17 15:00'
+            minutes: 60
+            what: '1:1 with Head of Product – September launch scope'
+          -
+            when: '2026-11-18 09:00'
+            minutes: 60
+            what: 'Data-privacy audit prep – external regulator questionnaire'
+          -
+            when: '2026-11-18 11:00'
+            minutes: 60
+            what: 'Technical screening – backend contractor candidates (Round 1)'
+          -
+            when: '2026-11-19 10:00'
+            minutes: 60
+            what: 'Mauritius UI/UX partner sync – front-end integration'
+          -
+            when: '2026-11-19 16:00'
+            minutes: 60
+            what: 'Budget checkpoint with CFO – 12-month spend forecast'
+          -
+            when: '2026-11-20 09:30'
+            minutes: 60
+            what: 'Incident review – API latency regression on staging'
+          -
+            when: '2026-11-20 14:30'
+            minutes: 60
+            what: 'Open-source tooling workshop – internal dev team'
+          -
+            when: '2026-11-23 10:00'
+            minutes: 60
+            what: 'Sprint review – e-learning platform milestone demo'
+          -
+            when: '2026-11-23 15:00'
+            minutes: 60
+            what: 'Legal sync – IP ownership and GDPR clauses for contractors'
+          -
+            when: '2026-11-24 09:00'
+            minutes: 60
+            what: 'Technical screening – backend contractor candidates (Round 2)'
+          -
+            when: '2026-11-24 13:30'
+            minutes: 60
+            what: 'Referral call – Etixio discovery (offshore support)'
+          -
+            when: '2026-11-25 10:00'
+            minutes: 60
+            what: 'Data-privacy audit dry run with DPO'
+          -
+            when: '2026-11-25 16:00'
+            minutes: 60
+            what: 'Roadmap review – Q1 2027 backend capacity plan'
+          -
+            when: '2026-11-26 09:30'
+            minutes: 60
+            what: 'CFO risk/benefit review – offshore engagement decision'
+          -
+            when: '2026-11-26 14:00'
+            minutes: 60
+            what: 'Vendor comparison – shortlist and scoring matrix'
+          -
+            when: '2026-11-27 10:00'
+            minutes: 60
+            what: 'All-hands – autumn semester platform readiness'
+          -
+            when: '2026-11-27 15:00'
+            minutes: 60
+            what: 'Contingency planning – launch timeline and fallback options'
+        sources:
+          -
+            key: crm_notes
+            label: 'CRM Notes'
+            description: 'Sales and relationship notes on vendors, referrals and internal stakeholders'
+            entries:
+              - { title: 'Referral – Etixio (Julien Goumet)', when: '2026-11-12', details: [{ name: referrer, value: 'Julien Goumet, CEO, Etixio' }, { name: context, value: 'Former colleague; Etixio delivered banking platform work' }, { name: next_step, value: 'Book 30-min discovery call with Etixio CTO' }], note: 'Julien says Etixio has a Madagascar team with strong code quality and turnaround. Good match for backend capacity. Need to verify GDPR and IP ownership.' }
+              - { title: 'Mauritius UI/UX partner – front-end', when: '2026-11-05', details: [{ name: partner, value: 'IslandPixel Ltd (Mauritius)' }, { name: scope, value: 'Front-end UI/UX for e-learning platform' }, { name: status, value: 'Active; integration ongoing' }], note: 'They cannot provide robust backend or AI expertise. We need a separate backend/AI partner for the scoring module.' }
+              - { title: 'Internal dev team capacity', when: '2026-11-10', details: [{ name: headcount, value: '2 developers' }, { name: current_focus, value: 'Platform rollout, maintenance' }, { name: gap, value: 'AI-driven assessment scoring module' }], note: 'Team cannot deliver scoring module in time for September launch. Need external capacity urgently.' }
+              - { title: 'CFO – budget guardrails', when: '2026-11-14', details: [{ name: annual_budget, value: '€80,000 for up to 3 senior developers' }, { name: hard_ceiling, value: '€90,000 for next 12 months' }, { name: approval, value: 'CFO sign-off after risk/benefit review' }], note: 'CFO insists spend stays under €90k. Camille is final decision-maker but needs CFO sign-off. Decision target within 4 weeks.' }
+              - { title: 'Data-privacy audit – external regulator', when: '2026-11-18', details: [{ name: regulator, value: 'CNIL (pending)' }, { name: scope, value: 'GDPR compliance, data processing, subcontractors' }, { name: status, value: 'Questionnaire received; dry run scheduled' }], note: 'GDPR compliance is an absolute deal-breaker. Any offshore engagement must respect GDPR and have clear code ownership.' }
+          -
+            key: vendor_shortlist
+            label: 'Vendor Shortlist'
+            description: 'Potential development partners and evaluation criteria'
+            entries:
+              - { title: 'Etixio – offshore development (Madagascar)', when: '2026-11-12', details: [{ name: location, value: Madagascar }, { name: services, value: 'Backend, AI, full-stack development' }, { name: referral, value: 'Julien Goumet, CEO Etixio' }, { name: status, value: 'To be assessed' }], note: 'Referral from satisfied client. Need technical audit, pricing sheet within 24h, ed-tech references.' }
+              - { title: 'IslandPixel Ltd – front-end UI/UX', when: '2026-11-05', details: [{ name: location, value: Mauritius }, { name: services, value: 'Front-end UI/UX' }, { name: status, value: 'Active partner' }], note: 'Good for front-end but lacks backend/AI expertise. Not a candidate for scoring module.' }
+              - { title: 'Local agency – Bordeaux (backend)', when: '2026-11-08', details: [{ name: location, value: 'Bordeaux, France' }, { name: services, value: 'Backend development' }, { name: rate, value: €650/day }, { name: status, value: 'Too expensive for required capacity' }], note: 'Quality is good but cost exceeds budget for 3 senior developers. Not viable at scale.' }
+              - { title: 'Freelance network – Eastern Europe', when: '2026-11-09', details: [{ name: location, value: 'Romania, Poland' }, { name: services, value: 'Backend, AI' }, { name: rate, value: €450/day }, { name: status, value: 'Under evaluation' }], note: 'EU-based, easier GDPR compliance, but availability uncertain for September launch.' }
+          -
+            key: project_status
+            label: 'Project Status'
+            description: 'E-learning platform rollout and AI scoring module progress'
+            entries:
+              - { title: 'E-learning platform – autumn semester rollout', when: '2026-11-16', details: [{ name: launch_target, value: '2026-09-01' }, { name: status, value: 'On track for core features' }, { name: risk, value: 'AI scoring module may delay launch' }], note: 'Core platform is progressing. The AI-driven assessment scoring module is the critical path.' }
+              - { title: 'AI-driven assessment scoring module', when: '2026-11-17', details: [{ name: owner, value: 'Internal dev team (2 developers)' }, { name: status, value: 'Behind schedule' }, { name: required_by, value: '2026-09-01' }, { name: gap, value: 'Need 2-3 senior backend/AI developers' }], note: 'Internal team cannot deliver in time. External capacity needed to accelerate backend development.' }
+              - { title: 'Backend API – staging latency issue', when: '2026-11-20', details: [{ name: issue, value: 'API latency regression on staging' }, { name: impact, value: 'Slows down QA and demo' }, { name: status, value: 'Under investigation' }], note: 'Incident review scheduled. May need additional backend expertise to resolve quickly.' }
+              - { title: 'Code ownership and documentation', when: '2026-11-23', details: [{ name: policy, value: 'All code must be owned by SavoirPlus' }, { name: documentation, value: 'Clear handover and architecture docs required' }, { name: status, value: 'Legal sync scheduled' }], note: 'Camille values clear documentation and code ownership. Any offshore contract must specify IP transfer.' }
     lines:
       -
         speaker: seller
@@ -645,67 +1070,76 @@ calls:
     seconds: 26
     revealed:
       - budget
+      - pain
       - decision
       - 'yes'
-    score: 70
+    score: 40
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
-          score: 8
-          comment: 'Seller quickly uncovered the referral context, budget, timeline, and decision‐maker details before proposing any solution.'
+          score: 5
+          comment: 'The client volunteered the bottleneck (AI scoring module, September launch), the budget (€80k, <€90k), the decision process (CFO) and the 4-week deadline, but the seller surfaced none of it himself and never touched the hidden items (Mauritius UI/UX partner, pending regulator data-privacy audit).'
         questions:
           label: 'Open questions'
-          score: 8
-          comment: 'Four open‑ended questions drove the conversation forward and revealed the client’s pain and constraints.'
+          score: 5
+          comment: 'Four open questions out of six, but two were redundant — the budget/deadline question came after the client had already given €80k, <€90k, September and four weeks twice.'
         listening:
           label: 'Listening and rephrasing'
           score: 3
-          comment: 'Seller asked questions but did not rephrase or summarize the client’s statements, missing an opportunity to confirm understanding.'
+          comment: 'Zero rephrasing, and four client questions (team structure, time-zone coordination, audit/documentation assurance, audit turnaround) were left completely unanswered.'
         objections:
           label: 'Handling objections'
-          score: 2
-          comment: 'Key objections about offshore quality, time‑zone coordination, GDPR and code ownership were not addressed with Etixio’s real guarantees.'
+          score: 3
+          comment: "The client raised GDPR, code ownership, offshore quality and time-zone coordination himself; the seller answered none of them with the offer's real arguments (SCCs, named role access, client-owned repos, Madagascar +2h/+1h French-speaking)."
         value:
           label: 'Value proposition'
           score: 4
-          comment: 'Seller suggested a technical call but did not explicitly tie Etixio’s audit or dedicated‑team offers to the client’s AI‑scoring need.'
+          comment: 'No value proposition at all — no format (dedicated team vs T&M vs fixed price), no 4–8 week start, no audit, no GDPR/ownership mechanics — though nothing false was promised.'
         closing:
           label: 'Closing / next step'
-          score: 9
-          comment: 'A concrete next‑step (30‑minute video call next Tuesday at 10 h and a written estimate by Friday) was secured and accepted.'
-      summary: 'The seller efficiently discovered the client’s budget, timeline and decision process, but missed the chance to reassure the client on GDPR, quality and time‑zone concerns. The call ended with a solid next‑step agreement.'
-      next_step: true
-      outcome: 'Client agreed to a 30‑minute technical discovery call next Tuesday and to receive a ball‑park estimate by Friday.'
-      result: 'Technical discovery meeting secured'
+          score: 6
+          comment: "The seller proposed a dated next step himself (30-min CTO video call Tuesday 10am, written estimate Friday) matching the offer's real first step, but no calendar booking and no confirmation of the pricing sheet as a deliverable."
+      summary: 'A friendly 10-minute referral call where the client did most of the work: he named the referral, the AI scoring bottleneck, the €80k budget, the CFO sign-off and the 4-week deadline, and asked four technical questions the seller never answered. The seller asked a few open questions and locked a verbal next step, but showed no listening, no objection handling and no value proposition — the same three flaws flagged in the last three debriefs.'
+      next_step: false
+      outcome: "A 30-minute CTO video call is verbally agreed for next Tuesday at 10am with a written estimate by Friday, but nothing is in the client's calendar and no pricing sheet deliverable was confirmed."
+      result: 'Client gave everything, seller gave nothing back — verbal next step only'
       objectives:
         -
           objective: 'Reference the referral without over‑selling the connection'
-          status: reached
-          evidence: 'SELLER: "Before anything else, what made you reach out to us this week?" CLIENT mentions the referral.'
+          status: missed
+          evidence: 'The client raised it himself ("We were actually referred by Julien Goumet"); the seller never named the referral, never acknowledged the banking-platform reference, and opened by asking the client what made him reach out.'
         -
           objective: 'Uncover the client’s real development bottleneck and AI integration interest'
-          status: reached
-          evidence: 'CLIENT describes the AI‑driven assessment scoring module and the three‑month sprint urgency.'
+          status: partial
+          evidence: 'The client stated it himself ("an AI-driven assessment scoring module that our two-person team can''t get ready in time", September launch, €80k, CFO <€90k, 4 weeks), but the seller surfaced none of it by his own questions and never touched the hidden items (Mauritius UI/UX partner, pending regulator data-privacy audit).'
         -
           objective: 'Agree on a concrete next step (e.g., schedule a 30‑minute technical discovery with their CTO and receive a ball‑park pricing sheet)'
-          status: reached
-          evidence: 'SELLER proposes a video call next Tuesday at ten and a written estimate by Friday; CLIENT accepts.'
-      goal: reached
-      missed: []
+          status: partial
+          evidence: 'The seller proposed it and dated it ("a thirty-minute video call with our CTO next Tuesday at ten... and a written estimate by Friday") and the client agreed verbally, but no calendar booking exists and the pricing sheet was not confirmed as a deliverable.'
+      goal: partial
+      missed:
+        -
+          section: objections
+          what: "The client's GDPR, code-ownership, offshore-quality and time-zone concerns, plus the pending regulator data-privacy audit that makes GDPR a deal-breaker."
+          how: '"You mentioned GDPR and code ownership — what would your CFO need to see exactly, and is there an external audit deadline we should work around?"'
+        -
+          section: secret
+          what: 'The existing UI/UX partner in Mauritius and the fact that SavoirPlus needs backend/AI expertise their current partners cannot provide.'
+          how: '"Who''s working on the front-end today, and where does the gap sit between what they cover and what you need for the scoring module?"'
       best:
         -
-          quote: 'Before anything else, what made you reach out to us this week?'
-          why: 'Open question that immediately surfaces the referral context and lets the client set the agenda.'
+          quote: 'Who else is involved in deciding how you move forward on this, and what would they need to see?'
+          why: 'Opens the decision process and surfaces the CFO, the risk review and the code-ownership requirement in one question.'
       worst:
         -
-          quote: 'Who else is involved in deciding how you move forward on this, and what would they need to see?'
-          why: 'Focuses on decision‑makers but ignores the client’s expressed GDPR and quality worries, leaving objections unaddressed.'
-          better: 'Who else is involved in the decision, and what specific concerns—such as GDPR compliance or code‑ownership— would they need us to address?'
+          quote: 'I see. And when that happens today, what does it cost you concretely, in time or in customers?'
+          why: 'The client had just given the cost in the same breath (three-month sprint, lost enrolments and revenue); this is the exact line already flagged on 2026-11-13 — no rephrasing, no build on what was said.'
+          better: '"So if I understand: a three-month sprint on the AI scoring module, and missing September means pushing the semester and losing enrolments. What''s the revenue at stake on that window?"'
       tips:
-        - 'Paraphrase the client’s statements after each answer to demonstrate active listening and confirm understanding.'
-        - 'Directly address the GDPR, code‑ownership and quality objections using Etixio’s documented processes (e.g., code remains client‑owned, GDPR‑compliant contracts, systematic code reviews).'
-        - 'Introduce the relevant Etixio offering (e.g., a flash technical audit) before proposing the next step, linking it explicitly to the AI‑scoring bottleneck.'
+        - "Answer the client's questions before asking the next one: he asked four (team structure, time-zone coordination, audit/documentation assurance, audit turnaround) and all four are answerable from the offer — dedicated team vs T&M vs fixed price, Madagascar +2h/+1h French-speaking, technical audit with prioritized remediation plan, client-owned code and repos, GDPR by contract with SCCs."
+        - 'Rephrase before moving on: "So the pain is the AI scoring module, September is non-negotiable, and the CFO needs a GDPR and ownership mitigation plan — did I get that right?" This kills the recurring no-listening flaw flagged in the last three debriefs.'
+        - 'Lock the next step in the calendar: send the invite during the call ("I''m sending the Tuesday 10am invite now — do you see it?") and confirm the pricing sheet as a named Friday deliverable, since no meeting is booked yet.'
       speech:
         voice: true
         talk_share: 22
@@ -718,7 +1152,7 @@ calls:
         longest: 33
         wpm: 187
         reply_delay: 0
-      speech_comment: 'Seller dominated the dialogue with concise, question‑driven statements, minimal filler, and a fast speaking pace.'
+      speech_comment: "22% talk share (107 vs 371 words), 6 questions of which 4 open, 0 fillers, 187 wpm — the seller is fast and quiet; the problem is not volume but that he asks a question, gets a rich answer, and moves to the next question without ever answering the client's own questions."
   -
     seller: junior
     days_ago: 3
@@ -769,6 +1203,109 @@ calls:
           - 'Turn the person at the switchboard into an ally'
           - 'Get the decision-maker, or a specific slot to call back'
           - 'Leave with useful information (project, timing, direct email)'
+      workspace:
+        calendar:
+          -
+            when: '2026-11-16 09:00'
+            minutes: 60
+            what: 'Comité de direction — point hebdo (Laura Benoît)'
+          -
+            when: '2026-11-16 14:00'
+            minutes: 60
+            what: 'Revue budgétaire Q4 — DAF'
+          -
+            when: '2026-11-17 10:00'
+            minutes: 90
+            what: "Comité d'architecture — migration micro‑services (Marc Dubois)"
+          -
+            when: '2026-11-18 11:00'
+            minutes: 60
+            what: 'Entretien final — recrutement Lead DevOps'
+          -
+            when: '2026-11-19 09:30'
+            minutes: 60
+            what: 'Point fournisseur — hébergeur cloud (renouvellement)'
+          -
+            when: '2026-11-20 15:00'
+            minutes: 60
+            what: "Revue de performance produit — moteur d'itinéraires IA"
+          -
+            when: '2026-11-23 09:00'
+            minutes: 60
+            what: 'Comité de direction — point hebdo (Laura Benoît)'
+          -
+            when: '2026-11-23 14:00'
+            minutes: 60
+            what: "Préparation du conseil d'administration — dossier Series B"
+          -
+            when: '2026-11-24 10:00'
+            minutes: 120
+            what: 'Séminaire interne — feuille de route 2027 (direction élargie)'
+          -
+            when: '2026-11-25 11:00'
+            minutes: 60
+            what: 'Point juridique — conformité RGPD et sous‑traitants'
+          -
+            when: '2026-11-25 16:00'
+            minutes: 60
+            what: 'Entretien — recrutement Senior .NET'
+          -
+            when: '2026-11-26 09:30'
+            minutes: 60
+            what: 'Revue fournisseurs — contrats en cours (achats)'
+          -
+            when: '2026-11-26 14:00'
+            minutes: 60
+            what: 'Comité sécurité — audit RGPD trimestriel'
+          -
+            when: '2026-11-27 10:00'
+            minutes: 60
+            what: 'Revue de portefeuille projets — arbitrages Q1 2027'
+          -
+            when: '2026-11-27 15:00'
+            minutes: 60
+            what: 'Point direction — préparation déplacement Toulouse‑Paris'
+        sources:
+          -
+            key: crm_activities
+            label: 'Activités CRM'
+            description: 'Suivi des échanges et opportunités commerciales et partenaires dans le CRM (Salesforce).'
+            entries:
+              - { title: 'REL‑2026‑0412 — Proof of concept moteur IA (prestataire externe)', when: '2026-10-28', details: [{ name: Statut, value: 'Bloqué — en attente de profils seniors IA' }, { name: Prestataire, value: 'NordSoft Solutions (concurrent Etixio)' }, { name: 'Montant engagé', value: '18 000 € sur un budget total de 150 000 €' }, { name: 'Prochaine étape', value: "Décision de poursuite ou d'arrêt avant fin novembre 2026" }], note: "Le POC n'avance plus : NordSoft n'a pas fourni les deux data scientists seniors promis. Marc Dubois demande une alternative crédible pour ne pas décaler le lancement Q1 2027." }
+              - { title: 'REL‑2026‑0398 — Appel entrant Etixio (services de développement offshore)', when: '2026-11-10', details: [{ name: Statut, value: 'Nouveau lead — non qualifié' }, { name: Source, value: 'Formulaire site web' }, { name: Contact, value: 'À identifier (vendeur junior)' }, { name: Priorité, value: 'Moyenne — à qualifier par Alexandre avant transfert' }], note: 'Alexandre a noté : « Rappeler pour qualifier. Vérifier références françaises et conformité RGPD avant de passer à Laura ou Marc. »' }
+              - { title: 'REL‑2026‑0405 — Renouvellement contrat hébergeur cloud', when: '2026-11-19', details: [{ name: Statut, value: 'En négociation' }, { name: Fournisseur, value: OVHcloud }, { name: Échéance, value: '2026-12-31' }, { name: 'Montant annuel', value: '42 000 €' }], note: "Point prévu le 19/11 à 09h30 avec le fournisseur. Impact sur l'architecture micro‑services à venir." }
+              - { title: 'REL‑2026‑0389 — Recrutement Lead DevOps', when: '2026-11-18', details: [{ name: Statut, value: 'Entretien final programmé' }, { name: Candidat, value: 'Sophie Renard' }, { name: 'Rémunération cible', value: '75 000 € annuels' }, { name: Décision, value: 'Attendue le 20/11' }], note: 'Poste clé pour la migration micro‑services. Sans cette recrue, la capacité interne reste limitée.' }
+              - { title: 'REL‑2026‑0377 — Audit RGPD trimestriel', when: '2026-11-26', details: [{ name: Statut, value: Planifié }, { name: Responsable, value: 'DSI + DPO externe' }, { name: Périmètre, value: 'Sous‑traitants, flux de données, hébergement' }, { name: Enjeu, value: 'Conformité avant lancement du moteur IA' }], note: "Tout nouveau prestataire devra être validé lors de cet audit. La question de l'offshore sera examinée." }
+          -
+            key: it_projects
+            label: 'Projets IT'
+            description: 'Portefeuille des projets techniques en cours et planifiés (Jira / Confluence).'
+            entries:
+              - { title: 'PRJ‑2026‑012 — Migration micro‑services (monolithe .NET 5)', when: '2026-11-17', details: [{ name: Statut, value: 'En cours — 35 % achevé' }, { name: Responsable, value: 'Marc Dubois (CTO)' }, { name: Équipe, value: '2 seniors .NET + 3 mid‑level Java + QA interne' }, { name: Risque, value: 'Retard possible — équipe déjà sollicitée sur le POC IA' }, { name: 'Budget alloué', value: '120 000 € (interne)' }], note: "Comité d'architecture du 17/11 : point sur l'avancement et les besoins en renfort externe." }
+              - { title: "PRJ‑2026‑018 — Moteur d'itinéraires IA (recommandation)", when: '2026-11-20', details: [{ name: Statut, value: 'En préparation — POC bloqué' }, { name: Responsable, value: 'Laura Benoît (CIO)' }, { name: Objectif, value: 'Lancement Q1 2027' }, { name: 'Budget externe', value: '150 000 € — plafond mensuel 30 000 €' }, { name: Besoins, value: '2 seniors IA + 1 expert micro‑services' }], note: 'Revue de performance produit le 20/11 à 15h. Laura attend une solution pour débloquer le POC.' }
+              - { title: 'PRJ‑2026‑009 — Refonte du portail client (front‑end)', when: '2026-09-15', details: [{ name: Statut, value: Livré }, { name: Responsable, value: 'Équipe interne' }, { name: Budget, value: '45 000 €' }, { name: Note, value: "Aucun recours à l'externe" }], note: "Projet terminé sans prestataire externe. L'équipe interne a montré sa capacité sur le front‑end." }
+              - { title: 'PRJ‑2026‑021 — Mise en conformité RGPD des flux IA', when: '2026-11-25', details: [{ name: Statut, value: 'En étude' }, { name: Responsable, value: 'DPO externe + DSI' }, { name: Exigence, value: "Hébergement UE, clauses contractuelles types, droit d'accès" }, { name: Impact, value: 'Tout prestataire offshore devra fournir des garanties documentées' }], note: 'Point juridique le 25/11 à 11h. Alexandre prépare le dossier pour Laura.' }
+              - { title: "PRJ‑2026‑024 — Extension de l'équipe QA (automatisation)", when: '2026-11-26', details: [{ name: Statut, value: Planifié }, { name: Responsable, value: 'QA interne' }, { name: Budget, value: '30 000 €' }, { name: Objectif, value: 'Réduire les régressions lors de la migration micro‑services' }], note: 'Revue fournisseurs le 26/11 à 09h30. Possibilité de faire appel à un partenaire externe.' }
+          -
+            key: invoices_contracts
+            label: 'Factures et contrats'
+            description: 'Suivi des factures fournisseurs et contrats en cours (SAP / SharePoint).'
+            entries:
+              - { title: 'FAC‑2026‑0781 — NordSoft Solutions — POC IA (phase 1)', when: '2026-10-15', details: [{ name: Montant, value: '18 000 € HT' }, { name: Statut, value: Payée }, { name: Échéance, value: '2026-10-30' }, { name: Projet, value: PRJ‑2026‑018 }], note: "Facture réglée. Le POC n'a pas dépassé la phase 1 faute de profils seniors. Aucune facture ultérieure reçue." }
+              - { title: 'CTR‑2026‑034 — Contrat cadre OVHcloud (hébergement)', when: '2026-01-01', details: [{ name: 'Montant annuel', value: '42 000 € HT' }, { name: Échéance, value: '2026-12-31' }, { name: Statut, value: 'Actif — renouvellement en négociation' }, { name: Périmètre, value: 'Hébergement UE, sauvegardes, conformité RGPD' }], note: 'Renouvellement à finaliser avant le 31/12. Point fournisseur le 19/11.' }
+              - { title: 'FAC‑2026‑0799 — Cabinet Juridique Toulouse — Audit RGPD', when: '2026-11-05', details: [{ name: Montant, value: '8 500 € HT' }, { name: Statut, value: 'En attente de validation' }, { name: Échéance, value: '2026-11-30' }, { name: Projet, value: PRJ‑2026‑021 }], note: "Facture pour l'audit RGPD trimestriel. Alexandre doit la faire valider par Laura." }
+              - { title: 'CTR‑2026‑041 — Contrat de prestation NordSoft (POC IA)', when: '2026-09-01', details: [{ name: Montant, value: '45 000 € HT (phase 1 + phase 2)' }, { name: Statut, value: 'Suspendu — phase 2 non lancée' }, { name: Clause, value: 'Résiliation possible avec préavis de 30 jours' }, { name: Projet, value: PRJ‑2026‑018 }], note: 'Contrat suspendu de fait. La clause de résiliation pourrait être activée si une alternative est trouvée.' }
+              - { title: 'FAC‑2026‑0805 — Recrutement Lead DevOps — Cabinet', when: '2026-11-18', details: [{ name: Montant, value: '12 000 € HT' }, { name: Statut, value: 'À réception' }, { name: Échéance, value: '2026-12-15' }, { name: Projet, value: REL‑2026‑0389 }], note: 'Honoraires du cabinet pour le recrutement. À payer après signature du candidat.' }
+          -
+            key: emails
+            label: Courriels
+            description: "Boîte de réception professionnelle d'Alexandre (Outlook)."
+            entries:
+              - { title: 'RE: POC moteur IA — point de situation', when: '2026-11-08', details: [{ name: De, value: 'Marc Dubois (CTO)' }, { name: À, value: 'Laura Benoît (CIO) ; Alexandre Martin' }, { name: Objet, value: 'POC moteur IA — point de situation' }], note: "Marc : « Laura, NordSoft ne tient pas ses engagements sur les profils seniors. Il nous faut une alternative crédible avant fin novembre, sinon le lancement Q1 2027 est compromis. Peux-tu demander à Alexandre de qualifier d'autres prestataires ? »" }
+              - { title: 'Appel entrant Etixio — à qualifier', when: '2026-11-10', details: [{ name: De, value: 'Alexandre Martin' }, { name: À, value: 'Laura Benoît (CIO)' }, { name: Objet, value: 'Appel entrant Etixio — à qualifier' }], note: "Alexandre : « Laura, un vendeur junior d'Etixio a laissé un message. Ils proposent du développement offshore avec des capacités IA. Je les connais de nom. Souhaites-tu que je qualifie avant de te transférer ? » Réponse de Laura : « Oui, qualifie. Vérifie les références françaises et le RGPD. »" }
+              - { title: "Préparation conseil d'administration — dossier Series B", when: '2026-11-23', details: [{ name: De, value: 'Direction financière' }, { name: À, value: 'Alexandre Martin ; Laura Benoît' }, { name: Objet, value: 'Préparation CA — dossier Series B' }], note: "Merci de préparer les slides sur l'utilisation des fonds, notamment le budget IA et les recrutements. Le CA se tiendra début décembre." }
+              - { title: 'RGPD et sous‑traitants hors UE — note interne', when: '2026-11-25', details: [{ name: De, value: 'DPO externe' }, { name: À, value: 'Alexandre Martin ; Laura Benoît ; Marc Dubois' }, { name: Objet, value: 'RGPD et sous‑traitants hors UE — note interne' }], note: "Rappel : tout recours à un sous‑traitant hors UE doit être encadré par des clauses contractuelles types et une analyse d'impact. L'offshore pur est possible mais nécessite des garanties solides." }
+              - { title: 'Invitation — petit-déjeuner partenaires Toulouse Tech', when: '2026-11-20', details: [{ name: De, value: 'Toulouse Tech' }, { name: À, value: 'Alexandre Martin' }, { name: Objet, value: 'Invitation — petit-déjeuner partenaires' }], note: 'Événement networking le 4 décembre. Alexandre y représentera VoyageTech. Occasion de rencontrer des prestataires locaux.' }
     lines:
       -
         speaker: seller
@@ -822,69 +1359,85 @@ calls:
     revealed:
       - budget
       - decision
-    score: 52
+    score: 34
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
-          score: 8
-          comment: 'Seller uncovered the client’s budget, decision‑makers and timeline before proposing a meeting.'
+          score: 5
+          comment: 'Budget (€150k / <€30k per month), decision chain (Laura Benoît + Marc Dubois validation, end of Feb 2027) and the Q1 2027 timeline did come out, but largely because the client volunteered them, and the seller asked the budget question twice after it had already been answered.'
         questions:
           label: 'Open questions'
-          score: 8
-          comment: 'Seller asked four open‑ended questions that elicited key information about cost, decision process and stakeholders.'
+          score: 5
+          comment: "Six questions, four open, and the decision question ('Who else is involved in deciding how you move forward on this, and what would they need to see?') was the best of them, but the questions were generic and repeated, and he never asked the one question this call required: who he was speaking to and how to reach Laura Benoît or Marc Dubois."
         listening:
           label: 'Listening and rephrasing'
-          score: 5
-          comment: 'Seller gave minimal paraphrasing, only saying “I see,” without summarizing the client’s statements.'
+          score: 4
+          comment: "The client asked twice for GDPR-compliant AI references ('how have you supported other French SaaS companies with similar GDPR-sensitive AI projects?' then 'could you share a reference from a French SaaS client...') and the seller never picked either up, rephrased nothing, and moved straight to his own scripted questions."
         objections:
           label: 'Handling objections'
           score: 3
-          comment: 'Seller did not address the gatekeeper’s concerns about GDPR compliance or code ownership.'
+          comment: "No classic objection was voiced in this excerpt, so handling cannot be fully tested, but the client's implicit concern (GDPR, offshore, proof of senior AI expertise) was raised twice and left unanswered, which is the same weakness flagged in the previous debrief."
         value:
           label: 'Value proposition'
-          score: 4
-          comment: 'Seller did not articulate Etixio’s dedicated‑team or AI capabilities, nor tie them to the client’s need.'
+          score: 2
+          comment: "Zero offer content: no GDPR-compliant offshore model, no French reference (Gorilla eSIM, the anesthesia AI agent, the SaaS compliance vendor were all available), no code-ownership argument, no French-speaking Madagascar/Mauritius teams, no 4-8 week start; and 'a written estimate by Friday' promises a firm figure before any scoping, which the offer does not provide (a ballpark figure comes after the CTO call)."
         closing:
           label: 'Closing / next step'
-          score: 8
-          comment: 'Seller secured a concrete 30‑minute video call with the CTO for next Tuesday.'
-      summary: 'The seller managed to extract budget, decision‑maker information and timeline, and booked a 30‑minute CTO call, but missed opportunities to reinforce Etixio’s value and address GDPR concerns. Overall performance is solid for a junior rep but needs stronger objection handling and value framing.'
-      next_step: true
-      outcome: 'The gatekeeper agreed to coordinate a 30‑minute video call with the CTO next Tuesday, moving the prospect toward a pilot discussion.'
-      result: 'Gatekeeper secured CTO discovery call and requested a French‑SaaS reference.'
+          score: 6
+          comment: "He proposed the right next step himself, dated and matching the offer's real first step ('a thirty-minute video call with our CTO next Tuesday at ten... and a written estimate by Friday'), but he did not lock it: no confirmation of the slot, no calendar invite, and client_actions shows no meeting booked."
+      summary: "A short gatekeeper call where the seller got budget, decision chain and timeline out of a talkative client, then proposed a dated 30-minute CTO video call. But he never identified his interlocutor, never asked for the CIO's or CTO's direct contact, delivered no value at all (GDPR, references and ownership all left unanswered despite two explicit openings), and left the slot unconfirmed. Junior level: decent instinct on the next step, still no offer substance and no locking."
+      next_step: false
+      outcome: 'A 30-minute CTO video call is proposed for Tuesday at 10 with a written estimate by Friday, but the client only says he will coordinate with Marc Dubois, so nothing is confirmed or booked.'
+      result: 'Dated CTO call proposed, not locked, zero value delivered'
       objectives:
         -
           objective: 'Turn the gatekeeper into an ally who is willing to pass the call or schedule a slot.'
-          status: reached
-          evidence: 'Client said “That works for me – I’ll coordinate with Marc Dubois for Tuesday at ten.”'
+          status: partial
+          evidence: "Alexandre engaged and offered to coordinate ('I'll coordinate with Marc Dubois for Tuesday at ten'), but the seller never asked who he was speaking to, never acknowledged the CIO's strategic planning week, and never asked to be put through or to be introduced to Laura Benoît."
         -
           objective: 'Obtain the decision‑maker’s direct email or calendar link for a follow‑up.'
           status: missed
-          evidence: 'Seller only secured agreement to schedule a call; no email or calendar link was exchanged.'
+          evidence: "No request for Laura Benoît's or Marc Dubois' email or calendar link appears anywhere in the conversation; the seller relied entirely on Alexandre to relay the invitation."
         -
           objective: 'Leave the gatekeeper with a concise, relevant piece of information (e.g., Etixio’s GDPR‑compliant offshore model).'
           status: missed
-          evidence: 'Seller did not provide any GDPR‑compliance details or other concise value information.'
+          evidence: "The client asked twice for GDPR-compliant AI experience and a French SaaS reference; the seller answered neither and gave no information about Etixio's model, locations or references."
       goal: partial
       missed:
         -
           section: pain
-          what: 'Specific technical challenges with the current .NET monolith and micro‑services migration'
-          how: 'Can you describe the main technical challenges you face with the monolith refactor and the micro‑services transition?'
+          what: 'The real pain: no senior AI and micro-services expertise internally, team already stretched on the monolith refactor, Q1 2027 launch at risk.'
+          how: "'What happens to the Q1 2027 launch if you can't find senior AI profiles in time?'"
+        -
+          section: objections
+          what: 'His concerns about code ownership, GDPR with an offshore team, and the absence of a nearshore presence in Europe.'
+          how: "'When you picture an offshore team on a GDPR-sensitive AI engine, what worries you most: data handling, code ownership, or the distance?'"
+        -
+          section: 'yes'
+          what: 'What would make him say yes: a clear GDPR-compliant offshore model, a French client reference, and a short CTO call to outline a concrete pilot.'
+          how: 'Answer the two GDPR/reference questions he already asked, then confirm the CTO call as a concrete pilot scoping.'
+        -
+          section: secret
+          what: "A competitor's proof-of-concept has already stalled because they cannot supply senior AI talent."
+          how: "'Have you already started anything on the AI engine side, with a vendor or internally?'"
       best:
         -
-          quote: 'Here is what I suggest: a thirty‑minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?'
-          why: 'Provides a clear, dated next step and shows confidence in delivering a concrete proposal.'
+          quote: 'Here is what I suggest: a thirty-minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?'
+          why: "He proposes the next step himself, dated, and it matches the offer's real first step (30-minute CTO video call, free and with no commitment)."
       worst:
         -
           quote: 'Do you have a budget or a deadline in mind for fixing it?'
-          why: 'Repeats information already given and misses the chance to address the client’s real concerns.'
-          better: 'Given your €150 k budget and the need to stay under €30 k per month, would a dedicated‑team model that aligns with those constraints be of interest?'
+          why: "The client had just given both the budget (€150k, under €30k per month) and the timeline (Q1 2027) two turns earlier; asking again shows he was not listening and wastes the gatekeeper's patience."
+          better: "'You mentioned €150k and a Q1 2027 launch - is the decision on the vendor already framed, or still open?'"
+        -
+          quote: 'a written estimate by Friday'
+          why: 'Promises something the offer does not provide: a firm written estimate before any scoping; the offer gives a price catalogue within 24 business hours on request and a written summary with a ballpark figure after the CTO call.'
+          better: "'After the CTO call I'll send you a written summary with a ballpark figure, and a price catalogue within 24 business hours if you want one.'"
       tips:
-        - 'Add brief paraphrasing after each client statement to demonstrate active listening and confirm understanding.'
-        - 'Address GDPR and code‑ownership concerns directly, using Etixio’s compliance guarantees as part of the value proposition.'
-        - 'Introduce Etixio’s dedicated‑team and AI expertise before proposing the next step, linking them to the client’s budget and timeline.'
+        - "Identify your interlocutor first and ask for the route in: 'Am I speaking with Laura Benoît's office? Could you put me through, or give me her and Marc Dubois' direct email or calendar link so I can send the invite myself?'"
+        - 'Answer the GDPR question before moving on, with the real arguments: French company based in Meudon, French-speaking teams in Madagascar and Mauritius, GDPR governed by contract with standard contractual clauses, named role-based access, separate environments, code and repositories owned by the client.'
+        - "Lock the slot instead of leaving it to the gatekeeper: send the calendar invite during the call, confirm Marc Dubois' attendance, and drop the 'written estimate by Friday' promise for a written summary with a ballpark figure after the CTO call."
       speech:
         voice: true
         talk_share: 31
@@ -897,7 +1450,7 @@ calls:
         longest: 33
         wpm: 187
         reply_delay: 0
-      speech_comment: 'Seller spoke concisely, asked focused open questions, and maintained a steady pace of about 187 words per minute.'
+      speech_comment: 'Talk share 31% (107 vs 235 words) with 6 questions and no fillers is healthy for a gatekeeper call, but 187 words per minute is fast and the seller used the space he had to fire scripted questions rather than deliver the one piece of information the client asked for twice.'
   -
     seller: manager
     days_ago: 1
@@ -952,6 +1505,102 @@ calls:
           - 'Qualify the need before talking price'
           - 'Identify the budget, the decision-maker and the timeline'
           - 'Get the 30-minute video call with the CTO'
+      workspace:
+        calendar:
+          -
+            when: '2026-11-16 09:00'
+            minutes: 60
+            what: 'Weekly digital-transformation steering committee'
+          -
+            when: '2026-11-16 14:00'
+            minutes: 60
+            what: 'ERP vendor review – Java/Spring modernization scope'
+          -
+            when: '2026-11-17 10:00'
+            minutes: 60
+            what: 'Interview – internal front-end developer candidate'
+          -
+            when: '2026-11-18 09:30'
+            minutes: 60
+            what: 'AI predictive-maintenance feature workshop'
+          -
+            when: '2026-11-19 11:00'
+            minutes: 60
+            what: 'Procurement alignment – contract and GDPR checkpoints'
+          -
+            when: '2026-11-20 08:30'
+            minutes: 60
+            what: 'CFO budget checkpoint – transformation envelope'
+          -
+            when: '2026-11-23 09:00'
+            minutes: 60
+            what: 'Weekly digital-transformation steering committee'
+          -
+            when: '2026-11-23 15:00'
+            minutes: 60
+            what: 'CTO technical review – architecture options'
+          -
+            when: '2026-11-24 10:00'
+            minutes: 60
+            what: 'Supplier evaluation – French IT firm shortlist'
+          -
+            when: '2026-11-25 09:30'
+            minutes: 60
+            what: 'Machine-interface demo planning'
+          -
+            when: '2026-11-25 14:00'
+            minutes: 60
+            what: 'Near-shore provider technical screening (Portugal)'
+          -
+            when: '2026-11-26 11:00'
+            minutes: 60
+            what: 'QA and DevOps staffing plan review'
+          -
+            when: '2026-11-27 09:00'
+            minutes: 60
+            what: 'Weekly digital-transformation steering committee'
+          -
+            when: '2026-11-27 15:30'
+            minutes: 60
+            what: 'Cycling club committee meeting'
+        sources:
+          -
+            key: vendor_quotes
+            label: 'Vendor Quote Tracker'
+            description: 'Comparison of quotes requested for two senior React developers and related full-stack roles; used for budget and supplier decisions.'
+            entries:
+              - { title: 'QUO-2027-001 – French IT firm – 2 senior React devs', when: '2026-11-24', details: [{ name: vendor, value: 'Atelier Numérique Strasbourg' }, { name: profile, value: '2 senior React full-stack developers' }, { name: monthly_cost_per_dev, value: '€24,500' }, { name: onboarding_time, value: '3 weeks' }, { name: notes, value: 'On-site 2 days/week, French payroll' }], note: 'Proposal received by e-mail. Rate above target. Waiting for clarification on AI integration experience.' }
+              - { title: 'QUO-2027-002 – Freelance collective – 2 senior React devs', when: '2026-11-25', details: [{ name: vendor, value: 'Freelance collective (4 independent profiles)' }, { name: profile, value: '2 senior React full-stack developers' }, { name: monthly_cost_per_dev, value: '€19,800' }, { name: onboarding_time, value: '2 weeks' }, { name: notes, value: 'Availability uncertain after March 2027' }], note: 'Attractive rate, but single-person dependency and no full team. Asked for references in industrial sector.' }
+              - { title: 'QUO-2027-003 – Near-shore provider Portugal – 2 senior React devs', when: '2026-11-25', details: [{ name: vendor, value: 'Lusitania Digital Lda' }, { name: profile, value: '2 senior React full-stack developers' }, { name: monthly_cost_per_dev, value: '€17,500' }, { name: onboarding_time, value: '4 weeks' }, { name: notes, value: 'English-speaking, 1h time difference' }], note: 'Good price. Need to verify GDPR/data location and quality assurance process.' }
+              - { title: 'QUO-2027-004 – Etixio – 2 senior React devs', when: '', details: [{ name: vendor, value: Etixio }, { name: profile, value: '2 senior React full-stack developers' }, { name: monthly_cost_per_dev, value: Pending }, { name: onboarding_time, value: Pending }, { name: notes, value: 'Price catalogue received 2026-11-16' }], note: 'Catalogue just received. Need to compare monthly cost vs. budget and ask about onboarding.' }
+          -
+            key: budget
+            label: 'Transformation Budget 2027'
+            description: 'Budget lines and approvals for the digital-transformation programme, including the legacy ERP modernization.'
+            entries:
+              - { title: 'BUD-2027-01 – Digital transformation envelope', when: '2026-11-20', details: [{ name: owner, value: 'Isabelle Laurent, CFO' }, { name: total_allocated, value: '€70,000 per month' }, { name: period, value: 'January 2027 – December 2027' }, { name: status, value: Approved }], note: 'Maximum monthly envelope for all digital-transformation work, including partners and tooling.' }
+              - { title: 'BUD-2027-02 – Legacy ERP modernization line', when: '2026-11-20', details: [{ name: owner, value: 'Isabelle Laurent, CFO' }, { name: planned_monthly_cost, value: '€45,000 – €50,000' }, { name: status, value: Provisional }], note: "Pierre's target for two senior React developers. Any quote above €50,000/month needs strong justification." }
+              - { title: 'BUD-2027-03 – Full-stack team extension', when: '2026-11-20', details: [{ name: owner, value: 'Isabelle Laurent, CFO' }, { name: roles, value: 'Product Owner, QA, DevOps' }, { name: monthly_cost_estimate, value: '€18,000 – €22,000' }, { name: status, value: 'Not yet approved' }], note: 'Possible extension beyond the two React developers. Would exceed the two-dev budget line if added.' }
+              - { title: 'BUD-2027-04 – Contingency for compliance deadline', when: '', details: [{ name: owner, value: 'Isabelle Laurent, CFO' }, { name: amount, value: '€8,000 per month' }, { name: status, value: Reserved }], note: 'Can only be released with CTO approval. Intended for urgent ramp-up or audit-related work.' }
+          -
+            key: emails
+            label: 'Email Inbox – Digital Transformation'
+            description: 'Key e-mails exchanged with vendors and internal stakeholders regarding the React developer request.'
+            entries:
+              - { title: 'Request for price catalogue – sent to Etixio', when: '2026-11-16', details: [{ name: from, value: pierre.martin@manufacturing-solutions.de }, { name: to, value: contact@etixio.com }, { name: subject, value: 'Request for price catalogue' }], note: 'Hello Etixio team, Could you please send me the pricing for two senior React developers (full-stack) for our upcoming project? We need to start in early January 2027 and would like to know the monthly cost per developer, as well as any onboarding time. Thanks, Pierre Martin, Head of Digital Transformation, Manufacturing Solutions GmbH, Strasbourg, France' }
+              - { title: 'Re: Request for price catalogue – Etixio catalogue received', when: '2026-11-16', details: [{ name: from, value: contact@etixio.com }, { name: to, value: pierre.martin@manufacturing-solutions.de }, { name: subject, value: 'Etixio price catalogue – React developers' }], note: 'Thank you for your request. Please find attached our price catalogue. We would be glad to discuss your project and clarify the team composition. Best regards, Etixio' }
+              - { title: 'Internal – CTO feedback on ERP modernization', when: '2026-11-23', details: [{ name: from, value: francois.dupont@manufacturing-solutions.de }, { name: to, value: pierre.martin@manufacturing-solutions.de }, { name: subject, value: 'RE: ERP modernization – React front-end' }], note: 'Pierre, I want a partner who can demonstrate industrial references and GDPR compliance. No more low-cost offshore experiments with high turnover. We need to decide by 31 January 2027. Can you arrange a 30-minute call with their CTO?' }
+              - { title: 'Internal – CFO budget confirmation', when: '2026-11-20', details: [{ name: from, value: isabelle.laurent@manufacturing-solutions.de }, { name: to, value: pierre.martin@manufacturing-solutions.de }, { name: subject, value: 'Budget envelope 2027 – digital transformation' }], note: 'The €70k monthly envelope is approved. For the two React developers, I expect a figure between €45k and €50k. Anything higher needs a solid business case. Please also clarify onboarding and time-zone impact.' }
+          -
+            key: project_status
+            label: 'Project Status – ERP Modernization'
+            description: 'Status of the legacy ERP modernization, including compliance and predictive-maintenance workstreams.'
+            entries:
+              - { title: 'PS-001 – Legacy ERP (Java/Spring) assessment', when: '2026-11-16', details: [{ name: lead, value: 'Pierre Martin' }, { name: status, value: Completed }, { name: findings, value: 'Monolithic Java/Spring ERP must be modernized with a React front-end; integration complexity is medium-high' }], note: 'Assessment done. React front-end is the priority for the first release.' }
+              - { title: 'PS-002 – AI predictive-maintenance feature', when: '2026-11-18', details: [{ name: lead, value: 'Pierre Martin' }, { name: status, value: 'In design' }, { name: deadline, value: '2027-02-15' }, { name: detail, value: 'Compliant demo of the predictive-maintenance interface required for EU Machinery Directive audit' }], note: 'This is the hard deadline. The demo must be ready by 15 February 2027.' }
+              - { title: 'PS-003 – Full-stack team composition', when: '2026-11-25', details: [{ name: lead, value: 'Pierre Martin' }, { name: status, value: Draft }, { name: roles_needed, value: '2 senior React devs, Product Owner, QA, DevOps' }, { name: target_start, value: '2027-01-05' }], note: 'Need to clarify whether Etixio can provide the full team or only developers.' }
+              - { title: 'PS-004 – Compliance audit preparation', when: '2026-11-25', details: [{ name: lead, value: 'Pierre Martin' }, { name: status, value: 'Not started' }, { name: deadline, value: '2027-02-15' }, { name: risk, value: 'High – ramp-up must be fast and quality assured' }], note: 'Any partner must be able to onboard by early January 2027 to deliver the February demo.' }
+              - { title: 'PS-005 – Decision timeline', when: '2026-11-27', details: [{ name: lead, value: 'Pierre Martin' }, { name: status, value: 'In progress' }, { name: decision_deadline, value: '2027-01-31' }, { name: contract_signing_target, value: 'Early February 2027' }], note: 'Final approval rests with CTO François Dupont after a brief review by CFO Isabelle Laurent.' }
     lines:
       -
         speaker: seller
@@ -1002,67 +1651,76 @@ calls:
     seconds: 29
     revealed:
       - budget
+      - pain
       - decision
       - 'yes'
-    score: 66
+    score: 60
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
-          score: 7
-          comment: 'The seller uncovered the need for two senior React developers, budget range, decision makers and the compliance deadline before proposing a solution.'
+          score: 6
+          comment: 'The seller got the client to talk about the January start, the €45–50k target, the mid-February compliance demo and the CTO/CFO approval chain, but only through three questions — the full-team scope (PO, QA, DevOps), the legacy Java/Spring ERP and the EU Machinery Directive audit never came out.'
         questions:
           label: 'Open questions'
-          score: 7
-          comment: 'Four open‑ended questions were asked, each targeting a distinct aspect (need, decision makers, budget, timeline).'
+          score: 6
+          comment: "Four open questions out of six, well sequenced (reason for the call, cost of inaction, decision chain, budget/deadline), but the budget question was closed and the client's own question about onboarding and ramp-up was never picked up."
         listening:
           label: 'Listening and rephrasing'
-          score: 5
-          comment: 'The seller asked questions but did not paraphrase or explicitly acknowledge the client’s statements, missing opportunities to confirm understanding.'
+          score: 3
+          comment: "Fourth occurrence of the same pattern: the client hands over the pain (selection time, January start, compliance deadline) and asks 'how quickly could you have the developers onboarded and what does the typical ramp-up timeline look like?', and the seller answers with 'I see. And when that happens today, what does it cost you concretely, in time or in customers?' — no rephrasing, no answer to the question asked."
         objections:
           label: 'Handling objections'
           score: 4
-          comment: 'No client objection was raised, and the seller did not pre‑empt typical offshore concerns such as time‑zone or GDPR.'
+          comment: 'No objection was raised yet, but the client explicitly named what he wants to see — GDPR safeguards, an industrial reference, the full-team setup — and the seller let all three pass without a single pre-emptive argument (SCCs, named role access, client-owned code, 7 sectors including industry).'
         value:
           label: 'Value proposition'
-          score: 4
-          comment: 'The seller did not tie Etixio’s specific offerings (e.g., GDPR safeguards, offshore team composition) to the client’s stated needs before scheduling the next call.'
+          score: 5
+          comment: 'Nothing promised outside the offer — no invented rate, no invented lead time — but no offer argument was used either: no 4–8 week start, no free 30-minute CTO call framing, no catalogue-within-24h, no GDPR or code-ownership point, no reference.'
         closing:
           label: 'Closing / next step'
-          score: 8
-          comment: 'A concrete, dated next step (30‑minute CTO video call on Tuesday at 10 am) was proposed and accepted.'
-      summary: 'Alex managed to qualify the budget, decision makers and timeline, and secured a CTO video call, but missed deeper discovery of the full‑team needs and did not address typical offshore objections.'
+          score: 6
+          comment: "The seller proposed the next step himself, dated ('next Tuesday at ten') with a written estimate by Friday, and the client accepted — but no calendar invite was sent and the Friday deliverable was not confirmed back."
+      summary: "A short, efficient qualification call: the seller opened well, extracted the budget, the decision chain and the deadline, and closed a dated CTO video call. But the recurring listening flaw struck a fourth time — the client's onboarding/ramp-up question went unanswered — and the seller used none of Etixio's real arguments (GDPR by contract, client-owned code, industrial references, 4–8 week start) even though the client named exactly what he wanted to see."
       next_step: true
-      outcome: 'A 30‑minute video call with the CTO is scheduled for Tuesday at 10 am, moving the opportunity forward.'
-      result: 'CTO video call booked, pricing discussion advanced.'
+      outcome: "A 30-minute CTO video call is verbally agreed for Tuesday at 10, with a written estimate promised by Friday, but nothing is in the client's calendar yet and the deal is still one of four options being compared."
+      result: 'Dated CTO call agreed, but no invite sent and no offer argument used'
       objectives:
         -
           objective: 'Qualify the need before talking price'
           status: partial
-          evidence: 'Seller identified the need for two senior React devs and the compliance deadline, but did not explore the full‑team composition or hidden urgency.'
+          evidence: "The pain and the mid-February compliance deadline surfaced, but only because the client volunteered them; the seller never rephrased, never explored the full-team scope (PO, QA, DevOps), the legacy Java/Spring ERP or the EU Machinery Directive audit, and never answered the client's onboarding/ramp-up question."
         -
           objective: 'Identify the budget, the decision‑maker and the timeline'
           status: reached
-          evidence: 'Client disclosed €45‑50 k per developer budget, decision makers (CTO François Dupont, CFO Isabelle Laurent) and the mid‑February deadline.'
+          evidence: "'Do you have a budget or a deadline in mind for fixing it?' brought out €70k/month overall, €45–50k for the two devs, CTO François Dupont with CFO Isabelle Laurent, and the mid-February 2027 demo."
         -
           objective: 'Get the 30‑minute video call with the CTO'
           status: reached
-          evidence: 'Seller proposed and client confirmed a Tuesday 10 am video call with the CTO.'
+          evidence: "'a thirty-minute video call with our CTO next Tuesday at ten' — the seller proposed it himself and the client accepted: 'That works for me, Tuesday at ten is fine.'"
       goal: partial
-      missed: []
+      missed:
+        -
+          section: secret
+          what: 'The compliant demo of the predictive-maintenance interface due 15 February 2027 for the EU Machinery Directive audit, and the possible ongoing support beyond the rollout.'
+          how: "'You said mid-February — is that a hard date tied to something external, and if the rollout goes well, would you want the team to stay on for support?'"
+        -
+          section: objections
+          what: 'The three objections Pierre will raise (time zone with Madagascar, GDPR for offshore code, past bad experience with low-cost offshore on quality and turnover) and what would make him say yes (full-team composition, GDPR safeguards, an industrial reference).'
+          how: "'When you compare providers, what's made you hesitate before with offshore teams — and what would you need to see on data protection and references to feel comfortable?'"
       best:
         -
-          quote: 'Here is what I suggest: a thirty‑minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?'
-          why: 'Provides a clear, dated next step and secures commitment in one sentence.'
+          quote: 'Hello, this is Alex Morgan from Etixio. Thanks for taking my call. Before anything else, what made you reach out to us this week?'
+          why: 'Clean, polite opening that hands the floor to the client immediately and gets the real context (January start, comparison with other providers) in one question.'
       worst:
         -
           quote: 'I see. And when that happens today, what does it cost you concretely, in time or in customers?'
-          why: 'The question is vague and confusing, missing a chance to restate the client’s pain and quantify impact.'
-          better: 'Can you tell me how each week of delay affects your project timeline and the associated business impact?'
+          why: 'Fourth time this exact line is flagged: the client had just given the pain and asked a direct question about onboarding and ramp-up, and the seller neither acknowledged what he heard nor answered — he fired the next question instead.'
+          better: "'So the real cost is the selection time eating into your January start and that mid-February compliance window — noted. On onboarding, we typically start in 4 to 8 weeks and the ramp-up is planned with you from day one; I'll have the CTO walk you through the exact timeline on Tuesday. In the meantime, what does that compliance deadline actually commit you to?'"
       tips:
-        - 'Practice active listening by paraphrasing the client’s statements before moving to the next question.'
-        - 'Proactively address common offshore concerns (time‑zone, GDPR, quality) with concrete Etixio guarantees.'
-        - 'Expand discovery to include all required roles (Product Owner, QA, DevOps) and the exact ramp‑up timeline needed for the February compliance demo.'
+        - 'Before asking the next question, spend one sentence rephrasing what the client just said — this is the fourth call where the same line is flagged; make it a rule: acknowledge, then ask.'
+        - "Answer the client's questions when he asks them: he asked twice about onboarding and ramp-up, and Etixio has a real answer (4–8 week start, profiles seen and interviewed by the client, adjustable team) — use it instead of deflecting."
+        - "Prepare three one-line arguments for Tuesday's CTO call, since Pierre named exactly what he wants to see: GDPR by contract with SCCs and named role access, code and repositories owned by the client, and an industrial-sector reference — plus send the calendar invite today so the step is locked, not just verbal."
       speech:
         voice: true
         talk_share: 23
@@ -1075,4 +1733,4 @@ calls:
         longest: 33
         wpm: 187
         reply_delay: 1
-      speech_comment: 'The seller spoke concisely, asked six questions, used no filler words and maintained a fast pace of about 187 words per minute.'
+      speech_comment: 'Only 23% of the words (107 vs 358) with 6 questions in 1 minute at 187 words per minute — the seller is efficient and lets the client talk, but the pace is rushed and the questions land without any acknowledgement of the previous answer.'
