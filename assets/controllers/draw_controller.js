@@ -1,8 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
+import { follow } from '../follow.js';
 
 /**
- * "New call": a situation is drawn and written on the server (some fifteen seconds) behind a waiting screen, then the
- * briefing opens. An optional select or button value picks the situation.
+ * "New call": a situation is drawn and written on the server behind a waiting screen, its steps ticked off as they
+ * come, then the briefing opens. An optional select or button value picks the situation.
  */
 export default class extends Controller {
     static targets = ['overlay', 'error'];
@@ -16,10 +17,13 @@ export default class extends Controller {
         if (overlay) overlay.hidden = false;
         if (this.hasErrorTarget) this.errorTarget.hidden = true;
         try {
-            const response = await fetch(form.action, { method: 'POST', body, headers: { Accept: 'application/json' } });
-            const data = await response.json();
-            if (!response.ok || !data.url) throw new Error(data.error ?? '');
-            window.location.assign(data.url);
+            // The steps (situation drawn, latest calls checked, call written…) are ticked off as the server reports them.
+            const list = overlay?.querySelector('[data-steps]');
+            list?.replaceChildren();
+            const response = await fetch(form.action, { method: 'POST', body, headers: { Accept: 'application/x-ndjson' } });
+            const end = list ? await follow(response, list) : { t: 'error' };
+            if (end.t !== 'done') throw new Error(end.error ?? '');
+            window.location.assign(end.url);
         } catch (e) {
             if (overlay) overlay.hidden = true;
             if (this.hasErrorTarget) {

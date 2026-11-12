@@ -14,7 +14,7 @@
         sheet: {label: 'form.prepare.text'|trans, placeholder: 'form.prepare.text_placeholder'|trans, help: 'form.prepare.text_help'|trans, rows: 10},
         call: {label: 'form.prepare.call_text'|trans, placeholder: 'form.prepare.call_placeholder'|trans, help: 'form.prepare.call_help'|trans, rows: 16},
     } %}
-    {{ form_start(form, {attr: {class: 'form', 'data-controller': 'busy source', 'data-action': 'busy#start change->source#update', 'data-busy-overlay-value': 'draw-overlay', 'data-source-modes-value': modes|json_encode}}) }}
+    {{ form_start(form, {attr: {class: 'form', 'data-controller': 'follow source', 'data-action': 'follow#submit change->source#update', 'data-follow-overlay-value': 'prepare-overlay', 'data-source-modes-value': modes|json_encode}}) }}
         {{ form_row(form.fromCall) }}
         {{ form_row(form.text, {attr: {'data-source-target': 'text'}}) }}
         <div class="fields-3">{{ form_row(form.type) }}{{ form_row(form.difficulty) }}{{ form_row(form.minutes) }}</div>
@@ -26,5 +26,5 @@
         <p class="small muted">{{ 'prepare.mcp'|trans }}</p>
     </aside>
 </div>
-{{ include('play/_draw_overlay.html.twig') }}
+{{ include('play/_draw_overlay.html.twig', {id: 'prepare-overlay', title: 'prepare.writing'|trans, text: 'prepare.writing_text'|trans}) }}
 {% endblock %}

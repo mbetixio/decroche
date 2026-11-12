@@ -1,9 +1,10 @@
-{# A waiting screen for a long step: a call drawn and written (by default), or the debrief being written (shown by the
-   draw, busy and call controllers). id, title and text may be given. #}
+{# A waiting screen for a long piece of work: a call drawn and written (by default), a rehearsal, or the debrief being
+   written, its steps ticked off as they come (draw and follow controllers). id, title and text may be given. #}
 <div class="overlay" id="{{ id ?? 'draw-overlay' }}" role="status" aria-live="polite" hidden>
     <div class="overlay-panel">
         <span class="loader" aria-hidden="true"><i></i><i></i><i></i></span>
         <h2>{{ title ?? 'play.drawing'|trans }}</h2>
         <p>{{ text ?? 'play.drawing_text'|trans }}</p>
+        {{ include('_steps.html.twig') }}
     </div>
 </div>

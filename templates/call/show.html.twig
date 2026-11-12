@@ -21,12 +21,13 @@
 
 {% if call.status.value == 'debriefing' and mine %}
     {# The coach is still to write the debrief: it starts at once, behind a waiting screen. #}
-    <form method="post" action="{{ path('call_finish', {id: call.id}) }}" data-controller="autosubmit">
+    <form method="post" action="{{ path('call_finish', {id: call.id}) }}" data-controller="follow" data-follow-auto-value="true" data-follow-overlay-value="debrief-wait">
         <input type="hidden" name="_token" value="{{ csrf_token('call-' ~ call.id) }}">
-        <div class="panel waiting" role="status">
+        <div class="panel waiting" id="debrief-wait" role="status">
             <span class="loader" aria-hidden="true"><i></i><i></i><i></i></span>
             <h2>{{ 'call.analysing'|trans }}</h2>
             <p>{{ 'call.analysing_text'|trans }}</p>
+            {{ include('_steps.html.twig') }}
             <noscript><button class="btn primary">{{ 'call.write_debrief'|trans }}</button></noscript>
         </div>
     </form>

@@ -60,7 +60,7 @@
         </div>
         {# Before the call: a labelled, still button (it only pulses for an incoming call). During the call: hang up. #}
         <button type="button" class="cs-pickup" data-call-target="pickup" data-action="call#pickUp"><twig:Icon name="phone" /><span>{{ (incoming ? 'call.pick_up_name' : 'call.dial_name')|trans({'%name%': persona.firstName}) }}</span></button>
-        <form method="post" action="{{ path('call_finish', {id: call.id}) }}" data-call-target="finish" data-action="call#hangUp" hidden>
+        <form method="post" action="{{ path('call_finish', {id: call.id}) }}" data-call-target="finish" data-controller="follow" data-follow-overlay-value="debrief-overlay" data-action="call#hangUp follow#submit" hidden>
             <input type="hidden" name="_token" value="{{ csrf_token('call-' ~ call.id) }}">
             <button class="cs-hangup"><twig:Icon name="phone" /><span>{{ 'call.hang_up'|trans }}</span></button>
         </form>

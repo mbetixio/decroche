@@ -533,6 +533,9 @@ td.num, th.num { text-align: right; }
 .overlay { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: var(--s-4); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(3px); }
 .overlay-panel { width: min(440px, 100%); display: grid; gap: var(--s-3); justify-items: center; text-align: center; padding: var(--s-6); border-radius: var(--radius-l); background: var(--surface); box-shadow: var(--shadow); }
 .overlay-panel p { color: var(--ink-2); }
+/* The steps of the work, ticked off as they come: left-aligned under the title. */
+.overlay-steps { justify-self: stretch; text-align: left; margin-top: var(--s-2); }
+.overlay-steps:empty { display: none; }
 .waiting { display: grid; gap: var(--s-3); justify-items: center; text-align: center; padding: var(--s-8) var(--s-4); }
 .waiting p { color: var(--ink-2); max-width: 46ch; }
 

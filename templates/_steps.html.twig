@@ -1,0 +1,4 @@
+{# The steps of a long piece of work, filled in as the server reports them (see assets/follow.js), and what went wrong. #}
+<ol class="analysis overlay-steps" data-steps aria-live="polite"></ol>
+<template data-step-template><li class="analysis-step"><span class="dot" aria-hidden="true"><twig:Icon name="check" /></span><span data-step-label></span></li></template>
+<p class="text-bad" data-step-error data-fallback="{{ 'call.error.unreachable'|trans }}" role="alert" hidden></p>

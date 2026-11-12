@@ -26,7 +26,7 @@ final class PrepareType extends AbstractType
     {
         $builder
             ->add('fromCall', ChoiceType::class, ['label' => 'form.prepare.source', 'expanded' => true, 'choices' => ['form.prepare.from_file' => false, 'form.prepare.from_call' => true]])
-            ->add('text', TextareaType::class, ['label' => 'form.prepare.text', 'help' => 'form.prepare.text_help', 'attr' => ['rows' => 10, 'placeholder' => 'form.prepare.text_placeholder']])
+            ->add('text', TextareaType::class, ['label' => 'form.prepare.text', 'empty_data' => '', 'help' => 'form.prepare.text_help', 'attr' => ['rows' => 10, 'placeholder' => 'form.prepare.text_placeholder']])
             ->add('type', EnumType::class, ['class' => MeetingType::class, 'label' => 'form.prepare.type', 'required' => false, 'placeholder' => 'form.prepare.type_any'])
             ->add('difficulty', EnumType::class, ['class' => Difficulty::class, 'label' => 'form.prepare.difficulty'])
             ->add('minutes', IntegerType::class, ['label' => 'form.prepare.minutes', 'attr' => ['min' => 3, 'max' => 60]]);
