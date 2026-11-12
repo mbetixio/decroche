@@ -10,6 +10,7 @@ use App\Enum\Difficulty;
 use App\Enum\MeetingType;
 use App\Model\Persona;
 use App\Model\Situation;
+use App\Model\Workspace;
 use App\Repository\ScenarioRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -51,6 +52,10 @@ class Scenario
     /** @var array<string, mixed> */
     #[ORM\Column(type: Types::JSON)]
     private array $persona;
+
+    /** @var array<string, mixed>|null the persona's own files and calendar, looked up during the call ({@see Workspace}) */
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $workspace = null;
 
     /** @var array<string, string> what the persona knows and hides, by {@see BriefSection}, plus their side of the story ("setup") */
     #[ORM\Column(type: Types::JSON)]
@@ -128,6 +133,19 @@ class Scenario
     public function briefArray(): array
     {
         return $this->brief;
+    }
+
+    /**
+     * What the persona has at hand: never shown to the seller before the debrief.
+     */
+    public function workspace(): Workspace
+    {
+        return Workspace::fromArray($this->workspace);
+    }
+
+    public function setWorkspace(Workspace $workspace): void
+    {
+        $this->workspace = $workspace->isEmpty() ? null : $workspace->toArray();
     }
 
     public function situation(): ?Situation

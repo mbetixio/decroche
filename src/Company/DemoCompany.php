@@ -71,6 +71,7 @@ final readonly class DemoCompany
             $existing->opening = $fresh->opening;
             $existing->setPersona($fresh->persona());
             $existing->setBrief($fresh->briefArray());
+            $existing->setWorkspace($fresh->workspace());
             $this->scenarios->save($existing);
         }
 

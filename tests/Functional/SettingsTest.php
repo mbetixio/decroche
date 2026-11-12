@@ -91,6 +91,38 @@ final class SettingsTest extends FunctionalTestCase
         self::assertSelectorTextContains('main', 'Renew at full price, for two years.');
     }
 
+    public function testALibraryScenarioGetsTheClientsFiles(): void
+    {
+        $values = ['scenario' => [
+            'title' => 'The CFO who wants a discount', 'type' => 'negotiation', 'difficulty' => '3', 'minutes' => '8',
+            'context' => 'The CFO calls about the renewal.', 'goal' => 'Renew without discount.', 'personaName' => 'Paul Durand',
+            'personaRole' => 'CFO', 'personaCompany' => 'Acme', 'personaPersonality' => 'Cold, precise.', 'opening' => 'Paul Durand. About the renewal.',
+            'brief' => ['pain' => 'His budget was cut by 20%.'],
+        ]];
+        $this->client->request('GET', '/library/new');
+        $this->submit('Save', $values);
+        $scenario = $this->service(ScenarioRepository::class)->findOneBy(['title' => 'The CFO who wants a discount']);
+        self::assertSame(['tickets'], array_keys($scenario->workspace()->sources()), 'Written with the scenario.');
+
+        // Saved again unchanged: the files stay; with a new brief, they are written again.
+        ScriptedModel::$prompts = [];
+        $this->client->request('GET', '/library/'.$scenario->id.'/edit');
+        $this->submit('Save', ['scenario[goal]' => 'Renew at full price.']);
+        self::assertSame([], ScriptedModel::$prompts);
+        $this->client->request('GET', '/library/'.$scenario->id.'/edit');
+        $this->submit('Save', ['scenario[brief][pain]' => 'His budget was cut by 40%.']);
+        self::assertCount(1, ScriptedModel::$prompts);
+
+        // Without the model, the scenario is saved all the same, without files.
+        ScriptedModel::$unreachable = true;
+        $values['scenario']['title'] = 'Another CFO';
+        $this->client->request('GET', '/library/new');
+        $this->submit('Save', $values);
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('.flash.error', 'files could not be written');
+        self::assertTrue($this->service(ScenarioRepository::class)->findOneBy(['title' => 'Another CFO'])->workspace()->isEmpty());
+    }
+
     public function testARealMeetingIsRehearsed(): void
     {
         $crawler = $this->client->request('GET', '/prepare');

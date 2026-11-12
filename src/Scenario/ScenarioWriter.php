@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Scenario;
 
+use App\Agent\AgentContext;
 use App\Ai\LanguageModel;
 use App\Ai\ModelException;
 use App\Ai\Output\CallScenario;
@@ -29,6 +30,8 @@ final readonly class ScenarioWriter
         private LanguageModel $model,
         private CompanyRepository $companies,
         private ClockInterface $clock,
+        private AgentContext $context,
+        private WorkspaceWriter $workspaces,
     ) {
     }
 
@@ -58,16 +61,18 @@ final readonly class ScenarioWriter
             The persona's attitude must make sense with the situation and with what {$company->name} sells: someone who calls,
             or who asked to be called back, is interested in it; their doubts are real but come out later in the call, when
             the seller pitches, quotes or asks the right question, never as a greeting.
-            Answer only with a JSON object; every text value is written in {$language}:
+            With your tools, look at recent_calls, to write something new (other people, companies and stories), and
+            read_offer if you need a detail of the offer. Every text value is written in {$language}:
             {"title": "a short, telling title, as the seller sees it",
              "context": "what the seller knows before the call, addressing them as you, 2 to 4 sentences: {$this->direction($situation)}",
              "material": "the document the seller has in front of them ({$material}), written in full like the real document, 5 to 15 lines, with line breaks",
              "goal": "the goal of the call in one sentence",
              "objectives": ["three concrete, checkable objectives for this call, adapted from: {$objectives}"],
              "persona": {"name": "first name last name", "gender": "f or m", "role": "job title", "company": "company name, sector, size, city", "personality": "2 or 3 sentences: their character on the phone (in the given tone), how they speak, what matters to them, a human trait (an anecdote, a passion, a habit)"},
-             "opening": "{$this->openingHint($situation)}",
+             "opening": "{$this->openingHint($situation)}, said in {$language}",
              "brief": {"setup": "the situation from the persona's side: what they know of the seller's company, their relationship with the seller, what they are doing when the call happens, their mood",
-                       {$this->briefFields()}}}
+                       {$this->briefFields()}},
+             "workspace": {$this->workspaces->hint()}}
             PROMPT;
         $user = 'Today is '.$this->clock->now()->format('Y-m-d')." (the scenario's dates, budgets and deadlines start from there).\n"
             ."The situation: {$situation->label}.\n{$situation->pitch}\n\n"
@@ -76,7 +81,8 @@ final readonly class ScenarioWriter
             .([] !== $avoid ? 'Invent new names: use none of these names of people or companies, met recently: '.implode(', ', $avoid).".\n" : '')
             .\sprintf('Difficulty: %d/3.', $draw->difficulty->value);
 
-        $data = $this->model->structured($system, $user, CallScenario::class, 1.0)->toArray();
+        $this->context->forMember($author);
+        $data = $this->model->work('writer', $system, $user, CallScenario::class, 1.0)->toArray();
         $scenario = ScenarioFactory::fromArray([
             'difficulty' => $draw->difficulty->value,
             'minutes' => $draw->difficulty->minutes(),
@@ -114,14 +120,16 @@ final readonly class ScenarioWriter
             questions. Write a realistic brief, precise, with figures where useful, consistent with the given situation, with
             real sales tension. The title, context and goal are public: they must reveal nothing of the brief (neither the real
             pain, nor the hidden information, nor the budget); the title describes the situation as the seller sees it.
-            Answer only with a JSON object; every text value is written in {$language}:
+            With your tools, look at recent_calls, to write something new (other people, companies and stories), and
+            read_offer if you need a detail of the offer. Every text value is written in {$language}:
             {"title": "a short, telling title",
              "type": "one of: {$types}",
              "context": "what the seller knows going in, addressing them as you, 2 to 4 sentences",
              "goal": "what they must obtain for the meeting to be a success (one sentence)",
              "persona": {"name": "first name last name", "gender": "f or m", "role": "job title", "company": "company and sector, size", "personality": "2 sentences on how they behave in a meeting"},
-             "opening": "the first sentence the client says when greeting the seller",
-             "brief": {{$this->briefFields()}}}
+             "opening": "the first sentence the client says when greeting the seller, said in {$language}",
+             "brief": {{$this->briefFields()}},
+             "workspace": {$this->workspaces->hint()}}
             PROMPT;
         $user = ($fromCall
             ? "What follows is the transcript of a real call (the client and the seller; turns are sometimes badly split). Rebuild this client so the seller can replay the call and do better: their company, job, character, way of speaking, objections, real stakes; the hidden brief starts from what they said and what they implied without saying it; the opening is theirs; the context describes the situation at the time of the call, revealing nothing of the brief. Keep their first name and company name if they appear.\n\nThe transcript:\n{$text}\n\n"
@@ -129,7 +137,8 @@ final readonly class ScenarioWriter
             .(null !== $type ? "Meeting type: {$type->describe()}.\n" : '')
             .\sprintf('Difficulty: %d/3.', $difficulty->value);
 
-        $data = $this->model->structured($system, $user, MeetingScenario::class, 0.9)->toArray();
+        $this->context->forMember($author);
+        $data = $this->model->work('writer', $system, $user, MeetingScenario::class, 0.9)->toArray();
 
         return ScenarioFactory::fromArray(['difficulty' => $difficulty->value, 'minutes' => $minutes] + (null !== $type ? ['type' => $type->value] : []) + $data, $author, $this->clock->now());
     }

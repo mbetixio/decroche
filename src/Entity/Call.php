@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Ai\Data;
 use App\Enum\BriefSection;
 use App\Enum\CallEnd;
 use App\Enum\CallStatus;
@@ -49,6 +50,10 @@ class Call
     /** @var list<string> the brief sections the persona gave away, because the seller asked the right question */
     #[ORM\Column(type: Types::JSON)]
     private array $revealed = [];
+
+    /** @var list<array{tool: string, summary: string, data: array<string, mixed>, at: string}> what the persona did with their tools */
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    private array $actions = [];
 
     /** @var array<string, mixed>|null the coach's debrief */
     #[ORM\Column(type: Types::JSON, nullable: true)]
@@ -165,6 +170,41 @@ class Call
         $this->revealed[] = $section->value;
 
         return true;
+    }
+
+    /**
+     * Records what the persona just did with one of their tools (looked something up, booked a meeting…).
+     *
+     * @param array<string, mixed> $data
+     */
+    public function act(string $tool, string $summary, \DateTimeImmutable $at, array $data = []): void
+    {
+        $this->actions[] = ['tool' => $tool, 'summary' => $summary, 'data' => $data, 'at' => self::local($at)->format(\DATE_ATOM)];
+    }
+
+    /**
+     * @return list<array{tool: string, summary: string, data: array<string, mixed>, at: string}>
+     */
+    public function actions(): array
+    {
+        return $this->actions;
+    }
+
+    /**
+     * The meetings the persona booked during the call.
+     *
+     * @return list<array{date: string, time: string, minutes: int, subject: string}>
+     */
+    public function bookings(): array
+    {
+        $bookings = [];
+        foreach ($this->actions as $action) {
+            if ('book_meeting' === $action['tool']) {
+                $bookings[] = ['date' => Data::string($action['data']['date'] ?? ''), 'time' => Data::string($action['data']['time'] ?? ''), 'minutes' => Data::int($action['data']['minutes'] ?? 30, 30), 'subject' => Data::string($action['data']['subject'] ?? '')];
+            }
+        }
+
+        return $bookings;
     }
 
     public function isRevealed(BriefSection $section): bool

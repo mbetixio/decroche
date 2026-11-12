@@ -13,6 +13,7 @@ use App\Enum\Difficulty;
 use App\Enum\MeetingType;
 use App\Model\Persona;
 use App\Model\Situation;
+use App\Model\Workspace;
 
 /**
  * Builds a scenario from loose data: what the model wrote, a YAML library entry, or a manager's form.
@@ -56,6 +57,7 @@ final class ScenarioFactory
         );
         $scenario->material = '' !== $text($data['material'] ?? '') ? $text($data['material']) : null;
         $scenario->setObjectives(Situation::strings($data['objectives'] ?? []));
+        $scenario->setWorkspace(Workspace::fromArray(\is_array($data['workspace'] ?? null) ? $data['workspace'] : null));
 
         return $scenario;
     }

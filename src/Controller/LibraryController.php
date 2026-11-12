@@ -16,6 +16,7 @@ use App\Repository\CallRepository;
 use App\Repository\ScenarioRepository;
 use App\Scenario\ScenarioFactory;
 use App\Scenario\ScenarioWriter;
+use App\Scenario\WorkspaceWriter;
 use App\Security\Voter\ScenarioVoter;
 use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,13 +56,14 @@ final class LibraryController extends AbstractController
 
     #[Route('/library/new', name: 'scenario_new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_MANAGER')]
-    public function new(#[CurrentUser] Member $me, Request $request, ClockInterface $clock): Response
+    public function new(#[CurrentUser] Member $me, Request $request, ClockInterface $clock, WorkspaceWriter $workspaces): Response
     {
         $data = new ScenarioData();
         $form = $this->createForm(ScenarioType::class, $data);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $scenario = ScenarioFactory::fromArray($data->toArray(), $me, $clock->now());
+            $this->equip($scenario, $workspaces);
             $this->scenarios->save($scenario);
             $this->addFlash('success', 'library.created');
 
@@ -73,13 +75,18 @@ final class LibraryController extends AbstractController
 
     #[Route('/library/{id<\d+>}/edit', name: 'scenario_edit', methods: ['GET', 'POST'])]
     #[IsGranted(ScenarioVoter::EDIT, 'scenario')]
-    public function edit(Scenario $scenario, Request $request): Response
+    public function edit(Scenario $scenario, Request $request, WorkspaceWriter $workspaces): Response
     {
         $data = ScenarioData::of($scenario);
         $form = $this->createForm(ScenarioType::class, $data);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $before = [$scenario->persona()->toArray(), $scenario->briefArray()];
             $data->applyTo($scenario);
+            // A new client or a new brief: their files are written again, to match.
+            if ($before !== [$scenario->persona()->toArray(), $scenario->briefArray()] || $scenario->workspace()->isEmpty()) {
+                $this->equip($scenario, $workspaces);
+            }
             $this->scenarios->save($scenario);
             $this->addFlash('success', 'library.saved');
 
@@ -87,6 +94,19 @@ final class LibraryController extends AbstractController
         }
 
         return $this->render('library/form.html.twig', ['form' => $form, 'scenario' => $scenario]);
+    }
+
+    /**
+     * Gives the scenario's client their files and calendar, for their tools during the call. Without the model, the
+     * scenario is saved all the same: the client then has an empty calendar and no files.
+     */
+    private function equip(Scenario $scenario, WorkspaceWriter $workspaces): void
+    {
+        try {
+            $scenario->setWorkspace($workspaces->write($scenario));
+        } catch (ModelException|\RuntimeException) {
+            $this->addFlash('error', 'library.no_workspace');
+        }
     }
 
     /**

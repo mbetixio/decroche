@@ -29,6 +29,7 @@ final class CallScenario extends Output
         #[Schema(description: 'The persona\'s first line on the phone')]
         public string $opening,
         public HiddenBrief $brief,
+        public Workspace $workspace,
     ) {
     }
 }
