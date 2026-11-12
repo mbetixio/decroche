@@ -438,6 +438,11 @@ input[type=checkbox], input[type=radio] { accent-color: var(--action); width: 18
 .record-field:last-child { border-bottom: 0; }
 .record-field dt { font-size: 13px; color: color-mix(in srgb, var(--paper-ink) 62%, transparent); padding-top: 1px; }
 .record-field dd { margin: 0; }
+/* The persona's files, in the debrief: one per line, opened on demand. */
+.file { border-top: 1px solid var(--line); padding: var(--s-3) 0; }
+.file:last-child { border-bottom: 1px solid var(--line); }
+.file > summary { cursor: pointer; list-style-position: outside; }
+.file[open] > summary { margin-bottom: var(--s-4); }
 .record-notes { display: grid; gap: var(--s-2); padding: var(--s-3) var(--s-4); border-radius: var(--radius-s); background: color-mix(in srgb, var(--paper-ink) 4%, transparent); font-size: 14px; }
 .record-bullet { padding-left: 1em; text-indent: -1em; }
 .record-bullet::before { content: '– '; }

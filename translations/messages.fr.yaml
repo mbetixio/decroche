@@ -358,6 +358,15 @@ scenario:
     error:
         too_short: 'Donnez un peu plus de matière (quelques lignes au moins).'
 debrief:
+    actions_title: 'Pendant l’appel, côté %name%'
+    files_title: 'Les dossiers de %name%'
+    files_intro: 'Ce qui était sous la main pendant l’appel : une bonne question pouvait le faire sortir.'
+    records: '{1} 1 fiche|]1,Inf[ %count% fiches'
+    action:
+        check_calendar: 'Consultation de son agenda'
+        book_meeting: 'Rendez-vous réservé'
+        look_up: 'Recherche dans ses dossiers'
+        previous_calls: 'Rappel de vos appels précédents'
     train: 'S’entraîner sur ce point'
     empty:
         comment: 'Pas assez d''échanges pour juger.'
@@ -453,6 +462,7 @@ briefing:
     length: 'Durée'
     type: 'Type'
 library:
+    no_workspace: 'Les dossiers du client n’ont pas pu être écrits (le modèle est injoignable) : il n’en aura pas dans ce scénario.'
     title: 'La bibliothèque'
     lead: 'Les mises en situation de vos managers, et les rendez-vous que vous avez préparés.'
     new: 'Nouveau scénario'

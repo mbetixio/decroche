@@ -110,6 +110,43 @@
             {% endfor %}
         </ul>
     </section>
+    {# What the persona did with their tools during the call, then the files they had at hand. #}
+    {% if call.actions %}
+        <section aria-labelledby="actions-title">
+            <div class="section-head"><h2 id="actions-title">{{ 'debrief.actions_title'|trans({'%name%': persona.name}) }}</h2></div>
+            <ul class="outcomes">
+                {% for action in call.actions %}
+                    <li>
+                        <span class="tag {{ action.tool == 'book_meeting' ? 'good' }}"><time datetime="{{ action.at }}">{{ action.at|date('H:i') }}</time></span>
+                        <div><b>{{ ('debrief.action.' ~ action.tool)|trans }}</b>{% if action.summary %} · {{ action.summary }}{% endif %}</div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+    {% set files = scenario.workspace.sources %}
+    {% if files %}
+        <section aria-labelledby="files-title">
+            <div class="section-head"><h2 id="files-title">{{ 'debrief.files_title'|trans({'%name%': persona.name}) }}</h2></div>
+            <p class="small muted section-intro">{{ 'debrief.files_intro'|trans }}</p>
+            <div class="stack">
+                {% for source in files %}
+                    <details class="file">
+                        <summary><b>{{ source.label }}</b> <span class="small muted">· {{ 'debrief.records'|trans({'%count%': source.entries|length}) }}{% if source.description %} · {{ source.description }}{% endif %}</span></summary>
+                        <div class="stack">
+                            {% for entry in source.entries %}
+                                <div class="doc small record">
+                                    <div class="record-head"><span class="record-kind">{{ entry.when }}</span><span class="record-subject">{{ entry.title }}</span></div>
+                                    {% if entry.details %}<dl class="record-fields">{% for detail in entry.details %}<div class="record-field"><dt>{{ detail.name }}</dt><dd>{{ detail.value }}</dd></div>{% endfor %}</dl>{% endif %}
+                                    {% if entry.note %}<p>{{ entry.note }}</p>{% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </details>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
 {% endif %}
 
 {% if debrief and call.status.value == 'done' %}

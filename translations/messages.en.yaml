@@ -358,6 +358,15 @@ scenario:
     error:
         too_short: 'Give a little more to work with (a few lines at least).'
 debrief:
+    actions_title: 'What %name% did during the call'
+    files_title: '%name%''s files'
+    files_intro: 'What they had at hand during the call: a good question could have brought it out.'
+    records: '{1} 1 record|]1,Inf[ %count% records'
+    action:
+        check_calendar: 'Checked their calendar'
+        book_meeting: 'Booked a meeting'
+        look_up: 'Looked something up'
+        previous_calls: 'Remembered your earlier calls'
     train: 'Train on this point'
     empty:
         comment: 'Not enough exchanges to judge.'
@@ -453,6 +462,7 @@ briefing:
     length: 'Length'
     type: 'Type'
 library:
+    no_workspace: 'The client''s files could not be written (the model is unreachable): they will have none in this scenario.'
     title: 'The library'
     lead: 'Your managers'' practice cases, and the meetings you prepared.'
     new: 'New scenario'
