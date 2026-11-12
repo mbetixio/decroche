@@ -41,10 +41,11 @@ final readonly class ScenarioWriter
      *
      * @param list<string>   $avoid names (people, companies) the seller met recently, not to be used again
      * @param Criterion|null $focus the skill the seller wants to train: the situation is built to test it
+     * @param \Closure|null  $step  told each step of the writing (see LanguageModel::work())
      *
      * @throws ModelException when the model's answer cannot make a scenario
      */
-    public function surprise(Draw $draw, Member $author, array $avoid = [], ?Criterion $focus = null): Scenario
+    public function surprise(Draw $draw, Member $author, array $avoid = [], ?Criterion $focus = null, ?\Closure $step = null): Scenario
     {
         $company = $this->companies->get();
         $situation = $draw->situation;
@@ -82,7 +83,7 @@ final readonly class ScenarioWriter
             .\sprintf('Difficulty: %d/3.', $draw->difficulty->value);
 
         $this->context->forMember($author);
-        $data = $this->model->work('writer', $system, $user, CallScenario::class, 1.0)->toArray();
+        $data = $this->model->work('writer', $system, $user, CallScenario::class, 1.0, $step)->toArray();
         $scenario = ScenarioFactory::fromArray([
             'difficulty' => $draw->difficulty->value,
             'minutes' => $draw->difficulty->minutes(),
@@ -104,7 +105,7 @@ final readonly class ScenarioWriter
      * @throws \InvalidArgumentException when the text is too short to work from
      * @throws ModelException            when the model's answer cannot make a scenario
      */
-    public function prepare(string $text, Member $author, ?MeetingType $type = null, Difficulty $difficulty = Difficulty::Demanding, int $minutes = 12, bool $fromCall = false): Scenario
+    public function prepare(string $text, Member $author, ?MeetingType $type = null, Difficulty $difficulty = Difficulty::Demanding, int $minutes = 12, bool $fromCall = false, ?\Closure $step = null): Scenario
     {
         $text = mb_substr(trim($text), 0, 20_000);
         if (mb_strlen($text) < 15) {
@@ -138,7 +139,7 @@ final readonly class ScenarioWriter
             .\sprintf('Difficulty: %d/3.', $difficulty->value);
 
         $this->context->forMember($author);
-        $data = $this->model->work('writer', $system, $user, MeetingScenario::class, 0.9)->toArray();
+        $data = $this->model->work('writer', $system, $user, MeetingScenario::class, 0.9, $step)->toArray();
 
         return ScenarioFactory::fromArray(['difficulty' => $difficulty->value, 'minutes' => $minutes] + (null !== $type ? ['type' => $type->value] : []) + $data, $author, $this->clock->now());
     }

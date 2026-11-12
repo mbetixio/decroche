@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Ai\ModelException;
 use App\Entity\Member;
 use App\Entity\Scenario;
+use App\Http\ProgressStream;
 use App\Progress\MissionTracker;
 use App\Progress\ProgressReport;
 use App\Repository\CallRepository;
@@ -50,11 +51,20 @@ final class PlayController extends AbstractController
      */
     #[Route('/call/new', name: 'call_draw', methods: ['POST'])]
     #[IsCsrfTokenValid('call-draw', tokenKey: 'token')]
-    public function draw(#[CurrentUser] Member $me, Request $request, SurpriseCalls $calls, TranslatorInterface $translator): JsonResponse
+    public function draw(#[CurrentUser] Member $me, Request $request, SurpriseCalls $calls, TranslatorInterface $translator, ProgressStream $progress): Response
     {
         set_time_limit(300);
+        $situation = $request->request->getString('situation') ?: null;
+        $focus = $request->request->getString('focus') ?: null;
+        if (ProgressStream::wanted($request)) {
+            return $progress->response(
+                $request,
+                fn (\Closure $step): string => $this->generateUrl('call_briefing', ['id' => $calls->draw($me, $situation, $focus, $step)->id]),
+                static fn (): array => ['error' => $translator->trans('play.draw_failed')],
+            );
+        }
         try {
-            $scenario = $calls->draw($me, $request->request->getString('situation') ?: null, $request->request->getString('focus') ?: null);
+            $scenario = $calls->draw($me, $situation, $focus);
         } catch (ModelException|\RuntimeException) {
             return new JsonResponse(['error' => $translator->trans('play.draw_failed')], Response::HTTP_BAD_GATEWAY);
         }

@@ -12,6 +12,7 @@ use App\Form\Model\PrepareData;
 use App\Form\Model\ScenarioData;
 use App\Form\PrepareType;
 use App\Form\ScenarioType;
+use App\Http\ProgressStream;
 use App\Repository\CallRepository;
 use App\Repository\ScenarioRepository;
 use App\Scenario\ScenarioFactory;
@@ -21,12 +22,14 @@ use App\Security\Voter\ScenarioVoter;
 use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The scenario library (the managers' practice cases, and the meetings a seller prepared), and the rehearsal of a real
@@ -128,11 +131,30 @@ final class LibraryController extends AbstractController
      * Rehearses a real meeting: a scenario written from what is known of the prospect (about a minute).
      */
     #[Route('/prepare', name: 'prepare', methods: ['GET', 'POST'])]
-    public function prepare(#[CurrentUser] Member $me, Request $request, ScenarioWriter $writer): Response
+    public function prepare(#[CurrentUser] Member $me, Request $request, ScenarioWriter $writer, ProgressStream $progress, TranslatorInterface $translator): Response
     {
         $data = new PrepareData();
         $form = $this->createForm(PrepareType::class, $data);
         $form->handleRequest($request);
+        if ($form->isSubmitted() && ProgressStream::wanted($request)) {
+            // Followed step by step; a form to correct goes back to the page, sent the usual way.
+            if (!$form->isValid()) {
+                return new JsonResponse(['invalid' => true], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            return $progress->response(
+                $request,
+                function (\Closure $step) use ($writer, $data, $me): string {
+                    $step('prepare.reading');
+                    $scenario = $writer->prepare($data->text, $me, $data->type, $data->difficulty, $data->minutes, $data->fromCall, $step);
+                    $this->scenarios->save($scenario);
+
+                    return $this->generateUrl('call_briefing', ['id' => $scenario->id]);
+                },
+                // The text was validated with the form: only the model can fail here.
+                static fn (): array => ['error' => $translator->trans('prepare.failed')],
+            );
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             set_time_limit(300);
             try {

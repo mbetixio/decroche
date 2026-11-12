@@ -31,7 +31,7 @@ final readonly class Coach
      *
      * @return array{debrief: Debrief, score: int}
      */
-    public function debrief(Call $call, \DateTimeImmutable $now): array
+    public function debrief(Call $call, \DateTimeImmutable $now, ?\Closure $step = null): array
     {
         $company = $this->companies->get();
         $scorecard = $company->scorecard();
@@ -41,7 +41,7 @@ final readonly class Coach
         }
         // The coach's tools (earlier debriefs, the exact lines, what the client did) work on this call.
         $this->context->forCall($call);
-        $data = $this->model->work('coach', $this->prompt->system($call, $company), $this->prompt->user($call, $figures, $now), CoachReport::class, 0.4)->toArray();
+        $data = $this->model->work('coach', $this->prompt->system($call, $company), $this->prompt->user($call, $figures, $now), CoachReport::class, 0.4, $step)->toArray();
         $result = $this->builder->build($call, $data, $scorecard, $figures);
         foreach ($result['discovered'] as $section) {
             $call->reveal($section);

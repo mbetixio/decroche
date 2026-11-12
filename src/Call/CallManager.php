@@ -123,8 +123,10 @@ final readonly class CallManager
 
     /**
      * Hangs up (if still live) and has the coach debrief the call.
+     *
+     * @param \Closure|null $step told each step of the debrief
      */
-    public function finish(Call $call): Call
+    public function finish(Call $call, ?\Closure $step = null): Call
     {
         $this->expire($call);
         if ($call->isLive()) {
@@ -133,7 +135,7 @@ final readonly class CallManager
             $this->calls->save($call);
         }
         if (!$call->isDone()) {
-            $result = $this->coach->debrief($call, $this->clock->now());
+            $result = $this->coach->debrief($call, $this->clock->now(), $step);
             $call->close($result['debrief']->toArray(), $result['score']);
             $this->calls->save($call);
         }

@@ -24,6 +24,7 @@ use App\Form\Model\SituationsData;
 use App\Form\OfferType;
 use App\Form\ScorecardType;
 use App\Form\SituationsType;
+use App\Http\ProgressStream;
 use App\Model\Criterion;
 use App\Onboarding\OnboardingStep;
 use App\Repository\CompanyRepository;
@@ -91,10 +92,23 @@ final class OnboardingController extends AbstractController
     #[Route('/analysis/run', name: 'onboarding_analyze', methods: ['POST'])]
     #[IsGranted('ROLE_MANAGER')]
     #[IsCsrfTokenValid('onboarding-analysis', tokenKey: 'token')]
-    public function analyze(OfferAnalyst $analyst): JsonResponse
+    public function analyze(OfferAnalyst $analyst, Request $request, ProgressStream $progress): Response
     {
         set_time_limit(400);
         $company = $this->companies->get();
+        if (ProgressStream::wanted($request)) {
+            return $progress->response(
+                $request,
+                function (\Closure $step) use ($analyst, $company): string {
+                    $analyst->analyze($company, $step);
+                    $company->reach(OnboardingStep::Offer);
+                    $this->em->flush();
+
+                    return $this->generateUrl('onboarding', ['step' => OnboardingStep::Offer->value]);
+                },
+                fn (\Throwable $e): array => ['error' => $this->translator->trans($e instanceof \InvalidArgumentException ? $e->getMessage() : 'onboarding.analysis.failed')],
+            );
+        }
         try {
             $analyst->analyze($company);
         } catch (\InvalidArgumentException $e) {

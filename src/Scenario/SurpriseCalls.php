@@ -29,12 +29,13 @@ final readonly class SurpriseCalls
      * Draws and writes a surprise call (some fifteen seconds), retrying once with another draw if the model's answer
      * is unusable.
      *
-     * @param string|null $situation a given situation (a mission asks for one); null for a surprise
-     * @param string|null $focus     a criterion of the scorecard to train on (from a debrief); unknown keys are ignored
+     * @param string|null   $situation a given situation (a mission asks for one); null for a surprise
+     * @param string|null   $focus     a criterion of the scorecard to train on (from a debrief); unknown keys are ignored
+     * @param \Closure|null $step      told each step of the drawing and writing
      *
      * @throws ModelException when the model fails twice
      */
-    public function draw(Member $member, ?string $situation = null, ?string $focus = null): Scenario
+    public function draw(Member $member, ?string $situation = null, ?string $focus = null, ?\Closure $step = null): Scenario
     {
         $company = $this->companies->get();
         $criterion = null !== $focus ? ($company->scorecard()[$focus] ?? null) : null;
@@ -48,10 +49,18 @@ final readonly class SurpriseCalls
         }
         $names = array_values(array_unique(array_filter($names)));
 
+        $write = function () use ($company, $target, $situation, $keys, $member, $names, $criterion, $step): Scenario {
+            $draw = $this->drawer->draw($company, $target, $situation, $keys);
+            if (null !== $step) {
+                $step('draw.situation', ['%situation%' => $draw->situation->label]);
+            }
+
+            return $this->writer->surprise($draw, $member, $names, $criterion, $step);
+        };
         try {
-            $scenario = $this->writer->surprise($this->drawer->draw($company, $target, $situation, $keys), $member, $names, $criterion);
+            $scenario = $write();
         } catch (ModelException) {
-            $scenario = $this->writer->surprise($this->drawer->draw($company, $target, $situation, $keys), $member, $names, $criterion);
+            $scenario = $write();
         }
         $scenario->focus = $criterion?->key;
         $this->scenarios->save($scenario);

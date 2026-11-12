@@ -12,6 +12,7 @@ use Symfony\AI\Platform\Message\Message;
 use Symfony\AI\Platform\Message\MessageBag;
 use Symfony\AI\Platform\PlatformInterface;
 use Symfony\AI\Platform\Result\Stream\Delta\TextDelta;
+use Symfony\AI\Platform\Result\ToolCall;
 use Symfony\AI\Platform\StructuredOutput\PlatformSubscriber;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -84,27 +85,39 @@ final readonly class LanguageModel
      *
      * @template T of Output
      *
-     * @param 'coach'|'writer' $agent
-     * @param class-string<T>  $shape
+     * @param 'coach'|'writer'                                      $agent
+     * @param class-string<T>                                       $shape
+     * @param (\Closure(string, array<string, string>=): void)|null $step  told each step as it starts: "<agent>.tool.<tool>", then "<agent>.writing"
      *
      * @return T
      *
      * @throws ModelException when the answer does not fit the shape
      */
-    public function work(string $agent, string $system, string $user, string $shape, float $temperature = 0.7): Output
+    public function work(string $agent, string $system, string $user, string $shape, float $temperature = 0.7, ?\Closure $step = null): Output
     {
         [$worker, $model, $reasoning, $tools] = 'coach' === $agent
             ? [$this->coach, self::name($this->coachModel, 'AI_COACH_MODEL'), $this->coachReasoning, ['previous_debriefs', 'find_in_transcript', 'client_actions', 'read_offer']]
             : [$this->writer, self::name($this->writerModel, 'AI_WRITER_MODEL'), $this->writerReasoning, ['recent_calls', 'read_offer']];
         $notes = '';
         try {
-            $found = $worker->call(
+            $execution = $worker->call(
                 self::bag($system."\n\nFirst, investigate with your tools. Then answer with your findings only, as short notes: what you will use, quoted exactly where it matters. Do not write the final answer yet.", [['role' => 'user', 'content' => $user]]),
                 ['tools' => $tools] + self::options($model, $temperature, $reasoning),
-            )->getContent();
+            );
+            // Each tool the agent really calls is a step the user sees.
+            foreach ($execution as $update) {
+                if (null !== $step && $update instanceof Progress && Progress::STAGE_TOOL_CALL === $update->getStage() && $update->getPayload() instanceof ToolCall) {
+                    $step("{$agent}.tool.".$update->getPayload()->getName());
+                }
+            }
+            $found = $execution->getContent();
             $notes = \is_string($found) ? trim($found) : '';
         } catch (\Throwable) {
             // The investigation failed (a tool error, too many tool calls…): the answer is written without notes.
+        }
+
+        if (null !== $step) {
+            $step("{$agent}.writing");
         }
 
         return $this->answer($model, $system, $user.('' !== $notes ? "\n\nYour notes from your investigation:\n".$notes : ''), $shape, $temperature, $reasoning);

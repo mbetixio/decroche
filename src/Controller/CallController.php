@@ -15,6 +15,7 @@ use App\Entity\Member;
 use App\Entity\Scenario;
 use App\Enum\Speaker;
 use App\Http\OutputBuffers;
+use App\Http\ProgressStream;
 use App\Repository\CallRepository;
 use App\Repository\CompanyRepository;
 use App\Security\Voter\CallVoter;
@@ -158,9 +159,23 @@ final class CallController extends AbstractController
     #[Route('/{id<\d+>}/finish', name: 'call_finish', methods: ['POST'])]
     #[IsGranted(CallVoter::PLAY, 'call')]
     #[IsCsrfTokenValid(new Expression('"call-" ~ args["call"].id'))]
-    public function finish(Call $call): Response
+    public function finish(Call $call, Request $request, ProgressStream $progress): Response
     {
         set_time_limit(300);
+        $show = $this->generateUrl('call_show', ['id' => $call->id]);
+        if (ProgressStream::wanted($request)) {
+            return $progress->response(
+                $request,
+                function (\Closure $step) use ($call, $show): string {
+                    $step('call.hung_up');
+                    $this->calls->finish($call, $step);
+
+                    return $show;
+                },
+                // The call page offers to write the debrief again.
+                fn (): array => ['error' => $this->translator->trans('call.error.debrief_failed'), 'url' => $show],
+            );
+        }
         try {
             $this->calls->finish($call);
         } catch (ModelException|\RuntimeException) {

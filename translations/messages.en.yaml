@@ -106,10 +106,6 @@ onboarding:
     analysis:
         title: 'Analysing'
         lead: 'Décroche is getting to know %company%: a minute or two.'
-        read: 'Reading %site%'
-        offer: 'Writing the offer sheet'
-        clients: 'Finding your typical clients'
-        situations: 'Writing the call situations'
         wait: 'Stay on this page, the next step opens by itself.'
         edit: 'Edit the company'
         failed: 'The analysis failed (the model is unreachable or its answer unusable): try again.'
@@ -423,7 +419,7 @@ play:
     new_call: 'New call'
     adapted: 'Difficulty follows your latest scores.'
     drawing: 'Getting a call ready for you…'
-    drawing_text: 'The situation is drawn and written for you: about fifteen seconds.'
+    drawing_text: 'The situation is drawn and written for you, with the client''s files: a few seconds.'
     draw_failed: 'The call could not be prepared (the model is unreachable): try again.'
     calls: '{0} no calls|{1} 1 call|]1,Inf[ %count% calls'
     average: 'average'
@@ -492,6 +488,8 @@ library:
     or_text: 'The cases below are written by your managers or prepared by you from a real meeting: you know what to expect. To be surprised as in real life, start a new call instead.'
     scenarios: 'The scenarios'
 prepare:
+    writing: 'Writing your rehearsal…'
+    writing_text: 'The client, their hidden brief and their files: a few seconds.'
     title: 'Rehearse a real meeting'
     lead: 'Paste what you know of the prospect: Décroche writes the persona and their hidden brief, then you rehearse.'
     submit: 'Write the rehearsal'
@@ -581,3 +579,28 @@ meta:
     source: 'Source code (AGPL)'
     description: 'Décroche: rehearse your sales calls out loud against an AI client with a hidden brief, then get a debrief graded by a coach.'
     skip: 'Skip to content'
+# The steps of a long piece of work, shown as they start (see App\Http\ProgressStream).
+steps:
+    draw:
+        situation: 'Situation drawn: %situation%'
+    writer:
+        tool:
+            recent_calls: 'Checking your latest calls, to make this one new'
+            read_offer: 'Reading the offer'
+        writing: 'Writing the call and the client’s files'
+    coach:
+        tool:
+            previous_debriefs: 'Reading your earlier debriefs'
+            find_in_transcript: 'Checking your lines word for word'
+            client_actions: 'Looking at what the client did'
+            read_offer: 'Checking your promises against the offer'
+        writing: 'Writing the debrief'
+    call:
+        hung_up: 'Call ended'
+    prepare:
+        reading: 'Reading what you know of the meeting'
+    analysis:
+        site: 'Reading %site%'
+        offer: 'Writing the offer sheet'
+        situations: 'Writing the call situations'
+    start: 'Getting started'

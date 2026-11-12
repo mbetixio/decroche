@@ -106,10 +106,6 @@ onboarding:
     analysis:
         title: 'Analyse en cours'
         lead: 'Décroche découvre %company% : une minute ou deux.'
-        read: 'Lecture de %site%'
-        offer: 'Rédaction de la fiche offre'
-        clients: 'Repérage de vos clients types'
-        situations: 'Écriture des situations d''appel'
         wait: 'Restez sur cette page, la suite s''ouvre toute seule.'
         edit: 'Modifier la société'
         failed: 'L''analyse n''a pas abouti (le modèle est injoignable ou sa réponse inutilisable) : réessayez.'
@@ -423,7 +419,7 @@ play:
     new_call: 'Nouvel appel'
     adapted: 'Difficulté adaptée à vos dernières notes.'
     drawing: 'On vous prépare un appel…'
-    drawing_text: 'La situation est tirée et écrite pour vous : une quinzaine de secondes.'
+    drawing_text: 'La situation est tirée et écrite pour vous, avec les dossiers du client : quelques secondes.'
     draw_failed: 'L''appel n''a pas pu être préparé (le modèle est injoignable) : réessayez.'
     calls: '{0} aucun appel|{1} 1 appel|]1,Inf[ %count% appels'
     average: 'moyenne'
@@ -492,6 +488,8 @@ library:
     or_text: 'Les mises en situation ci-dessous sont écrites par vos managers ou préparées par vous depuis un vrai rendez-vous : vous savez à quoi vous attendre. Pour être surpris comme dans la vraie vie, lancez plutôt un nouvel appel.'
     scenarios: 'Les scénarios'
 prepare:
+    writing: 'On écrit votre répétition…'
+    writing_text: 'Le client, son brief caché et ses dossiers : quelques secondes.'
     title: 'Préparer un vrai rendez-vous'
     lead: 'Collez ce que vous savez du prospect : Décroche écrit l''interlocuteur et son brief caché, puis vous répétez.'
     submit: 'Écrire la répétition'
@@ -581,3 +579,28 @@ meta:
     source: 'Code source (AGPL)'
     description: 'Décroche : entraînez-vous aux appels commerciaux à voix haute face à un client IA au brief caché, puis recevez un débrief noté par un coach.'
     skip: 'Aller au contenu'
+# The steps of a long piece of work, shown as they start (see App\Http\ProgressStream).
+steps:
+    draw:
+        situation: 'Situation tirée : %situation%'
+    writer:
+        tool:
+            recent_calls: 'Lecture de vos derniers appels, pour ne pas se répéter'
+            read_offer: 'Lecture de l’offre'
+        writing: 'Rédaction de l’appel et des dossiers du client'
+    coach:
+        tool:
+            previous_debriefs: 'Lecture de vos débriefs précédents'
+            find_in_transcript: 'Vérification de vos répliques mot pour mot'
+            client_actions: 'Ce qu’a fait le client'
+            read_offer: 'Vos promesses face à l’offre'
+        writing: 'Rédaction du débrief'
+    call:
+        hung_up: 'Appel terminé'
+    prepare:
+        reading: 'Lecture de ce que vous savez du rendez-vous'
+    analysis:
+        site: 'Lecture de %site%'
+        offer: 'Rédaction de la fiche d’offre'
+        situations: 'Rédaction des situations d’appel'
+    start: 'Démarrage'

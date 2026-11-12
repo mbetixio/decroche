@@ -28,18 +28,24 @@ final readonly class OfferAnalyst
     }
 
     /**
-     * The whole analysis (a minute or two).
+     * The whole analysis (a minute or two), told step by step.
+     *
+     * @param \Closure|null $step told each step as it starts
      *
      * @throws \InvalidArgumentException when there is neither a readable site nor a description to work from
      * @throws ModelException            when the model's answer is unusable
      */
-    public function analyze(Company $company): void
+    public function analyze(Company $company, ?\Closure $step = null): void
     {
+        $step ??= static function (): void {};
+        $step('analysis.site', ['%site%' => $company->website ?? '—']);
         $site = null !== $company->website && '' !== $company->website ? $this->site->read($company->website) : '';
         if ('' === trim($site) && mb_strlen(trim($company->about)) < 30) {
             throw new \InvalidArgumentException('company.error.nothing_to_analyze');
         }
+        $step('analysis.offer');
         $this->offer($company, $site);
+        $step('analysis.situations');
         $this->situations($company);
         $company->analyzedAt = $this->clock->now();
     }
