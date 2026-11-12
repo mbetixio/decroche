@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Call\Persona;
 
+use App\Agent\AgentContext;
 use App\Ai\LanguageModel;
 use App\Entity\Call;
 use App\Enum\Speaker;
@@ -19,6 +20,7 @@ final readonly class Persona
         private LanguageModel $model,
         private PersonaPrompt $prompt,
         private CompanyRepository $companies,
+        private AgentContext $context,
     ) {
     }
 
@@ -35,6 +37,8 @@ final readonly class Persona
         foreach ($call->lines() as $line) {
             $messages[] = ['role' => Speaker::Persona === $line->speaker ? 'assistant' : 'user', 'content' => $line->text];
         }
+        // Their tools (files, calendar, memory) work on this call.
+        $this->context->forCall($call);
         $filter = new ReplyFilter($call->scenario->persona()->name);
         $system = $this->prompt->build($call, $this->companies->get(), $now, $note);
         foreach ($this->model->stream($system, $messages, 0.8) as $chunk) {

@@ -35,7 +35,8 @@ final class CoachPromptTest extends TestCase
         self::assertStringContainsString("- rapport: Rapport (builds trust)\n- closing: Closing\n", $prompt);
         self::assertStringContainsString('{"criteria": [{"key": "rapport", "score": 0', $prompt);
         self::assertStringContainsString('the 2 of them', $prompt);
-        self::assertStringContainsString('every text value is written in French', $prompt);
+        self::assertStringContainsString('Every text value is written in French', $prompt);
+        self::assertStringContainsString('previous_debriefs', $prompt);
         self::assertStringContainsString('The seller describes themself this way (fit your advice to their experience and what they sell): Junior seller, sells dev teams.', $prompt);
     }
 

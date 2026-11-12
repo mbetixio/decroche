@@ -193,9 +193,9 @@ final class McpTest extends FunctionalTestCase
         }
 
         ScriptedModel::$unreachable = false;
-        ScriptedModel::$garbled = 2;
         foreach (['new_call' => [], 'prepare_call' => ['prospect' => 'Ana Diaz, Freshcart, wants our rates before Thursday.']] as $tool => $arguments) {
-            ScriptedModel::$garbled = 2;
+            // Each writing: the agent, then the plain answer asked instead; a surprise call is drawn twice.
+            ScriptedModel::$garbled = 4;
             $failed = $this->rpc('tools/call', ['name' => $tool, 'arguments' => (object) $arguments]);
             self::assertStringContainsString('could not be written', $failed['content'][0]['text']);
         }

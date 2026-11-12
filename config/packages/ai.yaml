@@ -1,4 +1,4 @@
-# The language model: any OpenAI-compatible API (DeepSeek through OpenCode Go, OpenAI, Mistral, OpenRouter,
+# The language models: any OpenAI-compatible API (DeepSeek through OpenCode Go, OpenAI, Mistral, OpenRouter,
 # Hugging Face, a local Ollama…), declared as a Symfony AI "generic" platform. See .env for AI_*.
 ai:
     platform:
@@ -10,6 +10,38 @@ ai:
                 model_catalog: 'Symfony\AI\Platform\Bridge\Generic\FallbackModelCatalog'
                 supports_embeddings: false
                 completions_path: '%env(AI_COMPLETIONS_PATH)%'
+
+    # Three agents, each with its tools. The coach and the writer investigate with theirs, then their notes feed a
+    # strict structured answer (see App\Ai\LanguageModel::work()).
+    agent:
+        # The client on the phone: their files, their calendar, their memory of earlier calls with this seller.
+        persona:
+            platform: 'ai.platform.generic.decroche'
+            model: '%env(AI_PERSONA_MODEL)%'
+            max_tool_calls: 3
+            tools:
+                - 'App\Agent\Persona\LookUp'
+                - 'App\Agent\Persona\CheckCalendar'
+                - 'App\Agent\Persona\BookMeeting'
+                - 'App\Agent\Persona\PreviousCalls'
+        # The coach: the seller's earlier debriefs, the exact lines, what the client did, the offer.
+        coach:
+            platform: 'ai.platform.generic.decroche'
+            model: '%env(AI_COACH_MODEL)%'
+            max_tool_calls: 8
+            tools:
+                - 'App\Agent\Coach\PreviousDebriefs'
+                - 'App\Agent\Coach\FindInTranscript'
+                - 'App\Agent\Coach\ClientActions'
+                - 'App\Agent\ReadOffer'
+        # The scenario writer: the seller's latest calls (to write something new) and the offer.
+        writer:
+            platform: 'ai.platform.generic.decroche'
+            model: '%env(AI_WRITER_MODEL)%'
+            max_tool_calls: 5
+            tools:
+                - 'App\Agent\Writer\RecentCalls'
+                - 'App\Agent\ReadOffer'
 
 services:
     Symfony\AI\Platform\Bridge\Generic\FallbackModelCatalog: ~

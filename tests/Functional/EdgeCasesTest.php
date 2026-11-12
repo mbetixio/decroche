@@ -126,7 +126,8 @@ final class EdgeCasesTest extends FunctionalTestCase
     {
         $this->onboardedCompany();
         $this->signIn($this->member());
-        ScriptedModel::$garbled = 1;
+        // The writer agent, then the plain answer asked instead: both unusable.
+        ScriptedModel::$garbled = 2;
 
         $crawler = $this->client->request('GET', '/prepare');
         $this->client->submit($crawler->selectButton('Write the rehearsal')->form(), [

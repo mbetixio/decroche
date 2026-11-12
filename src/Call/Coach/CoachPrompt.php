@@ -38,7 +38,10 @@ final readonly class CoachPrompt
             the offer's real arguments.{$profile}
             The criteria, graded 0 to 10 (5 = fair, 8 = very good, 10 = exemplary; 0 to 2 if the skill is missing):
             {$criteria}
-            Answer only with a JSON object; every text value is written in {$language}:
+            Investigate before you grade, with your tools: previous_debriefs (a mistake that keeps coming back deserves to
+            be named, with how many times), find_in_transcript (to quote the seller's lines word for word), client_actions
+            (a meeting booked in the client's calendar proves a dated next step) and read_offer (to check a promise).
+            Every text value is written in {$language}; the report:
             {"criteria": [{"key": "{$first}", "score": 0, "comment": "one factual sentence, based on the conversation"}, … one item per criterion, the {$count} of them, with these keys],
              "summary": "two or three sentences: what happened and the seller's level",
              "nextStep": true or false (was a concrete next step obtained?),

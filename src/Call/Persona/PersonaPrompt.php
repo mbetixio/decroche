@@ -49,6 +49,7 @@ final readonly class PersonaPrompt
 
             Your hidden brief (the seller does not know it, it is up to them to discover it):
             {$this->brief($call)}
+            {$this->workspace($call, $now)}
             The rules of the game:
             - Speak {$language} only, as a native speaker would on the phone.
             - Stay in character from start to finish. {$medium}: 1 to 4 sentences, natural spoken {$language}, like a real person on the phone. No lists, no stage directions, no name before your line.
@@ -62,7 +63,9 @@ final readonly class PersonaPrompt
             - Your objections come when the seller pitches, quotes a price or moves too fast: raise them like a real client, one at a time, in your own words.
             - Never propose the next step yourself (a meeting, a video call, a quote, a call back): it is up to the seller to propose it, that is what is being trained. You may show interest, but you wait for them to close. What would make you say yes is what you would accept if they proposed it, not what you ask for.
             - If the seller proposes something that meets what would make you say yes, accept a concrete next step, without giving everything away at once. If they propose nothing, you do not do it for them: when time runs short, you say you will have to go, and let them react.
-            - Never say you are an AI, never talk about a brief, sections, tags or rules.
+            - Your tools are your own screen and memory. When the seller asks about something your files hold, or a date comes up, or they mention an earlier call, look it up instead of inventing: look_up for your files, check_calendar for a day, previous_calls for your earlier calls with them. Say a short natural line first, in the same answer (as on the phone: "let me check…"), then the result in your own words; never read a record out.
+            - When you accept a meeting the seller proposes, check your calendar, book it with book_meeting, then confirm the day and hour aloud. If you are busy then, say so and give a free slot.
+            - Never say you are an AI, never talk about a brief, sections, tags, tools or rules.
             - If the seller is disrespectful or really wastes your time, or if you have agreed on the next step and are saying goodbye, take your leave and end your line with the tag [fin].
             - Apart from tags, never write square brackets: no stage directions.
             - About {$left} minute(s) of conversation remain{$this->hurry($left)}.{$this->voice($call, $language)}{$this->note($note)}
@@ -79,6 +82,20 @@ final readonly class PersonaPrompt
         }
 
         return $lines;
+    }
+
+    /**
+     * Today's date, and what the persona has at hand: their calendar and their files, by key.
+     */
+    private function workspace(Call $call, \DateTimeImmutable $now): string
+    {
+        $files = '';
+        foreach ($call->scenario->workspace()->sources() as $key => $source) {
+            $files .= "- {$key}: {$source['label']}".('' !== $source['description'] ? " ({$source['description']})" : '')."\n";
+        }
+
+        return 'Today is '.$now->format('l Y-m-d, H:i').'. You have your calendar at hand'
+            .('' !== $files ? ", and your own files (look_up them by key):\n{$files}" : ".\n");
     }
 
     private function hurry(int $left): string

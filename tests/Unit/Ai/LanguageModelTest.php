@@ -8,43 +8,88 @@ use App\Ai\LanguageModel;
 use App\Ai\ModelException;
 use App\Ai\Output\OfferSheet;
 use PHPUnit\Framework\TestCase;
+use Symfony\AI\Agent\Agent;
+use Symfony\AI\Agent\Toolbox\Toolbox;
+use Symfony\AI\Platform\Result\Stream\Delta\TextDelta;
+use Symfony\AI\Platform\Result\Stream\Delta\ToolCallComplete;
+use Symfony\AI\Platform\Result\StreamResult;
 use Symfony\AI\Platform\Result\TextResult;
+use Symfony\AI\Platform\Result\ToolCall;
+use Symfony\AI\Platform\Result\ToolCallResult;
 use Symfony\AI\Platform\StructuredOutput\PlatformSubscriber;
 use Symfony\AI\Platform\Test\MockPlatformFactory;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
+/**
+ * The agents behind LanguageModel, on a mock platform: the persona streams across a tool call, the writer and the
+ * coach investigate then answer in shape (or answer without notes when the investigation fails), and each model
+ * family gets its own reasoning option.
+ */
 final class LanguageModelTest extends TestCase
 {
-    /** @var list<array{model: string, options: array<string, mixed>}> */
+    /** @var list<array{model: string, payload: array<mixed>|string, options: array<string, mixed>}> */
     private array $calls = [];
 
-    public function testThePersonaStreamsWithItsOwnModelAndLittleReasoning(): void
+    public function testThePersonaStreamsAcrossAToolCall(): void
     {
-        $model = $this->model('Hello there.', persona: 'openai/gpt-oss-120b', personaReasoning: 'none');
+        $model = $this->model(function (array $options, bool $answered): StreamResult {
+            return new StreamResult((static function () use ($answered): \Generator {
+                if ($answered) {
+                    yield new TextDelta('I am free at nine.');
 
-        self::assertSame('Hello there.', implode('', iterator_to_array($model->stream('You play a client.', [['role' => 'user', 'content' => 'Hi']]), false)));
+                    return;
+                }
+                yield new TextDelta('Let me check.');
+                yield new ToolCallComplete([new ToolCall('1', 'calendar', ['day' => 'tuesday'])]);
+            })());
+        }, persona: 'openai/gpt-oss-120b', personaReasoning: 'none');
+
+        self::assertSame('Let me check. I am free at nine.', implode('', iterator_to_array($model->stream('You play a client.', [['role' => 'user', 'content' => 'Tuesday?']]), false)));
         self::assertSame('openai/gpt-oss-120b', $this->calls[0]['model']);
         // gpt-oss cannot reason less than "low".
         self::assertSame('low', $this->calls[0]['options']['reasoning_effort']);
+        self::assertCount(2, $this->calls, 'A second round once the tool answered.');
     }
 
-    public function testTheCoachAnswersInTheShapeOfTheClass(): void
+    public function testAnAgentInvestigatesThenAnswersInShape(): void
     {
-        $model = $this->model((string) json_encode(['name' => 'Acme', 'offer' => 'Dedicated teams.', 'sectors' => ['retail']]), coach: 'deepseek-ai/DeepSeek-V4.1-Flash', coachReasoning: 'medium');
+        $sheet = ['name' => 'Acme', 'offer' => 'Dedicated teams.', 'sectors' => ['retail']];
+        $model = $this->model(static fn (array $options, bool $answered): TextResult|ToolCallResult => match (true) {
+            isset($options[PlatformSubscriber::RESPONSE_FORMAT]) => new TextResult((string) json_encode($sheet)),
+            $answered => new TextResult('Notes: they sell dedicated teams.'),
+            default => new ToolCallResult([new ToolCall('1', 'read_offer', ['topic' => 'teams'])]),
+        }, writer: 'openai/gpt-oss-120b', writerReasoning: 'medium');
 
-        $sheet = $model->structured('You write offer sheets.', 'The company: Acme', OfferSheet::class);
+        $work = $model->work('writer', 'You write offer sheets.', 'The company: Acme', OfferSheet::class);
 
-        self::assertSame(['name' => 'Acme', 'offer' => 'Dedicated teams.', 'sectors' => ['retail']], $sheet->toArray());
-        self::assertSame('deepseek-ai/DeepSeek-V4.1-Flash', $this->calls[0]['model']);
-        // The class went out as a strict JSON schema; DeepSeek keeps thinking at "medium".
-        self::assertSame('json_schema', $this->calls[0]['options']['response_format']['type']);
-        self::assertTrue($this->calls[0]['options']['response_format']['json_schema']['strict']);
-        self::assertArrayNotHasKey('thinking', $this->calls[0]['options']);
+        self::assertSame($sheet, $work->toArray());
+        self::assertCount(3, $this->calls, 'A tool round, the notes, then the answer.');
+        $tools = (string) json_encode($this->calls[0]['options']['tools']);
+        self::assertStringContainsString('read_offer', $tools);
+        self::assertStringNotContainsString('calendar', $tools, 'Only the investigation tools.');
+        self::assertSame('medium', $this->calls[0]['options']['reasoning_effort']);
+        self::assertStringContainsString('Notes: they sell dedicated teams.', (string) json_encode($this->calls[2]['payload']), 'The notes feed the answer.');
+        self::assertTrue($this->calls[2]['options']['response_format']['json_schema']['strict']);
+    }
+
+    public function testWithoutNotesTheAnswerIsWrittenAllTheSame(): void
+    {
+        $model = $this->model(static function (array $options): TextResult {
+            if (!isset($options[PlatformSubscriber::RESPONSE_FORMAT])) {
+                throw new \RuntimeException('The tools are down.');
+            }
+
+            return new TextResult((string) json_encode(['name' => 'Acme', 'offer' => 'Teams.', 'sectors' => []]));
+        }, coach: 'deepseek-ai/DeepSeek-V4.1-Flash', coachReasoning: 'medium');
+
+        self::assertSame('Acme', $model->work('coach', 'You write offer sheets.', 'The company: Acme', OfferSheet::class)->name);
+        // DeepSeek keeps thinking at "medium".
+        self::assertArrayNotHasKey('thinking', $this->calls[1]['options']);
     }
 
     public function testDeepSeekStopsThinkingAtLowReasoning(): void
     {
-        $model = $this->model('Hi.', persona: 'deepseek-ai/DeepSeek-V4.1-Flash', personaReasoning: 'low');
+        $model = $this->model(static fn (): StreamResult => new StreamResult((static fn (): \Generator => yield new TextDelta('Hi.'))()), persona: 'deepseek-ai/DeepSeek-V4.1-Flash', personaReasoning: 'low');
         iterator_to_array($model->stream('You play a client.', []), false);
 
         self::assertSame(['type' => 'disabled'], $this->calls[0]['options']['thinking']);
@@ -52,7 +97,7 @@ final class LanguageModelTest extends TestCase
 
     public function testOtherModelsGetNoReasoningOption(): void
     {
-        $model = $this->model('Hi.', persona: 'mistral-small-latest', personaReasoning: 'high');
+        $model = $this->model(static fn (): StreamResult => new StreamResult((static fn (): \Generator => yield new TextDelta('Hi.'))()), persona: 'mistral-small-latest', personaReasoning: 'high');
         iterator_to_array($model->stream('You play a client.', []), false);
 
         self::assertArrayNotHasKey('reasoning_effort', $this->calls[0]['options']);
@@ -63,26 +108,33 @@ final class LanguageModelTest extends TestCase
     {
         $this->expectException(ModelException::class);
 
-        $this->model('Sorry, I cannot help with that.')->structured('You write offer sheets.', 'The company: Acme', OfferSheet::class);
+        $this->model(static fn (): TextResult => new TextResult('Sorry, I cannot help with that.'))->work('coach', 'You write offer sheets.', 'The company: Acme', OfferSheet::class);
     }
 
     public function testAMissingModelIsSaid(): void
     {
         $this->expectExceptionObject(new ModelException('No model is set: give AI_COACH_MODEL in .env.local.'));
 
-        $this->model('{}', coach: '')->structured('You write offer sheets.', 'The company: Acme', OfferSheet::class);
+        $this->model(static fn (): TextResult => new TextResult('{}'), coach: '')->structured('You write offer sheets.', 'The company: Acme', OfferSheet::class);
     }
 
-    private function model(string $answer, string $persona = 'persona-model', string $coach = 'coach-model', string $personaReasoning = 'low', string $coachReasoning = 'medium'): LanguageModel
+    /**
+     * @param \Closure(array<string, mixed>, bool): (TextResult|StreamResult|ToolCallResult) $answer given the request's options and whether a tool just answered
+     */
+    private function model(\Closure $answer, string $persona = 'persona-model', string $coach = 'coach-model', string $personaReasoning = 'low', string $coachReasoning = 'medium', string $writer = 'writer-model', string $writerReasoning = 'low'): LanguageModel
     {
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber(new PlatformSubscriber());
-        $platform = MockPlatformFactory::createPlatform(function ($model, array|string $payload, array $options) use ($answer): TextResult {
-            $this->calls[] = ['model' => $model->getName(), 'options' => $options];
+        $platform = MockPlatformFactory::createPlatform(function ($model, array|string $payload, array $options) use ($answer): TextResult|StreamResult|ToolCallResult {
+            $this->calls[] = ['model' => $model->getName(), 'payload' => $payload, 'options' => $options];
+            $messages = \is_array($payload) ? ($payload['messages'] ?? []) : [];
+            $last = \is_array($messages) ? end($messages) : null;
 
-            return new TextResult($answer);
+            return $answer($options, \is_array($last) && 'tool' === ($last['role'] ?? null));
         }, eventDispatcher: $dispatcher);
+        $toolbox = new Toolbox([new LanguageModelTestTools()], eventDispatcher: $dispatcher);
+        $agent = static fn (string $model): Agent => new Agent($platform, $model, toolbox: $toolbox, eventDispatcher: $dispatcher);
 
-        return new LanguageModel($platform, $persona, $coach, $personaReasoning, $coachReasoning);
+        return new LanguageModel($platform, $agent($persona), $agent($coach), $agent($writer), $persona, $coach, $writer, $personaReasoning, $coachReasoning, $writerReasoning);
     }
 }

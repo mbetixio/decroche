@@ -37,7 +37,8 @@ final class CallRulesTest extends FunctionalTestCase
 
     public function testADrawRetriesOnceThenSaysTheModelFailed(): void
     {
-        ScriptedModel::$garbled = 1;
+        // The writer agent and its plain fallback both garbled: the draw is made again, and works.
+        ScriptedModel::$garbled = 2;
         $this->draw();
         self::assertResponseIsSuccessful('A garbled answer is written again.');
 
@@ -49,7 +50,7 @@ final class CallRulesTest extends FunctionalTestCase
 
     public function testASituationWithoutObjectivesTakesTheCatalogues(): void
     {
-        $answer = json_decode((string) json_encode(['title' => 'A call', 'context' => 'You call.', 'material' => 'The form.', 'goal' => 'Book.', 'objectives' => [], 'persona' => ['name' => 'Ana Diaz', 'gender' => 'f', 'role' => 'COO', 'company' => 'Freshcart', 'personality' => 'Busy.'], 'opening' => 'Ana speaking.', 'brief' => ['setup' => 'Busy.', 'budget' => '30k', 'pain' => 'Lost orders.', 'decision' => 'Her.', 'objections' => 'Price.', 'yes' => 'A workshop.', 'secret' => 'A rival quote.']]), true);
+        $answer = json_decode((string) json_encode(['title' => 'A call', 'context' => 'You call.', 'material' => 'The form.', 'goal' => 'Book.', 'objectives' => [], 'persona' => ['name' => 'Ana Diaz', 'gender' => 'f', 'role' => 'COO', 'company' => 'Freshcart', 'personality' => 'Busy.'], 'opening' => 'Ana speaking.', 'brief' => ['setup' => 'Busy.', 'budget' => '30k', 'pain' => 'Lost orders.', 'decision' => 'Her.', 'objections' => 'Price.', 'yes' => 'A workshop.', 'secret' => 'A rival quote.'], 'workspace' => ScriptedModel::workspace()]), true);
         ScriptedModel::$answers['You write phone call situations'] = (string) json_encode($answer);
 
         $scenario = $this->service(SurpriseCalls::class)->draw($this->me, 'price_request');
