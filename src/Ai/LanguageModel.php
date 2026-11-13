@@ -104,10 +104,15 @@ final readonly class LanguageModel
                 self::bag($system."\n\nFirst, investigate with your tools. Then answer with your findings only, as short notes: what you will use, quoted exactly where it matters. Do not write the final answer yet.", [['role' => 'user', 'content' => $user]]),
                 ['tools' => $tools] + self::options($model, $temperature, $reasoning),
             );
-            // Each tool the agent really calls is a step the user sees.
+            // Each tool the agent really calls is a step the user sees, once: checking ten quotes is one step.
+            $told = [];
             foreach ($execution as $update) {
                 if (null !== $step && $update instanceof Progress && Progress::STAGE_TOOL_CALL === $update->getStage() && $update->getPayload() instanceof ToolCall) {
-                    $step("{$agent}.tool.".$update->getPayload()->getName());
+                    $key = "{$agent}.tool.".$update->getPayload()->getName();
+                    if (!isset($told[$key])) {
+                        $told[$key] = true;
+                        $step($key);
+                    }
                 }
             }
             $found = $execution->getContent();

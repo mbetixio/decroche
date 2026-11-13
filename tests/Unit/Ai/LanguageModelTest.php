@@ -72,6 +72,25 @@ final class LanguageModelTest extends TestCase
         self::assertTrue($this->calls[2]['options']['response_format']['json_schema']['strict']);
     }
 
+    public function testEachToolIsOneStepHoweverOftenItIsCalled(): void
+    {
+        $rounds = 0;
+        $model = $this->model(static function (array $options, bool $answered) use (&$rounds): TextResult|ToolCallResult {
+            if (isset($options[PlatformSubscriber::RESPONSE_FORMAT])) {
+                return new TextResult((string) json_encode(['name' => 'Acme', 'offer' => 'Teams.', 'sectors' => []]));
+            }
+
+            // The offer read three times, over two rounds: one step.
+            return ++$rounds <= 2 ? new ToolCallResult([new ToolCall('a'.$rounds, 'read_offer', ['topic' => 'teams']), new ToolCall('b'.$rounds, 'read_offer', ['topic' => 'prices'])]) : new TextResult('Notes.');
+        });
+        $steps = [];
+        $model->work('writer', 'You write offer sheets.', 'The company: Acme', OfferSheet::class, step: static function (string $key) use (&$steps): void {
+            $steps[] = $key;
+        });
+
+        self::assertSame(['writer.tool.read_offer', 'writer.writing'], $steps);
+    }
+
     public function testWithoutNotesTheAnswerIsWrittenAllTheSame(): void
     {
         $model = $this->model(static function (array $options): TextResult {
