@@ -49,20 +49,19 @@ sheet and 14–18 call situations specific to its business, in English or French
 <td width="50%"><img src="docs/screenshots/briefing.png" alt="The briefing before the call"><br><sub><b>Briefing</b> — the situation, the document, the objectives; the person stays in view.</sub></td>
 </tr>
 <tr>
-<td><img src="docs/screenshots/debrief.png" alt="The graded debrief"><br><sub><b>Debrief</b> — the score, the criteria, the objectives, the call in figures.</sub></td>
-<td><img src="docs/screenshots/team.png" alt="The team board"><br><sub><b>Team</b> — each seller's difficulty, average, trend and weak spot; missions.</sub></td>
+<td width="50%"><img src="docs/screenshots/debrief.png" alt="The graded debrief"><br><sub><b>Debrief</b> — the score, the criteria, the objectives, the call in figures.</sub></td>
+<td width="50%"><img src="docs/screenshots/debrief-agent.png" alt="What the client did during the call, and their files"><br><sub><b>The client's tools</b> — what they looked up and booked during the call, and the files they had at hand.</sub></td>
 </tr>
 <tr>
-<td><img src="docs/screenshots/debrief-agent.png" alt="What the client did during the call, and their files"><br><sub><b>The client's tools</b> — what they looked up and booked during the call, and the files they had at hand.</sub></td>
-<td><img src="docs/screenshots/phone.png" alt="The phone screen during a practice call"><br><sub><b>On the phone</b> — the client answers out loud, in their own words, from their own files.</sub></td>
+<td width="50%"><img src="docs/screenshots/team.png" alt="The team board"><br><sub><b>Team</b> — each seller's difficulty, average, trend and weak spot; missions.</sub></td>
+<td width="50%"><img src="docs/screenshots/progress.png" alt="A seller's progress"><br><sub><b>Progress</b> — scores over time, criteria, results by situation.</sub></td>
 </tr>
 <tr>
-<td><img src="docs/screenshots/progress.png" alt="A seller's progress"><br><sub><b>Progress</b> — scores over time, criteria, results by situation.</sub></td>
-<td><img src="docs/screenshots/onboarding.png" alt="The first onboarding step"><br><sub><b>Onboarding</b> — the instance sets itself up from the company's website.</sub></td>
+<td width="50%"><img src="docs/screenshots/onboarding.png" alt="The first onboarding step"><br><sub><b>Onboarding</b> — the instance sets itself up from the company's website.</sub></td>
+<td width="50%"><img src="docs/screenshots/sign-in.png" alt="The sign-in page"><br><sub><b>Sign-in</b> — a practice call writes itself while you sign in.</sub></td>
 </tr>
 <tr>
-<td><img src="docs/screenshots/sign-in.png" alt="The sign-in page"><br><sub><b>Sign-in</b> — a practice call writes itself while you sign in.</sub></td>
-<td><img src="docs/screenshots/debrief-dark.png" alt="The debrief in the dark theme"><br><sub><b>Dark theme</b> — every screen, light or dark, English or French.</sub></td>
+<td colspan="2"><img src="docs/screenshots/debrief-dark.png" alt="The debrief in the dark theme"><br><sub><b>Dark theme</b> — every screen, light or dark, English or French.</sub></td>
 </tr>
 </table>
 
