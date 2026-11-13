@@ -551,7 +551,7 @@
     personality: 'Énervé au début, il parle vite et coupe la parole. Il se calme quand on reconnaît le problème sans se justifier.'
   opening: "Bon, je vais être direct : la livraison de vendredi, c'est la deuxième fois en deux mois. Mon CEO m'a demandé si on devait changer de prestataire."
   brief:
-    budget: 'Le contrat actuel est de 38 000 € par mois ; le CEO veut le réduire de 15 % au renouvellement.'
+    budget: 'Le contrat actuel est de 18 000 € par mois ; le CEO veut le réduire de 15 % au renouvellement.'
     pain: "Il doit présenter la nouvelle fonctionnalité de téléconsultation à un salon dans six semaines ; s'il arrive sans rien, c'est sa tête qui saute."
     decision: 'Le CEO, Sophie Brun, décide du renouvellement ; Thomas a son oreille si on lui donne de quoi la rassurer.'
     objections: "« Votre lead dev n'est plus joignable après 16 h à cause du décalage horaire. » « Vous nous facturez des jours de réunion. » « Un concurrent nous propose moins cher. »"
@@ -688,7 +688,7 @@
             when: '2025-12-01'
             details:
               - { name: prestataire, value: Etixio }
-              - { name: 'montant mensuel', value: '38 000 €' }
+              - { name: 'montant mensuel', value: '18 000 €' }
               - { name: engagement, value: '12 mois, reconduction tacite' }
               - { name: équipe, value: '4 personnes dédiées' }
               - { name: 'échéance renouvellement', value: '2026-01-31' }
@@ -714,9 +714,9 @@
             when: '2024-12-01'
             details:
               - { name: prestataire, value: Etixio }
-              - { name: 'montant mensuel', value: '34 000 €' }
+              - { name: 'montant mensuel', value: '16 000 €' }
               - { name: engagement, value: '12 mois' }
-            note: "Premier contrat. Passage à 38 000 €/mois en 2025 avec l'équipe dédiée."
+            note: "Premier contrat. Passage à 18 000 €/mois en 2025 avec l'équipe dédiée."
       -
         key: notes_crm
         label: 'Notes CRM'
@@ -729,7 +729,7 @@
               - { name: rédacteur, value: 'Thomas Girard' }
               - { name: destinataire, value: 'Sophie Brun' }
               - { name: décision, value: 'objectif -15 % au renouvellement' }
-            note: "Sophie veut ramener le contrat à 32 300 €/mois. Argument : retards répétés et facturation de jours de réunion. Je pense qu'on peut obtenir un geste sans casser la relation, l'équipe Etixio reste la seule à connaître notre code."
+            note: "Sophie veut ramener le contrat à 15 300 €/mois. Argument : retards répétés et facturation de jours de réunion. Je pense qu'on peut obtenir un geste sans casser la relation, l'équipe Etixio reste la seule à connaître notre code."
           -
             title: 'Compte rendu — réunion de cadrage téléconsultation'
             when: '2026-10-08'
@@ -767,9 +767,9 @@
             when: '2026-11-06'
             details:
               - { name: concurrent, value: DevFactory }
-              - { name: proposition, value: 'équipe dédiée à 31 000 €/mois' }
+              - { name: proposition, value: 'équipe dédiée à 14 000 €/mois' }
               - { name: statut, value: 'proposition reçue, non signée' }
-            note: 'DevFactory nous propose 31 000 €/mois. Moins cher, mais ils ne connaissent pas notre codebase. À utiliser comme levier de négociation, pas comme plan de secours.'
+            note: 'DevFactory nous propose 14 000 €/mois. Moins cher, mais ils ne connaissent pas notre codebase. À utiliser comme levier de négociation, pas comme plan de secours.'
           -
             title: "Note interne — retour d'expérience support"
             when: '2026-11-15'
@@ -836,7 +836,7 @@
   type: negotiation
   difficulty: 3
   minutes: 12
-  context: 'Vous avez remis une proposition pour une équipe dédiée de cinq personnes (développeurs, QA, chef de projet) à un éditeur de logiciel de logistique, à 52 000 € par mois. La directrice des achats vous rappelle pour « finaliser ».'
+  context: 'Vous avez remis une proposition pour une équipe dédiée de cinq personnes (développeurs, QA, chef de projet) à un éditeur de logiciel de logistique, à 23 000 € par mois. La directrice des achats vous rappelle pour « finaliser ».'
   goal: 'Conclure sans brader : préserver la marge en échangeant toute concession contre une contrepartie.'
   persona:
     name: 'Nadia Benali'
@@ -845,11 +845,11 @@
     personality: "Acheteuse aguerrie, calme et polie, elle utilise le silence et l'ancrage. Elle respecte ceux qui tiennent leurs positions avec des arguments."
   opening: "Votre proposition plaît aux équipes techniques. Mais je ne peux pas la signer à ce prix : il me faut 20 % de moins, sinon on part avec l'autre finaliste."
   brief:
-    budget: "Le budget validé est de 47 000 € par mois ; elle a une marge de manœuvre jusqu'à 50 000 € si la durée d'engagement monte à 18 mois."
+    budget: "Le budget validé est de 20 000 € par mois ; elle a une marge de manœuvre jusqu'à 22 000 € si la durée d'engagement monte à 18 mois."
     pain: "L'autre finaliste est moins cher mais ne peut démarrer que dans trois mois ; le directeur technique veut démarrer avant la fin du trimestre."
     decision: "Elle signe ; mais le directeur technique, Paul Ader, a déjà dit qu'il préférait Etixio, et il a du poids."
     objections: "« L'autre finaliste, en nearshore au Maroc, est 18 % moins cher et plus proche. » « Pourquoi un chef de projet à temps plein ? » « Vos tarifs augmentent chaque année. »"
-    'yes': "Un prix sous 50 000 € en échange d'un engagement de 18 mois, une révision tarifaire plafonnée, et un démarrage ferme dans les six semaines."
+    'yes': "Un prix sous 22 000 € en échange d'un engagement de 18 mois, une révision tarifaire plafonnée, et un démarrage ferme dans les six semaines."
     secret: "Son objectif annuel est mesuré sur le pourcentage de remise obtenu, pas sur le montant : une remise affichée sur une durée plus longue l'arrange."
   workspace:
     calendar:
@@ -924,9 +924,9 @@
             when: '2026-11-18'
             details:
               - { name: Fournisseur, value: Etixio }
-              - { name: 'Proposition en cours', value: '5 profils dédiés (3 dev, 1 QA, 1 chef de projet) — 52 000 €/mois' }
-              - { name: 'Budget validé', value: '47 000 €/mois' }
-              - { name: 'Marge discrétionnaire', value: "jusqu'à 50 000 €/mois si engagement 18 mois" }
+              - { name: 'Proposition en cours', value: '5 profils dédiés (3 dev, 1 QA, 1 chef de projet) — 23 000 €/mois' }
+              - { name: 'Budget validé', value: '20 000 €/mois' }
+              - { name: 'Marge discrétionnaire', value: "jusqu'à 22 000 €/mois si engagement 18 mois" }
               - { name: 'Finaliste alternatif', value: 'MarocSkills (nearshore, Maroc) — 18 % moins cher, démarrage à 3 mois' }
               - { name: Statut, value: 'Appel de finalisation prévu avec Etixio' }
             note: 'Paul Ader (DT) a indiqué sa préférence pour Etixio. Démarrage impératif avant fin du trimestre. Arbitrage prévu le 18/11 à 15h00.'
@@ -1008,7 +1008,7 @@
             details:
               - { name: De, value: contact@etixio.fr }
               - { name: À, value: n.benali@logistiq.fr }
-              - { name: Objet, value: 'Proposition 5 profils à 52 000 €/mois' }
+              - { name: Objet, value: 'Proposition 5 profils à 23 000 €/mois' }
             note: '« Bonjour Madame Benali, suite à notre échange, vous trouverez notre proposition pour une équipe dédiée de cinq personnes. Nous restons à votre disposition pour finaliser. »'
           -
             title: 'Point planning démarrage'
@@ -1705,7 +1705,7 @@
     personality: "Cordial, prudent, il dit « oui mais » à tout. Il n'aime pas qu'on le pousse et apprécie qu'on l'aide à décider."
   opening: 'Écoutez, la proposition est bien, vraiment. Mais je préfère attendre un peu, peut-être en septembre. Rien ne presse, si ?'
   brief:
-    budget: "Le budget de 27 000 € par mois est validé par le conseil d'administration jusqu'au 30 juin ; après, il faudra le revoter."
+    budget: "Le budget de 13 000 € par mois est validé par le conseil d'administration jusqu'au 30 juin ; après, il faudra le revoter."
     pain: "Sans les nouveaux développements, le lancement de l'espace propriétaire prévu en octobre est compromis, et un concurrent lance le même service."
     decision: "C'est lui qui signe. Mais son directeur des opérations, Luc, craint que l'équipe externe « prenne la place » de ses deux développeurs internes."
     objections: "« Ce n'est pas le bon moment. » « Mes équipes ne sont pas prêtes à travailler avec des développeurs à Madagascar. » « Je veux être sûr que ça ne déstabilise personne. »"
@@ -1787,7 +1787,7 @@
             title: 'BUD-2026-07 — Enveloppe renfort développement produit'
             when: '2026-06-30'
             details:
-              - { name: montant_mensuel, value: '27 000 €' }
+              - { name: montant_mensuel, value: '13 000 €' }
               - { name: périmètre, value: 'Équipe externe dédiée — 3 développeurs' }
               - { name: validé_par, value: "Conseil d'administration" }
               - { name: échéance, value: '30 juin 2026' }
@@ -1807,7 +1807,7 @@
             details:
               - { name: consommé, value: '0 €' }
               - { name: engagé, value: '0 €' }
-              - { name: disponible, value: "27 000 €/mois jusqu'au 30 juin 2026" }
+              - { name: disponible, value: "13 000 €/mois jusqu'au 30 juin 2026" }
             note: 'Aucun engagement pris à ce jour sur cette enveloppe.'
       -
         key: suivi_projet

@@ -469,7 +469,7 @@
     personality: 'Angry at first, he talks fast and cuts you off. He calms down when the problem is acknowledged without excuses.'
   opening: "Right, I'll be direct: Friday's delivery is the second slip in two months. My CEO asked me whether we should change vendors."
   brief:
-    budget: 'The current contract is €38,000 a month; the CEO wants it cut by 15% at renewal.'
+    budget: 'The current contract is €18,000 a month; the CEO wants it cut by 15% at renewal.'
     pain: 'He has to present the new teleconsultation feature at a trade show in six weeks; if he shows up empty-handed, his head is on the block.'
     decision: "The CEO, Sophie Brun, decides on the renewal; Thomas has her ear if he's given something to reassure her with."
     objections: "'Your lead dev is unreachable after 4 p.m. because of the time difference.' 'You bill us for meeting days.' 'A competitor is offering us a lower price.'"
@@ -548,7 +548,7 @@
             when: '2025-12-01'
             details:
               - { name: Reference, value: MSA-2025-118 }
-              - { name: 'Monthly fee', value: '€38,000' }
+              - { name: 'Monthly fee', value: '€18,000' }
               - { name: 'Dedicated team', value: '4 people (1 lead dev, 2 devs, 1 QA)' }
               - { name: 'Renewal date', value: '2027-01-31' }
               - { name: 'Notice period', value: '60 days' }
@@ -558,8 +558,8 @@
             when: '2026-11-10'
             details:
               - { name: Author, value: 'Sophie Brun, CEO' }
-              - { name: Target, value: '15% reduction on €38,000/month' }
-              - { name: 'Target monthly fee', value: '€32,300' }
+              - { name: Target, value: '15% reduction on €18,000/month' }
+              - { name: 'Target monthly fee', value: '€15,300' }
               - { name: Constraint, value: 'No reduction in team size without written justification' }
             note: 'Sophie wants a defensible number before the steering committee on 27 November. Thomas must bring something concrete.'
           -
@@ -567,16 +567,16 @@
             when: '2026-10-31'
             details:
               - { name: 'Invoice number', value: ETX-2026-1044 }
-              - { name: Amount, value: '€38,000' }
+              - { name: Amount, value: '€18,000' }
               - { name: 'Line item', value: 'Dedicated team - monthly' }
-              - { name: 'Line item', value: 'Meeting days billed: 4 x €1,200 = €4,800' }
+              - { name: 'Line item', value: 'Meeting days billed: 4 x €200 = €800' }
             note: 'Thomas flagged the meeting-day billing as a recurring irritation.'
           -
             title: 'Competitor proposal - received by Thomas'
             when: '2026-11-05'
             details:
               - { name: Vendor, value: NordSoft }
-              - { name: 'Monthly fee', value: '€31,000' }
+              - { name: 'Monthly fee', value: '€14,000' }
               - { name: Team, value: '3 people, nearshore' }
               - { name: Note, value: 'No healthcare-specific references provided' }
             note: 'Thomas has not shared this with Etixio yet. Used as leverage in negotiation.'
@@ -666,7 +666,7 @@
   type: negotiation
   difficulty: 3
   minutes: 12
-  context: "You've submitted a proposal for a dedicated team of five (developers, QA, project manager) to a logistics software vendor, at €52,000 a month. Their head of procurement is calling you back to 'finalize.'"
+  context: "You've submitted a proposal for a dedicated team of five (developers, QA, project manager) to a logistics software vendor, at €23,000 a month. Their head of procurement is calling you back to 'finalize.'"
   goal: 'Close without giving it away: protect the margin by trading every concession for something in return.'
   persona:
     name: 'Nadia Benali'
@@ -675,11 +675,11 @@
     personality: 'A seasoned buyer, calm and polite, she uses silence and anchoring. She respects those who hold their positions with arguments.'
   opening: "Your proposal appeals to the technical teams. But I can't sign it at this price: I need 20% less, or we go with the other finalist."
   brief:
-    budget: 'The approved budget is €47,000 a month; she has room to go up to €50,000 if the commitment term goes to 18 months.'
+    budget: 'The approved budget is €20,000 a month; she has room to go up to €22,000 if the commitment term goes to 18 months.'
     pain: "The other finalist is cheaper but can't start for three months; the CTO wants to start before the end of the quarter."
     decision: 'She signs; but the CTO, Paul Ader, has already said he prefers Etixio, and he carries weight.'
     objections: "'The other finalist, nearshore in Morocco, is 18% cheaper and closer.' 'Why a full-time project manager?' 'Your rates go up every year.'"
-    'yes': 'A price under €50,000 in exchange for an 18-month commitment, a capped rate review, and a firm start within six weeks.'
+    'yes': 'A price under €22,000 in exchange for an 18-month commitment, a capped rate review, and a firm start within six weeks.'
     secret: 'Her annual objective is measured on the discount percentage she obtains, not the amount: a discount shown over a longer term suits her.'
   workspace:
     calendar:
@@ -747,13 +747,13 @@
             details:
               - { name: vendor, value: Etixio }
               - { name: scope, value: '5 FTE dedicated: 3 developers, 1 QA, 1 project manager' }
-              - { name: proposal_monthly_eur, value: '52000' }
+              - { name: proposal_monthly_eur, value: '23000' }
               - { name: term_months, value: '12' }
-              - { name: target_monthly_eur, value: '47000' }
-              - { name: ceiling_monthly_eur, value: '50000' }
+              - { name: target_monthly_eur, value: '20000' }
+              - { name: ceiling_monthly_eur, value: '22000' }
               - { name: target_discount_pct, value: 20% }
               - { name: status, value: 'Open — call-back scheduled 26/11 11:00' }
-            note: "Anchor at 20% reduction. Floor is 47k; can go to 50k if term extends to 18 months. Discount % is the metric that counts, so spread any concession over a longer term. Do not reveal budget envelope or Paul's preference."
+            note: "Anchor at 20% reduction. Floor is 20k; can go to 22k if term extends to 18 months. Discount % is the metric that counts, so spread any concession over a longer term. Do not reveal budget envelope or Paul's preference."
           -
             title: 'NEG-2026-039 — TMS licence renewal (incumbent)'
             when: '2026-11-19'
@@ -792,12 +792,12 @@
             title: 'BL-IT-07 — Dedicated development team (external)'
             when: '2026-11-18'
             details:
-              - { name: approved_monthly_eur, value: '47000' }
+              - { name: approved_monthly_eur, value: '20000' }
               - { name: annual_eur, value: '564000' }
               - { name: contingency_pct, value: 6% }
               - { name: owner, value: 'Nadia Benali' }
               - { name: status, value: 'Approved in budget committee 18/11' }
-            note: 'Approved monthly envelope is 47,000. Contingency of 6% available (~2,820/month) only with CFO sign-off. Do not state the ceiling as a budget figure.'
+            note: 'Approved monthly envelope is 20,000. Contingency of 6% available (~1,200/month) only with CFO sign-off. Do not state the ceiling as a budget figure.'
           -
             title: 'BL-IT-11 — Nearshore outsourcing pilot'
             when: '2026-11-18'
@@ -1450,7 +1450,7 @@
     personality: "Cordial, cautious, he says 'yes, but' to everything. He doesn't like being pushed and appreciates being helped to decide."
   opening: "Listen, the proposal is good, really. But I'd rather wait a bit, maybe until September. There's no rush, is there?"
   brief:
-    budget: 'The €27,000-a-month budget is approved by the board until June 30; after that, it will have to be voted on again.'
+    budget: 'The €13,000-a-month budget is approved by the board until June 30; after that, it will have to be voted on again.'
     pain: 'Without the new development work, the launch of the owner portal planned for October is compromised, and a competitor is launching the same service.'
     decision: "He's the one who signs. But his head of operations, Luc, fears the external team will 'take the place' of his two in-house developers."
     objections: "'It's not the right time.' 'My teams aren't ready to work with developers in Madagascar.' 'I want to be sure it doesn't destabilize anyone.'"
@@ -1533,7 +1533,7 @@
             when: '2026-11-27'
             details:
               - { name: Référence, value: OPP-2026-147 }
-              - { name: Montant, value: '27 000 €/mois' }
+              - { name: Montant, value: '13 000 €/mois' }
               - { name: Étape, value: 'Négociation — signature en attente (CEO)' }
               - { name: Décideur, value: 'Olivier Fabre, CEO' }
               - { name: 'Date de clôture prévue', value: '2026-11-30' }
@@ -1597,7 +1597,7 @@
             when: ''
             details:
               - { name: Référence, value: FAC-2026-311 }
-              - { name: Montant, value: '27 000 €' }
+              - { name: Montant, value: '13 000 €' }
               - { name: Statut, value: 'En attente de bon de commande' }
               - { name: Échéance, value: 'À réception de la signature' }
             note: 'Facture préparée mais non émise : la direction financière attend la signature du CEO.'
@@ -1629,7 +1629,7 @@
             when: '2026-11-18'
             details:
               - { name: Auteur, value: 'Direction financière' }
-              - { name: 'Budget validé', value: "27 000 €/mois jusqu'au 2026-06-30" }
+              - { name: 'Budget validé', value: "13 000 €/mois jusqu'au 2026-06-30" }
               - { name: Au-delà, value: 'Nouveau vote du conseil requis' }
               - { name: Statut, value: 'Enveloppe confirmée par le conseil' }
             note: "L'enveloppe est disponible. Toute prolongation au-delà du 30 juin devra être représentée au conseil."
