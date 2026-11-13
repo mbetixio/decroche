@@ -30,6 +30,8 @@ final class EdgeTtsSynthesizerTest extends TestCase
             # Writes "MP3 <text>" to the file after --write-media; with "fail" in ./mode it exits in error, with "empty" it
             # writes nothing.
             mode=$(cat "$(dirname "$0")/mode" 2>/dev/null); out=""; text=""
+            # "flaky": the first try fails, the next works.
+            if [ "$mode" = "flaky" ]; then echo ok > "$(dirname "$0")/mode"; exit 1; fi
             while [ $# -gt 0 ]; do
                 case "$1" in
                     --write-media) out="$2"; shift ;;
@@ -84,6 +86,15 @@ final class EdgeTtsSynthesizerTest extends TestCase
 
         $this->expectException(SynthesisException::class);
         $tts->speak('Third line.', 'en-US-AvaNeural', new Prosody());
+    }
+
+    public function testARefusedSynthesisIsTriedOnceMore(): void
+    {
+        $this->mode('flaky');
+        $synthesis = $this->synthesizer()->start('Try again.', 'en-US-AvaNeural', new Prosody());
+        $synthesis->wait();
+
+        self::assertSame('MP3 Try again.', $synthesis->audio());
     }
 
     public function testTheCacheIsPrunedNowAndThen(): void
