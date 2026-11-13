@@ -146,7 +146,12 @@ final readonly class CallTools
         try {
             $turn = $this->calls->say($current, $message);
         } catch (CallException $e) {
-            throw new ToolCallException($this->translator->trans($e->getMessage(), domain: 'messages', locale: 'en').($current->isLive() ? '' : ' Debrief it with hang_up.'));
+            // What to do next depends on where the call stands: waiting for its debrief, or already closed.
+            throw new ToolCallException($this->translator->trans($e->getMessage(), domain: 'messages', locale: 'en').match ($current->status) {
+                CallStatus::Live => '',
+                CallStatus::Debriefing => ' Debrief it with hang_up.',
+                CallStatus::Done, CallStatus::Abandoned => ' Start another one with new_call.',
+            });
         }
 
         return [

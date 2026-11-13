@@ -165,6 +165,10 @@ final class McpTest extends FunctionalTestCase
         self::assertTrue($refused['isError']);
         self::assertStringContainsString('hang_up', $refused['content'][0]['text']);
         self::assertStringContainsString('Orders are lost', $this->tool('debrief', ['call' => $started['call']])['html']);
+        // Once debriefed, the latest call is closed: a new line points to a new call, not to hang_up.
+        $closed = $this->rpc('tools/call', ['name' => 'reply', 'arguments' => (object) ['message' => 'Hello again?']]);
+        self::assertTrue($closed['isError']);
+        self::assertStringContainsString('new_call', $closed['content'][0]['text']);
 
         $other = $this->rpc('tools/call', ['name' => 'debrief', 'arguments' => (object) ['call' => 9999]]);
         self::assertStringContainsString('No call #9999 in your name.', $other['content'][0]['text']);
