@@ -37,3 +37,6 @@
 !/.env
 !/.env.dev
 !/.env.test
+
+# macOS folder metadata
+.DS_Store
