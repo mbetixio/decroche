@@ -39,6 +39,7 @@ final readonly class WorkspaceWriter
             You prepare a role-play to train the sellers of {$company->name}: a simulated client will look things up in
             their own files and calendar during the call. Write that workspace, true to who they are and to the
             situation, consistent with their hidden brief. Every text value is written in {$company->language->englishName()}.
+            {$this->money($company->offer)}
             The workspace: {$this->hint()}
             PROMPT;
         $user = "The client: {$persona->name}, {$persona->role} at {$persona->company}. {$persona->personality}\n"
@@ -54,6 +55,14 @@ final readonly class WorkspaceWriter
      * The persona's own systems, which they consult during the call with their tools: generic records, so that any
      * business fits (a shop's stock, a software firm's tickets, a factory's suppliers…).
      */
+    /**
+     * The offer, for the amounts in the files to match it (see ScenarioWriter::MONEY).
+     */
+    private function money(string $offer): string
+    {
+        return "The offer the seller sells, for reference:\n{$offer}\n".ScenarioWriter::MONEY;
+    }
+
     public function hint(): string
     {
         $from = $this->clock->now()->modify('+1 weekday');

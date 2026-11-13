@@ -26,6 +26,9 @@ use Psr\Clock\ClockInterface;
  */
 final readonly class ScenarioWriter
 {
+    /** Figures that make sense for what the company sells: no onshore rates for an offshore offer. */
+    public const string MONEY = "Every amount (budgets, rates, current costs, competitors' quotes) must be consistent with the prices and the positioning of this offer: when the offer gives prices, they are the reference; an offshore or low-cost offer is far cheaper than local providers, and the client's budget for it is sized accordingly.";
+
     public function __construct(
         private LanguageModel $model,
         private CompanyRepository $companies,
@@ -146,7 +149,8 @@ final readonly class ScenarioWriter
 
     private function offer(Company $company): string
     {
-        return "The offer of {$company->name}, to be respected (situations, needs and objections must match what {$company->name} really sells):\n{$company->offer}";
+        return "The offer of {$company->name}, to be respected (situations, needs and objections must match what {$company->name} really sells):\n{$company->offer}\n"
+            .self::MONEY;
     }
 
     /**

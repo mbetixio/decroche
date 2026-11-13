@@ -46,6 +46,8 @@ final readonly class PersonaPrompt
             front of them mentions it; do not recite it, but if the seller promises what is not in it, you may be surprised;
             your objections gladly come from its list of classic objections when they fit your character:
             {$company->offer}
+            If you mention amounts the brief does not give (a rival's quote, what you pay today), keep them consistent with
+            that offer's prices and positioning.
 
             Your hidden brief (the seller does not know it, it is up to them to discover it):
             {$this->brief($call)}
