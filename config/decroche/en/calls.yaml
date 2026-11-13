@@ -167,128 +167,192 @@ calls:
     lines:
       -
         speaker: seller
-        text: 'Hello, I am calling from Etixio about our offshore teams.'
-        second: 1
-        voice_ms: 4565
+        text: 'Hello, I am calling from Etixio about our offshore teams. We are the best on the market, really, and we are cheap. So, do you want a quote?'
+        second: 2
+        voice_ms: 8340
       -
         speaker: persona
-        text: 'Nice to hear from you! We’ve been pretty busy with those new IoT sensors on the CNCs – are you seeing a lot of interest from other manufacturers these days?'
-        second: 1
+        text: "Oh, hello! Well, that's quite a pitch first thing on a Saturday morning. I've got my coffee in hand, so I'm listening – but before we talk quotes, what's actually prompting the call? Are you following up on the maintenance work your team's been doing for us?"
+        second: 14
       -
         speaker: seller
-        text: 'We are the best on the market, really, and we are cheap.'
-        second: 1
-        voice_ms: 4520
+        text: 'No, no, this is a new offer, not about that work. We are the best on the market, really, and we are cheap. So, do you want a quote?'
+        second: 34
+        voice_ms: 7860
       -
         speaker: persona
-        text: 'That’s good to know – quality is really what we care about on the shop floor. How do you make sure the code stays solid when you’re working offshore?'
-        second: 2
+        text: "Right, so you're not the account team I usually deal with, then. Honestly, \"cheap\" makes me a bit nervous – I've been around long enough to know the cheapest option usually costs you double somewhere down the line. What is it you're actually offering, and why do you think it fits us?"
+        second: 45
       -
         speaker: seller
-        text: 'So, do you want a quote?'
-        second: 2
-        voice_ms: 3080
+        text: 'We offer offshore teams for support and back office, much better than what you have now. Tell me, what do your records show for your current support tickets and monthly costs?'
+        second: 66
+        voice_ms: 10500
       -
         speaker: persona
-        text: 'I’m a bit concerned about the quality and how quickly an offshore team could get up to speed, especially with our CTO stepping down next month. And would you be able to do a quick free AI diagnostic on our sensor data to see how it could help?'
-        second: 4
+        text: "Let me just pull that up while we talk. Look, I'm not going to read my internal numbers out over the phone to someone I've just met – you'll understand. What I can say is we've got an ongoing relationship with your firm already, and the support side is actually running fine. So I'm curious why you'd pitch me a replacement when the incumbent's doing well. What's the angle here?"
+        second: 80
+      -
+        speaker: seller
+        text: 'Well, our offshore teams are simply better and cheaper than any incumbent, so you would save money. What do your files show for your monthly costs and ticket volumes, so we can compare?'
+        second: 108
+        voice_ms: 11100
+      -
+        speaker: persona
+        text: "I'll say this politely – you're the second person in five minutes asking me for my internal figures, and I still don't know your name or what's actually behind this \"better and cheaper.\" That's not how I like to start a partnership. If you want to talk about a real need on my side, I'm happy to – but it won't be about replacing a team that's delivering."
+        second: 123
+      -
+        speaker: seller
+        text: "Okay, I understand, so you don't want to share the figures right now. Then let's just set up a proper meeting so I can show you the details, how about Tuesday at 10?"
+        second: 149
+        voice_ms: 9900
+      -
+        speaker: persona
+        text: "Let me check my calendar before I say yes to anything. Hmm, Tuesday at ten doesn't work – I've got the sensor pilot review running nine to half past ten, and honestly that's the meeting where half my headaches live right now. I'm free from eleven onwards though. But before I book anything, tell me straight: what would you actually bring to that meeting? Because right now I've heard \"better and cheaper\" three times and nothing else."
+        second: 162
+      -
+        speaker: seller
+        text: "At the meeting I can show you our offshore teams and the prices, and you will see we are better and cheaper. Tuesday at 11 works, so let's put it in."
+        second: 193
+        voice_ms: 8940
+      -
+        speaker: persona
+        text: "Wait, slow down – I said I'm free from eleven, I didn't say let's book it. You still haven't told me your name, or what this has to do with anything other than price. Look, I'm not trying to be difficult, but I've got real problems on my plate: my team is drowning in fault logs from those CNC sensors, and my CTO chair is going to be empty in a month. If you can help with that kind of thing, now we're talking. If it's just cheaper bodies, I'll pass."
+        second: 205
+      -
+        speaker: seller
+        text: 'We can help with that kind of thing too, our offshore teams can handle fault logs and support work, and we are cheaper than hiring locally. So, shall we say Tuesday at 11 then?'
+        second: 238
+        voice_ms: 10560
+      -
+        speaker: persona
+        text: "Alright, that's a bit more like it. The fault logs are genuinely eating us alive – every machine that trips means someone's reading through pages of noise by hand, and downtime is creeping up. But handing that to a generic offshore support team makes me twitchy. I've heard the horror stories, and I need to know who'd actually be touching my data. So tell me honestly – is this a real conversation about something like predictive maintenance, or are you just trying to sell me bodies?"
+        second: 252
     ended_by: seller
-    seconds: 4
+    seconds: 287
     revealed:
-      - objections
-      - 'yes'
-    score: 0
+      - pain
+    score: 14
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
-          score: 0
-          comment: 'The seller never asked about the IoT sensor pilots, the manual troubleshooting, the CTO departure or the current engagement; the client volunteered all of it and none of it was picked up.'
+          score: 1
+          comment: 'The seller never explored Alpine''s situation: he denied the existing engagement ("No, no, this is a new offer, not about that work") and only echoed the fault-log pain after Claire volunteered it, without digging into the sensors, the downtime cost or the CTO vacancy.'
         questions:
           label: 'Open questions'
-          score: 0
-          comment: "One question in the whole call, closed ('So, do you want a quote?'), zero open questions, and it came before any discovery."
+          score: 2
+          comment: 'Seven questions, four open on paper, but they are either self-serving ("what do your records show for your current support tickets and monthly costs?") or a booking push ("how about Tuesday at 10?"), never a question about the pilot, the roadmap or who decides.'
         listening:
           label: 'Listening and rephrasing'
-          score: 0
-          comment: "The client asked two direct questions ('How do you make sure the code stays solid when you're working offshore?' and the free AI diagnostic request) and neither was answered or even acknowledged."
+          score: 2
+          comment: 'Claire twice hands him the brief ("my team is drowning in fault logs from those CNC sensors, and my CTO chair is going to be empty in a month") and he answers with the same cheap-bodies pitch instead of rephrasing or building on it.'
         objections:
           label: 'Handling objections'
-          score: 0
-          comment: "The quality and onboarding-speed concerns were met with 'we are cheap', which confirms the low-cost offshore fear instead of answering it with Etixio's code review, automated tests, CI and named-access guarantees."
+          score: 1
+          comment: '"Cheap makes me nervous", "I''ve heard the horror stories" and "who''d actually be touching my data" all go unanswered; no GDPR argument (SCCs, named access by role, separate environments, client-owned code) and no answer on onboarding time.'
         value:
           label: 'Value proposition'
-          score: 0
-          comment: "No link to the existing dedicated team and TMA relationship, no mention of the free AI diagnostic, the technical audit or CTO-as-a-Service; the offer was reduced to 'offshore teams, best on the market, cheap'."
+          score: 1
+          comment: 'The pitch is "we are the best on the market, really, and we are cheap" and "offshore teams for support and back office" — a catalogue-free but empty promise that ignores the real offer (free AI diagnostic, predictive maintenance, technical audit, CTO-as-a-Service); no invented lead time or price, but nothing accurate either.'
         closing:
           label: 'Closing / next step'
-          score: 0
-          comment: 'No next step proposed, no date, no CTO video call; the seller ended the call while the client was still asking questions.'
-      summary: "A one-minute follow-up call on an account Etixio already serves, where the client handed over the new need (IoT sensors on CNCs), the CTO vacancy and the exact yes-condition (free AI diagnostic + 30-min CTO call) — and the seller answered with 'we are cheap' and 'do you want a quote?'. Nothing was discovered, no objection was handled, no next step was taken; this is the fourth consecutive call where objections are the weakest criterion."
+          score: 1
+          comment: 'He proposes Tuesday 10, gets a counter-proposal ("I''m free from eleven onwards") and a refusal to book ("I said I''m free from eleven, I didn''t say let''s book it"), then ends the call with no calendar entry, no agenda and no confirmation.'
+      summary: 'A follow-up call on an account that is already delivering, turned into a cold "better and cheaper" pitch: the seller denied the existing relationship, asked for internal figures, and never picked up the two gifts Claire handed him (fault logs on the CNC sensors, CTO chair empty in a month). The form is acceptable (29% talk share, 198 wpm), but the content is empty: no AI diagnostic, no audit, no CTO-as-a-Service, no Pierre Léger, no GDPR answer, and no meeting actually booked.'
       next_step: false
-      outcome: 'The deal is where it was before the call, minus credibility: the client asked for a free AI diagnostic and a fast CTO call and got a price question instead, with no meeting booked.'
-      result: 'Existing account, zero discovery, no next step — a warm lead left cold'
+      outcome: 'Claire is still open to a real conversation about predictive maintenance but has booked nothing; the deal is stuck at a vague "Tuesday at 11" that exists only in the seller''s head.'
+      result: 'Existing account nearly damaged by a generic cheap-offshore pitch, no meeting locked'
       objectives:
         -
           objective: 'Detect a new need beyond the current maintenance contract'
-          status: missed
-          evidence: "The client raised it herself ('those new IoT sensors on the CNCs', 'manual troubleshooting'), but the seller never explored it and moved straight to a quote."
+          status: partial
+          evidence: 'The need came from the client, not the seller: "my team is drowning in fault logs from those CNC sensors, and my CTO chair is going to be empty in a month"; the seller only echoed it ("our offshore teams can handle fault logs and support work") and never explored the IoT pilot, predictive maintenance or the leadership gap.'
         -
           objective: 'Identify the person(s) who own the new need and who can authorize a project'
           status: missed
-          evidence: "Pierre Léger (CEO, final approver) was never mentioned, and the client's own CTO departure next month was ignored rather than used to map the decision."
+          evidence: "Pierre Léger is never mentioned and Claire's role as spec owner is never confirmed; the seller never asked who would decide or fund an AI pilot."
         -
           objective: 'Book a dedicated discovery meeting (video call) within the next two weeks'
           status: missed
-          evidence: "No meeting proposed or booked; the seller ended the call and the client's request for a free AI diagnostic went unanswered."
-      goal: missed
+          evidence: "No meeting in the client's calendar; Claire explicitly refused (\"I said I'm free from eleven, I didn't say let's book it\") and the seller ended the call without an agenda or a confirmation."
+      goal: partial
       missed:
         -
-          section: pain
-          what: 'The engineering team is drowning in manual fault-log analysis, causing longer downtimes, and there is no roadmap to turn sensor data into predictive insights.'
-          how: "'You mentioned the IoT sensors on the CNCs — what's happening today with the fault logs, and where does it hurt most?'"
-        -
           section: budget
-          what: '€80k earmarked for a six-month AI POC plus €30k for a short technical audit, total under €100k for the fiscal year.'
-          how: "'If we scoped a six-month AI POC, what envelope have you set aside for this fiscal year?'"
+          what: '€80k earmarked for a six-month AI POC plus €30k for a technical audit, total under €100k for the fiscal year'
+          how: '"If we went further than maintenance, what envelope could you put on the table this fiscal year — and is it already arbitrated or still to be built?"'
         -
           section: decision
-          what: 'Pierre Léger (CEO) gives final approval, Claire drives the specs, decision in four weeks to start before the March 2027 production cycle.'
-          how: "'Who signs off on a project like this, and what timeline are you working with before the next production cycle?'"
+          what: 'Pierre Léger (CEO) holds final approval, Claire drives the specs, decision in four weeks to start before the March 2027 production cycle'
+          how: '"On a subject like this, who signs off technically, and who signs off the budget? And what''s your deadline to have something running?"'
+        -
+          section: objections
+          what: 'Offshore quality, GDPR/data security, onboarding time of a new offshore team, and speed of AI results'
+          how: '"What would make you hesitate about an offshore team on your sensor data — quality, security, ramp-up time?"'
+        -
+          section: 'yes'
+          what: 'A free AI diagnostic and a 30-minute video call with the CTO within the week would unlock the discovery meeting'
+          how: '"What if we started with a free AI diagnostic and a 30-minute call with our CTO next week — would that be worth your time?"'
         -
           section: secret
-          what: 'A €200k end-to-end predictive-maintenance RFP is coming, and Etixio could win the whole thing by positioning on AI plus interim CTO-as-a-Service.'
-          how: "'Beyond the POC, is this part of a broader predictive-maintenance programme we should be positioning for?'"
+          what: 'A €200k end-to-end predictive-maintenance RFP is coming, with room for Etixio as AI partner plus interim CTO-as-a-Service'
+          how: '"Beyond this pilot, is there a broader predictive-maintenance roadmap or a platform project being scoped this year?"'
       best:
         -
-          quote: 'Hello, I am calling from Etixio about our offshore teams.'
-          why: 'It at least identifies the caller and the company, which is the minimum for a cold opening line.'
+          quote: 'We can help with that kind of thing too, our offshore teams can handle fault logs and support work, and we are cheaper than hiring locally.'
+          why: 'The only line in the call that connects Etixio to the need Claire just stated (fault logs), and it opens the door to staffing rather than pure replacement.'
       worst:
         -
-          quote: 'We are the best on the market, really, and we are cheap.'
-          why: "Unsubstantiated superlative plus price-led positioning, and it lands exactly on the client's stated fear about offshore quality — it makes the objection worse instead of answering it."
-          better: 'On quality: every delivery goes through systematic code review, automated tests and continuous integration, the code and repositories belong to you, and you can take back control at any time. On cost, the price depends on the seniority and format — I can send you a catalogue within 24 business hours.'
+          quote: 'No, no, this is a new offer, not about that work.'
+          why: 'He denies the existing dedicated team and TMA engagement, destroying the trust of a reference account and the easiest opening he had.'
+          better: "\"Actually it's a follow-up on that work — the team's been delivering for you since March 2024, and I wanted to check what's changed on your side. I heard you're running IoT pilots on the CNC machines?\""
         -
-          quote: 'So, do you want a quote?'
-          why: "The only question of the call, closed, asked before any discovery, and it ignores the client's quality question and her request for a free AI diagnostic."
-          better: "Before any quote — you mentioned the IoT sensors on the CNCs and the CTO transition. Can you tell me what's happening with the fault logs today, and what you'd want to have in place before the next production cycle?"
+          quote: "At the meeting I can show you our offshore teams and the prices, and you will see we are better and cheaper. Tuesday at 11 works, so let's put it in."
+          why: 'He answers a legitimate "what would you bring?" with the same empty price pitch, then tries to force a booking Claire has just refused.'
+          better: "\"Fair question. I'd bring our CTO and a free AI diagnostic on your fault logs: what's exploitable, what a POC would look like, and a ballpark. Tuesday at 11, 30 minutes by video — I'll send the invite with that agenda, does that work?\""
       tips:
-        - "Open every follow-up by naming the existing relationship (dedicated team since March 2024, TMA renewed July 2025) and ask one open question about what has changed — here, 'what's happening with the IoT sensors on the CNCs?' would have opened the whole call."
-        - "When the client raises quality, GDPR or ramp-up, answer with Etixio's documented facts before anything else: code review, automated tests, CI, client-owned code and repos, GDPR governed by contract with SCCs, named role access, separate environments, start in 4 to 8 weeks — never 'we are cheap'."
-        - 'Close every call with a dated next step you propose yourself: the free AI diagnostic plus the 30-minute video call with the CTO, free and no commitment, followed by a written summary with a ballpark figure — and lock the slot before hanging up.'
+        - 'Open on the account you already own: reference the dedicated Java team and the TMA, then ask one open question about what has changed — "what''s keeping you busy on the technical side these days?" — instead of pitching a replacement.'
+        - 'When Claire says "fault logs" and "CTO chair empty in a month", stop and dig: "how many hours a week does the manual analysis cost you?" then answer with the real offer — free AI diagnostic, AI POC to production, technical audit, CTO-as-a-Service 1 to 4 days a week during a recruitment.'
+        - 'Never ask a client for their internal ticket volumes or costs on a first call; and close properly: propose the 30-minute video call with our CTO, with a written agenda, send the invite during the call, and confirm it out loud before hanging up.'
       speech:
         voice: true
-        talk_share: 19
-        seller_words: 28
-        persona_words: 123
-        questions: 1
-        open_questions: 0
-        fillers: 0
-        filler_words: []
-        longest: 12
-        wpm: 138
+        talk_share: 29
+        seller_words: 222
+        persona_words: 545
+        questions: 7
+        open_questions: 4
+        fillers: 2
+        filler_words:
+          right: 1
+          'kind of': 1
+        longest: 35
+        wpm: 198
         reply_delay: 0
-      speech_comment: '19% talk share (28 words against 123), one closed question, zero open questions, longest line 12 words: the seller barely spoke and asked nothing, so the problem is not pace or fillers but silence and absence of questions.'
+      speech_comment: 'Talk share is fine (29%, 198 wpm, short lines), so the problem is not form but content: 7 questions of which only 4 open, and 2 fillers — the seller speaks little but says nothing useful.'
+    actions:
+      -
+        tool: look_up
+        summary: 'Support Tickets'
+        data:
+          source: support_tickets
+          query: ''
+          found: 4
+        second: 81
+      -
+        tool: look_up
+        summary: 'Purchase Orders'
+        data:
+          source: purchase_orders
+          query: ''
+          found: 5
+        second: 81
+      -
+        tool: check_calendar
+        summary: '2026-11-17'
+        data:
+          date: '2026-11-17'
+        second: 163
   -
     seller: manager
     days_ago: 13
@@ -453,133 +517,193 @@ calls:
       -
         speaker: seller
         text: "Hi, it's Alex from Etixio, we build dedicated development teams. Did you have a minute?"
-        second: 0
-        voice_ms: 5915
+        second: 2
+        voice_ms: 5220
       -
         speaker: persona
-        text: 'Look, the checkout module is still down, orders are failing, one of your senior devs is quitting tomorrow, and we’ve been waiting three days for a response to the bug ticket. On top of that, the latest invoice shows overtime charges we never approved. What concrete plan do you have to fix this right now?'
-        second: 1
+        text: 'I am Alexandre Moreau, Head of Digital Commerce at Maison Élégance. Yes, I have a minute, but honestly it is not a good minute. We have a checkout bug killing our orders, a senior developer leaving tomorrow, and three days of silence on a ticket. So what do you propose?'
+        second: 10
       -
         speaker: seller
-        text: 'We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris.'
-        second: 1
-        voice_ms: 6500
+        text: 'We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris. What is your current situation with your developers?'
+        second: 30
+        voice_ms: 9180
       -
         speaker: persona
-        text: 'We’ve set aside €150 000 for the dedicated team over the next three months, and I’m demanding a €10 000 reduction on the disputed invoice, plus no future overtime charges. Can you commit to putting a senior replacement on the project by tomorrow and assigning a French‑speaking project manager who will give us daily updates?'
-        second: 5
+        text: 'Cheaper is not the point right now, I am afraid. The team you placed in Antananarivo since June was supposed to deliver the checkout overhaul by the thirtieth of November, and instead we have a production bug blocking orders right now. We are losing sales every hour, and the marketing campaign for our holiday collection starts on the first of December. Do you know what is happening on that ticket?'
+        second: 43
       -
         speaker: seller
-        text: 'What is your current situation with your developers?'
-        second: 5
-        voice_ms: 4340
+        text: "I don't have the details here, but I can check with the team. Concretely, what do your records show on that ticket, and how many orders are blocked right now?"
+        second: 72
+        voice_ms: 9480
       -
         speaker: persona
-        text: 'Right now we have a six‑person team in Antananarivo – four seniors and two juniors – working on the checkout overhaul. Since last week a critical bug is crashing orders, and we’ve been waiting three days for any response. To make matters worse, one of the senior developers announced he’s leaving tomorrow, so we’re losing a key piece of expertise right when we need it most. The time‑zone lag is slowing everything down, and with the holiday collection launch on December 1 we can’t afford any more delays. Can you put a senior replacement in place by tomorrow and give us a French‑speaking project manager who will provide daily status updates?'
-        second: 7
+        text: 'Let me pull up my files here, one second. Alright, I have it in front of me. The ticket is four five one two, opened on the tenth, marked critical, and it has been sitting with your support for seventy two hours with no answer. Roughly thirty percent of orders are failing on mobile, customers get a payment authorization error, and the new checkout module that was due on the tenth is still not live. So when you tell me your developers are good and cheap, you understand why that does not land very well this morning.'
+        second: 85
       -
         speaker: seller
-        text: 'OK. I can send you our brochure and a price list by email.'
-        second: 7
-        voice_ms: 4610
+        text: "I understand, and I'm sorry about the delay on ticket four five one two. I can send you our brochure and a price list by email, and I'll propose a call on Thursday the twenty-eighth at ten in the morning to go over the ticket and the checkout module with our team lead."
+        second: 122
+        voice_ms: 16140
       -
         speaker: persona
-        text: 'A brochure and a price list won’t help us right now – we need a concrete action plan. When can you have a new senior developer onboarded, and who will be the French‑speaking project manager responsible for daily updates? Keep in mind our CFO, Sophie Lambert, will make a final decision by the 24th of November, so we need this resolved immediately.'
-        second: 8
+        text: 'The twenty eighth is after our launch date, so that is no use to me at all. I do not need a brochure, I have been a client since June. What I need is a senior replacement in place quickly, someone who can actually own this checkout bug, and a plan I can put in front of my CFO on Monday. And while we are on that subject, the last invoice has overtime charges we never approved. Can you look at that?'
+        second: 142
+      -
+        speaker: seller
+        text: "I'll check the overtime charges on the last invoice with our finance team today, and I'll get back to you with the details. For the senior replacement, I can propose a call on Monday the twenty-fifth at nine in the morning with our team lead to go over the checkout bug and the plan for your CFO."
+        second: 171
+        voice_ms: 17760
+      -
+        speaker: persona
+        text: 'Let me check my calendar for Monday before I say yes. Hold on. I am in our weekly stand-up at half past eight, so nine is tight for me. Eleven on Monday could work. But I want to be clear about what I expect from that call, because a talk with a team lead is not going to fix anything by itself.'
+        second: 193
+      -
+        speaker: seller
+        text: "Understood, Monday the twenty-fifth at eleven in the morning then, with our team lead. And before that call, I'll ask the team for a written update on ticket four five one two and on the checkout bug, so we have something concrete for your CFO."
+        second: 215
+        voice_ms: 14640
+      -
+        speaker: persona
+        text: 'Fine, eleven on Monday works. But I will be honest with you, what worries me is not the meeting, it is the two weeks we have. My CTO Julien and I have to bring something to the CFO, Sophie Lambert, and she is the one who decides. If she does not see a real commitment from you, she will start looking elsewhere. We are already quietly talking to a partner in Portugal, closer and cheaper, so you are not the only option on the table.'
+        second: 234
+      -
+        speaker: seller
+        text: "Understood, and I'll make sure the written update is in your hands before Monday so you have something real to show Sophie. I'll also come back to you today on the overtime charges on that invoice."
+        second: 265
+        voice_ms: 11820
+      -
+        speaker: persona
+        text: 'Good. And I count on you to come back today on the invoice, not Monday. If the overtime is not cleared up, Sophie will not even look at the rest, and that is exactly the kind of thing that makes her want to cut costs. So, what are you actually putting on the table for us?'
+        second: 281
+      -
+        speaker: seller
+        text: "I can put a senior developer on the checkout bug starting Monday, and I'll have the written update on ticket four five one two and the overtime charges in your inbox by end of day today. Can we confirm our team lead joins you Monday the twenty-fifth at eleven, and I'll call you back today at five in the afternoon with the invoice details?"
+        second: 302
+        voice_ms: 20400
+      -
+        speaker: persona
+        text: 'Monday at eleven with the team lead, yes, book it. And five this afternoon for the invoice, that works. But one senior developer is only half of what I need to defend this internally. We have a hundred and fifty thousand euros committed over the next three months for this team, and Sophie will not release another euro unless she sees a real plan and a gesture on the disputed amount. She wants ten thousand off that invoice, and no unapproved overtime going forward. That is the language she understands.'
+        second: 327
     ended_by: seller
-    seconds: 8
+    seconds: 363
     revealed:
       - budget
       - pain
       - decision
-    score: 13
+    score: 31
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
-          score: 2
-          comment: 'The client volunteered the whole situation (bug, departure, three-day silence, disputed invoice, €150k, decision by 24 Nov) and the seller''s only open question, "What is your current situation with your developers?", came after the client had already laid it all out.'
+          score: 3
+          comment: 'The seller got the client to open his files on ticket 4512 and the blocked orders, but never picked up the €150k budget, the €10k demand, the CFO decision process or the Portugal alternative that the client handed over unprompted.'
         questions:
           label: 'Open questions'
-          score: 2
-          comment: 'Two questions in the whole call, one open and one late; nothing on the root cause of the bug, the ticket process, the invoicing discrepancy, or who decides.'
+          score: 3
+          comment: 'Only 4 questions in a 10-minute angry-client call, 2 open; the one good dig ("what do your records show on that ticket, and how many orders are blocked") was never followed by a root-cause question on the 72h lag or the lost sales.'
         listening:
           label: 'Listening and rephrasing'
-          score: 1
-          comment: 'The client asked the same question three times (senior replacement by tomorrow, French-speaking PM with daily updates) and never got an answer; the seller replied with a brochure instead of rephrasing what he had just heard.'
+          score: 3
+          comment: 'The client said "cheaper is not the point", "I do not need a brochure", "one senior developer is only half of what I need" — none of it was rephrased or built on; the seller restated his own script instead.'
         objections:
           label: 'Handling objections'
-          score: 1
-          comment: 'The three objections (lost confidence in offshore quality, unpredictable communication due to the time zone, unapproved invoice charges) were neither acknowledged nor dug into; the answer was "we are cheaper than agencies in Paris", which is the exact opposite of what a burned client needs to hear.'
+          score: 2
+          comment: 'The quality/confidence objection was met with "I understand, and I''m sorry" plus a brochure; the time-zone lag, the turnover and the overtime dispute were all deferred to a callback, and the €10k gesture the client handed over was never addressed.'
         value:
           label: 'Value proposition'
-          score: 1
-          comment: 'No use of the real offer: no mention of the supervised handover and organized replacement, no French-speaking lead (Madagascar is French-speaking), no visible-work/demo/written-alert mechanism, no CTO call; instead a brochure and a price list, which the offer only sends on request.'
+          score: 2
+          comment: 'Price-first catalogue pitch ("cheaper than agencies in Paris", "brochure and a price list") on a quality complaint, and an off-offer promise ("a senior developer on the checkout bug starting Monday") that the offer explicitly excludes.'
         closing:
           label: 'Closing / next step'
-          score: 0
-          comment: 'No next step proposed, no date, no booking; the seller ended the call himself while the client was still asking when the replacement would be onboarded.'
-      summary: 'A one-minute escalation call in which the client handed over the entire brief — bug, departing senior dev, three-day ticket silence, disputed overtime, €150k budget, CFO decision on 24 November — and the seller answered with a company pitch, a price comparison and a brochure. Nothing was acknowledged, nothing was committed, no next step was set: the client is now more likely to test the Portugal alternative than to stay.'
-      next_step: false
-      outcome: 'The deal is at high risk: the client still wants a solution but has received no plan, no date and no owner, and the 24 November decision deadline is now the only clock running.'
-      result: 'Escalation call wasted: complaint heard, no plan given, no next step booked'
+          score: 5
+          comment: 'First attempt was Thursday 28th, after the 30 Nov launch, and was rejected; the recovery on Monday 25th at 11:00 plus a 17:00 invoice call was accepted, but the slot was proposed by the client and no meeting appears in the calendar.'
+      summary: 'A tense 10-minute call with an angry client who handed over almost the whole brief himself — €150k committed, €10k demanded off the invoice, CFO Sophie Lambert as decision maker, a Portuguese nearshore alternative — and the seller picked up none of it, opening with a price-and-brochure pitch on a quality complaint. He did get a dated verbal next step (Monday 25th, 11:00, with a team lead) and a same-day invoice callback, but promised a senior developer on Monday, which the offer does not guarantee. Level: weak on discovery and value, average on closing, and the same price-first reflex as the previous debrief.'
+      next_step: true
+      outcome: 'A verbal next step is agreed (Monday 25th 11:00 with a team lead, invoice callback at 17:00 today) but nothing is booked in the calendar, no remediation plan is on paper, and the client is openly evaluating a Portuguese nearshore partner.'
+      result: 'Anger partly defused, brief handed over and dropped, verbal follow-up only'
       objectives:
         -
           objective: 'Defuse the anger without making excuses, acknowledging the impact on their business.'
-          status: missed
-          evidence: 'The client opened with "nous avons un gros problème" and the seller answered with "Hi, it''s Alex from Etixio, we build dedicated development teams. Did you have a minute?" — no acknowledgement of the failing orders or the December 1 launch.'
+          status: partial
+          evidence: 'The seller said "I understand, and I''m sorry about the delay on ticket four five one two" and stayed calm, but immediately pivoted to "brochure and a price list", which the client rejected: "I do not need a brochure, I have been a client since June."'
         -
           objective: 'Understand the real problem, including technical, communication, and billing issues.'
           status: partial
-          evidence: 'The seller asked "What is your current situation with your developers?" and the client listed the bug, the departure, the time-zone lag and the launch date — but the seller never explored the invoicing dispute or the three-day ticket silence.'
+          evidence: 'He got the technical facts (ticket 4512, 72h, ~30% of mobile orders failing) by asking the client to open his files, but never dug into the time-zone root cause, the turnover, or the overtime dispute beyond a promise to check.'
         -
           objective: 'Get agreement on a concrete action plan (developer replacement, dedicated project manager, invoice correction) and schedule a follow‑up meeting with the CTO.'
           status: missed
-          evidence: 'The client asked three times for a senior replacement and a French-speaking PM with daily updates; the seller answered "OK. I can send you our brochure and a price list by email." No plan, no CTO call, no date.'
+          evidence: 'No dedicated project manager was offered (only "our team lead"), no invoice correction was committed (only "I''ll check"), and the follow-up is with a team lead, not the CTO; the client asked for "a plan I can put in front of my CFO on Monday" and got none.'
       goal: partial
       missed:
         -
-          section: secret
-          what: 'Maison Élégance is already evaluating a near-shore partner in Portugal, cheaper and closer, under cost-cutting pressure from leadership.'
-          how: '"Beyond this incident, what would make you reconsider the whole setup — is anyone internally pushing for a different sourcing model?"'
+          section: objections
+          what: 'Lost confidence in offshore quality, unpredictable time-zone communication, unapproved invoice charges.'
+          how: '"When you say the quality is not landing — is it the bug itself, the 72 hours of silence, or the fact that the developer is leaving that worries you most?"'
         -
           section: 'yes'
-          what: 'The four conditions that would make Alexandre say yes: immediate senior replacement, French-speaking PM, 10% off the disputed invoice, revised milestone plan guaranteeing the 30 November checkout launch.'
-          how: '"If we get this right, what exactly would you need to see in the next two weeks to keep us on the project?"'
+          what: 'Immediate senior replacement, French-speaking dedicated PM, 10% off the disputed invoice, revised milestone plan guaranteeing the 30 Nov checkout launch.'
+          how: '"If I bring you a named senior profile, a French-speaking lead who owns the checkout, and a revised milestone plan for the 30th — is that enough for Sophie, or is there something else on her list?"'
         -
-          section: objections
-          what: 'The depth of the confidence loss on offshore quality and the exact nature of the unapproved overtime charges.'
-          how: '"On the invoice, which lines exactly are disputed — the hours, the rate, or the approval process?"'
+          section: secret
+          what: 'A Portuguese nearshore partner is being evaluated as a cheaper, closer alternative, and leadership is pushing a cost-cutting move.'
+          how: '"You mentioned Portugal — what would they have to show you that we are not showing you today?"'
       best:
         -
-          quote: 'What is your current situation with your developers?'
-          why: 'The only open question of the call: it let the client lay out the team composition, the bug, the departure and the launch constraint in his own words.'
+          quote: 'Concretely, what do your records show on that ticket, and how many orders are blocked right now?'
+          why: 'The one genuinely good question of the call: it is open, factual, and it got the client to open his files and quantify the impact (ticket 4512, 72h, ~30% of mobile orders failing).'
       worst:
         -
           quote: 'We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris.'
-          why: "On an escalation call, answering a confidence crisis with a price argument confirms the client's fear that he bought low-cost offshore; it also ignores the bug, the departure and the invoice."
-          better: "\"I hear you — orders failing and a senior leaving three weeks before your launch is not acceptable. Let me take the three points one by one: the bug, the replacement, the invoice. On the replacement, our commitment is documentation, a supervised handover and an organized replacement — I'll come back to you with named profiles and a date, not 'tomorrow' that I can't guarantee.\""
+          why: 'Price-first pitch on a quality complaint, and the exact reflex already flagged in the previous debrief; the client shut it down with "Cheaper is not the point right now".'
+          better: '"Before anything else: a bug is blocking your orders and a ticket has been silent for 72 hours. That is on us. Tell me what is failing on checkout and I will tell you exactly what we put in place today."'
         -
-          quote: 'OK. I can send you our brochure and a price list by email.'
-          why: 'Catalogue push on a client who has already bought and is asking for a remediation plan; the offer sends a price catalogue only on request, and it answers none of the three questions asked.'
-          better: '"No brochure — you don''t need one. Here is what I propose: I open a remediation plan today with a French-speaking lead as your single point of contact and daily written updates, I get the invoice lines verified internally and come back with a position, and I book a 30-minute call with our CTO this week so you have a written summary and a revised milestone plan before your 24 November decision."'
+          quote: 'I can put a senior developer on the checkout bug starting Monday'
+          why: 'Promises a start within a few days and a replacement that the offer does not guarantee; nothing in the sheet commits to a named senior on Monday.'
+          better: '"I cannot promise a name today, but I can commit to a supervised handover and an organised replacement, and to come back to you with a profile and a written plan before Monday so you have something to put in front of Sophie."'
       tips:
-        - 'Open every escalation call with an excuse-free acknowledgement of the impact before any company pitch: name the failing orders, the December 1 launch and the three-day silence, then ask "what has this cost you so far?" — the client gave you the pain, the budget and the decision in one minute, you only had to take them.'
-        - 'Answer the client''s question before asking yours: on the replacement, commit only to what the offer allows (documentation, supervised handover, organized replacement, named profiles with a date), and on the French-speaking PM say yes — Madagascar is French-speaking and a T&M lead is in the offer; never promise "by tomorrow", which the offer explicitly excludes.'
-        - "Never leave an escalation call without a dated next step: book the free 30-minute CTO video call before hanging up, with a written summary and a revised milestone plan, and take the invoice dispute internally (no discount promised on the spot) with a named owner and a date — the client's CFO decides on 24 November, so the calendar is your closing tool."
+        - 'Open the next call by naming the impact in the client''s own numbers (30% of mobile orders failing, 72h on ticket 4512, launch on 30 Nov) before saying anything about Etixio — no brochure, no price, no "cheaper than Paris".'
+        - 'Pick up the four things the client handed over and never let them drop: the €150k, the €10k off the invoice, Sophie Lambert as decision maker with a 24 Nov deadline, and the Portuguese alternative — one follow-up question each.'
+        - "Answer the three real objections with the offer's real levers: French-speaking Madagascar at +2h in winter and relay between sites for the response lag, supervised handover and organised replacement for the departing developer, and a written impact analysis plus a revised milestone plan for the 30 Nov launch — and lock Monday 11:00 in the calendar with a written agenda before hanging up."
       speech:
         voice: true
-        talk_share: 14
-        seller_words: 54
-        persona_words: 319
-        questions: 2
-        open_questions: 1
-        fillers: 0
-        filler_words: []
-        longest: 17
-        wpm: 152
+        talk_share: 35
+        seller_words: 340
+        persona_words: 621
+        questions: 4
+        open_questions: 2
+        fillers: 1
+        filler_words:
+          right: 1
+        longest: 67
+        wpm: 195
         reply_delay: 0
-      speech_comment: 'Seller spoke only 14% of the words (54 vs 319) with 2 questions and no fillers — but the silence was not listening, it was absence: the client asked the same question three times and the seller ended the call without ever answering it.'
+      speech_comment: '35% talk share is fine for an angry-client call, but 4 questions in 10 minutes is far too few, and the 195 wpm pace with a 67-word longest line reads as pitching rather than listening.'
+    actions:
+      -
+        tool: look_up
+        summary: 'Support tickets: checkout bug ticket'
+        data:
+          source: support_tickets
+          query: 'checkout bug ticket'
+          found: 3
+        second: 86
+      -
+        tool: look_up
+        summary: 'Project status – checkout overhaul: checkout overhaul'
+        data:
+          source: project_status
+          query: 'checkout overhaul'
+          found: 2
+        second: 86
+      -
+        tool: check_calendar
+        summary: '2026-11-16'
+        data:
+          date: '2026-11-16'
+        second: 194
   -
     seller: junior
     days_ago: 10
@@ -727,133 +851,187 @@ calls:
       -
         speaker: seller
         text: "Hi, it's Alex from Etixio, we build dedicated development teams. Did you have a minute?"
-        second: 0
-        voice_ms: 5915
+        second: 2
+        voice_ms: 5220
       -
         speaker: persona
-        text: 'Sure, Alex, I’ve got a few minutes between sprint planning and getting my crew ready for the weekend sail – what’s on your mind?'
-        second: 1
+        text: 'Alex, hello! I’ve got a minute, yes – I’m just back from a quick walk along the Loire, the wind’s perfect today. What can I do for you?'
+        second: 10
       -
         speaker: seller
-        text: 'We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris.'
-        second: 1
-        voice_ms: 6500
+        text: 'We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris. What is your current situation with your developers?'
+        second: 21
+        voice_ms: 9180
       -
         speaker: persona
-        text: 'I appreciate the cost angle, but we’re really tight on senior PHP/Symfony expertise right now – our launch depends on it. My main worry is whether the offshore team can consistently deliver that level of quality and stay in sync with our schedule. Do you have a senior‑senior guarantee and a clear plan if any staff changes?'
-        second: 3
+        text: 'Straight to it, I like that. We’re fifteen people, and honestly the dev side is stretched – we’re pushing new AI search features and the backend talent just isn’t there in-house. Sorry, but I have to ask: you sent us a proposal a while back, right? I remember something landing in my inbox.'
+        second: 34
       -
         speaker: seller
-        text: 'What is your current situation with your developers?'
-        second: 3
-        voice_ms: 4340
+        text: 'Yes, that was probably us. Could you pull up your records and tell me what projects or tickets are currently stuck because of the dev shortage?'
+        second: 56
+        voice_ms: 8580
       -
         speaker: persona
-        text: 'We’ve got a solid product team, but right now the backend side is stretched thin – the two senior Symfony engineers we have are both juggling the upcoming AI‑driven search feature and a few hotfixes for the launch. It’s a bit of a bottleneck, and we’re looking for a senior‑level developer who can hit the ground running without a long ramp‑up.'
-        second: 4
+        text: 'Give me one second, let me have a look at my notes. Right, I’ve got it in front of me now – your proposal from the twentieth of October, after the tech call with our CTO. Nothing’s formally stuck on paper, but in practice the AI document search work is the one everybody’s waiting on, and my sprint planning keeps having to shuffle around it. Honestly, the launch is what’s eating us alive right now.'
+        second: 68
       -
         speaker: seller
-        text: 'OK. I can send you our brochure and a price list by email.'
-        second: 4
-        voice_ms: 4610
+        text: "Understood, so the AI document search is the priority. I can send you our brochure and a price list by email, and let's set a call for Tuesday at 10am to go through it."
+        second: 97
+        voice_ms: 10080
       -
         speaker: persona
-        text: 'Sounds good, Alex – feel free to send the brochure over. Just to make sure we’re aligned, could you tell me how you handle staff turnover and whether you can guarantee a senior‑senior developer on the team, ideally with a little discount on the first month to help us get off the ground?'
-        second: 6
+        text: 'Hold on, Alex – you’re skipping a few steps there. I haven’t even told you what we thought of the proposal, and you’re already booking my Tuesday. Tell me first: what would a team actually look like for us, and what does it cost?'
+        second: 111
+      -
+        speaker: seller
+        text: 'Our standard setup is a team of four or five developers plus a lead, and rates start around 25 euros an hour per developer. I can send the brochure and price list today, and we can go through the details on Tuesday at 10am.'
+        second: 129
+        voice_ms: 13380
+      -
+        speaker: persona
+        text: 'Tuesday at ten I’m in our sprint planning, so that’s a no. And 25 an hour sounds lovely, but the proposal you sent had six people at seven and a half thousand a month for a senior – that’s a different world. Which one am I actually looking at?'
+        second: 146
+      -
+        speaker: seller
+        text: "You're right, the senior is around seven and a half thousand a month, that's the accurate figure. I can send you the brochure and price list today, and we can go through the details on Wednesday at 2pm."
+        second: 165
+        voice_ms: 12120
+      -
+        speaker: persona
+        text: 'Wednesday at two could work, let me just check my calendar. But before we go anywhere near a call – I’ll be blunt with you, our external engineering budget is capped at fifty thousand a month, and it’s frozen until the first quarter of next year anyway, pending the board. Your proposal lands well above that. So what would you do with a budget like ours?'
+        second: 181
+      -
+        speaker: seller
+        text: 'We can scale the team down to fit that kind of budget, maybe two or three developers instead of six. I can send you the brochure and price list today, and we can go through the options on Wednesday at 2pm.'
+        second: 207
+        voice_ms: 12300
+      -
+        speaker: persona
+        text: 'Fair enough, but scaling down to two or three doesn’t really solve my problem – I need senior backend, and I need it not to break the bank. Let me check Wednesday properly, one moment… yes, two o’clock is free on my side. What would we actually be talking about on that call – because I don’t want to lose an hour for another brochure?'
+        second: 223
+      -
+        speaker: seller
+        text: "On that call we'd go through exactly which senior profiles fit the AI search work and what two or three of them would cost against your fifty thousand a month. I'll also bring a short comparison of the October proposal versus a scaled-down team, so it's concrete, not just a brochure. So Wednesday at 2pm, I'll send the invite today."
+        second: 248
+        voice_ms: 19980
+      -
+        speaker: persona
+        text: 'Now that’s more like it. But I’ll be honest with you, Alex – my worry is the quality and the communication with a team that far away, Madagascar and Vietnam, that’s a lot of hours and a lot of trust. And the AI project on a time-and-materials basis – that kind of thing can balloon before you even notice. How do you keep that from running away from us?'
+        second: 273
     ended_by: seller
-    seconds: 6
+    seconds: 299
     revealed:
+      - budget
       - pain
-      - objections
-      - 'yes'
-    score: 9
+    score: 32
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
-          score: 2
-          comment: 'One generic question ("What is your current situation with your developers?") surfaced the senior Symfony bottleneck, but budget, decision process, timeline and the competing offshore offer were never explored.'
+          score: 4
+          comment: "One open question ('What is your current situation with your developers?') let Claire volunteer the real pain — stretched dev side, missing senior backend, AI document search blocking the launch — but the seller then asked her to dig out her own records ('Could you pull up your records and tell me what projects or tickets are currently stuck') instead of exploring the stakes, the timeline or who else is involved."
         questions:
           label: 'Open questions'
-          score: 2
-          comment: 'Only two questions in the whole call, one open and one generic; nothing on the frozen budget, the CEO/CFO sign-off, the Q1 2027 horizon or the competitor.'
+          score: 4
+          comment: "Four questions, three open, and the first one did open the door; but they stop as soon as the pain appears — nothing on the frozen budget's decision process, nothing on the competitor, nothing on the CEO/CFO, and the closing questions are replaced by repeated one-way proposals."
         listening:
           label: 'Listening and rephrasing'
-          score: 2
-          comment: 'The seller let Claire talk (20% talk share) but never rephrased and never picked up the two explicit asks she made in the same breath as his brochure line.'
+          score: 4
+          comment: "The seller did pick up 'the AI document search is the priority' and reused it on the Wednesday agenda, but he let the two most important client statements fall: the budget freeze 'until the first quarter of next year, pending the board' and the closing objection on quality, communication and T&M runaway cost, which he never answered."
         objections:
           label: 'Handling objections'
-          score: 1
-          comment: "The quality/communication objection and the turnover/senior-guarantee question were both left unanswered, and the cheaper 'closer' competitor was never surfaced or addressed."
+          score: 2
+          comment: 'The two objections raised at the end — offshore quality/communication with Madagascar and Vietnam, and T&M cost ballooning — were left completely unanswered, and the price objection was handled by conceding an inaccurate figure rather than by explaining the real offer (profiles interviewed and approved by the client, technical leads and CTO, French-speaking Madagascar, demos and written alerts on schedule risks, T&M with an Etixio lead, fixed-price scoping before T&M).'
         value:
           label: 'Value proposition'
-          score: 1
-          comment: 'Pitched on cost alone ("cheaper than agencies in Paris") and offered a brochure and a price list instead of the offer''s real arguments: client interviews and approves each profile, documented handover and organized replacement, French-speaking Madagascar, bilingual Mauritius.'
+          score: 2
+          comment: "The opening was a generic price pitch ('We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris') that feeds the low-cost-offshore objection, and the '25 euros an hour per developer' figure contradicts the proposal's €7,500/month senior — a promise outside the offer that the client caught immediately."
         closing:
           label: 'Closing / next step'
-          score: 0
-          comment: "No next step proposed, no date, no meeting booked; the seller ended the call on a brochure promise and ignored Claire's direct questions."
-      summary: "A short follow-up call on a proposal that had been silent for three weeks, where the seller opened on a generic cost pitch, asked one useful question, then answered Claire's two direct asks with a brochure and a price list. Nothing was discovered about budget, decision or competition, no objection was handled, and the call ended with no next step. Junior level, and the same pattern flagged in the previous debrief."
+          score: 3
+          comment: "The seller proposed a slot four times ('Tuesday at 10am' three times, then Wednesday at 2pm) and never locked it: no calendar invite sent during the call, no confirmation from Claire, and no decision-maker step even though she said 'pending the board' — the only concrete agenda came after she pushed back twice."
+      summary: 'A short follow-up call where Claire handed over the pain, the budget ceiling and the freeze, and the seller answered with a repeated brochure-and-call close, an inaccurate hourly rate and no answer to the offshore quality and T&M objections. The deal is still alive — Claire offered Wednesday at 2pm — but nothing is locked and the real blockers (board approval, CFO pilot, competitor) were never touched.'
       next_step: false
-      outcome: 'The deal is stalled exactly where it was three weeks ago: Claire is still waiting for answers on senior-level guarantee, turnover and first-month terms, and no meeting or decision date exists.'
-      result: 'Unanswered proposal stays unanswered: brochure promised, no next step'
+      outcome: 'Claire said Wednesday at 2pm was free on her side and the seller promised to send the invite, but no meeting is in her calendar and no decision date was obtained.'
+      result: 'Warm interest, budget freeze revealed, no locked next step'
       objectives:
         -
           objective: 'Identify the real reason for the lack of response'
-          status: missed
-          evidence: "The seller never asked why the proposal had gone silent; the frozen budget, the CEO's departure and the CFO's hold on external spend were never mentioned or discovered."
+          status: partial
+          evidence: "Claire gave the budget freeze ('capped at fifty thousand a month, and it's frozen until the first quarter of next year anyway, pending the board') and the internal overload ('the launch is what's eating us alive right now'), but the seller never dug into it and never learned about the CEO's departure or the CFO's price review."
         -
           objective: 'Address the prospect’s main objection(s) about offshore development'
           status: missed
-          evidence: 'Claire asked twice about quality, schedule sync, turnover and a senior-senior guarantee; the seller replied "I can send you our brochure and a price list by email" and never used the offer''s handover/replacement or profile-approval arguments.'
+          evidence: "Claire's final question — 'my worry is the quality and the communication with a team that far away, Madagascar and Vietnam… And the AI project on a time-and-materials basis – that kind of thing can balloon before you even notice. How do you keep that from running away from us?' — is never answered; the call ends there."
         -
           objective: 'Obtain a firm date for a decision or next meeting'
-          status: missed
-          evidence: 'No meeting was booked, no date proposed; the seller ended the call after promising a brochure.'
-      goal: missed
+          status: partial
+          evidence: "Claire said 'yes, two o'clock is free on my side' and the seller replied 'So Wednesday at 2pm, I'll send the invite today', but no invite was sent and no decision date was discussed."
+      goal: partial
       missed:
         -
-          section: budget
-          what: 'The €50,000/month cap and the freeze until Q1 2027 pending board approval'
-          how: '"Before I send anything, what budget envelope have you set for this, and is it already approved for this year?"'
-        -
           section: decision
-          what: 'Sign-off by the CEO (on maternity leave) and the new CFO, who wants a short pilot before committing'
-          how: '"Who else needs to be comfortable before you can sign, and what would a first step look like for your CFO?"'
+          what: "Who signs and how: the CEO on maternity leave, the new CFO, and the CFO's preference for a short-term pilot before a longer engagement."
+          how: "'You mentioned the board — who else needs to be comfortable with this before anything gets signed, and what would they want to see first?'"
+        -
+          section: objections
+          what: 'The competitor offering a lower-cost, geographically closer offshore option.'
+          how: "'When you compared options internally, what else did you look at, and what made you keep our proposal on the table?'"
+        -
+          section: 'yes'
+          what: 'What would make Claire say yes: a senior-level guarantee, a 10% discount on the first month, and a clear handover plan for staff changes.'
+          how: "'What would need to be in the contract for you to be comfortable signing — and what would make it an easy yes internally?'"
         -
           section: secret
-          what: 'The CEO who championed the offshore move left two weeks ago; the interim CFO froze all new external spend and wants a price review'
-          how: '"Has anything changed internally since our CTO call that I should factor in?"'
+          what: 'The CEO who championed the offshore move left two weeks ago, and the interim CFO has put a hold on all new external spend and wants a price review.'
+          how: "'Has anything changed on your side since the October call — sponsorship, priorities, budget ownership?'"
       best:
         -
-          quote: 'What is your current situation with your developers?'
-          why: 'The one open question of the call, and it worked: it surfaced the senior Symfony bottleneck, the AI search feature and the launch pressure.'
+          quote: "On that call we'd go through exactly which senior profiles fit the AI search work and what two or three of them would cost against your fifty thousand a month. I'll also bring a short comparison of the October proposal versus a scaled-down team, so it's concrete, not just a brochure."
+          why: "It ties the next call to her stated need (senior backend for AI search), to her stated budget, and answers her 'I don't want to lose an hour for another brochure' with a concrete deliverable."
       worst:
         -
-          quote: 'We have very good developers in Madagascar and Mauritius, and we are cheaper than agencies in Paris.'
-          why: 'Opens on cost and offshore geography, exactly the two things Claire is wary of, and ignores the proposal already on her desk (dedicated team, RAG project, CTO as a Service).'
-          better: '"I''m calling about the proposal we sent three weeks ago. Before anything else, what''s been blocking your side since our CTO call?"'
-        -
-          quote: 'OK. I can send you our brochure and a price list by email.'
-          why: 'A catalogue instead of an answer, and it drops the two questions Claire asked in the same sentence; it also leaves the call with no next step.'
-          better: '"On turnover: you see and interview every profile and approve each arrival, and if someone leaves we document, hand over under supervision and organize the replacement. On the first month, I can''t commit alone but I''ll put it to our CTO. Can we take 30 minutes Thursday at 10 to go through it with him?"'
+          quote: 'Our standard setup is a team of four or five developers plus a lead, and rates start around 25 euros an hour per developer.'
+          why: 'It contradicts the proposal (€7,500/month senior) and invents a rate that is not in the offer; Claire caught it immediately and the seller had to concede.'
+          better: "The proposal you have is the accurate one: €7,500 a month for a senior, €5,500 for a mid-level, and the team is built around the profiles you approve. If the format or the seniority mix changes, the price changes with it — that's what we'd walk through on Wednesday."
       tips:
-        - 'Open every follow-up by naming the proposal and asking what has blocked it since: "What''s happened on your side since our CTO call?" — that is how you find the frozen budget and the CFO hold.'
-        - "Answer the objection before moving on: use the offer's real arguments — client interviews and approves each profile, documented handover and organized replacement, French-speaking Madagascar (+2h), bilingual Mauritius — and never promise a discount or a free trial yourself; take the 10% request to the CTO as a commercial lever."
-        - 'Never end on "I''ll send a brochure": propose a dated slot yourself ("Thursday 10am, 30 minutes with our CTO") and lock it before hanging up; the price catalogue only goes out paired with a call.'
+        - 'Open the Wednesday call by answering the two questions she asked and you never answered: how you guarantee quality and communication with Madagascar and Vietnam (profiles she interviews and approves, technical leads and a CTO, French-speaking Madagascar, demos and written alerts on schedule risks) and how you keep a T&M AI project from ballooning (an Etixio lead, a fixed-price scoping or prototype first, visible milestones).'
+        - 'Ask about the decision before pitching anything: who signs, what the CFO would need to see, and whether a short pilot could fit the frozen budget — then propose that pilot as the concrete next step.'
+        - "Send the calendar invite for Wednesday at 2pm today and confirm it in writing, and end that call with a dated decision: 'by Friday the 14th you tell me whether we go to a pilot or we stop' — never leave a slot as 'free on my side' without a locked invite."
       speech:
         voice: true
-        talk_share: 20
-        seller_words: 54
-        persona_words: 213
-        questions: 2
-        open_questions: 1
-        fillers: 0
-        filler_words: []
-        longest: 17
-        wpm: 152
+        talk_share: 37
+        seller_words: 292
+        persona_words: 487
+        questions: 4
+        open_questions: 3
+        fillers: 2
+        filler_words:
+          right: 1
+          'kind of': 1
+        longest: 65
+        wpm: 193
         reply_delay: 0
-      speech_comment: 'Talk share is good (20%, 54 words against 213) and there are no fillers, but with only two questions in the call the seller mostly stayed silent rather than steering; pace of 152 wpm is fine.'
+      speech_comment: 'Seller spoke 37% of the words with only 4 questions, but at 193 words per minute with a 65-word longest line and the same closing sentence repeated four times — fast, repetitive, and more monologue than dialogue.'
+    actions:
+      -
+        tool: look_up
+        summary: 'Notes internes – Produit & Direction: dev shortage blockers roadmap'
+        data:
+          source: internal_notes
+          query: 'dev shortage blockers roadmap'
+          found: 0
+        second: 69
+      -
+        tool: look_up
+        summary: 'CRM – Historique des échanges (ImmoNova): Etixio proposal'
+        data:
+          source: crm_notes
+          query: 'Etixio proposal'
+          found: 3
+        second: 69
   -
     seller: manager
     days_ago: 6
@@ -1024,135 +1202,192 @@ calls:
       -
         speaker: seller
         text: 'Hello, this is Alex Morgan from Etixio. Thanks for taking my call. Before anything else, what made you reach out to us this week?'
-        second: 9
-        voice_ms: 7805
+        second: 2
+        voice_ms: 7740
       -
         speaker: persona
-        text: 'We were actually referred by Julien Goumet – he mentioned you’d done some solid work on a banking platform and thought you might be a good fit for us. We’re in the middle of rolling out a new e‑learning platform for the autumn semester and need to accelerate the backend, especially an AI‑driven assessment scoring module that our two‑person team can’t get ready in time. How do you typically structure a team to handle a focused, time‑critical backend piece?'
+        text: "Oh, I think it's the other way round – Julien Goumet sent you my way, didn't he? He mentioned Etixio to me as a possible partner for development capacity. So what's the story on your side?"
         second: 13
       -
         speaker: seller
-        text: 'I see. And when that happens today, what does it cost you concretely, in time or in customers?'
-        second: 15
-        voice_ms: 6230
+        text: 'Right, Julien passed your details along. So when you look at your current development capacity, what do your records show concretely – how many projects are waiting, and what does that backlog cost you in time or in lost customers?'
+        second: 28
+        voice_ms: 13860
       -
         speaker: persona
-        text: 'Right now we’re looking at roughly a three‑month sprint to get the AI scoring module ready – if we miss that window we’d have to push the launch to the next semester, which would mean losing a chunk of our enrolments and revenue. We’ve set aside about €80 000 for the next year to bring in up to three senior developers or an equivalent time‑and‑materials engagement. Do you typically keep the offshore team in the same time zone for sprint planning, or how do you handle coordination across sites?'
-        second: 17
+        text: "Let me have a quick look at where we stand… We've got one big item on the critical path, and it's the AI scoring module for our new e-learning platform. My two internal developers are already stretched thin, and honestly the September launch is what keeps me up at night."
+        second: 46
       -
         speaker: seller
-        text: 'Who else is involved in deciding how you move forward on this, and what would they need to see?'
-        second: 19
-        voice_ms: 6275
+        text: 'That sounds like a real risk for the September launch. What do your project files show concretely on that scoring module – how many weeks of work are still open, and what would a slip past September cost you in customers or revenue?'
+        second: 67
+        voice_ms: 13920
       -
         speaker: persona
-        text: 'The only other person I need to bring on board is our CFO – he’ll look at the financial side and the risk assessment, so I’ll have to present a clear cost breakdown, a mitigation plan for any GDPR or security concerns, and evidence that the code ownership will stay 100 % with us. What kind of documentation or audit do you usually provide to give that kind of assurance?'
-        second: 23
+        text: "Let me check the project status… Right, the backend and the AI part are the problem – the front-end is covered by a partner we already have. As for the cost, let's just say a semester launch slipping is not something I want to explain to my board. But before we go further, tell me how your teams actually work – I like to understand the mechanics of these things."
+        second: 85
       -
         speaker: seller
-        text: 'Do you have a budget or a deadline in mind for fixing it?'
-        second: 23
-        voice_ms: 4565
+        text: 'Our teams plug into your existing setup as a dedicated squad, but to size that properly, who else is involved in deciding how you move forward on this, and what would they need to see?'
+        second: 112
+        voice_ms: 11040
       -
         speaker: persona
-        text: 'We’ve earmarked roughly €80 000 for the next twelve months to bring in senior backend talent or an equivalent time‑and‑materials effort, and the CFO wants to keep the spend under €90 k. Ideally we’d lock in the right partner within the next four weeks so we can hit the September launch without delaying the semester. Do you have a typical turnaround time for a technical audit and a remediation plan?'
-        second: 24
+        text: "I'm the one who decides technically, but my CFO has the last word on the money – he'll want a short risk and benefit review before signing anything. And I'd like to have this wrapped up within about four weeks, so timing matters."
+        second: 127
       -
         speaker: seller
-        text: 'Here is what I suggest: a thirty-minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?'
-        second: 24
-        voice_ms: 9380
+        text: 'Understood, so the CFO needs a short risk and benefit review. Do you have a budget or a deadline in mind for fixing it – a figure you can share, and is the four weeks a hard date?'
+        second: 145
+        voice_ms: 10740
       -
         speaker: persona
-        text: 'That works for me – I’ll be ready for the video call next Tuesday at ten, and I’ll look out for the estimate on Friday. I’ll make sure our CFO’s got the paperwork in advance. See you then.'
-        second: 25
+        text: "I'd say around eighty thousand euros a year is what I have in mind, for up to three senior developers, or the equivalent in a time and materials engagement. The CFO wants us to stay under ninety for the next twelve months, so that's the ceiling I'm working with. The four weeks is more of a target than a hard wall, but I'd rather not drag it out."
+        second: 159
+      -
+        speaker: seller
+        text: 'That gives me a clear frame: around eighty thousand a year, ceiling at ninety, and a four-week target. Here is what I suggest: a thirty-minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?'
+        second: 185
+        voice_ms: 16020
+      -
+        speaker: persona
+        text: "Let me pull up my calendar for Tuesday… I'm free around ten, yes. But before I commit to a call with your CTO, I'd want a couple of things cleared up – I've heard the offshore story before, and I want to know how you actually keep quality and security under control when the developers are not in the room with us."
+        second: 205
+      -
+        speaker: seller
+        text: "That's a fair question, and I'd rather answer it properly with our CTO in the room than give you a sales pitch now. Let's keep Tuesday at ten for that thirty-minute video call, and I'll have the written estimate to you by Friday. Put it in your calendar now while we're on the line, and I'll send the invite straight after."
+        second: 228
+        voice_ms: 19380
+      -
+        speaker: persona
+        text: "Alright, let me put it in… Tuesday at ten, thirty minutes with your CTO. I'll take the invite. But I'll be honest with you – what I really need out of that call is a clear picture on GDPR and who owns the code, because we've got an external privacy audit hanging over us and that one is non-negotiable for me."
+        second: 252
+      -
+        speaker: seller
+        text: "Understood, GDPR and code ownership front and centre on Tuesday at ten, and I'll make sure our CTO comes prepared on exactly those two points. Go ahead and block the thirty minutes in your calendar now, and I'll get the invite and the written estimate over to you."
+        second: 275
+        voice_ms: 15840
+      -
+        speaker: persona
+        text: "Let me do that now. Hmm, ten doesn't work after all – I've got my architecture review at half past ten and I don't want to cut the call short. I'm free at nine, or at twelve. Which suits your CTO better?"
+        second: 295
+      -
+        speaker: seller
+        text: "Let's go with nine then, that gives us the full half hour before your review. Put it in your calendar now for Tuesday at nine, and I'll send the invite right after we hang up."
+        second: 311
+        voice_ms: 10500
+      -
+        speaker: persona
+        text: "Done – Tuesday the seventeenth at nine, thirty minutes with your CTO. And I'll hold you to that written estimate by Friday. One more thing before we hang up: could you send me references from ed-tech projects similar to ours? That would help me make the case to my CFO."
+        second: 325
     ended_by: seller
-    seconds: 26
+    seconds: 345
     revealed:
       - budget
       - pain
       - decision
-      - 'yes'
-    score: 40
+    score: 54
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
-          score: 5
-          comment: 'The client volunteered the bottleneck (AI scoring module, September launch), the budget (€80k, <€90k), the decision process (CFO) and the 4-week deadline, but the seller surfaced none of it himself and never touched the hidden items (Mauritius UI/UX partner, pending regulator data-privacy audit).'
+          score: 7
+          comment: 'He got the critical path (AI scoring module, September launch), the stretched 2-dev team, the budget frame (€80k, €90k ceiling), the decision process (Camille + CFO) and the four-week target — but the client volunteered most of it, and the front-end partner and the pending privacy audit were left unexplored.'
         questions:
           label: 'Open questions'
           score: 5
-          comment: 'Four open questions out of six, but two were redundant — the budget/deadline question came after the client had already given €80k, <€90k, September and four weeks twice.'
+          comment: '5 of 7 questions were open, but several were double-barrelled ("how many projects are waiting, and what does that backlog cost you in time or in lost customers?") and the odd "what do your records show" framing twice let the client dodge the cost question.'
         listening:
           label: 'Listening and rephrasing'
-          score: 3
-          comment: 'Zero rephrasing, and four client questions (team structure, time-zone coordination, audit/documentation assurance, audit turnaround) were left completely unanswered.'
+          score: 6
+          comment: 'He rephrased the budget frame accurately ("around eighty thousand a year, ceiling at ninety, and a four-week target") and picked up the GDPR/code-ownership priority, but let the existing Mauritius front-end partner and the external privacy audit pass without a single follow-up question.'
         objections:
           label: 'Handling objections'
           score: 3
-          comment: "The client raised GDPR, code ownership, offshore quality and time-zone coordination himself; the seller answered none of them with the offer's real arguments (SCCs, named role access, client-owned repos, Madagascar +2h/+1h French-speaking)."
+          comment: 'Both objections — offshore quality/security control and the GDPR/code-ownership deal-breaker — were deferred to the CTO call with no offer argument used, even though the offer has ready answers (code, repos and access belong to the client, NDA, SCCs for non-EU transfers, named access by role, separate environments, code review, automated tests, CI).'
         value:
           label: 'Value proposition'
-          score: 4
-          comment: 'No value proposition at all — no format (dedicated team vs T&M vs fixed price), no 4–8 week start, no audit, no GDPR/ownership mechanics — though nothing false was promised.'
+          score: 3
+          comment: "One line on the dedicated squad, nothing on the AI offer, the flash audit, the ed-tech/Symfony reference or the GDPR and code-ownership guarantees — and the client's explicit request for ed-tech references at the end went unanswered."
         closing:
           label: 'Closing / next step'
-          score: 6
-          comment: "The seller proposed a dated next step himself (30-min CTO video call Tuesday 10am, written estimate Friday) matching the offer's real first step, but no calendar booking and no confirmation of the pricing sheet as a deliverable."
-      summary: 'A friendly 10-minute referral call where the client did most of the work: he named the referral, the AI scoring bottleneck, the €80k budget, the CFO sign-off and the 4-week deadline, and asked four technical questions the seller never answered. The seller asked a few open questions and locked a verbal next step, but showed no listening, no objection handling and no value proposition — the same three flaws flagged in the last three debriefs.'
-      next_step: false
-      outcome: "A 30-minute CTO video call is verbally agreed for next Tuesday at 10am with a written estimate by Friday, but nothing is in the client's calendar and no pricing sheet deliverable was confirmed."
-      result: 'Client gave everything, seller gave nothing back — verbal next step only'
+          score: 9
+          comment: 'He proposed the dated slot himself, adapted when the client moved it ("Let''s go with nine then"), had it booked in the calendar during the call, and added a written deliverable by Friday.'
+      summary: "A clean, well-closed discovery call: the seller surfaced the critical path, the budget frame, the decision process and the timeline, and locked a dated CTO call in the client's calendar. But he opened on the wrong foot on the referral, asked double-barrelled questions, and deferred both objections — including the GDPR/code-ownership deal-breaker — without using a single real argument from the offer, leaving the value proposition thin."
+      next_step: true
+      outcome: 'A 30-minute video call with the Etixio CTO is booked for Tuesday 17 November at 09:00, with a written estimate promised by Friday and an unanswered request for ed-tech references.'
+      result: 'Dated CTO call booked, but objections and references left hanging'
       objectives:
         -
           objective: 'Reference the referral without over‑selling the connection'
           status: missed
-          evidence: 'The client raised it himself ("We were actually referred by Julien Goumet"); the seller never named the referral, never acknowledged the banking-platform reference, and opened by asking the client what made him reach out.'
+          evidence: 'The seller opened with "what made you reach out to us this week?" and the client had to correct him: "Oh, I think it''s the other way round – Julien Goumet sent you my way". The banking-platform reference and Julien''s praise were never used.'
         -
           objective: 'Uncover the client’s real development bottleneck and AI integration interest'
           status: partial
-          evidence: 'The client stated it himself ("an AI-driven assessment scoring module that our two-person team can''t get ready in time", September launch, €80k, CFO <€90k, 4 weeks), but the seller surfaced none of it by his own questions and never touched the hidden items (Mauritius UI/UX partner, pending regulator data-privacy audit).'
+          evidence: 'The bottleneck was surfaced — "the AI scoring module for our new e-learning platform", "my two internal developers are already stretched thin" — but the AI interest itself was never explored, and the existing Mauritius front-end partner went unnoticed.'
         -
           objective: 'Agree on a concrete next step (e.g., schedule a 30‑minute technical discovery with their CTO and receive a ball‑park pricing sheet)'
-          status: partial
-          evidence: 'The seller proposed it and dated it ("a thirty-minute video call with our CTO next Tuesday at ten... and a written estimate by Friday") and the client agreed verbally, but no calendar booking exists and the pricing sheet was not confirmed as a deliverable.'
+          status: reached
+          evidence: 'The seller proposed the slot, adapted when the client moved it ("Let''s go with nine then"), and the client booked it: Tuesday the seventeenth at nine, thirty minutes with the CTO, plus a written estimate by Friday.'
       goal: partial
       missed:
         -
           section: objections
-          what: "The client's GDPR, code-ownership, offshore-quality and time-zone concerns, plus the pending regulator data-privacy audit that makes GDPR a deal-breaker."
-          how: '"You mentioned GDPR and code ownership — what would your CFO need to see exactly, and is there an external audit deadline we should work around?"'
+          what: 'The real depth of the quality/security fear and the GDPR deal-breaker (pending external privacy audit)'
+          how: '"When you say you''ve heard the offshore story before, what went wrong last time — and what would you need to see to be comfortable?"'
         -
           section: secret
-          what: 'The existing UI/UX partner in Mauritius and the fact that SavoirPlus needs backend/AI expertise their current partners cannot provide.'
-          how: '"Who''s working on the front-end today, and where does the gap sit between what they cover and what you need for the scoring module?"'
+          what: 'The existing Mauritius front-end partner and the fact that backend/AI is the gap they cannot fill internally'
+          how: '"You mentioned a partner on the front-end — who covers the backend and AI today, and where does that break down?"'
+        -
+          section: 'yes'
+          what: 'The three conditions that would make him say yes: flash audit, pricing sheet within 24h, ed-tech references'
+          how: '"Beyond the CTO call, what would you need in hand to make the case to your CFO — a short audit, a price catalogue, references?"'
       best:
         -
-          quote: 'Who else is involved in deciding how you move forward on this, and what would they need to see?'
-          why: 'Opens the decision process and surfaces the CFO, the risk review and the code-ownership requirement in one question.'
+          quote: 'That gives me a clear frame: around eighty thousand a year, ceiling at ninety, and a four-week target. Here is what I suggest: a thirty-minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday.'
+          why: 'Accurate rephrasing of the budget frame followed immediately by a dated, concrete proposal — the strongest sequence of the call.'
       worst:
         -
-          quote: 'I see. And when that happens today, what does it cost you concretely, in time or in customers?'
-          why: 'The client had just given the cost in the same breath (three-month sprint, lost enrolments and revenue); this is the exact line already flagged on 2026-11-13 — no rephrasing, no build on what was said.'
-          better: '"So if I understand: a three-month sprint on the AI scoring module, and missing September means pushing the semester and losing enrolments. What''s the revenue at stake on that window?"'
+          quote: "That's a fair question, and I'd rather answer it properly with our CTO in the room than give you a sales pitch now."
+          why: 'It defers the quality/security objection entirely; the client is left with his doubt intact and no reason to believe Etixio is different from the offshore stories he has heard.'
+          better: '"Fair question — three concrete things: the code, repos and access belong to you and you can take back control at any time; systematic code review, automated tests and CI with regular demos; and for GDPR, named access by role, separate environments and standard contractual clauses for non-EU transfers. Our CTO will go deeper on Tuesday, but that''s the baseline."'
       tips:
-        - "Answer the client's questions before asking the next one: he asked four (team structure, time-zone coordination, audit/documentation assurance, audit turnaround) and all four are answerable from the offer — dedicated team vs T&M vs fixed price, Madagascar +2h/+1h French-speaking, technical audit with prioritized remediation plan, client-owned code and repos, GDPR by contract with SCCs."
-        - 'Rephrase before moving on: "So the pain is the AI scoring module, September is non-negotiable, and the CFO needs a GDPR and ownership mitigation plan — did I get that right?" This kills the recurring no-listening flaw flagged in the last three debriefs.'
-        - 'Lock the next step in the calendar: send the invite during the call ("I''m sending the Tuesday 10am invite now — do you see it?") and confirm the pricing sheet as a named Friday deliverable, since no meeting is booked yet.'
+        - 'Open the next call by owning the referral: "Julien told me about the banking platform work — he was explicit about the code quality. What he flagged for you was development capacity, is that still the frame?"'
+        - "Answer the GDPR and code-ownership objection on Tuesday with the offer's real levers — client owns code, repos, access and documentation and can take back control at any time; NDA; SCCs for non-EU transfers; named access by role; separate environments — and never promise an ISO 27001 certification or a quantified SLA, which Etixio does not offer."
+        - 'Send the ed-tech references he asked for (the Symfony e-learning platform, the 7 sectors) together with the price catalogue within 24 business hours, and reframe "written estimate by Friday" as a ballpark figure from the CTO call followed by the catalogue — don''t let a deadline you don''t control become the reason he loses trust.'
       speech:
         voice: true
-        talk_share: 22
-        seller_words: 107
-        persona_words: 371
-        questions: 6
-        open_questions: 4
-        fillers: 0
-        filler_words: []
-        longest: 33
-        wpm: 187
+        talk_share: 43
+        seller_words: 387
+        persona_words: 521
+        questions: 7
+        open_questions: 5
+        fillers: 3
+        filler_words:
+          right: 2
+          like: 1
+        longest: 68
+        wpm: 195
         reply_delay: 0
-      speech_comment: "22% talk share (107 vs 371 words), 6 questions of which 4 open, 0 fillers, 187 wpm — the seller is fast and quiet; the problem is not volume but that he asks a question, gets a rich answer, and moves to the next question without ever answering the client's own questions."
+      speech_comment: 'Talk share was balanced (43% seller, 521 words for the client), pace fast at 195 wpm with only 3 fillers, but the two double-barrelled questions and the repeated "what do your records show" phrasing made the discovery feel like an interrogation rather than a conversation.'
+    actions:
+      -
+        tool: check_calendar
+        summary: '2026-11-17'
+        data:
+          date: '2026-11-17'
+        second: 296
+      -
+        tool: book_meeting
+        summary: '2026-11-17 09:00 · Video call with Etixio CTO – technical scoping, GDPR and code ownership'
+        data:
+          date: '2026-11-17'
+          time: '09:00'
+          minutes: 30
+          subject: 'Video call with Etixio CTO – technical scoping, GDPR and code ownership'
+        second: 326
   -
     seller: junior
     days_ago: 3
@@ -1310,147 +1545,202 @@ calls:
       -
         speaker: seller
         text: 'Hello, this is Alex Morgan from Etixio. Thanks for taking my call. Before anything else, what made you reach out to us this week?'
-        second: 0
-        voice_ms: 7805
+        second: 2
+        voice_ms: 7740
       -
         speaker: persona
-        text: 'We’re actually in the middle of a strategic planning week for the CIO, and the team has been looking at ways to boost our development capacity—especially around the new AI‑driven itinerary engine we’re launching next year. I’m curious, how have you supported other French SaaS companies with similar GDPR‑sensitive AI projects?'
-        second: 3
+        text: "Ah, hello. Well, I have to admit I'm not sure I did reach out — I get a lot of calls, and I don't remember Etixio. Could you remind me what this is about?"
+        second: 13
       -
         speaker: seller
-        text: 'I see. And when that happens today, what does it cost you concretely, in time or in customers?'
-        second: 3
-        voice_ms: 6230
+        text: 'Of course, no problem at all. We work with companies on their order and ticket tracking, and I was following up on the request that came in from your side. Just so I have it right, when you look at your records today, what do your order files or support tickets actually show?'
+        second: 26
+        voice_ms: 16560
       -
         speaker: persona
-        text: 'We’ve set aside roughly €150 thousand for external development on the AI engine, trying to keep the monthly spend under €30 k, and we’re really keen to stay on schedule for a Q1 2027 launch.'
-        second: 4
+        text: "Let me just check something before we go further — I like to know who I'm actually speaking with. Right, I see it now — there was a form filled in on our site, and a message from your side. I'm the one who screens these before anything reaches our CIO, so I'll be honest with you: I'm listening, but I'm not convinced yet. What exactly does Etixio do, and why should this matter to us?"
+        second: 47
       -
         speaker: seller
-        text: 'Who else is involved in deciding how you move forward on this, and what would they need to see?'
-        second: 4
-        voice_ms: 6275
+        text: "Fair enough, and I appreciate the honesty. Concretely, when a customer's order or ticket gets lost in your current setup, what does that cost you — in hours of chasing, or in customers who don't come back?"
+        second: 75
+        voice_ms: 12300
       -
         speaker: persona
-        text: 'The final decision rests with our CIO, Laura Benoît, but she requires a technical validation from our CTO, Marc Dubois, before any contract is signed. They’ll want to see a concrete pilot plan, clear GDPR‑compliant processes, and proof of senior AI expertise. Do you have experience running a technical validation with a CTO on a similar AI project?'
-        second: 5
+        text: "Hmm, that's a strange angle for us — we're a travel software company, our tickets aren't really the issue. Our real problem is on the product side, not support. So if that's what you're selling, I'm not sure you've got the right lead, to be honest."
+        second: 91
       -
         speaker: seller
-        text: 'Do you have a budget or a deadline in mind for fixing it?'
-        second: 5
-        voice_ms: 4565
+        text: "Understood, so it's the product side rather than support — that's useful. When you look at your product records today, what do your stock or order figures actually show that tells you something's off?"
+        second: 110
+        voice_ms: 12000
       -
         speaker: persona
-        text: |-
-          We’ve allocated about €150 thousand for the AI development, aiming to stay under €30 k per month. 
-           The internal timeline targets a decision by the end of February 2027, so we’d need the pilot ready well before then.
-        second: 6
+        text: "I'm going to stop you there, because it feels like you're reading from a script that doesn't match us at all. We don't sell stock, we don't have orders in that sense. Let me ask you plainly: what does Etixio actually do?"
+        second: 126
       -
         speaker: seller
-        text: 'Here is what I suggest: a thirty-minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?'
-        second: 6
-        voice_ms: 9380
+        text: "That's a fair question, and I'll be direct: we help teams get a clear, live view of their product data so nothing slips through. Since it's the product side that's causing you trouble, who else is involved in deciding how you move forward on this, and what would they need to see?"
+        second: 143
+        voice_ms: 16800
       -
         speaker: persona
-        text: 'That works for me – I’ll coordinate with Marc Dubois for Tuesday at ten. One quick question: could you share a reference from a French SaaS client who’s done a similar GDPR‑compliant AI rollout?'
-        second: 7
+        text: "Alright, I'll give you a little more, since you asked properly. On something like this, our CIO Laura Benoît has the final say, but nothing gets signed before our CTO Marc Dubois has looked at the technical side and given his blessing. So whatever you'd bring, it would have to convince him first. But you still haven't told me what your company really does — and I'd rather hear that than another question."
+        second: 164
+      -
+        speaker: seller
+        text: "You're right, and I owe you a straight answer: Etixio gives product teams a live view of their data so nothing slips through. Since Marc is the one who'd need convincing on the technical side, do you have a budget or a deadline in mind for fixing it?"
+        second: 194
+        voice_ms: 15000
+      -
+        speaker: persona
+        text: "We do have numbers, yes — the AI engine we're planning has about one hundred and fifty thousand euros set aside for external help, and I'd like to keep the monthly spend under thirty thousand. And the deadline is real: it has to be live for Q1 2027. But you keep circling without telling me what Etixio actually does. If you're a software company, just say so."
+        second: 213
+      -
+        speaker: seller
+        text: "Understood, and yes, we're a software company — Etixio gives product teams a live view of their data so nothing slips through. Given Marc needs to be convinced on the technical side, here's what I suggest: a thirty-minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?"
+        second: 239
+        voice_ms: 20760
+      -
+        speaker: persona
+        text: "Hold on — you've just told me you're a software company, and now suddenly you have a CTO to put on a call. Are you a software editor, or do you build software for others? I don't even know which country your teams are in. Before I put anything in anyone's calendar, I need to understand what kind of outfit you are."
+        second: 265
+      -
+        speaker: seller
+        text: "That's a fair challenge, so let me be clear: we're a software editor, our teams are in Lyon and Lisbon, and our CTO would run that call himself. Let's put it in the calendar now — next Tuesday at ten, thirty minutes with him, and a written estimate by Friday."
+        second: 288
+        voice_ms: 15540
+      -
+        speaker: persona
+        text: "Lyon and Lisbon — that's not what I'd heard. Honestly, I'd been told Etixio was an offshore outfit, with teams in Madagascar, Mauritius, Vietnam. So which is it? Because if you're a French editor with teams in Europe, that's one conversation; if you're offshore, that's a very different one for us."
+        second: 308
+      -
+        speaker: seller
+        text: "That's an easy one to clear up: our editor is registered in France, and the delivery teams are in Lyon and Lisbon, not Madagascar or Vietnam. If that works for you, let's lock in next Tuesday at ten for the thirty-minute call with our CTO — can you put it in your calendar now?"
+        second: 330
+        voice_ms: 16620
+      -
+        speaker: persona
+        text: "Let me have a look at Tuesday before I promise anything. Ten o'clock won't work, I'm afraid — I'm in our architecture committee with Marc Dubois then, of all people. I could do noon, or two in the afternoon. But before I put a call with your CTO in the diary, I'd still like a straight answer on where your developers actually sit, because that changes everything for us on the data side."
+        second: 351
     ended_by: seller
-    seconds: 8
+    seconds: 379
     revealed:
       - budget
       - decision
-    score: 34
+    score: 14
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
-          score: 5
-          comment: 'Budget (€150k / <€30k per month), decision chain (Laura Benoît + Marc Dubois validation, end of Feb 2027) and the Q1 2027 timeline did come out, but largely because the client volunteered them, and the seller asked the budget question twice after it had already been answered.'
+          score: 2
+          comment: "The seller never discovered the real situation: he asked about 'order and ticket tracking' and 'stock or order figures' to a travel SaaS with a legacy .NET monolith and a Q1 2027 AI engine, and only got the decision process, budget and deadline because the client volunteered them after being asked bluntly."
         questions:
           label: 'Open questions'
-          score: 5
-          comment: "Six questions, four open, and the decision question ('Who else is involved in deciding how you move forward on this, and what would they need to see?') was the best of them, but the questions were generic and repeated, and he never asked the one question this call required: who he was speaking to and how to reach Laura Benoît or Marc Dubois."
+          score: 3
+          comment: "Nine questions, seven open, but they are generic and repeated ('what do your order files or support tickets actually show?', 'what do your stock or order figures actually show?') and the budget question ('do you have a budget or a deadline in mind for fixing it?') comes before any value is established."
         listening:
           label: 'Listening and rephrasing'
-          score: 4
-          comment: "The client asked twice for GDPR-compliant AI references ('how have you supported other French SaaS companies with similar GDPR-sensitive AI projects?' then 'could you share a reference from a French SaaS client...') and the seller never picked either up, rephrased nothing, and moved straight to his own scripted questions."
+          score: 2
+          comment: "The client says 'we're a travel software company, our tickets aren't really the issue' and 'we don't sell stock, we don't have orders in that sense', yet the seller re-asks about stock and orders and repeats the same non-answer three times instead of building on what he was told."
         objections:
           label: 'Handling objections'
-          score: 3
-          comment: "No classic objection was voiced in this excerpt, so handling cannot be fully tested, but the client's implicit concern (GDPR, offshore, proof of senior AI expertise) was raised twice and left unanswered, which is the same weakness flagged in the previous debrief."
+          score: 1
+          comment: "The client's real objection — 'if you're offshore, that's a very different one for us' on the data side — is never addressed; the seller answers it by denying the offshore model ('our teams are in Lyon and Lisbon, not Madagascar or Vietnam'), which contradicts the offer and leaves GDPR untouched."
         value:
           label: 'Value proposition'
-          score: 2
-          comment: "Zero offer content: no GDPR-compliant offshore model, no French reference (Gorilla eSIM, the anesthesia AI agent, the SaaS compliance vendor were all available), no code-ownership argument, no French-speaking Madagascar/Mauritius teams, no 4-8 week start; and 'a written estimate by Friday' promises a firm figure before any scoping, which the offer does not provide (a ballpark figure comes after the CTO call)."
+          score: 1
+          comment: "No offer-accurate value was ever stated: the seller claims 'we're a software editor, our teams are in Lyon and Lisbon', while Etixio is an offshore development company (HQ Meudon, ~170 developers in Madagascar, Mauritius, Vietnam) — no dedicated team, no AI integration, no .NET/micro-services, no GDPR contractual framework mentioned."
         closing:
           label: 'Closing / next step'
-          score: 6
-          comment: "He proposed the right next step himself, dated and matching the offer's real first step ('a thirty-minute video call with our CTO next Tuesday at ten... and a written estimate by Friday'), but he did not lock it: no confirmation of the slot, no calendar invite, and client_actions shows no meeting booked."
-      summary: "A short gatekeeper call where the seller got budget, decision chain and timeline out of a talkative client, then proposed a dated 30-minute CTO video call. But he never identified his interlocutor, never asked for the CIO's or CTO's direct contact, delivered no value at all (GDPR, references and ownership all left unanswered despite two explicit openings), and left the slot unconfirmed. Junior level: decent instinct on the next step, still no offer substance and no locking."
+          score: 3
+          comment: "The seller did make a dated ask ('a thirty-minute video call with our CTO next Tuesday at ten... and a written estimate by Friday'), but it was built on the false Lyon-Lisbon story, the client countered with noon or two, and no meeting was booked in his calendar."
+      summary: 'A ten-minute gatekeeper call where the seller never answered the one question asked four times — what Etixio actually does — and instead invented a French-editor-with-teams-in-Lyon-and-Lisbon story that contradicts the offer, while the client volunteered the decision process, the €150k budget and the Q1 2027 deadline on his own. The instinct to propose a dated CTO call is there, but it rests on a false premise and nothing was locked in.'
       next_step: false
-      outcome: 'A 30-minute CTO video call is proposed for Tuesday at 10 with a written estimate by Friday, but the client only says he will coordinate with Marc Dubois, so nothing is confirmed or booked.'
-      result: 'Dated CTO call proposed, not locked, zero value delivered'
+      outcome: "The gatekeeper is still unconvinced and has not put anything in the CIO's or CTO's calendar; he asked for a straight answer on where the developers sit before any call is booked."
+      result: 'Gatekeeper not passed — wrong company story, no meeting booked'
       objectives:
         -
           objective: 'Turn the gatekeeper into an ally who is willing to pass the call or schedule a slot.'
-          status: partial
-          evidence: "Alexandre engaged and offered to coordinate ('I'll coordinate with Marc Dubois for Tuesday at ten'), but the seller never asked who he was speaking to, never acknowledged the CIO's strategic planning week, and never asked to be put through or to be introduced to Laura Benoît."
+          status: missed
+          evidence: "Alexandre says 'I'm listening, but I'm not convinced yet' and ends with 'before I put a call with your CTO in the diary, I'd still like a straight answer on where your developers actually sit' — he is not an ally, he is still screening."
         -
           objective: 'Obtain the decision‑maker’s direct email or calendar link for a follow‑up.'
           status: missed
-          evidence: "No request for Laura Benoît's or Marc Dubois' email or calendar link appears anywhere in the conversation; the seller relied entirely on Alexandre to relay the invitation."
+          evidence: "No email or calendar link was requested or given; the seller only pushed 'can you put it in your calendar now?' and the client replied 'Let me have a look at Tuesday before I promise anything.'"
         -
           objective: 'Leave the gatekeeper with a concise, relevant piece of information (e.g., Etixio’s GDPR‑compliant offshore model).'
           status: missed
-          evidence: "The client asked twice for GDPR-compliant AI experience and a French SaaS reference; the seller answered neither and gave no information about Etixio's model, locations or references."
-      goal: partial
+          evidence: "The word GDPR never appears in the call, and the seller instead told him the teams are in 'Lyon and Lisbon', the opposite of Etixio's real offshore model."
+      goal: missed
       missed:
         -
           section: pain
-          what: 'The real pain: no senior AI and micro-services expertise internally, team already stretched on the monolith refactor, Q1 2027 launch at risk.'
-          how: "'What happens to the Q1 2027 launch if you can't find senior AI profiles in time?'"
+          what: 'The real pain: no senior AI and micro-services expertise to hit the Q1 2027 launch, with the internal team already stretched on the monolith refactor.'
+          how: "'What's blocking you on the AI engine side today — is it capacity, skills, or the monolith refactor taking up your seniors?'"
         -
           section: objections
-          what: 'His concerns about code ownership, GDPR with an offshore team, and the absence of a nearshore presence in Europe.'
-          how: "'When you picture an offshore team on a GDPR-sensitive AI engine, what worries you most: data handling, code ownership, or the distance?'"
+          what: 'The GDPR and code-ownership concerns about an offshore team, and the doubt about quality without a nearshore presence in Europe.'
+          how: "'When you picture an offshore team working on the AI engine, what worries you first — where the data sits, or who owns the code?'"
         -
           section: 'yes'
-          what: 'What would make him say yes: a clear GDPR-compliant offshore model, a French client reference, and a short CTO call to outline a concrete pilot.'
-          how: 'Answer the two GDPR/reference questions he already asked, then confirm the CTO call as a concrete pilot scoping.'
+          what: 'What would make them say yes: a clear GDPR-compliant offshore model, a French client reference, and a short CTO call to outline a concrete pilot.'
+          how: "'If I showed you a GDPR framework governed by contract and a French client reference, would a 30-minute call with our CTO be enough to move forward?'"
         -
           section: secret
-          what: "A competitor's proof-of-concept has already stalled because they cannot supply senior AI talent."
-          how: "'Have you already started anything on the AI engine side, with a vendor or internally?'"
+          what: 'The stalled proof-of-concept with a competitor who cannot supply senior AI talent — the open window.'
+          how: "'Have you already started anything on the AI engine with another partner, and if so what's working and what isn't?'"
       best:
         -
-          quote: 'Here is what I suggest: a thirty-minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?'
-          why: "He proposes the next step himself, dated, and it matches the offer's real first step (30-minute CTO video call, free and with no commitment)."
+          quote: 'Fair enough, and I appreciate the honesty.'
+          why: "Welcomes the client's frankness without getting defensive, which keeps the gatekeeper talking."
       worst:
         -
-          quote: 'Do you have a budget or a deadline in mind for fixing it?'
-          why: "The client had just given both the budget (€150k, under €30k per month) and the timeline (Q1 2027) two turns earlier; asking again shows he was not listening and wastes the gatekeeper's patience."
-          better: "'You mentioned €150k and a Q1 2027 launch - is the decision on the vendor already framed, or still open?'"
-        -
-          quote: 'a written estimate by Friday'
-          why: 'Promises something the offer does not provide: a firm written estimate before any scoping; the offer gives a price catalogue within 24 business hours on request and a written summary with a ballpark figure after the CTO call.'
-          better: "'After the CTO call I'll send you a written summary with a ballpark figure, and a price catalogue within 24 business hours if you want one.'"
+          quote: "That's a fair challenge, so let me be clear: we're a software editor, our teams are in Lyon and Lisbon, and our CTO would run that call himself."
+          why: 'Invented and contradicts the offer: Etixio is not a software editor, has no developers in France, and delivers from Madagascar, Mauritius and Vietnam — and it dodges the GDPR question the client actually raised.'
+          better: 'Etixio is a French company headquartered in Meudon, with about 170 developers in Madagascar, Mauritius and Vietnam, supervised by tech leads and a CTO. On the data side, GDPR is governed by contract with standard contractual clauses, named access by role, separate environments and anonymized data — and the code and repositories stay yours. If that works, our CTO can walk Marc through it in 30 minutes.'
       tips:
-        - "Identify your interlocutor first and ask for the route in: 'Am I speaking with Laura Benoît's office? Could you put me through, or give me her and Marc Dubois' direct email or calendar link so I can send the invite myself?'"
-        - 'Answer the GDPR question before moving on, with the real arguments: French company based in Meudon, French-speaking teams in Madagascar and Mauritius, GDPR governed by contract with standard contractual clauses, named role-based access, separate environments, code and repositories owned by the client.'
-        - "Lock the slot instead of leaving it to the gatekeeper: send the calendar invite during the call, confirm Marc Dubois' attendance, and drop the 'written estimate by Friday' promise for a written summary with a ballpark figure after the CTO call."
+        - "Answer the question you were asked, once, truthfully: 'Etixio is a French company, HQ in Meudon, ~170 developers in Madagascar, Mauritius and Vietnam' — then stop and let him react. He asked four times; the fifth evasion ends the call."
+        - "Replace the script with the client's own words: he said 'travel software', '.NET monolith', 'AI engine for Q1 2027' — talk dedicated .NET/micro-services teams and AI integration (RAG, assistants, POC to production), never 'order and ticket tracking'."
+        - 'Turn the GDPR objection into your strongest card: standard contractual clauses, named access by role, separate environments, anonymized data, code and repos owned by the client — then ask for the 30-minute CTO call with Marc Dubois, and accept noon or 2pm he already offered.'
       speech:
         voice: true
-        talk_share: 31
-        seller_words: 107
-        persona_words: 235
-        questions: 6
-        open_questions: 4
-        fillers: 0
-        filler_words: []
-        longest: 33
-        wpm: 187
+        talk_share: 43
+        seller_words: 435
+        persona_words: 575
+        questions: 9
+        open_questions: 7
+        fillers: 4
+        filler_words:
+          actually: 2
+          right: 2
+        longest: 66
+        wpm: 196
         reply_delay: 0
-      speech_comment: 'Talk share 31% (107 vs 235 words) with 6 questions and no fillers is healthy for a gatekeeper call, but 187 words per minute is fast and the seller used the space he had to fire scripted questions rather than deliver the one piece of information the client asked for twice.'
+      speech_comment: "43% talk share is fine, but 196 words per minute is fast and the longest line (66 words) is a scripted non-answer repeated three times; the four fillers ('actually', 'right') land exactly where the client is waiting for a straight answer."
+    actions:
+      -
+        tool: look_up
+        summary: 'Courriels: Etixio'
+        data:
+          source: emails
+          query: Etixio
+          found: 1
+        second: 48
+      -
+        tool: look_up
+        summary: 'Activités CRM: Etixio'
+        data:
+          source: crm_activities
+          query: Etixio
+          found: 2
+        second: 48
+      -
+        tool: check_calendar
+        summary: '2026-11-17'
+        data:
+          date: '2026-11-17'
+        second: 352
   -
     seller: manager
     days_ago: 1
@@ -1605,132 +1895,185 @@ calls:
       -
         speaker: seller
         text: 'Hello, this is Alex Morgan from Etixio. Thanks for taking my call. Before anything else, what made you reach out to us this week?'
+        second: 2
+        voice_ms: 7740
+      -
+        speaker: persona
+        text: "Well, Alex, you folks sent over your price catalogue for the two React developers I asked about — so, thank you for that, it was quick. I'm shopping around a bit, comparing you with a few others, so a chat makes sense. How are you doing today?"
         second: 13
-        voice_ms: 7805
-      -
-        speaker: persona
-        text: 'Sure thing, Alex. We’ve been looking to add a couple of senior React full‑stack developers for a new interface we need to roll out early next year, so I asked Etixio for a price catalogue to see how you compare with a few other options we’re evaluating. It’s part of a broader push on our digital‑transformation roadmap – I’m hoping to line up the right team before the year ends. By the way, I was out on a long ride this weekend, so I’m in a good mood to chat!'
-        second: 14
       -
         speaker: seller
-        text: 'I see. And when that happens today, what does it cost you concretely, in time or in customers?'
-        second: 15
-        voice_ms: 6230
+        text: "Doing well, thanks. When you look at those two developer profiles in the catalogue, what do your own project figures show — the delivery dates you're committed to and the budget you've set aside for this?"
+        second: 32
+        voice_ms: 12240
       -
         speaker: persona
-        text: 'To be honest, the main cost for us is the time we spend on the selection – every week we delay pushes our January start date and tightens the window we have to meet the compliance deadline. That’s why I’m hoping for a clear monthly rate that fits within roughly €45‑50 k for the two senior React devs, and an onboarding period that doesn’t drag on too long. Could you tell me how quickly you could have the developers onboarded and what the typical ramp‑up timeline looks like?'
-        second: 16
+        text: "Let me pull up my notes here a second… Right, so we're aiming to kick off in early January 2027, and honestly the budget is the part that keeps me up at night a bit. We've got a ceiling of seventy thousand a month for the whole transformation effort, and I was hoping two senior React folks would land somewhere around forty-five to fifty. Is that realistic on your side?"
+        second: 48
       -
         speaker: seller
-        text: 'Who else is involved in deciding how you move forward on this, and what would they need to see?'
-        second: 16
-        voice_ms: 6275
+        text: "That helps, thank you. And when you add up the delivery dates you've committed to and what a slip would cost you, what do your figures show — is that forty-five to fifty a hard ceiling, or is there room if the profiles are stronger?"
+        second: 75
+        voice_ms: 13920
       -
         speaker: persona
-        text: 'The final go‑ahead will come from our CTO, François Dupont, once he’s had a quick look‑over. He’ll also run it past our CFO, Isabelle Laurent, to make sure the numbers line up. They’ll need to see a solid cost breakdown, the onboarding schedule and some proof that the team can deliver on time – especially since we have that compliance demo due in mid‑February.'
-        second: 18
+        text: "It's more of a soft target than a wall — if the profiles are genuinely senior and they hit the ground running, I could stretch a bit. But I've got a CTO and a CFO looking over my shoulder on this one, so I can't just wave numbers around. What kind of rate would you actually put on a senior full-stack React profile?"
+        second: 93
       -
         speaker: seller
-        text: 'Do you have a budget or a deadline in mind for fixing it?'
-        second: 19
-        voice_ms: 4565
+        text: "That's good to know. Who else besides the CTO and CFO would need to sign off on this, and what would they need to see from us to feel comfortable?"
+        second: 117
+        voice_ms: 8760
       -
         speaker: persona
-        text: 'We’ve allocated about €70 000 per month for the overall digital‑transformation effort, and for the two senior React developers we’re aiming to stay in the €45‑50 k range each month. The key deadline is to have the new predictive‑maintenance interface ready for a demo by mid‑February 2027, so we need the team fully ramped up well before then.'
-        second: 20
+        text: "Well, it's really François, our CTO, who has the final word — Isabelle from finance just gives it a quick sanity check on the numbers. For François it's all about the technical fit and whether he trusts the team. So what would help is a clear picture of who exactly would be working with us, and honestly a reference in our world — industrial, manufacturing — would go a long way with him."
+        second: 129
+      -
+        speaker: seller
+        text: "That's helpful. Do you have a budget or a deadline in mind for fixing it?"
+        second: 157
+        voice_ms: 4380
+      -
+        speaker: persona
+        text: "Yes — the decision needs to be locked in by the end of January 2027, with the contract signed early February. That's driven by a compliance deadline on our side, so the clock is genuinely ticking. Why do you ask?"
+        second: 164
       -
         speaker: seller
         text: 'Here is what I suggest: a thirty-minute video call with our CTO next Tuesday at ten to look at your setup, and a written estimate by Friday. Does that work for you?'
-        second: 23
-        voice_ms: 9380
+        second: 181
+        voice_ms: 9840
       -
         speaker: persona
-        text: 'That works for me, Tuesday at ten is fine. I’ll make sure François is available and we’ll be ready to discuss the full‑team setup, GDPR safeguards and see an industrial reference. Looking forward to it.'
-        second: 25
-    ended_by: seller
-    seconds: 29
+        text: "Let me check my calendar for Tuesday… Give me a second. Ah, ten o'clock is no good for me — I've got a candidate interview then. Eleven would work though, or any time after that. Would eleven suit your CTO?"
+        second: 194
+      -
+        speaker: seller
+        text: "Eleven works perfectly for our CTO on Tuesday. Please put it in your calendar right now, Tuesday at eleven, and I'll send the invite along with the written estimate by Friday."
+        second: 210
+        voice_ms: 10500
+      -
+        speaker: persona
+        text: "Done — it's in my calendar, Tuesday the seventeenth at eleven, half an hour. And I'll keep an eye out for that estimate by Friday. Thanks for sorting this out so quickly, Alex."
+        second: 224
+      -
+        speaker: seller
+        text: "Perfect, thank you. I'll get the invite over today, and we'll speak on Tuesday at eleven. Have a good rest of your week."
+        second: 238
+        voice_ms: 7200
+      -
+        speaker: persona
+        text: "Great, talk Tuesday then. And wish me luck — I'm squeezing in a decent bike ride before the rain hits this weekend. Take care, Alex."
+        second: 248
+    ended_by: persona
+    seconds: 259
     revealed:
       - budget
-      - pain
       - decision
       - 'yes'
-    score: 60
+    score: 65
     debrief:
       criteria:
         discovery:
           label: 'Needs discovery'
           score: 6
-          comment: 'The seller got the client to talk about the January start, the €45–50k target, the mid-February compliance demo and the CTO/CFO approval chain, but only through three questions — the full-team scope (PO, QA, DevOps), the legacy Java/Spring ERP and the EU Machinery Directive audit never came out.'
+          comment: 'He pulled out the budget (€70k ceiling, €45-50k target), the decision chain (CTO François Dupont final, CFO Isabelle Laurent sanity check) and the timeline (decision by end of January 2027, signature early February), but never asked what the project actually is — the legacy Java/Spring ERP, the React front-end, the predictive-maintenance AI or the compliance deadline never came up.'
         questions:
           label: 'Open questions'
           score: 6
-          comment: "Four open questions out of six, well sequenced (reason for the call, cost of inaction, decision chain, budget/deadline), but the budget question was closed and the client's own question about onboarding and ramp-up was never picked up."
+          comment: "Five open questions out of seven, and the sign-off question ('Who else besides the CTO and CFO would need to sign off on this, and what would they need to see from us to feel comfortable?') was the best of the call, but several were compound ('when you add up the delivery dates you've committed to and what a slip would cost you, what do your figures show') and 'Do you have a budget or a deadline in mind for fixing it?' was closed and redundant since the client had just given both."
         listening:
           label: 'Listening and rephrasing'
-          score: 3
-          comment: "Fourth occurrence of the same pattern: the client hands over the pain (selection time, January start, compliance deadline) and asks 'how quickly could you have the developers onboarded and what does the typical ramp-up timeline look like?', and the seller answers with 'I see. And when that happens today, what does it cost you concretely, in time or in customers?' — no rephrasing, no answer to the question asked."
+          score: 7
+          comment: "He let the client talk 63% of the words, built on each answer ('That helps, thank you', 'That's good to know') and dug one level deeper on the budget with the soft-ceiling question, but he never picked up the two openings the client handed him — the direct rate question and the industrial reference request."
         objections:
           label: 'Handling objections'
-          score: 4
-          comment: 'No objection was raised yet, but the client explicitly named what he wants to see — GDPR safeguards, an industrial reference, the full-team setup — and the seller let all three pass without a single pre-emptive argument (SCCs, named role access, client-owned code, 7 sectors including industry).'
+          score: 3
+          comment: 'No objection was actually raised in this short excerpt, so nothing to handle, but he also pre-empted nothing on the classic offshore objections (time zone, GDPR, turnover, past bad experiences) that the brief says are coming at the CTO meeting.'
         value:
           label: 'Value proposition'
-          score: 5
-          comment: 'Nothing promised outside the offer — no invented rate, no invented lead time — but no offer argument was used either: no 4–8 week start, no free 30-minute CTO call framing, no catalogue-within-24h, no GDPR or code-ownership point, no reference.'
+          score: 3
+          comment: "He left the client's direct question ('What kind of rate would you actually put on a senior full-stack React profile?') unanswered, surfaced none of the offer's real arguments (offshore team, CTO call, industrial reference, GDPR/SCCs, site relay), and over-promised 'a written estimate by Friday' when the framework only supports a catalogue within 24 business hours and a written summary with a ballpark figure after the CTO call."
         closing:
           label: 'Closing / next step'
-          score: 6
-          comment: "The seller proposed the next step himself, dated ('next Tuesday at ten') with a written estimate by Friday, and the client accepted — but no calendar invite was sent and the Friday deliverable was not confirmed back."
-      summary: "A short, efficient qualification call: the seller opened well, extracted the budget, the decision chain and the deadline, and closed a dated CTO video call. But the recurring listening flaw struck a fourth time — the client's onboarding/ramp-up question went unanswered — and the seller used none of Etixio's real arguments (GDPR by contract, client-owned code, industrial references, 4–8 week start) even though the client named exactly what he wanted to see."
+          score: 9
+          comment: "He proposed the dated slot himself ('a thirty-minute video call with our CTO next Tuesday at ten'), adjusted to eleven when the client had a conflict, and locked it in ('Please put it in your calendar right now, Tuesday at eleven') — the meeting is confirmed in the client's calendar for 17 November at 11:00, 30 minutes."
+      summary: "A short, efficient qualification call: Alex got the budget, the decision chain and the timeline out of a cooperative prospect and closed a dated 30-minute CTO video call that is now in the client's calendar. But he never asked what the project actually is, left the direct rate question unanswered, and repeated the recurring over-promise of a 'written estimate by Friday' that the framework does not support."
       next_step: true
-      outcome: "A 30-minute CTO video call is verbally agreed for Tuesday at 10, with a written estimate promised by Friday, but nothing is in the client's calendar yet and the deal is still one of four options being compared."
-      result: 'Dated CTO call agreed, but no invite sent and no offer argument used'
+      outcome: 'The deal is at the CTO video-call stage: Tuesday 17 November at 11:00, 30 minutes, with a written estimate promised by Friday — a promise to walk back before it becomes a commitment.'
+      result: 'Dated CTO call booked, but the real project and the price question left untouched'
       objectives:
         -
           objective: 'Qualify the need before talking price'
           status: partial
-          evidence: "The pain and the mid-February compliance deadline surfaced, but only because the client volunteered them; the seller never rephrased, never explored the full-team scope (PO, QA, DevOps), the legacy Java/Spring ERP or the EU Machinery Directive audit, and never answered the client's onboarding/ramp-up question."
+          evidence: 'He got budget, decision chain and timeline, but never asked what the project is — the legacy Java/Spring ERP, the React front-end, the predictive-maintenance AI and the compliance deadline were never mentioned.'
         -
           objective: 'Identify the budget, the decision‑maker and the timeline'
           status: reached
-          evidence: "'Do you have a budget or a deadline in mind for fixing it?' brought out €70k/month overall, €45–50k for the two devs, CTO François Dupont with CFO Isabelle Laurent, and the mid-February 2027 demo."
+          evidence: "Client: 'a ceiling of seventy thousand a month… forty-five to fifty' for two senior React devs; 'it's really François, our CTO, who has the final word — Isabelle from finance just gives it a quick sanity check'; 'the decision needs to be locked in by the end of January 2027, with the contract signed early February'."
         -
           objective: 'Get the 30‑minute video call with the CTO'
           status: reached
-          evidence: "'a thirty-minute video call with our CTO next Tuesday at ten' — the seller proposed it himself and the client accepted: 'That works for me, Tuesday at ten is fine.'"
+          evidence: "Seller proposed the slot, adjusted to eleven, and the client confirmed: 'Done — it's in my calendar, Tuesday the seventeenth at eleven, half an hour.'"
       goal: partial
       missed:
         -
+          section: pain
+          what: 'The real need behind the two React profiles: modernizing a legacy Java/Spring ERP with a React front-end, AI predictive maintenance, and a full-stack team (PO, QA, DevOps) to hit a compliance deadline.'
+          how: "'Before we talk profiles — what's the project behind these two React developers? What are you building, and what's forcing the January start?'"
+        -
           section: secret
-          what: 'The compliant demo of the predictive-maintenance interface due 15 February 2027 for the EU Machinery Directive audit, and the possible ongoing support beyond the rollout.'
-          how: "'You said mid-February — is that a hard date tied to something external, and if the rollout goes well, would you want the team to stay on for support?'"
+          what: 'The compliant demo of the predictive-maintenance interface due 15 February 2027 for the EU Machinery Directive audit, and the need for ongoing support after rollout.'
+          how: "'You mentioned a compliance deadline — what exactly has to be delivered, and by when? And after the first rollout, is there a run phase you'd want covered?'"
         -
           section: objections
-          what: 'The three objections Pierre will raise (time zone with Madagascar, GDPR for offshore code, past bad experience with low-cost offshore on quality and turnover) and what would make him say yes (full-team composition, GDPR safeguards, an industrial reference).'
-          how: "'When you compare providers, what's made you hesitate before with offshore teams — and what would you need to see on data protection and references to feel comfortable?'"
+          what: 'The objections he will raise at the CTO meeting: Madagascar time zone, GDPR for code offshore, past bad experiences with low-cost offshore on quality and turnover.'
+          how: "'When you've looked at offshore teams before, what went wrong — and what would you need to see on data location, time-zone overlap and team stability to be comfortable?'"
       best:
         -
-          quote: 'Hello, this is Alex Morgan from Etixio. Thanks for taking my call. Before anything else, what made you reach out to us this week?'
-          why: 'Clean, polite opening that hands the floor to the client immediately and gets the real context (January start, comparison with other providers) in one question.'
+          quote: 'Who else besides the CTO and CFO would need to sign off on this, and what would they need to see from us to feel comfortable?'
+          why: 'One open question that pulled both the real decision-maker (François has the final word, Isabelle only sanity-checks) and the buying criterion (technical trust plus an industrial reference).'
       worst:
         -
-          quote: 'I see. And when that happens today, what does it cost you concretely, in time or in customers?'
-          why: 'Fourth time this exact line is flagged: the client had just given the pain and asked a direct question about onboarding and ramp-up, and the seller neither acknowledged what he heard nor answered — he fired the next question instead.'
-          better: "'So the real cost is the selection time eating into your January start and that mid-February compliance window — noted. On onboarding, we typically start in 4 to 8 weeks and the ramp-up is planned with you from day one; I'll have the CTO walk you through the exact timeline on Tuesday. In the meantime, what does that compliance deadline actually commit you to?'"
+          quote: "Please put it in your calendar right now, Tuesday at eleven, and I'll send the invite along with the written estimate by Friday."
+          why: "The closing move is good, but 'written estimate by Friday' promises a firm figure before the CTO call — the offer only supports a catalogue within 24 business hours and a written summary with a ballpark figure after the CTO call. Same over-promise as the 2026-11-14 debrief, second occurrence."
+          better: "'I'll send the invite today. After Tuesday's call with our CTO you'll get a written summary with a ballpark figure — the firm number comes once we've scoped the team with you.'"
       tips:
-        - 'Before asking the next question, spend one sentence rephrasing what the client just said — this is the fourth call where the same line is flagged; make it a rule: acknowledge, then ask.'
-        - "Answer the client's questions when he asks them: he asked twice about onboarding and ramp-up, and Etixio has a real answer (4–8 week start, profiles seen and interviewed by the client, adjustable team) — use it instead of deflecting."
-        - "Prepare three one-line arguments for Tuesday's CTO call, since Pierre named exactly what he wants to see: GDPR by contract with SCCs and named role access, code and repositories owned by the client, and an industrial-sector reference — plus send the calendar invite today so the step is locked, not just verbal."
+        - "Before Tuesday, send a short agenda and ask one question by email: 'What's the project behind the two React profiles?' — walk into the CTO call knowing it's an ERP modernization with AI predictive maintenance, not a generic React request."
+        - 'Prepare and rehearse the three offshore objections (time zone, GDPR, turnover) with the real arguments: Antananarivo is only +2h from Paris in winter with a relay between sites, GDPR is governed by contract with SCCs and named role-based access, and departures are covered by documentation and supervised handover.'
+        - "Walk back the 'written estimate by Friday' in your confirmation email: reframe it as a written summary with a ballpark figure after the CTO call, and bring the industrial reference (and the free 30-minute CTO call framing) into the Tuesday meeting."
       speech:
         voice: true
-        talk_share: 23
-        seller_words: 107
-        persona_words: 358
-        questions: 6
-        open_questions: 4
-        fillers: 0
-        filler_words: []
-        longest: 33
-        wpm: 187
-        reply_delay: 1
-      speech_comment: 'Only 23% of the words (107 vs 358) with 6 questions in 1 minute at 187 words per minute — the seller is efficient and lets the client talk, but the pace is rushed and the questions land without any acknowledgement of the previous answer.'
+        talk_share: 37
+        seller_words: 246
+        persona_words: 415
+        questions: 7
+        open_questions: 5
+        fillers: 1
+        filler_words:
+          right: 1
+        longest: 47
+        wpm: 198
+        reply_delay: 0
+      speech_comment: 'Talk share was healthy (37% seller, 63% client) with 5 open questions out of 7, but the pace was fast at 198 wpm and questions were often stacked two or three at a time, which is why the rate question and the industrial-reference opening went unanswered.'
+    actions:
+      -
+        tool: check_calendar
+        summary: '2026-11-17'
+        data:
+          date: '2026-11-17'
+        second: 195
+      -
+        tool: check_calendar
+        summary: '2026-11-17'
+        data:
+          date: '2026-11-17'
+        second: 225
+      -
+        tool: book_meeting
+        summary: '2026-11-17 11:00 · Video call with Etixio CTO – ERP modernization / React team'
+        data:
+          date: '2026-11-17'
+          time: '11:00'
+          minutes: 30
+          subject: 'Video call with Etixio CTO – ERP modernization / React team'
+        second: 225

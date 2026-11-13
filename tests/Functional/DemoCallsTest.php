@@ -28,6 +28,9 @@ final class DemoCallsTest extends FunctionalTestCase
         self::assertNotNull($junior);
         $calls = $this->service(CallRepository::class)->all();
         self::assertCount(6, $calls);
+        // The calls were played with the agents: the clients looked their files up, and booked meetings in the best ones.
+        self::assertNotEmpty(array_merge(...array_map(static fn ($c): array => $c->actions(), $calls)));
+        self::assertNotEmpty(array_merge(...array_map(static fn ($c): array => $c->bookings(), $calls)));
         foreach ($calls as $call) {
             self::assertSame(CallStatus::Done, $call->status);
             self::assertNotNull($call->score);

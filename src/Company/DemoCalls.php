@@ -26,7 +26,7 @@ use Symfony\Component\Yaml\Yaml;
  * and debriefed on Décroche; their dates count back from today.
  *
  * @phpstan-type DemoPerson array{name: string, email?: string, profile: string}
- * @phpstan-type DemoCall array{seller: string, days_ago: int, scenario: array{situation?: array{key: string}&array<string, mixed>}&array<string, mixed>, lines: list<array{speaker: string, text: string, second: int, voice_ms?: int}>, ended_by: string, seconds: int, revealed: list<string>, score: int, debrief: array<string, mixed>}
+ * @phpstan-type DemoCall array{seller: string, days_ago: int, scenario: array{situation?: array{key: string}&array<string, mixed>}&array<string, mixed>, lines: list<array{speaker: string, text: string, second: int, voice_ms?: int}>, ended_by: string, seconds: int, revealed: list<string>, actions?: list<array{tool: string, summary: string, data: array<string, mixed>, second: int}>, score: int, debrief: array<string, mixed>}
  */
 final readonly class DemoCalls
 {
@@ -103,6 +103,10 @@ final readonly class DemoCalls
         }
         foreach ($data['revealed'] as $section) {
             $call->reveal(BriefSection::from($section));
+        }
+        // What the client did with their tools during the call: their files looked up, a meeting booked.
+        foreach ($data['actions'] ?? [] as $action) {
+            $call->act($action['tool'], $action['summary'], $start->modify(\sprintf('+%d seconds', $action['second'])), $action['data']);
         }
         $call->stop(CallEnd::from($data['ended_by']), $start->modify(\sprintf('+%d seconds', $data['seconds'])));
         $call->close($data['debrief'], $data['score']);
