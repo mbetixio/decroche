@@ -117,7 +117,9 @@
             <ul class="outcomes">
                 {% for action in call.actions %}
                     <li>
-                        <span class="tag {{ action.tool == 'book_meeting' ? 'good' }}"><time datetime="{{ action.at }}">{{ action.at|date('H:i') }}</time></span>
+                        {# When it happened in the call, as the call log counts. #}
+                        {% set elapsed = max(0, action.at|date('U') - call.startedAt|date('U')) %}
+                        <span class="tag {{ action.tool == 'book_meeting' ? 'good' }}"><time datetime="{{ action.at }}">{{ '%02d:%02d'|format(elapsed // 60, elapsed % 60) }}</time></span>
                         <div><b>{{ ('debrief.action.' ~ action.tool)|trans }}</b>{% if action.summary %} · {{ action.summary }}{% endif %}</div>
                     </li>
                 {% endfor %}
@@ -137,7 +139,7 @@
                             {% for entry in source.entries %}
                                 <div class="doc small record">
                                     <div class="record-head"><span class="record-kind">{{ entry.when }}</span><span class="record-subject">{{ entry.title }}</span></div>
-                                    {% if entry.details %}<dl class="record-fields">{% for detail in entry.details %}<div class="record-field"><dt>{{ detail.name }}</dt><dd>{{ detail.value }}</dd></div>{% endfor %}</dl>{% endif %}
+                                    {% if entry.details %}<dl class="record-fields">{% for detail in entry.details %}<div class="record-field"><dt>{{ detail.name|replace({'_': ' '})|capitalize }}</dt><dd>{{ detail.value }}</dd></div>{% endfor %}</dl>{% endif %}
                                     {% if entry.note %}<p>{{ entry.note }}</p>{% endif %}
                                 </div>
                             {% endfor %}
