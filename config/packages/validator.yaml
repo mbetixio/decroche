@@ -1,3 +1,3 @@
-# Validation runs on the forms' data (src/Form/Model) and the entities' constraints.
+# Validation runs on the forms' data (src/Form/Data) and the entities' constraints.
 framework:
     validation: ~
