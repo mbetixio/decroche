@@ -46,11 +46,13 @@ final readonly class ProgressTools
      */
     public function report(Member $member): array
     {
-        return $this->progress->of($member)->toArray() + [
-            'missions' => array_map(fn (array $m): array => self::mission($m) + ['situation' => $this->companies->get()->situation($m['mission']->situation)?->label], $this->missions->of($member)),
+        $history = $this->calls->history($member);
+
+        return $this->progress->of($member, $history)->toArray() + [
+            'missions' => array_map(fn (array $m): array => self::mission($m) + ['situation' => $this->companies->get()->situation($m['mission']->situation)?->label], $this->missions->of($member, $history)),
             'recent' => array_map(static fn (Call $c): array => [
                 'call' => $c->id, 'scenario' => $c->scenario->title, 'date' => $c->startedAt->format('Y-m-d H:i'), 'status' => $c->status->value, 'score' => $c->score,
-            ], $this->calls->history($member, 10)),
+            ], \array_slice($history, 0, 10)),
         ];
     }
 

@@ -22,11 +22,12 @@ final class CallRepository extends ServiceEntityRepository
     }
 
     /**
-     * A member's calls, newest first, with their scenario (every list shows its title).
+     * A member's calls, newest first, with their scenario (every list shows its title): all of them for the figures, a
+     * few for a list.
      *
      * @return list<Call>
      */
-    public function history(Member $member, int $limit = 500): array
+    public function history(Member $member, ?int $limit = null): array
     {
         /* @var list<Call> */
         return $this->createQueryBuilder('c')
@@ -61,7 +62,7 @@ final class CallRepository extends ServiceEntityRepository
      *
      * @return list<Call>
      */
-    public function all(int $limit = 2000): array
+    public function all(?int $limit = null): array
     {
         /* @var list<Call> */
         return $this->createQueryBuilder('c')

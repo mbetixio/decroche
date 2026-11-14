@@ -144,11 +144,13 @@ final class TeamController extends AbstractController
      */
     private function memberPage(Member $member, ?string $password = null): Response
     {
+        $history = $this->calls->history($member);
+
         return $this->render('team/member.html.twig', [
             'member' => $member,
-            'stats' => $this->progress->of($member),
-            'missions' => $this->missions->of($member),
-            'recent' => $this->calls->history($member, 20),
+            'stats' => $this->progress->of($member, $history),
+            'missions' => $this->missions->of($member, $history),
+            'recent' => \array_slice($history, 0, 20),
         ] + (null !== $password ? ['password' => $password] : []));
     }
 }

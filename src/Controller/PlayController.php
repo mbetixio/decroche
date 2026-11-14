@@ -37,11 +37,14 @@ final class PlayController extends AbstractController
     #[Route('/', name: 'home', methods: ['GET'])]
     public function home(#[CurrentUser] Member $me, ProgressReport $progress, MissionTracker $missions, CallRepository $calls, CompanyRepository $companies): Response
     {
+        // The member's calls, read once for the figures, the missions and the list.
+        $history = $calls->history($me);
+
         return $this->render('play/home.html.twig', [
             'current' => $calls->current($me),
-            'stats' => $progress->of($me),
-            'missions' => $missions->of($me),
-            'recent' => $calls->history($me, 6),
+            'stats' => $progress->of($me, $history),
+            'missions' => $missions->of($me, $history),
+            'recent' => \array_slice($history, 0, 6),
             'situations' => $companies->get()->situations(),
         ]);
     }

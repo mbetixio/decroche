@@ -25,9 +25,12 @@ final readonly class ProgressReport
     ) {
     }
 
-    public function of(Member $member): Stats
+    /**
+     * @param list<Call>|null $history the member's calls, newest first, when the page already has them
+     */
+    public function of(Member $member, ?array $history = null): Stats
     {
-        return $this->summarize($this->calls->history($member));
+        return $this->summarize($history ?? $this->calls->history($member));
     }
 
     /**

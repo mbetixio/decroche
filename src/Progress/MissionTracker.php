@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Progress;
 
+use App\Entity\Call;
 use App\Entity\Member;
 use App\Entity\Mission;
 use App\Repository\CallRepository;
@@ -27,11 +28,13 @@ final readonly class MissionTracker
     /**
      * A member's missions and their progress, the unfinished and most urgent first (finished ones stay visible).
      *
+     * @param list<Call>|null $history the member's calls, newest first, when the page already has them
+     *
      * @return list<array{mission: Mission, done: int, complete: bool, overdue: bool}>
      */
-    public function of(Member $member): array
+    public function of(Member $member, ?array $history = null): array
     {
-        $history = $this->calls->history($member);
+        $history ??= $this->calls->history($member);
         $rows = array_map(function (Mission $mission) use ($history): array {
             $done = $mission->progress($history);
 
