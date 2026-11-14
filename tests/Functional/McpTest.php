@@ -292,6 +292,18 @@ final class McpTest extends FunctionalTestCase
         $refused = $this->rpc('tools/call', ['name' => 'team', 'arguments' => []]);
         self::assertTrue($refused['isError']);
         self::assertStringContainsString('managers only', $refused['content'][0]['text']);
+        // Every manager's tool, not only the team.
+        foreach (['member_progress' => ['email' => 'seller@decroche.test'], 'give_mission' => [], 'invite' => ['email' => 'new@decroche.test']] as $tool => $arguments) {
+            $refused = $this->rpc('tools/call', ['name' => $tool, 'arguments' => (object) $arguments]);
+            self::assertTrue($refused['isError'], $tool);
+            self::assertStringContainsString('managers only', $refused['content'][0]['text'], $tool);
+        }
+        // Nor someone else's call, by its number.
+        $theirs = $this->liveCall($this->member('other@decroche.test'));
+        foreach (['reply' => ['message' => 'Hello?', 'call' => $theirs->id], 'hang_up' => ['call' => $theirs->id], 'debrief' => ['call' => $theirs->id]] as $tool => $arguments) {
+            $refused = $this->rpc('tools/call', ['name' => $tool, 'arguments' => (object) $arguments]);
+            self::assertStringContainsString('No call #'.$theirs->id.' in your name.', $refused['content'][0]['text'], $tool);
+        }
     }
 
     public function testAManagerReadsTheTeamAndGivesAMission(): void
