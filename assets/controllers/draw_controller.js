@@ -7,14 +7,12 @@ import { follow } from '../follow.js';
  * waiting screen, which a button closes.
  */
 export default class extends Controller {
-    static targets = ['overlay'];
-
     async submit(event) {
         event.preventDefault();
         const form = event.currentTarget.closest('form') ?? event.target.closest('form');
         const body = new FormData(form);
         if (event.submitter?.name) body.append(event.submitter.name, event.submitter.value);
-        const overlay = this.hasOverlayTarget ? this.overlayTarget : document.getElementById('draw-overlay');
+        const overlay = document.getElementById('draw-overlay');
         if (!overlay) {
             form.submit();
             return;

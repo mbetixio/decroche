@@ -16,8 +16,9 @@
     no_recognition: 'call.no_recognition'|trans, resume: 'call.state.resume'|trans, voice_server: 'call.voice.server'|trans,
     voice_browser: 'call.voice.browser'|trans, sample: 'call.voice.sample'|trans,
 } %}
-<div class="callscreen" id="main" data-state="{{ incoming ? 'incoming' : 'idle' }}"
+<main class="callscreen" id="main" data-state="{{ incoming ? 'incoming' : 'idle' }}"
      data-controller="call"
+     data-action="keydown.esc@window->call#closeSheet"
      data-call-talk-url-value="{{ path('call_talk', {id: call.id}) }}"
      data-call-token-value="{{ csrf_token('call-' ~ call.id) }}"
      data-call-language-value="{{ company().language.value }}"
@@ -68,7 +69,7 @@
     </div>
 
     <aside class="cs-sheet" data-call-target="sheet" aria-labelledby="sheet-title" hidden>
-        <div class="cs-sheet-head"><h2 id="sheet-title">{{ 'call.sheet.title'|trans }}</h2><button type="button" class="btn ghost sm" data-action="call#closeSheet">{{ 'action.hide'|trans }}</button></div>
+        <div class="cs-sheet-head"><h2 id="sheet-title" tabindex="-1">{{ 'call.sheet.title'|trans }}</h2><button type="button" class="btn ghost sm" data-action="call#closeSheet">{{ 'action.hide'|trans }}</button></div>
         <div class="stack">
             <div class="block">
                 <p class="small"><b>{{ 'call.sheet.goal'|trans }}</b> {{ scenario.goal }}</p>
@@ -96,6 +97,6 @@
             </form>
         </div>
     </aside>
-</div>
+</main>
 {{ include('play/_draw_overlay.html.twig', {id: 'debrief-overlay', title: 'call.analysing'|trans, text: 'call.analysing_text'|trans, fallback: 'call.error.debrief_failed'}) }}
 {% endblock %}

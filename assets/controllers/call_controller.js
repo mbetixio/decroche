@@ -443,12 +443,17 @@ export default class extends Controller {
         this.showKeypad(this.keypadTarget.hidden);
     }
 
+    // Opened from its key, the sheet takes the focus; closed (its button, Escape), the focus goes back to the key.
     toggleSheet() {
-        this.setSheet(this.sheetTarget.hidden);
+        const open = this.sheetTarget.hidden;
+        this.setSheet(open);
+        if (open) this.element.querySelector('#sheet-title')?.focus();
     }
 
     closeSheet() {
+        if (this.sheetTarget.hidden) return;
         this.setSheet(false);
+        this.element.querySelector('[data-key="sheet"]')?.focus();
     }
 
     toggleBarge() {

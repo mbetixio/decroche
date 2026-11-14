@@ -12,7 +12,7 @@
     <div class="page-actions">
         {% if mine and not call.isLive %}
             <form method="post" action="{{ path('call_start', {id: scenario.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('call-start-' ~ scenario.id) }}"><button class="btn"><twig:Icon name="refresh" />{{ 'call.again'|trans }}</button></form>
-            <form method="post" action="{{ path('call_draw') }}" data-controller="draw" data-action="draw#submit"><input type="hidden" name="token" value="{{ csrf_token('call-draw') }}"><button class="btn primary"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button></form>
+            <twig:DrawForm><button class="btn primary"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button></twig:DrawForm>
         {% else %}
             <twig:Status :call="call" />
         {% endif %}

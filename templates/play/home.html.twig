@@ -43,7 +43,7 @@
 </div>
 
 {% if missions %}
-    <section class="section spaced" data-controller="draw" aria-labelledby="missions-title">
+    <section class="section spaced" aria-labelledby="missions-title">
         <div class="section-head"><h2 id="missions-title">{{ 'play.missions'|trans }}</h2></div>
         <div class="missions">
             {% for row in missions %}
@@ -60,10 +60,7 @@
                         <div class="bar {{ row.complete ? 'good' : 'signal' }}"><i style="--pct: {{ min(100, (row.done / mission.calls * 100)|round) }}%"></i></div>
                         <span class="num">{{ row.done }}/{{ mission.calls }}</span>
                         {% if not row.complete %}
-                            <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit">
-                                <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
-                                <button class="btn sm" name="situation" value="{{ mission.situation }}">{{ 'play.play'|trans }}</button>
-                            </form>
+                            <twig:DrawForm :situation="mission.situation"><button class="btn sm">{{ 'play.play'|trans }}</button></twig:DrawForm>
                         {% endif %}
                     </div>
                 </article>

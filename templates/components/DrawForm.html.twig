@@ -1,0 +1,9 @@
+{# "New call": the form that has a call drawn and written behind the waiting screen (draw controller), for a given
+   situation (a mission) or criterion to train (focus), or at random. The button's look and text are given. #}
+{% props situation = null, focus = null %}
+<form method="post" action="{{ path('call_draw') }}" {{ attributes.defaults({'data-controller': 'draw', 'data-action': 'draw#submit'}) }}>
+    <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
+    {% if situation %}<input type="hidden" name="situation" value="{{ situation }}">{% endif %}
+    {% if focus %}<input type="hidden" name="focus" value="{{ focus }}">{% endif %}
+    {% block content %}{% endblock %}
+</form>

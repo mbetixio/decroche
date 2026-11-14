@@ -1,10 +1,7 @@
 {# The main action, wherever one may want to play: a call drawn at random from the company's situations. #}
-<section class="panel pad-l new-call" data-controller="draw" aria-labelledby="new-call-title">
+<section class="panel pad-l new-call" aria-labelledby="new-call-title">
     <h2 id="new-call-title">{{ 'play.cta_title'|trans }}</h2>
     <p>{{ 'play.cta_text'|trans }}</p>
-    <form method="post" action="{{ path('call_draw') }}" data-action="draw#submit">
-        <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
-        <button class="btn primary lg"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button>
-    </form>
+    <twig:DrawForm><button class="btn primary lg"><twig:Icon name="phone" />{{ 'play.new_call'|trans }}</button></twig:DrawForm>
     <p class="note">{{ 'play.adapted'|trans }}</p>
 </section>

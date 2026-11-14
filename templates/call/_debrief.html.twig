@@ -49,11 +49,7 @@
                         <div class="bar {{ ctone }}" aria-hidden="true"><i style="--pct: {{ criterion.score * 10 }}%"></i></div>
                         <p>{{ criterion.comment }}</p>
                         {% if key == weakest and (mine ?? false) and not call.isLive %}
-                            <form method="post" action="{{ path('call_draw') }}" class="train" data-controller="draw" data-action="draw#submit">
-                                <input type="hidden" name="token" value="{{ csrf_token('call-draw') }}">
-                                <input type="hidden" name="focus" value="{{ key }}">
-                                <button class="btn sm"><twig:Icon name="target" />{{ 'debrief.train'|trans }}</button>
-                            </form>
+                            <twig:DrawForm class="train" :focus="key"><button class="btn sm"><twig:Icon name="target" />{{ 'debrief.train'|trans }}</button></twig:DrawForm>
                         {% endif %}
                     </div>
                 {% endfor %}

@@ -3,13 +3,13 @@
 {% block page %}
 <div class="auth">
     <aside class="auth-side">
-        <div class="brand"><img class="brand-logo" src="/brand/logo.svg" alt="" width="34" height="34"><span>Décroche<small>{{ company().name }}</small></span></div>
+        <twig:Brand :tagline="company().name" />
         <p class="auth-statement">{{ 'security.statement'|trans|raw }}</p>
         {{ include('_call_log.html.twig') }}
     </aside>
     <main class="auth-main" id="main">
         <div class="auth-card">
-            <div class="brand auth-mobile-brand"><img class="brand-logo" src="/brand/logo.svg" alt="" width="34" height="34"><span>Décroche<small>{{ company().name }}</small></span></div>
+            <twig:Brand class="brand auth-mobile-brand" :tagline="company().name" />
             {{ include('_flashes.html.twig') }}
             {% block content %}{% endblock %}
         </div>

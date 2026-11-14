@@ -76,7 +76,7 @@ final readonly class ProgressReport
             criteria: $criteria,
             weakest: array_key_first($rated),
             strongest: array_key_last($rated),
-            scores: array_reverse(array_map(static fn (Call $c): array => ['id' => $c->id, 'score' => (int) $c->score, 'date' => $c->startedAt->format('d/m'), 'title' => $c->scenario->title], \array_slice($done, 0, 20))),
+            scores: array_reverse(array_map(static fn (Call $c): array => ['id' => $c->id, 'score' => (int) $c->score, 'date' => $c->startedAt->format('Y-m-d'), 'title' => $c->scenario->title], \array_slice($done, 0, 20))),
             challenge: Challenge::of($scores),
             goals: \count(array_filter($debriefs, static fn (Debrief $d): bool => ObjectiveStatus::Reached === $d->goal)),
             bySituation: $this->bySituation($done),

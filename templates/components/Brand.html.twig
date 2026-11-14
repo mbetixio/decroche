@@ -1,0 +1,8 @@
+{# The logo and the name, with a line under it (the company's name, the onboarding's tagline): a link with href. #}
+{% props tagline = null, href = null %}
+{% set inner %}<img class="brand-logo" src="/brand/logo.svg" alt="" width="34" height="34"><span>Décroche{% if tagline %}<small>{{ tagline }}</small>{% endif %}</span>{% endset %}
+{% if href %}
+    <a {{ attributes.defaults({class: 'brand'}) }} href="{{ href }}">{{ inner }}</a>
+{% else %}
+    <div {{ attributes.defaults({class: 'brand'}) }}>{{ inner }}</div>
+{% endif %}

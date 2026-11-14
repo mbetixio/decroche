@@ -14,11 +14,14 @@
             {% set n = stats.scores|length %}
             {% set points = [] %}
             {% for s in stats.scores %}{% set points = points|merge([(loop.index0 * 600 / (n - 1))|round ~ ',' ~ (180 - s.score * 1.6)|round]) %}{% endfor %}
-            <svg class="chart" viewBox="-30 0 640 190" role="img" aria-label="{{ 'progress.scores_aria'|trans({'%count%': n, '%last%': (stats.scores|last).score}) }}">
+            {# The drawing is for the eye; the list after it gives the same scores, and their calls, to keyboards and screen readers. #}
+            <svg class="chart" viewBox="-30 0 640 190" aria-hidden="true" focusable="false">
                 {% for y in [20, 100, 180] %}<line x1="0" x2="600" y1="{{ y }}" y2="{{ y }}" /><text x="-8" y="{{ y + 4 }}" text-anchor="end">{{ ((180 - y) / 1.6)|round }}</text>{% endfor %}
                 <polyline points="{{ points|join(' ') }}" />
-                {% for s in stats.scores %}<a href="{{ s.id ? path('call_show', {id: s.id}) : '#' }}"><circle cx="{{ (loop.index0 * 600 / (n - 1))|round }}" cy="{{ (180 - s.score * 1.6)|round }}" r="5"><title>{{ s.title }} · {{ s.score }}</title></circle></a>{% endfor %}
+                {% for s in stats.scores %}<a href="{{ path('call_show', {id: s.id}) }}" tabindex="-1"><circle cx="{{ (loop.index0 * 600 / (n - 1))|round }}" cy="{{ (180 - s.score * 1.6)|round }}" r="5"><title>{{ s.title }} · {{ s.score }}</title></circle></a>{% endfor %}
             </svg>
+            <p class="visually-hidden">{{ 'progress.scores_aria'|trans({'%count%': n, '%last%': (stats.scores|last).score}) }}</p>
+            <ol class="visually-hidden">{% for s in stats.scores %}<li><a href="{{ path('call_show', {id: s.id}) }}">{{ s.date }} · {{ s.title }} · {{ s.score }}/100</a></li>{% endfor %}</ol>
         {% else %}
             <twig:Empty :title="'progress.no_scores'|trans" />
         {% endif %}

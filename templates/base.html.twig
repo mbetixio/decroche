@@ -40,10 +40,7 @@
 <div class="shell">
     {% set route = app.request.attributes.get('_route') %}
     <aside class="sidebar">
-        <a class="brand" href="{{ path('home') }}">
-            <img class="brand-logo" src="/brand/logo.svg" alt="" width="34" height="34">
-            <span>Décroche<small>{{ company().name }}</small></span>
-        </a>
+        <twig:Brand :href="path('home')" :tagline="company().name" />
         {# On phones the sidebar becomes a bottom bar: the secondary links ("desktop-only") are reached from their pages,
            and the account takes the last place. #}
         <nav class="nav" aria-label="{{ 'nav.main'|trans }}">

@@ -103,7 +103,7 @@ final class ProgressReportTest extends TestCase
         self::assertSame(Difficulty::Tough, $stats->challenge->difficulty);
         self::assertSame(70, $stats->challenge->recentAverage);
         self::assertSame([70, 60, 80], array_column($stats->scores, 'score'));
-        self::assertSame(['11/11', '12/11', '13/11'], array_column($stats->scores, 'date'));
+        self::assertSame(['2026-11-11', '2026-11-12', '2026-11-13'], array_column($stats->scores, 'date'));
     }
 
     public function testSummarizeIgnoresReplaysAndUnscoredCalls(): void
