@@ -2,15 +2,19 @@
 .github
 .idea
 .vscode
-.env.local
-.env.*.local
+.DS_Store
+# Every local env file stays out of the image (.env copy.local included); only the committed defaults go in.
+.env*
+!.env
+!.env.dev
 var/
 vendor/
 tests/
+docs/
 phpunit.xml
 phpunit.dist.xml
 phpstan.dist.neon
 .phpunit.cache
+.php-cs-fixer.cache
 compose.yaml
 Dockerfile
-.env.docker

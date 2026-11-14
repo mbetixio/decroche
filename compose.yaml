@@ -6,8 +6,10 @@ services:
     build: .
     image: decroche:latest
     restart: unless-stopped
+    # Reachable from this machine only by default: until the first manager signs up, whoever opens the instance first
+    # becomes its manager. Set DECROCHE_BIND=0.0.0.0 (behind your HTTPS proxy) once you have created that account.
     ports:
-      - "${DECROCHE_PORT:-7077}:80"
+      - "${DECROCHE_BIND:-127.0.0.1}:${DECROCHE_PORT:-7077}:80"
     environment:
       # Hugging Face Inference Providers by default (a token hf_…); any OpenAI-compatible API works (see the README).
       AI_API_KEY: ${AI_API_KEY:?Set AI_API_KEY to a Hugging Face token (hf_…) or another provider key}
@@ -24,7 +26,9 @@ services:
       # The public address of the instance, for the links it generates (call links, invitations).
       DEFAULT_URI: ${DEFAULT_URI:-http://localhost:7077}
       MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-localhost,127.0.0.1}
-      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-private_ranges}
+      # The reverse proxy in front, if any (e.g. private_ranges): left empty, forwarded headers are not trusted.
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-}
+      APP_TIMEZONE: ${APP_TIMEZONE:-Europe/Paris}
       # Where your users can get the source code (AGPL-3.0): your fork, if you modify Décroche.
       SOURCE_URL: ${SOURCE_URL:-https://github.com/mbetixio/decroche}
       # 1: skip the onboarding and load the example company (with a manager printed in the logs).
