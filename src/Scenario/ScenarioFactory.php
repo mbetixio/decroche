@@ -27,7 +27,7 @@ final class ScenarioFactory
      */
     public static function fromArray(array $data, ?Member $author, \DateTimeImmutable $now): Scenario
     {
-        $text = static fn (mixed $v): string => \is_scalar($v) ? trim((string) $v) : '';
+        $text = Data::string(...);
         $persona = Persona::fromArray(\is_array($data['persona'] ?? null) ? $data['persona'] : []);
         $brief = [];
         $given = \is_array($data['brief'] ?? null) ? $data['brief'] : [];

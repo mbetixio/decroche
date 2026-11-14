@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Ai\Data;
 use App\Enum\Tone;
 
 /**
@@ -27,7 +28,7 @@ final readonly class Persona
      */
     public static function fromArray(array $data): self
     {
-        $text = static fn (mixed $v): string => \is_scalar($v) ? trim((string) $v) : '';
+        $text = Data::string(...);
         $gender = mb_strtolower($text($data['gender'] ?? ''));
 
         return new self(

@@ -6,6 +6,7 @@ namespace App\Agent\Coach;
 
 use App\Agent\AgentContext;
 use App\Model\Line;
+use App\Model\Text;
 use Symfony\AI\Agent\Toolbox\Attribute\AsTool;
 
 /**
@@ -26,12 +27,11 @@ final readonly class FindInTranscript
      */
     public function __invoke(string $words): array
     {
-        $norm = static fn (string $s): string => trim((string) preg_replace('/[^\p{L}\p{N}]+/u', ' ', mb_strtolower($s)));
-        $needles = array_filter(explode(' ', $norm($words)), static fn (string $w): bool => '' !== $w);
+        $needles = Text::words($words);
         $lines = array_filter($this->context->call()->lines(), static fn (Line $l): bool => $l->isSeller());
 
-        return array_values(array_map(static fn (Line $l): string => $l->text, array_filter($lines, static function (Line $l) use ($needles, $norm): bool {
-            $text = $norm($l->text);
+        return array_values(array_map(static fn (Line $l): string => $l->text, array_filter($lines, static function (Line $l) use ($needles): bool {
+            $text = Text::normalize($l->text);
 
             return [] === array_filter($needles, static fn (string $w): bool => !str_contains($text, $w));
         })));

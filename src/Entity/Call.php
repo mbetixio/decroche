@@ -10,6 +10,7 @@ use App\Enum\CallEnd;
 use App\Enum\CallStatus;
 use App\Enum\Speaker;
 use App\Model\Line;
+use App\Model\Text;
 use App\Repository\CallRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -124,13 +125,12 @@ class Call
      */
     public function lineOf(string $quote): ?int
     {
-        $norm = static fn (string $t): string => trim((string) preg_replace('/[^\p{L}\p{N}]+/u', ' ', mb_strtolower(str_replace(['’', 'œ'], ["'", 'oe'], $t))));
-        $needle = $norm($quote);
+        $needle = Text::normalize($quote);
         if ('' === $needle) {
             return null;
         }
         foreach ($this->lines() as $i => $line) {
-            if ($line->isSeller() && str_contains($norm($line->text), $needle)) {
+            if ($line->isSeller() && str_contains(Text::normalize($line->text), $needle)) {
                 return $i;
             }
         }

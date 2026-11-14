@@ -94,13 +94,13 @@ final readonly class Workspace
     public function search(string $source, string $query = ''): array
     {
         $entries = $this->sources[$source]['entries'] ?? [];
-        $words = array_filter(preg_split('/[^\p{L}\p{N}]+/u', mb_strtolower($query)) ?: [], static fn (string $w): bool => mb_strlen($w) > 1);
+        $words = Text::words($query, 2);
         if ([] === $words) {
             return \array_slice($entries, 0, 5);
         }
         $scored = [];
         foreach ($entries as $entry) {
-            $text = mb_strtolower($entry['title'].' '.$entry['when'].' '.$entry['note'].' '.implode(' ', array_map(static fn (array $d): string => $d['name'].' '.$d['value'], $entry['details'])));
+            $text = Text::normalize($entry['title'].' '.$entry['when'].' '.$entry['note'].' '.implode(' ', array_map(static fn (array $d): string => $d['name'].' '.$d['value'], $entry['details'])));
             $score = \count(array_filter($words, static fn (string $w): bool => str_contains($text, $w)));
             if ($score > 0) {
                 $scored[] = [$score, $entry];

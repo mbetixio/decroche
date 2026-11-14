@@ -12,6 +12,7 @@ use App\Enum\Language;
 use App\Enum\ObjectiveStatus;
 use App\Model\Criterion;
 use App\Model\Line;
+use App\Model\Text;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -37,7 +38,7 @@ final readonly class DebriefBuilder
         $criteria = [];
         foreach ($scorecard as $key => $criterion) {
             $c = Data::map(Data::map($data['criteria'] ?? null)[$key] ?? null);
-            $criteria[$key] = ['label' => $criterion->label, 'score' => max(0, min(10, Data::int($c['score'] ?? 0))), 'comment' => self::text($c['comment'] ?? '')];
+            $criteria[$key] = ['label' => $criterion->label, 'score' => max(0, min(10, Data::int($c['score'] ?? 0))), 'comment' => Data::string($c['comment'] ?? '')];
         }
         $skills = [] === $criteria ? 0.0 : array_sum(array_column($criteria, 'score')) / \count($criteria) * 10;
 
@@ -46,7 +47,7 @@ final readonly class DebriefBuilder
         $objectives = [];
         foreach ($call->scenario->objectives() as $i => $objective) {
             $j = \is_array($judged[$i] ?? null) ? $judged[$i] : [];
-            $objectives[] = ['objective' => $objective, 'status' => ObjectiveStatus::fromModel($j['status'] ?? ''), 'evidence' => self::text($j['evidence'] ?? '')];
+            $objectives[] = ['objective' => $objective, 'status' => ObjectiveStatus::fromModel($j['status'] ?? ''), 'evidence' => Data::string($j['evidence'] ?? '')];
         }
         $reached = [] === $objectives ? null : array_sum(array_map(static fn (array $o): float => $o['status']->weight(), $objectives)) / \count($objectives);
         $score = (int) round(null === $reached ? $skills : 0.7 * $skills + 30 * $reached);
@@ -60,9 +61,9 @@ final readonly class DebriefBuilder
         }
         $missed = [];
         foreach (\is_array($data['missed'] ?? null) ? $data['missed'] : [] as $m) {
-            $section = \is_array($m) ? BriefSection::tryFrom(self::text($m['rubric'] ?? '')) : null;
+            $section = \is_array($m) ? BriefSection::tryFrom(Data::string($m['rubric'] ?? '')) : null;
             if (null !== $section && !\in_array($section, $discovered, true) && !$call->isRevealed($section)) {
-                $missed[$section->value] = ['section' => $section, 'what' => self::text($m['what'] ?? ''), 'how' => self::text($m['how'] ?? '')];
+                $missed[$section->value] = ['section' => $section, 'what' => Data::string($m['what'] ?? ''), 'how' => Data::string($m['how'] ?? '')];
             }
         }
 
@@ -70,18 +71,18 @@ final readonly class DebriefBuilder
 
         return ['score' => $score, 'discovered' => $discovered, 'debrief' => new Debrief(
             criteria: $criteria,
-            summary: self::text($data['summary'] ?? ''),
+            summary: Data::string($data['summary'] ?? ''),
             nextStep: (bool) ($data['next_step'] ?? false),
-            outcome: self::text($data['outcome'] ?? ''),
-            result: self::text($data['result'] ?? ''),
+            outcome: Data::string($data['outcome'] ?? ''),
+            result: Data::string($data['result'] ?? ''),
             objectives: $objectives,
             goal: null === $reached ? null : ($reached >= 0.99 ? ObjectiveStatus::Reached : ($reached > 0 ? ObjectiveStatus::Partial : ObjectiveStatus::Missed)),
             missed: array_values($missed),
             best: array_map(static fn (array $q): array => ['quote' => $q['quote'], 'why' => $q['why']], self::quotes($data['best'] ?? null, $said)),
             worst: self::quotes($data['worst'] ?? null, $said),
-            tips: \array_slice(array_values(array_filter(array_map(self::text(...), \is_array($data['tips'] ?? null) ? $data['tips'] : []))), 0, 3),
+            tips: \array_slice(array_values(array_filter(array_map(Data::string(...), \is_array($data['tips'] ?? null) ? $data['tips'] : []))), 0, 3),
             speech: $figures,
-            speechComment: self::text($data['speech'] ?? ''),
+            speechComment: Data::string($data['speech'] ?? ''),
         )];
     }
 
@@ -122,8 +123,8 @@ final readonly class DebriefBuilder
     {
         $kept = [];
         foreach (Data::rows($list) as $q) {
-            if (self::wasSaid(self::text($q['quote'] ?? ''), $said)) {
-                $kept[] = ['quote' => self::text($q['quote'] ?? ''), 'why' => self::text($q['why'] ?? ''), 'better' => self::text($q['better'] ?? '')];
+            if (self::wasSaid(Data::string($q['quote'] ?? ''), $said)) {
+                $kept[] = ['quote' => Data::string($q['quote'] ?? ''), 'why' => Data::string($q['why'] ?? ''), 'better' => Data::string($q['better'] ?? '')];
             }
         }
 
@@ -135,13 +136,12 @@ final readonly class DebriefBuilder
      */
     private static function wasSaid(string $quote, array $said): bool
     {
-        $norm = static fn (string $s): string => trim((string) preg_replace('/[^\p{L}\p{N}]+/u', ' ', mb_strtolower($s)));
-        $q = $norm($quote);
+        $q = Text::normalize($quote);
         if (mb_strlen($q) < 4) {
             return false;
         }
         foreach ($said as $line) {
-            $l = $norm($line);
+            $l = Text::normalize($line);
             similar_text($q, $l, $percent);
             if (str_contains($l, $q) || (str_contains($q, $l) && mb_strlen($l) > 10) || $percent >= 80) {
                 return true;
@@ -149,10 +149,5 @@ final readonly class DebriefBuilder
         }
 
         return false;
-    }
-
-    private static function text(mixed $value): string
-    {
-        return \is_scalar($value) ? trim((string) $value) : '';
     }
 }

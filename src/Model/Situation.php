@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Ai\Data;
 use App\Enum\CallDirection;
 use App\Enum\SituationFamily;
 
@@ -39,7 +40,7 @@ final readonly class Situation
      */
     public static function fromArray(string $key, array $data): ?self
     {
-        $text = static fn (mixed $v): string => \is_scalar($v) ? trim((string) $v) : '';
+        $text = Data::string(...);
         $objectives = \array_slice(self::strings($data['objectives'] ?? []), 0, 3);
         $label = mb_substr($text($data['label'] ?? ''), 0, 80);
         $pitch = $text($data['pitch'] ?? '');

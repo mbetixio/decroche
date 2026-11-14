@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Agent;
 
+use App\Model\Text;
 use App\Repository\CompanyRepository;
 use Symfony\AI\Agent\Toolbox\Attribute\AsTool;
 
@@ -25,12 +26,12 @@ final readonly class ReadOffer
     public function __invoke(string $topic = ''): string
     {
         $offer = $this->companies->get()->offer;
-        $words = array_filter(preg_split('/[^\p{L}\p{N}]+/u', mb_strtolower($topic)) ?: [], static fn (string $w): bool => mb_strlen($w) > 2);
+        $words = Text::words($topic, 3);
         if ([] === $words) {
             return $offer;
         }
         $parts = array_filter(preg_split('/\n\s*\n/', $offer) ?: [], static function (string $part) use ($words): bool {
-            $part = mb_strtolower($part);
+            $part = Text::normalize($part);
 
             return [] !== array_filter($words, static fn (string $w): bool => str_contains($part, $w));
         });
