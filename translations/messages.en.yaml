@@ -549,7 +549,7 @@ security:
     join_lead: '%name% invites you to train on Décroche (%email%). Choose your password.'
     join_submit: 'Join the team'
     join_invalid: 'This invitation is no longer valid'
-    join_invalid_text: 'It was already used or withdrawn: ask your manager for a new one.'
+    join_invalid_text: 'It was already used, withdrawn or sent more than two weeks ago: ask your manager for a new one.'
     statement: 'Fumble your calls <em>here</em>, not in front of clients.'
 log:
     aria: 'Excerpt of a practice call'

@@ -10,11 +10,14 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * An invitation to join the team: a personal link, valid until it is used or withdrawn.
+ * An invitation to join the team: a personal link, valid for two weeks, until it is used or withdrawn. Sent again, it
+ * is valid two weeks more.
  */
 #[ORM\Entity(repositoryClass: InvitationRepository::class)]
 class Invitation
 {
+    public const string LIFETIME = '14 days';
+
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     public private(set) ?int $id = null;
 
@@ -52,5 +55,21 @@ class Invitation
     public function isPending(): bool
     {
         return null === $this->acceptedAt;
+    }
+
+    /**
+     * Whether the link still lets someone join: not used, and sent less than two weeks ago.
+     */
+    public function isValid(\DateTimeImmutable $now): bool
+    {
+        return $this->isPending() && $this->createdAt->modify('+'.self::LIFETIME) > $now;
+    }
+
+    /**
+     * Sent again: valid two weeks more.
+     */
+    public function renew(\DateTimeImmutable $now): void
+    {
+        $this->createdAt = $now;
     }
 }

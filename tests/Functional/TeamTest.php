@@ -65,6 +65,25 @@ final class TeamTest extends FunctionalTestCase
         self::assertSelectorTextContains('main', 'My missions');
     }
 
+    public function testAnInvitationExpiresAfterTwoWeeksUnlessSentAgain(): void
+    {
+        $team = $this->service(TeamManager::class);
+        $invitation = $team->invite('late@decroche.test', MemberRole::Seller, null);
+        $clock = $this->service(\Psr\Clock\ClockInterface::class);
+        $invitation->renew($clock->now()->modify('-15 days'));
+        $this->service(\Doctrine\ORM\EntityManagerInterface::class)->flush();
+
+        $this->client->request('GET', '/logout');
+        $this->client->request('GET', '/join/'.$invitation->token);
+        self::assertResponseStatusCodeSame(404);
+        self::assertSelectorTextContains('main', 'two weeks');
+
+        // Sent again: the same link works two weeks more.
+        $this->service(TeamManager::class)->invite('late@decroche.test', MemberRole::Seller, null);
+        $this->client->request('GET', '/join/'.$invitation->token);
+        self::assertResponseIsSuccessful();
+    }
+
     public function testAnInvitationCanBeWithdrawn(): void
     {
         $this->client->request('GET', '/team');

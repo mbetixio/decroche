@@ -59,6 +59,7 @@ final readonly class TeamManager
         }
         if (null !== $pending = $this->invitations->findPendingByEmail($email)) {
             $pending->role = $role;
+            $pending->renew($this->clock->now());
             $this->em->flush();
 
             return $pending;
@@ -77,7 +78,7 @@ final readonly class TeamManager
      */
     public function accept(Invitation $invitation, string $name, string $password): Member
     {
-        if (!$invitation->isPending()) {
+        if (!$invitation->isValid($this->clock->now())) {
             throw new \DomainException('team.error.invitation_used');
         }
 

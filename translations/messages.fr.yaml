@@ -549,7 +549,7 @@ security:
     join_lead: '%name% vous invite à vous entraîner sur Décroche (%email%). Choisissez votre mot de passe.'
     join_submit: 'Rejoindre l''équipe'
     join_invalid: 'Cette invitation n''est plus valable'
-    join_invalid_text: 'Elle a déjà servi ou a été retirée : demandez-en une nouvelle à votre manager.'
+    join_invalid_text: 'Elle a déjà servi, a été retirée ou date de plus de deux semaines : demandez-en une nouvelle à votre manager.'
     statement: 'Ratez vos appels <em>ici</em>, pas devant vos clients.'
 log:
     aria: 'Extrait d’un appel d’entraînement'

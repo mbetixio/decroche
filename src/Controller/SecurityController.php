@@ -10,6 +10,7 @@ use App\Form\JoinType;
 use App\Repository\InvitationRepository;
 use App\Repository\MemberRepository;
 use App\Team\TeamManager;
+use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,10 +59,11 @@ final class SecurityController extends AbstractController
      * Joining the team through the link of an invitation: the account is created, then the member describes themself.
      */
     #[Route('/join/{token<[a-f0-9]{48}>}', name: 'join', methods: ['GET', 'POST'])]
-    public function join(string $token, Request $request, InvitationRepository $invitations, TeamManager $team, Security $security): Response
+    public function join(string $token, Request $request, InvitationRepository $invitations, TeamManager $team, Security $security, ClockInterface $clock): Response
     {
         $invitation = $invitations->findPendingByToken($token);
-        if (null === $invitation) {
+        // Unknown, used, or more than two weeks old: the manager sends a new one.
+        if (null === $invitation || !$invitation->isValid($clock->now())) {
             return $this->render('security/join.html.twig', ['invitation' => null], new Response(status: Response::HTTP_NOT_FOUND));
         }
         $data = new JoinData();
