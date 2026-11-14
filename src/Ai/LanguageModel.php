@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Ai;
 
 use App\Ai\Output\Output;
+use Psr\Log\LoggerInterface;
 use Symfony\AI\Agent\AgentInterface;
 use Symfony\AI\Agent\Execution\Update\Progress;
 use Symfony\AI\Platform\Exception\ExceptionInterface;
@@ -29,6 +30,7 @@ final readonly class LanguageModel
     public function __construct(
         #[Autowire(service: 'ai.platform.generic.decroche')]
         private PlatformInterface $platform,
+        private LoggerInterface $logger,
         #[Autowire(service: 'ai.agent.persona')]
         private AgentInterface $persona,
         #[Autowire(service: 'ai.agent.coach')]
@@ -95,14 +97,15 @@ final readonly class LanguageModel
      */
     public function work(string $agent, string $system, string $user, string $shape, float $temperature = 0.7, ?\Closure $step = null): Output
     {
-        [$worker, $model, $reasoning, $tools] = 'coach' === $agent
-            ? [$this->coach, self::name($this->coachModel, 'AI_COACH_MODEL'), $this->coachReasoning, ['previous_debriefs', 'find_in_transcript', 'client_actions', 'read_offer']]
-            : [$this->writer, self::name($this->writerModel, 'AI_WRITER_MODEL'), $this->writerReasoning, ['recent_calls', 'read_offer']];
+        // Each agent offers the tools config/packages/ai.yaml gives it.
+        [$worker, $model, $reasoning] = 'coach' === $agent
+            ? [$this->coach, self::name($this->coachModel, 'AI_COACH_MODEL'), $this->coachReasoning]
+            : [$this->writer, self::name($this->writerModel, 'AI_WRITER_MODEL'), $this->writerReasoning];
         $notes = '';
         try {
             $execution = $worker->call(
                 self::bag($system."\n\nFirst, investigate with your tools. Then answer with your findings only, as short notes: what you will use, quoted exactly where it matters. Do not write the final answer yet.", [['role' => 'user', 'content' => $user]]),
-                ['tools' => $tools] + self::options($model, $temperature, $reasoning),
+                self::options($model, $temperature, $reasoning),
             );
             // Each tool the agent really calls is a step the user sees, once: checking ten quotes is one step.
             $told = [];
@@ -117,8 +120,9 @@ final readonly class LanguageModel
             }
             $found = $execution->getContent();
             $notes = \is_string($found) ? trim($found) : '';
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             // The investigation failed (a tool error, too many tool calls…): the answer is written without notes.
+            $this->logger->warning('The {agent} agent could not investigate: {message}', ['agent' => $agent, 'message' => $e->getMessage(), 'exception' => $e]);
         }
 
         if (null !== $step) {

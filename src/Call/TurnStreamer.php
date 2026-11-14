@@ -10,6 +10,7 @@ use App\Voice\Prosody;
 use App\Voice\SpeechSynthesizer;
 use App\Voice\Synthesis;
 use App\Voice\VoiceCasting;
+use Psr\Log\LoggerInterface;
 
 /**
  * One exchange of a call on the phone screen, as a stream of events: each sentence of the persona's reply leaves as
@@ -24,6 +25,7 @@ final readonly class TurnStreamer
         private SpeechSynthesizer $synthesizer,
         private VoiceCasting $casting,
         private CompanyRepository $companies,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -84,7 +86,8 @@ final readonly class TurnStreamer
             }
             yield from $drain(true);
             yield ['t' => 'done'] + $turn->getReturn()->toArray();
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logger->warning('A persona reply was cut: {message}', ['message' => $e->getMessage(), 'exception' => $e]);
             yield from $drain(true);
             yield ['t' => 'error', 'error' => 'call.error.line_cut'];
         }

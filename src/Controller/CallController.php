@@ -24,6 +24,7 @@ use App\Voice\SpeechSynthesizer;
 use App\Voice\SynthesisException;
 use App\Voice\VoiceCasting;
 use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -100,7 +101,7 @@ final class CallController extends AbstractController
     #[Route('/{id<\d+>}/talk', name: 'call_talk', methods: ['POST'], format: 'json')]
     #[IsGranted(CallVoter::PLAY, 'call')]
     #[IsCsrfTokenValid(new Expression('"call-" ~ args["call"].id'), tokenKey: 'X-CSRF-Token', tokenSource: IsCsrfTokenValid::SOURCE_HEADER)]
-    public function talk(Call $call, Request $request, TurnStreamer $streamer): Response
+    public function talk(Call $call, Request $request, TurnStreamer $streamer, LoggerInterface $logger): Response
     {
         set_time_limit(180);
         $body = $request->toArray();
@@ -109,8 +110,10 @@ final class CallController extends AbstractController
             $events = $streamer->stream($call, \is_string($body['message'] ?? null) ? $body['message'] : '', $voiceMs, true === ($body['interrupted'] ?? false), '1' !== $request->query->get('browserVoice'));
         } catch (CallException $e) {
             return new JsonResponse(['error' => $this->translator->trans($e->getMessage()), 'ended' => !$call->isLive()], Response::HTTP_BAD_REQUEST);
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             // The model is unreachable or failed: the seller says it again.
+            $logger->warning('The persona could not answer: {message}', ['message' => $e->getMessage(), 'exception' => $e]);
+
             return new JsonResponse(['error' => $this->translator->trans('call.error.unreachable')], Response::HTTP_BAD_GATEWAY);
         }
         // The session is released: the rest of the site answers while the persona speaks.

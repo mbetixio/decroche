@@ -211,8 +211,9 @@ final class CallFlowTest extends FunctionalTestCase
     private function pickUp(): Call
     {
         $crawler = $this->client->request('GET', '/');
+        // Without JavaScript, the draw leads straight to the briefing.
         $this->client->request('POST', '/call/new', ['token' => $crawler->filter('form[action="/call/new"] input[name=token]')->attr('value')]);
-        $this->client->request('GET', json_decode((string) $this->client->getResponse()->getContent(), true)['url']);
+        $this->client->followRedirect();
         $this->client->submit($this->client->getCrawler()->filter('form[action^="/calls/start/"]')->form());
         self::assertResponseRedirects();
         $this->client->followRedirect();

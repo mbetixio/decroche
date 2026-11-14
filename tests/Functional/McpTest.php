@@ -11,6 +11,7 @@ use App\Entity\Scenario;
 use App\Enum\Language;
 use App\Tests\Fake\ScriptedModel;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
 
 /**
  * The MCP server, as an AI client uses it: authenticated by the member's personal key, it draws a call and hands over a
@@ -184,6 +185,34 @@ final class McpTest extends FunctionalTestCase
         self::assertSame($dropped, $this->tool('hang_up', ['abandon' => true]), 'Abandoning twice changes nothing.');
         $graded = $this->rpc('tools/call', ['name' => 'hang_up', 'arguments' => new \stdClass()]);
         self::assertStringContainsString('no graded debrief', $graded['content'][0]['text']);
+    }
+
+    public function testASpentQuotaOrAFailedDebriefIsToldToTheClient(): void
+    {
+        $member = $this->member();
+        $this->connect($member);
+        $this->tool('new_call', ['mode' => 'chat']);
+        $this->tool('reply', ['message' => 'What budget have you set aside?']);
+
+        // The coach unreachable: the call stays hung up, and hang_up can be tried again.
+        ScriptedModel::$unreachable = true;
+        $failed = $this->rpc('tools/call', ['name' => 'hang_up', 'arguments' => new \stdClass()]);
+        self::assertStringContainsString('Try hang_up again', $failed['content'][0]['text']);
+        ScriptedModel::$unreachable = false;
+
+        // The member's quotas for writing and debriefing calls, spent to the last one.
+        foreach (['writing', 'coaching'] as $usage) {
+            /** @var RateLimiterFactoryInterface $factory */
+            $factory = $this->service('limiter.ai_'.$usage);
+            $limiter = $factory->create('member-'.$member->id);
+            while ($limiter->consume()->isAccepted()) {
+            }
+        }
+        foreach (['new_call' => [], 'prepare_call' => ['prospect' => 'Ana Diaz, Freshcart, wants our rates before Thursday.'], 'hang_up' => []] as $tool => $arguments) {
+            $refused = $this->rpc('tools/call', ['name' => $tool, 'arguments' => (object) $arguments]);
+            self::assertTrue($refused['isError'], $tool);
+            self::assertStringContainsString('the model needs a break', $refused['content'][0]['text'], $tool);
+        }
     }
 
     public function testTheModelFailingIsToldToTheClient(): void

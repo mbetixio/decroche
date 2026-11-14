@@ -8,6 +8,7 @@ use App\Ai\LanguageModel;
 use App\Ai\ModelException;
 use App\Ai\Output\OfferSheet;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\AI\Agent\Agent;
 use Symfony\AI\Agent\Toolbox\Toolbox;
 use Symfony\AI\Platform\Result\Stream\Delta\TextDelta;
@@ -65,8 +66,7 @@ final class LanguageModelTest extends TestCase
         self::assertSame($sheet, $work->toArray());
         self::assertCount(3, $this->calls, 'A tool round, the notes, then the answer.');
         $tools = (string) json_encode($this->calls[0]['options']['tools']);
-        self::assertStringContainsString('read_offer', $tools);
-        self::assertStringNotContainsString('calendar', $tools, 'Only the investigation tools.');
+        self::assertStringContainsString('read_offer', $tools, 'The agent offers its own tools.');
         self::assertSame('medium', $this->calls[0]['options']['reasoning_effort']);
         self::assertStringContainsString('Notes: they sell dedicated teams.', (string) json_encode($this->calls[2]['payload']), 'The notes feed the answer.');
         self::assertTrue($this->calls[2]['options']['response_format']['json_schema']['strict']);
@@ -154,6 +154,6 @@ final class LanguageModelTest extends TestCase
         $toolbox = new Toolbox([new LanguageModelTestTools()], eventDispatcher: $dispatcher);
         $agent = static fn (string $model): Agent => new Agent($platform, $model, toolbox: $toolbox, eventDispatcher: $dispatcher);
 
-        return new LanguageModel($platform, $agent($persona), $agent($coach), $agent($writer), $persona, $coach, $writer, $personaReasoning, $coachReasoning, $writerReasoning);
+        return new LanguageModel($platform, new NullLogger(), $agent($persona), $agent($coach), $agent($writer), $persona, $coach, $writer, $personaReasoning, $coachReasoning, $writerReasoning);
     }
 }

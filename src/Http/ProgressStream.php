@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http;
 
 use App\Call\CallException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
@@ -21,6 +22,7 @@ final readonly class ProgressStream
 
     public function __construct(
         private TranslatorInterface $translator,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -44,9 +46,10 @@ final readonly class ProgressStream
             $request->getSession()->save();
         }
         $translator = $this->translator;
+        $logger = $this->logger;
         $locale = $request->getLocale();
 
-        return new StreamedResponse(static function () use ($work, $error, $translator, $locale): void {
+        return new StreamedResponse(static function () use ($work, $error, $translator, $logger, $locale): void {
             // The work runs while the answer is sent, once the request is over: its language is set again.
             if ($translator instanceof LocaleAwareInterface) {
                 $translator->setLocale($locale);
@@ -61,6 +64,9 @@ final readonly class ProgressStream
                 $send(['t' => 'done', 'url' => $url]);
             } catch (\Throwable $e) {
                 $failure = $error($e);
+                if (!$e instanceof CallException) {
+                    $logger->error('A long piece of work failed: {message}', ['message' => $e->getMessage(), 'exception' => $e]);
+                }
                 // A refusal the user can act on (a spent quota, an abandoned call) is said as is, not as a failure.
                 if ($e instanceof CallException) {
                     $failure['error'] = $translator->trans($e->getMessage());

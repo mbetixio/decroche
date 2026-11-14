@@ -107,17 +107,16 @@ final class UsageLimitsTest extends FunctionalTestCase
         self::assertNull($this->call($call)->score);
     }
 
+    /**
+     * Spends the member's quota for this kind of use, to the last one.
+     */
     private function spend(Usage $usage): void
     {
         /** @var RateLimiterFactoryInterface $factory */
         $factory = $this->service('limiter.ai_'.$usage->value);
-        $factory->create('member-'.$this->me->id)->consume($this->limit($usage));
-    }
-
-    private function limit(Usage $usage): int
-    {
-        // The quotas set in .env.
-        return (int) $_SERVER[Usage::Talking === $usage ? 'AI_LIMIT_LINES_PER_MINUTE' : 'AI_LIMIT_CALLS_PER_HOUR'];
+        $limiter = $factory->create('member-'.$this->me->id);
+        while ($limiter->consume()->isAccepted()) {
+        }
     }
 
     private function call(Call $call): Call
