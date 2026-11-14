@@ -27,7 +27,7 @@ final readonly class SituationDrawer
      *
      * @throws \LogicException when the company has no situation yet
      */
-    public function draw(Company $company, Difficulty $target = Difficulty::Easy, ?string $key = null, array $avoid = []): Draw
+    public function draw(Company $company, Difficulty $target = Difficulty::Approachable, ?string $key = null, array $avoid = []): Draw
     {
         $catalogue = $company->situations();
         if ([] === $catalogue) {

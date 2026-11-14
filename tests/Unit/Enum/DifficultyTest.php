@@ -15,7 +15,7 @@ final class DifficultyTest extends TestCase
 {
     public function testMinutesGrowWithDifficulty(): void
     {
-        self::assertSame(8, Difficulty::Easy->minutes());
+        self::assertSame(8, Difficulty::Approachable->minutes());
         self::assertSame(10, Difficulty::Demanding->minutes());
         self::assertSame(12, Difficulty::Tough->minutes());
     }
@@ -29,15 +29,15 @@ final class DifficultyTest extends TestCase
 
     public function testAroundIsMostlyItselfWithANeighbour(): void
     {
-        self::assertSame([Difficulty::Easy, Difficulty::Easy, Difficulty::Demanding], Difficulty::Easy->around());
-        self::assertSame([Difficulty::Easy, Difficulty::Demanding, Difficulty::Demanding, Difficulty::Tough], Difficulty::Demanding->around());
+        self::assertSame([Difficulty::Approachable, Difficulty::Approachable, Difficulty::Demanding], Difficulty::Approachable->around());
+        self::assertSame([Difficulty::Approachable, Difficulty::Demanding, Difficulty::Demanding, Difficulty::Tough], Difficulty::Demanding->around());
         self::assertSame([Difficulty::Demanding, Difficulty::Tough, Difficulty::Tough], Difficulty::Tough->around());
     }
 
-    public function testAnEasyTargetNeverDrawsToughAndAToughOneNeverEasy(): void
+    public function testAnApproachableTargetNeverDrawsToughAndAToughOneNeverApproachable(): void
     {
-        self::assertNotContains(Difficulty::Tough, Difficulty::Easy->around());
-        self::assertNotContains(Difficulty::Easy, Difficulty::Tough->around());
+        self::assertNotContains(Difficulty::Tough, Difficulty::Approachable->around());
+        self::assertNotContains(Difficulty::Approachable, Difficulty::Tough->around());
     }
 
     public function testTranslationKey(): void

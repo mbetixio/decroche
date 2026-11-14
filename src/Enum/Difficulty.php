@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 enum Difficulty: int implements TranslatableInterface
 {
-    case Easy = 1;
+    case Approachable = 1;
     case Demanding = 2;
     case Tough = 3;
 
@@ -27,7 +27,7 @@ enum Difficulty: int implements TranslatableInterface
     public function minutes(): int
     {
         return match ($this) {
-            self::Easy => 8,
+            self::Approachable => 8,
             self::Demanding => 10,
             self::Tough => 12,
         };
@@ -39,7 +39,7 @@ enum Difficulty: int implements TranslatableInterface
     public function instruction(): string
     {
         return match ($this) {
-            self::Easy => 'Difficulty: you are rather open. If the seller is genuinely interested in you, you gladly talk about your situation and let yourself be convinced by a proposal that holds up.',
+            self::Approachable => 'Difficulty: you are rather open. If the seller is genuinely interested in you, you gladly talk about your situation and let yourself be convinced by a proposal that holds up.',
             self::Demanding => 'Difficulty: you need to be convinced. You chat willingly, but the essentials (your real stakes, your budget, who decides) only come out if the seller digs with good questions; a canned pitch leaves you polite but uninterested.',
             self::Tough => 'Difficulty: you are hard to convince. You have heard many sellers, you have solid objections and little time; you only open up if the seller really listens, understands your problem and answers to the point. Demanding does not mean unpleasant: you stay human.',
         };
@@ -53,8 +53,8 @@ enum Difficulty: int implements TranslatableInterface
     public function around(): array
     {
         return match ($this) {
-            self::Easy => [self::Easy, self::Easy, self::Demanding],
-            self::Demanding => [self::Easy, self::Demanding, self::Demanding, self::Tough],
+            self::Approachable => [self::Approachable, self::Approachable, self::Demanding],
+            self::Demanding => [self::Approachable, self::Demanding, self::Demanding, self::Tough],
             self::Tough => [self::Demanding, self::Tough, self::Tough],
         };
     }

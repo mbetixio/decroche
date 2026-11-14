@@ -34,14 +34,14 @@ final readonly class Challenge
     {
         $recent = \array_slice($scores, 0, self::WINDOW);
         if (\count($recent) < self::WARM_UP) {
-            return new self(Difficulty::Easy, null, \count($recent));
+            return new self(Difficulty::Approachable, null, \count($recent));
         }
         $average = (int) round(array_sum($recent) / \count($recent));
 
         return new self(match (true) {
             $average >= 70 => Difficulty::Tough,
             $average >= 50 => Difficulty::Demanding,
-            default => Difficulty::Easy,
+            default => Difficulty::Approachable,
         }, $average, \count($recent));
     }
 

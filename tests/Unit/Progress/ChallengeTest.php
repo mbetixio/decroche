@@ -18,7 +18,7 @@ final class ChallengeTest extends TestCase
     {
         $challenge = Challenge::of([95, 90]);
 
-        self::assertSame(Difficulty::Easy, $challenge->difficulty);
+        self::assertSame(Difficulty::Approachable, $challenge->difficulty);
         self::assertTrue($challenge->isWarmingUp());
         self::assertNull($challenge->recentAverage);
         self::assertSame(2, $challenge->basis);
@@ -26,7 +26,7 @@ final class ChallengeTest extends TestCase
 
     public function testTheRecentAverageSetsTheDifficulty(): void
     {
-        self::assertSame(Difficulty::Easy, Challenge::of([40, 45, 48])->difficulty);
+        self::assertSame(Difficulty::Approachable, Challenge::of([40, 45, 48])->difficulty);
         self::assertSame(Difficulty::Demanding, Challenge::of([50, 55, 60])->difficulty);
         self::assertSame(Difficulty::Tough, Challenge::of([70, 75, 80])->difficulty);
     }
@@ -44,7 +44,7 @@ final class ChallengeTest extends TestCase
     public function testItGoesDownAgainAfterWeakCalls(): void
     {
         // A tough run, then four weak calls (newest first): the average of the last five falls under 50.
-        self::assertSame(Difficulty::Easy, Challenge::of([30, 35, 40, 45, 90, 90, 90])->difficulty);
+        self::assertSame(Difficulty::Approachable, Challenge::of([30, 35, 40, 45, 90, 90, 90])->difficulty);
     }
 
     public function testToArray(): void

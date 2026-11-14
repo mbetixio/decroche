@@ -68,7 +68,7 @@ final class ProgressReportTest extends TestCase
         self::assertNull($stats->weakest);
         self::assertNull($stats->discovery);
         self::assertNull($stats->goalRate());
-        self::assertSame(Difficulty::Easy, $stats->challenge->difficulty);
+        self::assertSame(Difficulty::Approachable, $stats->challenge->difficulty);
         self::assertTrue($stats->challenge->isWarmingUp());
         self::assertSame([], $stats->bySituation);
         // Without any debrief, the criteria are the company's default scorecard, in its language.
@@ -167,6 +167,6 @@ final class ProgressReportTest extends TestCase
         self::assertSame(80, $data['average']);
         self::assertSame(100, $data['goal_rate']);
         self::assertSame(1, $data['goals_reached']);
-        self::assertSame(['difficulty' => 'Easy', 'recent_average' => null, 'basis' => 1], $data['challenge']);
+        self::assertSame(['difficulty' => 'Approachable', 'recent_average' => null, 'basis' => 1], $data['challenge']);
     }
 }

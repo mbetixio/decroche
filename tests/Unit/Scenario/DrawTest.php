@@ -20,13 +20,13 @@ final class DrawTest extends TestCase
     public function testHoldsItsDressing(): void
     {
         $situation = self::situation();
-        $draw = new Draw($situation, 'Retail', 'a 15-person startup', 'Lyon', Tone::Busy, Difficulty::Easy);
+        $draw = new Draw($situation, 'Retail', 'a 15-person startup', 'Lyon', Tone::Busy, Difficulty::Approachable);
 
         self::assertSame($situation, $draw->situation);
         self::assertSame('Retail', $draw->sector);
         self::assertSame('a 15-person startup', $draw->size);
         self::assertSame('Lyon', $draw->city);
         self::assertSame(Tone::Busy, $draw->tone);
-        self::assertSame(Difficulty::Easy, $draw->difficulty);
+        self::assertSame(Difficulty::Approachable, $draw->difficulty);
     }
 }

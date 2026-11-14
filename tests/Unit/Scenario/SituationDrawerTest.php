@@ -108,13 +108,13 @@ final class SituationDrawerTest extends TestCase
         $drawer = self::drawer();
         $beginner = $veteran = [];
         for ($i = 0; $i < 40; ++$i) {
-            $beginner[] = $drawer->draw(self::catalogue(), Difficulty::Easy)->difficulty;
+            $beginner[] = $drawer->draw(self::catalogue(), Difficulty::Approachable)->difficulty;
             $veteran[] = $drawer->draw(self::catalogue(), Difficulty::Tough)->difficulty;
         }
 
         self::assertNotContains(Difficulty::Tough, $beginner);
-        self::assertContains(Difficulty::Easy, $beginner);
-        self::assertNotContains(Difficulty::Easy, $veteran);
+        self::assertContains(Difficulty::Approachable, $beginner);
+        self::assertNotContains(Difficulty::Approachable, $veteran);
         self::assertContains(Difficulty::Tough, $veteran);
     }
 
