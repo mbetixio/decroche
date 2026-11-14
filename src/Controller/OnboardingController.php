@@ -35,7 +35,6 @@ use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -96,31 +95,19 @@ final class OnboardingController extends AbstractController
     {
         set_time_limit(400);
         $company = $this->companies->get();
-        if (ProgressStream::wanted($request)) {
-            return $progress->response(
-                $request,
-                function (\Closure $step) use ($analyst, $company): string {
-                    $analyst->analyze($company, $step);
-                    $company->reach(OnboardingStep::Offer);
-                    $this->em->flush();
 
-                    return $this->generateUrl('onboarding', ['step' => OnboardingStep::Offer->value]);
-                },
-                fn (\Throwable $e): array => ['error' => $this->translator->trans($e instanceof \InvalidArgumentException ? $e->getMessage() : 'onboarding.analysis.failed')],
-            );
-        }
-        try {
-            $analyst->analyze($company);
-        } catch (\InvalidArgumentException $e) {
-            return new JsonResponse(['error' => $this->translator->trans($e->getMessage())], Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (\Throwable) {
-            // The model or the website failed: the screen offers to try again.
-            return new JsonResponse(['error' => $this->translator->trans('onboarding.analysis.failed')], Response::HTTP_BAD_GATEWAY);
-        }
-        $company->reach(OnboardingStep::Offer);
-        $this->em->flush();
+        // Always followed step by step: the analysis screen needs JavaScript to run it.
+        return $progress->response(
+            $request,
+            function (\Closure $step) use ($analyst, $company): string {
+                $analyst->analyze($company, $step);
+                $company->reach(OnboardingStep::Offer);
+                $this->em->flush();
 
-        return new JsonResponse(['next' => $this->generateUrl('onboarding', ['step' => OnboardingStep::Offer->value])]);
+                return $this->generateUrl('onboarding', ['step' => OnboardingStep::Offer->value]);
+            },
+            fn (\Throwable $e): array => ['error' => $this->translator->trans($e instanceof \InvalidArgumentException ? $e->getMessage() : 'onboarding.analysis.failed')],
+        );
     }
 
     /**

@@ -16,7 +16,7 @@ use App\Model\Line;
 final readonly class SpeechAnalyzer
 {
     /** Filler words that weaken a pitch, by language (speech recognition keeps the "euh" and "um" when they are said). */
-    public const array FILLERS = [
+    private const array FILLERS = [
         'fr' => ['euh', 'heu', 'bah', 'ben', 'du coup', 'en fait', 'voilà', 'genre', 'en gros', 'quoi', 'enfin bref', 'vous voyez', 'tu vois', 'franchement', 'honnêtement'],
         'en' => ['um', 'uh', 'erm', 'like', 'you know', 'i mean', 'basically', 'actually', 'literally', 'sort of', 'kind of', 'to be honest', 'honestly', 'right'],
     ];

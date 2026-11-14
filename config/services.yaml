@@ -14,10 +14,13 @@ services:
 
     App\:
         resource: '../src/'
+        # Value objects, never services: entities, enums, models, the models' answers and the forms' data.
         exclude:
             - '../src/Entity/'
             - '../src/Enum/'
             - '../src/Model/'
+            - '../src/Ai/Output/'
+            - '../src/Form/Model/'
             - '../src/Kernel.php'
 
 

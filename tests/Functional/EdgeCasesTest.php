@@ -58,24 +58,27 @@ final class EdgeCasesTest extends FunctionalTestCase
         $crawler = $this->client->request('GET', '/welcome/analysis');
         $token = (string) $crawler->filter('[data-analysis-token-value]')->attr('data-analysis-token-value');
 
-        $this->client->request('POST', '/welcome/analysis/run', ['token' => $token]);
-        self::assertResponseStatusCodeSame(422, 'Nothing to analyse.');
+        $analyse = function () use ($token): string {
+            $this->client->request('POST', '/welcome/analysis/run', ['token' => $token], server: ['HTTP_ACCEPT' => 'application/x-ndjson']);
+            $end = $this->lines()[\count($this->lines()) - 1];
+            self::assertSame('error', $end['t']);
+
+            return $end['error'];
+        };
+        self::assertStringContainsString('Give a readable website', $analyse(), 'Nothing to analyse.');
 
         $company = $this->service(CompanyRepository::class)->get();
         $company->about = 'Acme builds software for retailers and logistics firms across Europe.';
         $this->service(EntityManagerInterface::class)->flush();
         ScriptedModel::$unreachable = true;
-        $this->client->request('POST', '/welcome/analysis/run', ['token' => $token]);
-        self::assertResponseStatusCodeSame(502);
+        self::assertStringContainsString('try again', $analyse());
 
         // A sheet or a catalogue too short to use is a failure too.
         ScriptedModel::$unreachable = false;
         ScriptedModel::$answers['sales training tool'] = (string) json_encode(['name' => 'Acme', 'offer' => 'Software.', 'sectors' => []]);
-        $this->client->request('POST', '/welcome/analysis/run', ['token' => $token]);
-        self::assertResponseStatusCodeSame(502);
+        self::assertStringContainsString('try again', $analyse());
         ScriptedModel::$answers = ['catalogue of situations' => (string) json_encode(['situations' => []])];
-        $this->client->request('POST', '/welcome/analysis/run', ['token' => $token]);
-        self::assertResponseStatusCodeSame(502);
+        self::assertStringContainsString('try again', $analyse());
     }
 
     public function testTheTeamStepInvitesOnlyNewcomers(): void

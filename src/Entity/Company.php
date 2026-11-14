@@ -153,11 +153,6 @@ class Company
         $this->criteria = \count($grid) >= 2 ? $grid : null;
     }
 
-    public function hasOwnScorecard(): bool
-    {
-        return null !== $this->criteria;
-    }
-
     /**
      * Ready to play: the offer sheet and the situations exist.
      */

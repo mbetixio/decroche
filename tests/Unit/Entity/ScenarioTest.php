@@ -52,14 +52,12 @@ final class ScenarioTest extends TestCase
     {
         $scenario = self::scenario();
         self::assertNull($scenario->situation());
-        self::assertFalse($scenario->isSurpriseCall());
 
         $scenario->setSituation(self::situation('price_request'));
-        self::assertTrue($scenario->isSurpriseCall());
         self::assertEquals(self::situation('price_request'), $scenario->situation());
 
         $scenario->setSituation(null);
-        self::assertFalse($scenario->isSurpriseCall());
+        self::assertNull($scenario->situation());
     }
 
     public function testObjectivesAreCleanedAndCut(): void

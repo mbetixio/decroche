@@ -52,10 +52,6 @@ final readonly class WorkspaceWriter
     }
 
     /**
-     * The persona's own systems, which they consult during the call with their tools: generic records, so that any
-     * business fits (a shop's stock, a software firm's tickets, a factory's suppliers…).
-     */
-    /**
      * The offer, for the amounts in the files to match it (see ScenarioWriter::MONEY).
      */
     private function money(string $offer): string
@@ -63,6 +59,10 @@ final readonly class WorkspaceWriter
         return "The offer the seller sells, for reference:\n{$offer}\n".ScenarioWriter::MONEY;
     }
 
+    /**
+     * The persona's own systems, which they consult during the call with their tools: generic records, so that any
+     * business fits (a shop's stock, a software firm's tickets, a factory's suppliers…).
+     */
     public function hint(): string
     {
         $from = $this->clock->now()->modify('+1 weekday');

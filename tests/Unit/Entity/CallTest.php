@@ -43,7 +43,6 @@ final class CallTest extends TestCase
         $call->say(Speaker::Persona, 'Yes?', self::at('2026-11-13 10:00:25'));
 
         self::assertSame(['Hello, Claire speaking.', 'Hi Claire', 'Yes?'], array_map(static fn ($l): string => $l->text, $call->lines()));
-        self::assertSame('Yes?', $call->lastLine()->text);
         self::assertSame(1, $call->sellerTurns());
         self::assertFalse($call->isSpoken());
     }
@@ -84,11 +83,10 @@ final class CallTest extends TestCase
         self::assertFalse($call->isRevealed(BriefSection::Secret));
     }
 
-    public function testDeadlineAndSecondsLeft(): void
+    public function testSecondsLeftCountDownToTheDeadline(): void
     {
         $call = self::call(self::scenario(minutes: 10));
 
-        self::assertSame(self::at('2026-11-13 10:10:00')->getTimestamp(), $call->deadline()->getTimestamp());
         self::assertSame(600, $call->secondsLeft(self::at()));
         self::assertSame(420, $call->secondsLeft(self::at('2026-11-13 10:03:00')));
         self::assertSame(1, $call->secondsLeft(self::at('2026-11-13 10:09:59')));

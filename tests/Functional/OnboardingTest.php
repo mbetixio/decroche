@@ -84,9 +84,10 @@ final class OnboardingTest extends FunctionalTestCase
 
         $this->client->followRedirect();
         $token = $this->client->getCrawler()->filter('[data-analysis-token-value]')->attr('data-analysis-token-value');
-        $this->client->request('POST', '/welcome/analysis/run', ['token' => $token]);
+        $this->client->request('POST', '/welcome/analysis/run', ['token' => $token], server: ['HTTP_ACCEPT' => 'application/x-ndjson']);
         self::assertResponseIsSuccessful();
-        self::assertSame('/welcome/offer', json_decode((string) $this->client->getResponse()->getContent(), true)['next'] ?? null);
+        $lines = $this->lines();
+        self::assertSame(['t' => 'done', 'url' => '/welcome/offer'], end($lines));
 
         $company = $this->service(CompanyRepository::class)->get();
         self::assertStringContainsString('Dedicated teams', $company->offer);

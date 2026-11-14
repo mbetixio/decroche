@@ -7,7 +7,7 @@ namespace App\Form\Model;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * A new account: the first manager's (onboarding) or a guest's (invitation).
+ * The first manager's account, created during the onboarding (a guest's comes from {@see JoinData}).
  */
 final class AccountData
 {

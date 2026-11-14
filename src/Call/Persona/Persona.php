@@ -11,8 +11,9 @@ use App\Enum\Speaker;
 use App\Repository\CompanyRepository;
 
 /**
- * The seller's counterpart: the model playing the persona, in one pass and as a stream (no tool call, so no second
- * round trip to the model). Its reply comes piece by piece, cleaned of its tags (see {@see ReplyFilter}).
+ * The seller's counterpart: the persona agent, answering as a stream. It may look something up first with its tools
+ * (its files, its calendar, its earlier calls with the seller), then its reply comes piece by piece, cleaned of its tags
+ * (see {@see ReplyFilter}).
  */
 final readonly class Persona
 {

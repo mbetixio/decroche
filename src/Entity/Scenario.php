@@ -158,11 +158,6 @@ class Scenario
         $this->situation = $situation?->toArray();
     }
 
-    public function isSurpriseCall(): bool
-    {
-        return null !== $this->situation;
-    }
-
     /**
      * @return list<string>
      */

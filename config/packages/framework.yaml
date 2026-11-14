@@ -5,15 +5,10 @@ framework:
     trusted_proxies: '%env(default::TRUSTED_PROXIES)%'
     trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
 
-    # Note that the session will be started ONLY if you read or write from it.
     # A cookie name of Décroche's own: cookies on 127.0.0.1 do not tell ports apart, so another local Symfony project
     # would otherwise overwrite the session (and sign the member out).
     session:
         name: DECROCHE_SESSION
-    csrf_protection: true
-
-    #esi: true
-    #fragments: true
 
 # In production (Docker), sessions live in the persistent volume: a redeployment signs nobody out.
 when@prod:

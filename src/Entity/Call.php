@@ -119,13 +119,6 @@ class Call
         return array_map(Line::fromArray(...), $this->lines);
     }
 
-    public function lastLine(): Line
-    {
-        $last = end($this->lines);
-
-        return Line::fromArray(false !== $last ? $last : throw new \LogicException('A call always holds its opening line.'));
-    }
-
     /**
      * The seller's line that contains this quote (to replay a moment from the debrief).
      */
@@ -232,7 +225,7 @@ class Call
         return null !== $this->replayOf;
     }
 
-    public function deadline(): \DateTimeImmutable
+    private function deadline(): \DateTimeImmutable
     {
         return $this->startedAt->modify(\sprintf('+%d minutes', $this->scenario->minutes));
     }

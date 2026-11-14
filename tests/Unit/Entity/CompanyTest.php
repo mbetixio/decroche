@@ -87,7 +87,6 @@ final class CompanyTest extends TestCase
     public function testDefaultScorecardFollowsTheLanguage(): void
     {
         $company = new Company();
-        self::assertFalse($company->hasOwnScorecard());
         self::assertEquals(Criterion::defaults(Language::French), $company->scorecard());
 
         $company->language = Language::English;
@@ -99,7 +98,6 @@ final class CompanyTest extends TestCase
         $company = new Company();
         $company->setScorecard([new Criterion('rapport', 'Rapport', 'trust'), new Criterion('closing', 'Closing')]);
 
-        self::assertTrue($company->hasOwnScorecard());
         self::assertEquals(['rapport' => new Criterion('rapport', 'Rapport', 'trust'), 'closing' => new Criterion('closing', 'Closing', '')], $company->scorecard());
     }
 
@@ -107,7 +105,6 @@ final class CompanyTest extends TestCase
     {
         $company = new Company();
         $company->setScorecard([new Criterion('alone', 'Alone')]);
-        self::assertFalse($company->hasOwnScorecard());
         self::assertEquals(Criterion::defaults(), $company->scorecard());
 
         $company->setScorecard(array_map(static fn (int $i): Criterion => new Criterion("c{$i}", "C{$i}"), range(1, 10)));
