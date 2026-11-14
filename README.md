@@ -142,35 +142,49 @@ debrief) costs a few cents with the default model.
 
 ### 2a. With Docker (recommended)
 
+All you need is [Docker](https://docs.docker.com/get-docker/) with Compose (Docker Desktop, or Docker Engine 24+ on a
+server). Three commands:
+
 ```bash
 git clone https://github.com/mbetixio/decroche.git && cd decroche
-echo "AI_API_KEY=hf_your_token" > .env.docker
-docker compose --env-file .env.docker up -d --build
+cp .env.docker.dist .env.docker          # then open .env.docker and paste your token after AI_API_KEY=
+docker compose up -d --build             # about three minutes the first time
 ```
 
-Open <http://localhost:7077> (the container only answers on this machine until you have created the first manager:
-whoever opens a fresh instance first becomes its manager). Then choose:
+Open <http://localhost:7077>. The instance only answers on this machine until you have created the first manager
+(whoever opens a fresh instance first becomes its manager). Then choose:
 
 - **A real instance, set up from your company** (default): the onboarding starts. Pick the language, create the first
   manager account, give your website (analysed in a minute or two), review the offer, the situations and the
   scorecard, invite your team.
-- **A demo instance, with test data**: add `DECROCHE_DEMO=1` to `.env.docker` before starting.
+- **A demo instance, with test data**: set `DECROCHE_DEMO=1` in `.env.docker` (and `DECROCHE_LANGUAGE=fr` for French)
+  before the first start, then read the demo manager's e-mail and password:
 
   ```bash
-  echo "DECROCHE_DEMO=1" >> .env.docker
-  docker compose --env-file .env.docker up -d --build
-  docker compose logs decroche | grep -A1 Manager     # the demo manager's e-mail and password
+  docker compose logs decroche | grep -A1 Manager
   ```
 
   The onboarding is skipped: an example company (a software services firm), its 24 situations, a library of 7
   scenarios, and a small team are created. You sign in as its manager, Alex Morgan, who already has four debriefed
-  calls (scores climbing from 14 to 65 in English, 31 to 74 in French, the coach naming the flaw that keeps coming back,
-the client checking their calendar and booking a meeting in the best ones) next to a junior seller's
-  two, so the home page, the progress, the team board and the MCP statistics are full from the start. Every scenario
-  comes with its client's files. `DECROCHE_LANGUAGE=fr` gives the same in French.
+  calls (scores climbing from 14 to 65 in English, 31 to 74 in French, the coach naming the flaw that keeps coming
+  back, the client checking their calendar and booking a meeting in the best ones) next to a junior seller's two, so
+  the home page, the progress, the team board and the MCP statistics are full from the start. Every scenario comes
+  with its client's files.
 
-The database, the sessions, the synthesized voices and the instance's own secrets live in the `decroche` volume:
-`docker compose down` keeps them, `docker compose down -v` starts over.
+**Everyday commands**
+
+| | |
+|---|---|
+| `docker compose ps` | Is it running? `healthy` once it answers. |
+| `docker compose logs -f decroche` | What it is doing (a model or a voice that fails is logged as a warning). |
+| `git pull && docker compose up -d --build` | Update: the database is migrated at start, your data stays. |
+| `docker compose down` | Stop it; the data stays in the `decroche` volume. `docker compose down -v` starts over. |
+| `DECROCHE_PORT=8080 docker compose up -d` | Another port (then set `DEFAULT_URI` in `.env.docker` to match). |
+
+**If it does not start**: `docker compose ps` shows *Restarting* and the logs say *AI_API_KEY is empty* when the key
+is missing from `.env.docker`; *env file .env.docker not found* means the copy step was skipped. Every setting lives
+in `.env.docker`: change it, then `docker compose up -d` again. The database, the sessions, the synthesized voices and
+the instance's own secrets live in the `decroche` volume.
 
 ### 2b. Without Docker
 
@@ -207,8 +221,8 @@ phone screen lets you type your lines. Without edge-tts, the browser's own voice
 
 ## Configuration
 
-Put your values in `.env.docker` (with Docker) or `.env.local` (without Docker). With Docker, only `AI_API_KEY` is
-required: the container generates the instance's own secrets once. Without Docker, also set `APP_SECRET` and
+Put your values in `.env.docker` (with Docker, see `.env.docker.dist`) or `.env.local` (without Docker). With Docker,
+only `AI_API_KEY` is required: the container generates the instance's own secrets once. Without Docker, also set `APP_SECRET` and
 `MCP_STATE_KEY` (see [Without Docker](#2b-without-docker)).
 
 | Variable | Default | |
@@ -228,8 +242,8 @@ required: the container generates the instance's own secrets once. Without Docke
 | `APP_SECRET`, `MCP_STATE_KEY` | generated (Docker) | The instance's own secrets: required without Docker. |
 | `APP_TIMEZONE` | `Europe/Paris` | The clock of calendars, calls and missions. |
 | `SOURCE_URL` | this repository | Where your users can get the source code, linked at the foot of every page (AGPL-3.0): point it at your fork if you modify Décroche. |
-| `DECROCHE_DEMO`, `DECROCHE_LANGUAGE` | `0`, `en` | Docker only: load the demo data instead of the onboarding. |
-| `DECROCHE_PORT`, `DECROCHE_BIND` | `7077`, `127.0.0.1` | Docker only: the port, and the interface it listens on (`0.0.0.0` behind your proxy, once the first manager exists). |
+| `DECROCHE_DEMO`, `DECROCHE_LANGUAGE` | `0`, `en` | Docker only, in `.env.docker`: load the demo data instead of the onboarding. |
+| `DECROCHE_PORT`, `DECROCHE_BIND` | `7077`, `127.0.0.1` | Docker only, given to `docker compose` itself (`DECROCHE_BIND=0.0.0.0 docker compose up -d`): the port, and the interface it listens on (`0.0.0.0` behind your proxy, once the first manager exists). |
 | `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | The neural voices and their cache. |
 
 **Choosing a model.** The persona answers in one to four sentences and must start *fast* (it is a phone call); the
@@ -260,11 +274,20 @@ The writer is the other way round: a call and its client's files are a long text
 
 ## Deploy on a server
 
-`docker compose up -d --build` on any server, behind your HTTPS reverse proxy (Caddy, Traefik, Nginx Proxy Manager…)
-pointing at port 7077. Set `DEFAULT_URI=https://your-domain` and add the domain to `MCP_ALLOWED_HOSTS` so that call
-links, invitations and the MCP endpoint use it; set `DECROCHE_BIND=0.0.0.0` (or put the proxy on the same Docker
-network) once you have created the first manager, and `TRUSTED_PROXIES` to your proxy's address. The container migrates the database and prunes old voices at each
-start.
+The same three commands on any Linux server with Docker, then your HTTPS reverse proxy (Caddy, Traefik, Nginx Proxy
+Manager…) in front of port 7077. Each team runs its own instance with its own key: the model's cost stays theirs.
+
+1. On the server: `git clone`, `cp .env.docker.dist .env.docker`, put the key, and in `.env.docker` set
+   `DEFAULT_URI=https://your-domain` and add the domain to `MCP_ALLOWED_HOSTS` (call links, invitations and Claude's
+   connector use them).
+2. `docker compose up -d --build`, then open the instance through an SSH tunnel (`ssh -L 7077:127.0.0.1:7077 server`
+   and <http://localhost:7077>) and create the first manager account.
+3. Open it to your proxy: `DECROCHE_BIND=0.0.0.0 docker compose up -d` (or put the proxy on the container's Docker
+   network), and set `TRUSTED_PROXIES` in `.env.docker` to the proxy's address.
+
+With Caddy, the whole proxy is `your-domain { reverse_proxy 127.0.0.1:7077 }`: HTTPS included. The replies stream as
+they are written, so a proxy must not buffer the responses (Caddy and Traefik do not; with Nginx, the app already sends
+`X-Accel-Buffering: no`). The container migrates the database and prunes old voices at each start.
 
 **The landing page** is a single static file, `docs/index.html` (English and French, the same design as the app). To
 publish it with GitHub Pages: *Settings → Pages → Deploy from a branch → `main`, `/docs`*.
