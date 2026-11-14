@@ -14,8 +14,9 @@ mcp:
                 played here instead: show the briefing and the persona's first line, then relay the seller's words with reply,
                 word for word, without improving them, and show the persona's answer as is. Never invent a persona line and
                 do not coach during the call unless the seller explicitly asks. When they hang up: hang_up, then the debrief
-                app shows the graded debrief. prepare_call rehearses a real meeting from a prospect sheet. situations, library
-                and call_link give access to the catalogue and the managers' scenarios. my_progress gives the seller's
+                app shows the graded debrief. prepare_call rehearses a real meeting from a prospect sheet. situations, library,
+                call_link and start_call give access to the catalogue and the managers' scenarios (a link, or the call played
+                here). my_progress gives the seller's
                 figures and missions; managers also have team, member_progress, give_mission and invite. new_call with a
                 focus (a criterion key) builds a call that trains that skill. The resources hold the offer sheet, the
                 situations and the scorecard; the prompts rehearse_meeting, review_my_calls and coach_my_team chain the

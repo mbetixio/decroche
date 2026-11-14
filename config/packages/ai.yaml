@@ -1,5 +1,5 @@
-# The language models: any OpenAI-compatible API (DeepSeek through OpenCode Go, OpenAI, Mistral, OpenRouter,
-# Hugging Face, a local Ollama…), declared as a Symfony AI "generic" platform. See .env for AI_*.
+# The language models: Hugging Face Inference Providers by default, or any OpenAI-compatible API (OpenAI, DeepSeek,
+# Mistral, OpenRouter, a local Ollama…), declared as a Symfony AI "generic" platform. See .env for AI_*.
 ai:
     platform:
         generic:

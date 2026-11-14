@@ -116,11 +116,14 @@ And *resources* a client can attach to a conversation: `decroche://offer` (the o
 | `my_progress` | Difficulty and why, scores and trend, criteria, results by situation, missions, latest calls. |
 | `team`, `member_progress`, `give_mission`, `invite` | For managers. |
 
-The persona's hidden brief never leaves the server before the debrief: the client's model cannot whisper the answers.
+The persona's hidden brief never leaves the server while the call is on (it is shown once the call is debriefed or
+abandoned): the client's model cannot whisper the answers.
 
 **Connect it.** In Décroche, open *My account → Train from Claude → Create my MCP address*, then in Claude add a
-custom connector with that address (`https://your-instance/mcp?key=pcl_…`). The MCP endpoint needs a public HTTPS
-address for Claude to reach it (see [Deploy](#deploy-on-a-server)).
+custom connector with that address (`https://your-instance/mcp?key=pcl_…`; clients that can send headers may pass the
+key as `Authorization: Bearer pcl_…` instead, which keeps it out of proxy logs). The key is stored hashed, redacted
+from the logs, and closed when the member's password changes. The MCP endpoint needs a public HTTPS address for Claude
+to reach it (see [Deploy](#deploy-on-a-server)).
 
 ## Run it
 
@@ -140,12 +143,13 @@ debrief) costs a few cents with the default model.
 ### 2a. With Docker (recommended)
 
 ```bash
-git clone https://github.com/<you>/decroche.git && cd decroche
+git clone https://github.com/mbetixio/decroche.git && cd decroche
 echo "AI_API_KEY=hf_your_token" > .env.docker
 docker compose --env-file .env.docker up -d --build
 ```
 
-Open <http://localhost:7077>. Then choose:
+Open <http://localhost:7077> (the container only answers on this machine until you have created the first manager:
+whoever opens a fresh instance first becomes its manager). Then choose:
 
 - **A real instance, set up from your company** (default): the onboarding starts. Pick the language, create the first
   manager account, give your website (analysed in a minute or two), review the offer, the situations and the
@@ -160,7 +164,8 @@ Open <http://localhost:7077>. Then choose:
 
   The onboarding is skipped: an example company (a software services firm), its 24 situations, a library of 7
   scenarios, and a small team are created. You sign in as its manager, Alex Morgan, who already has four debriefed
-  calls (scores climbing from 0 to 60, the coach naming the flaw that keeps coming back) next to a junior seller's
+  calls (scores climbing from 14 to 65 in English, 31 to 74 in French, the coach naming the flaw that keeps coming back,
+the client checking their calendar and booking a meeting in the best ones) next to a junior seller's
   two, so the home page, the progress, the team board and the MCP statistics are full from the start. Every scenario
   comes with its client's files. `DECROCHE_LANGUAGE=fr` gives the same in French.
 
@@ -172,9 +177,9 @@ The database, the sessions, the synthesized voices and the instance's own secret
 Requires PHP 8.5 with `pdo_sqlite` and `intl`, [Composer](https://getcomposer.org), and Python 3 for the voices.
 
 ```bash
-git clone https://github.com/<you>/decroche.git && cd decroche
+git clone https://github.com/mbetixio/decroche.git && cd decroche
 composer install
-echo "AI_API_KEY=hf_your_token" > .env.local     # never committed
+printf 'AI_API_KEY=hf_your_token\nAPP_SECRET=%s\nMCP_STATE_KEY=%s\n' "$(openssl rand -hex 16)" "$(openssl rand -hex 32)" > .env.local   # never committed
 python3 -m venv var/edge-tts && var/edge-tts/bin/pip install edge-tts==7.3.1   # optional: neural voices
 ```
 
@@ -188,12 +193,13 @@ or the demo data:
 
 ```bash
 php bin/console app:install --demo --language=en    # the example company, team and calls; prints the manager's e-mail and password
+                                                     # (--email and --password to choose them)
 ```
 
 and serve it:
 
 ```bash
-symfony serve        # or: php -S 127.0.0.1:8000 -t public
+symfony serve        # or: PHP_CLI_SERVER_WORKERS=4 php -S 127.0.0.1:8000 -t public   (several workers: the voices load while the reply streams)
 ```
 
 **Use Chrome, Edge or Safari** (speech recognition) and allow the microphone. Without a microphone, the keypad on the
@@ -201,7 +207,9 @@ phone screen lets you type your lines. Without edge-tts, the browser's own voice
 
 ## Configuration
 
-Put your values in `.env.local` (without Docker) or `.env.docker` (with Docker). Only `AI_API_KEY` is required.
+Put your values in `.env.docker` (with Docker) or `.env.local` (without Docker). With Docker, only `AI_API_KEY` is
+required: the container generates the instance's own secrets once. Without Docker, also set `APP_SECRET` and
+`MCP_STATE_KEY` (see [Without Docker](#2b-without-docker)).
 
 | Variable | Default | |
 |---|---|---|
@@ -210,15 +218,18 @@ Put your values in `.env.local` (without Docker) or `.env.docker` (with Docker).
 | `AI_PERSONA_MODEL` | `deepseek-ai/DeepSeek-V4.1-Flash` | The client on the phone: its reply is streamed, so it must start fast. |
 | `AI_COACH_MODEL` | `deepseek-ai/DeepSeek-V4.1-Flash` | The coach, who investigates the call then grades it, and the offer sheet. |
 | `AI_WRITER_MODEL` | `openai/gpt-oss-120b` | The writer of each call and of its client's files: a long text, so it must write fast. The same model several times is fine. |
-| `AI_PERSONA_REASONING`, `AI_COACH_REASONING`, `AI_WRITER_REASONING` | `low` | Reasoning effort, `none` to `high`, sent the way the model family expects it (gpt-oss, gpt-5, DeepSeek). |
+| `AI_PERSONA_REASONING`, `AI_COACH_REASONING`, `AI_WRITER_REASONING` | `low` | Reasoning effort, `none` to `high`, sent the way the model family expects it (gpt-oss, gpt-5, DeepSeek); ignored for other models. |
+| `AI_LIMIT_CALLS_PER_HOUR`, `AI_LIMIT_LINES_PER_MINUTE` | `20`, `40` | Each member's share of the model: calls written (and debriefed) an hour, lines a minute. Far above what training takes, too tight for a script or a stolen key to run up the bill. |
 | `AI_COMPLETIONS_PATH` | `/chat/completions` | |
 | `AI_HEADERS` | `{}` | Extra HTTP headers for the model's API, as JSON. |
 | `DEFAULT_URI` | `http://127.0.0.1:8000` | The instance's public address, for the links it generates (call links, invitations). |
 | `MCP_ALLOWED_HOSTS` | `localhost,127.0.0.1,…` | Host names the MCP endpoint answers on: add your domain. |
-| `TRUSTED_PROXIES` | — | Your reverse proxy, e.g. `private_ranges`. |
+| `TRUSTED_PROXIES` | — | Your reverse proxy, e.g. `private_ranges`: left empty, forwarded headers are not trusted. |
+| `APP_SECRET`, `MCP_STATE_KEY` | generated (Docker) | The instance's own secrets: required without Docker. |
+| `APP_TIMEZONE` | `Europe/Paris` | The clock of calendars, calls and missions. |
 | `SOURCE_URL` | this repository | Where your users can get the source code, linked at the foot of every page (AGPL-3.0): point it at your fork if you modify Décroche. |
 | `DECROCHE_DEMO`, `DECROCHE_LANGUAGE` | `0`, `en` | Docker only: load the demo data instead of the onboarding. |
-| `DECROCHE_PORT` | `7077` | Docker only: the port on your machine. |
+| `DECROCHE_PORT`, `DECROCHE_BIND` | `7077`, `127.0.0.1` | Docker only: the port, and the interface it listens on (`0.0.0.0` behind your proxy, once the first manager exists). |
 | `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | The neural voices and their cache. |
 
 **Choosing a model.** The persona answers in one to four sentences and must start *fast* (it is a phone call); the
@@ -227,12 +238,15 @@ the app's own prompts:
 
 | | First word on the phone (median) | Debrief | Debrief quality |
 |---|---|---|---|
-| `deepseek-ai/DeepSeek-V4.1-Flash` on Hugging Face (**default**) | **1.5 s**, steady (0.6–1.9 s) | 7–12 s | **The most precise**: notices a question asked twice, quotes the offer's real arguments |
+| `deepseek-ai/DeepSeek-V4.1-Flash` on Hugging Face (**default**) | **1.5 s**, steady (0.6–1.9 s) | 7–12 s* | **The most precise**: notices a question asked twice, quotes the offer's real arguments |
 | `openai/gpt-oss-120b` on Hugging Face | 2.1 s, uneven (up to 5.5 s) | **2–3 s** | Correct but more generic |
 | DeepSeek V4.1 Flash on another provider | 1.8 s | 9–12 s | As precise as the default |
 
-Reasoning made the debriefs slower (about 20 s) without making them better, so it is off by default. For instant
-debriefs, set `AI_COACH_MODEL=openai/gpt-oss-120b`.
+\* Measured on the plain answer. Since the coach investigates with its tools first (earlier debriefs, exact lines,
+the client's actions, the offer), a debrief takes about 30 seconds, and the waiting screen shows each step.
+
+Reasoning made the debriefs slower without making them better, so it is low by default: no thinking for DeepSeek, low
+effort for gpt-oss. For faster debriefs, set `AI_COACH_MODEL=openai/gpt-oss-120b`.
 
 The writer is the other way round: a call and its client's files are a long text, and gpt-oss writes it in about
 5 seconds where DeepSeek takes 30 or more, so gpt-oss writes by default. Other providers:
@@ -248,7 +262,8 @@ The writer is the other way round: a call and its client's files are a long text
 
 `docker compose up -d --build` on any server, behind your HTTPS reverse proxy (Caddy, Traefik, Nginx Proxy Manager…)
 pointing at port 7077. Set `DEFAULT_URI=https://your-domain` and add the domain to `MCP_ALLOWED_HOSTS` so that call
-links, invitations and the MCP endpoint use it. The container migrates the database and prunes old voices at each
+links, invitations and the MCP endpoint use it; set `DECROCHE_BIND=0.0.0.0` (or put the proxy on the same Docker
+network) once you have created the first manager, and `TRUSTED_PROXIES` to your proxy's address. The container migrates the database and prunes old voices at each
 start.
 
 **The landing page** is a single static file, `docs/index.html` (English and French, the same design as the app). To
@@ -282,6 +297,12 @@ publish it with GitHub Pages: *Settings → Pages → Deploy from a branch → `
 - **MCP tools, prompts and resources as plain Symfony services.** `src/Mcp/*Tools.php` methods carry `#[McpTool]`,
   `Prompts` `#[McpPrompt]` and `CompanyResources` `#[McpResource]`; schemas come from the signatures. A stateless firewall authenticates each member by a personal key (`McpKeyAuthenticator`), redacted from
   the logs.
+- **Every step shown.** A call written, a debrief, the website's analysis: the agents' work is streamed to the browser
+  as NDJSON steps (`ProgressStream`), one per tool the agent really calls ("checking your latest calls", "checking
+  your lines word for word"…), ticked off on the waiting screen. Each agent's tool rounds are capped in `ai.yaml`
+  (persona 3, coach 8, writer 5).
+- **Fair use.** Symfony's rate limiter gives each member a share of the model (`UsageLimits`), on the website and over
+  MCP alike, and throttles sign-in attempts.
 - **Call links.** `CallLinks` uses Symfony's login links (signed with the member's password hash, 15 minutes, a few
   uses) with a target path: the model hands the seller a link, and the phone screen opens already signed in.
 - **An MCP App.** `DebriefApp` (`#[AsMcpApp]`) renders the debrief with the site's own Twig partial and stylesheet.
@@ -304,6 +325,9 @@ src/
   Progress/     a member's figures, the difficulty that follows their scores, the team board, missions
   Voice/        edge-tts synthesis and its cache pruning, voice casting per language, gender and tone
   Mcp/          the MCP tools, prompts and resources, the debrief app, call links
+  Security/     the MCP key authenticator, the voters, each member's share of the model
+  Http/         the step-by-step stream of long work (ProgressStream); EventListener/ locale, security headers
+  Logging/      the MCP key redacted from the logs
   Onboarding/   the steps and the guard that steers first-boot visitors
   Controller/   thin controllers; Form/ typed models validated with constraints; Twig/ the CRM-style document
   Entity/ Enum/ Model/ Repository/  the domain
@@ -314,14 +338,16 @@ translations/   English and French; config/decroche/{en,fr}/ the example company
 ## Quality
 
 ```bash
-php vendor/bin/phpunit                    # about 400 unit and functional tests, offline, in about twenty seconds
+php vendor/bin/phpunit                    # about 430 unit and functional tests, offline, in about half a minute
 php vendor/bin/phpunit --coverage-text    # 100 % of the classes, methods and lines (needs pcov or Xdebug)
-vendor/bin/phpstan analyse                # level max, with the Symfony and Doctrine extensions
+vendor/bin/phpstan analyse --memory-limit=1G   # level max, with the Symfony and Doctrine extensions
 vendor/bin/php-cs-fixer fix --dry-run     # Symfony coding standard, strict types everywhere
 ```
 
-Accessible (WCAG AA contrasts, keyboard, reduced motion), responsive down to 360 px, every page in English and French.
-A company's instance stays out of search engines (`noindex`, `robots.txt`).
+Accessible (WCAG AA contrasts, keyboard, reduced motion, screen-reader announcements kept to what changes),
+responsive down to 360 px, every page in English and French. A company's instance stays out of search engines
+(`noindex`, `robots.txt`), refuses to be framed by another site, throttles sign-in attempts, and its website reader
+never reaches private networks.
 
 ## Maintenance
 
