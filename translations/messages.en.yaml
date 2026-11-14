@@ -130,7 +130,6 @@ onboarding:
         offer: 'Offer sheet'
         situations: 'Situations'
         criteria: 'Criteria'
-        ready: 'Your first call'
         first_call: 'A situation is waiting for you.'
         first_call_text: 'You won''t know which until you pick up: as in real life. Talk into the microphone, as on the phone.'
         go: 'Go to the home page'
@@ -214,7 +213,6 @@ form:
         keep: 'Keep this situation'
 account:
     error:
-        wrong_password: 'This is not your current password.'
     title: 'My account'
     edit_profile: 'My profile'
     profile_title: 'My profile'
@@ -259,8 +257,6 @@ call:
     left_title: 'The meeting''s maximum length'
     interrupt: 'Cut them off'
     keypad_placeholder: 'Type your line if you cannot talk…'
-    pick_up: 'Pick up'
-    dial: 'Call'
     hang_up: 'Hang up'
     analysing: 'Analysing the call…'
     analysing_text: 'The coach is writing your debrief: about thirty seconds.'
@@ -293,7 +289,7 @@ call:
         resume: 'Call on hold: pick the line back up'
     hint:
         incoming: 'Someone is calling you: answer.'
-        outgoing: 'The call has not started yet: press the green button to place it.'
+        outgoing: 'The call has not started yet: press “Call” to place it.'
         talk: 'Talk naturally, as on the phone.'
     key:
         mute: 'Mute'
@@ -322,7 +318,6 @@ company:
         invalid_website: 'This does not look like a website address.'
         nothing_to_analyze: 'Give a readable website or describe the company in a few lines.'
         no_situation: 'Keep at least one situation.'
-        scorecard_size: 'The scorecard has 2 to 8 criteria.'
 team:
     error:
         email_taken: 'This address already has an account.'
@@ -374,9 +369,6 @@ debrief:
         tip: 'Start a new call and see the conversation through.'
     abandoned: 'No score for an abandoned call. Here is %name%''s hidden brief all the same, for next time.'
     pending: 'The debrief is not written yet.'
-    next_step: 'Next step obtained'
-    no_next_step: 'No next step'
-    uncovered: '%n% / %total% sections uncovered'
     criteria: 'The criteria'
     objectives: 'The call''s objectives'
     figures: 'The call in figures'
@@ -415,7 +407,6 @@ play:
         work_on: 'To work on'
     hello: 'Hello %name%'
     title: 'Ready for a call?'
-    ready: 'Ready?'
     cta_title: 'A situation is waiting for you.'
     cta_text: 'A job ad spotted, a furious client, a price request, a project check-in… You won''t know which until you start: as in real life.'
     new_call: 'New call'
@@ -423,8 +414,6 @@ play:
     drawing: 'Getting a call ready for you…'
     drawing_text: 'The situation is drawn and written for you, with the client''s files: a few seconds.'
     draw_failed: 'The call could not be prepared (the model is unreachable): try again.'
-    calls: '{0} no calls|{1} 1 call|]1,Inf[ %count% calls'
-    average: 'average'
     current:
         live: 'Call in progress'
         debrief: 'Call to debrief'
@@ -518,10 +507,7 @@ progress:
     weakest: 'to work on'
     by_situation: 'By situation'
     situation: 'Situation'
-    date: 'Date'
-    call: 'Call'
     status: 'Status'
-    score: 'Score'
     scores_aria: 'Chart of your last %count% scores; the latest is %last%.'
     scores_member: 'Scores'
     recent_member: 'Latest calls'
@@ -605,4 +591,3 @@ steps:
         site: 'Reading %site%'
         offer: 'Writing the offer sheet'
         situations: 'Writing the call situations'
-    start: 'Getting started'

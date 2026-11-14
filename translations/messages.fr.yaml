@@ -130,7 +130,6 @@ onboarding:
         offer: 'Fiche offre'
         situations: 'Situations'
         criteria: 'Critères'
-        ready: 'Votre premier appel'
         first_call: 'Une situation vous attend.'
         first_call_text: 'Vous ne savez pas laquelle avant de décrocher : comme dans la vraie vie. Parlez au micro, comme au téléphone.'
         go: 'Aller à l''accueil'
@@ -214,7 +213,6 @@ form:
         keep: 'Garder cette situation'
 account:
     error:
-        wrong_password: 'Ce n''est pas votre mot de passe actuel.'
     title: 'Mon compte'
     edit_profile: 'Mon profil'
     profile_title: 'Mon profil'
@@ -259,8 +257,6 @@ call:
     left_title: 'Durée maximale du rendez-vous'
     interrupt: 'Couper la parole'
     keypad_placeholder: 'Tapez votre réplique si vous ne pouvez pas parler…'
-    pick_up: 'Décrocher'
-    dial: 'Appeler'
     hang_up: 'Raccrocher'
     analysing: 'Analyse de l''appel…'
     analysing_text: 'Le coach rédige votre débrief : une trentaine de secondes.'
@@ -293,7 +289,7 @@ call:
         resume: 'Appel en attente : reprenez la ligne'
     hint:
         incoming: 'On vous appelle : décrochez.'
-        outgoing: 'L''appel n''est pas encore lancé : appuyez sur le bouton vert pour appeler.'
+        outgoing: 'L''appel n''est pas encore lancé : appuyez sur « Appeler » pour le lancer.'
         talk: 'Parlez naturellement, comme au téléphone.'
     key:
         mute: 'Micro'
@@ -322,7 +318,6 @@ company:
         invalid_website: 'Cette adresse ne ressemble pas à un site web.'
         nothing_to_analyze: 'Donnez un site lisible ou décrivez la société en quelques lignes.'
         no_situation: 'Gardez au moins une situation.'
-        scorecard_size: 'La grille compte de 2 à 8 critères.'
 team:
     error:
         email_taken: 'Cette adresse a déjà un compte.'
@@ -374,9 +369,6 @@ debrief:
         tip: 'Lancez un nouvel appel et allez au bout de la conversation.'
     abandoned: 'Pas de note pour un appel abandonné. Voici tout de même le brief caché de %name%, pour la prochaine fois.'
     pending: 'Le débrief n''est pas encore rédigé.'
-    next_step: 'Prochaine étape obtenue'
-    no_next_step: 'Pas de prochaine étape'
-    uncovered: '%n% / %total% rubriques découvertes'
     criteria: 'Les critères'
     objectives: 'Les objectifs de l''appel'
     figures: 'L''appel en chiffres'
@@ -415,7 +407,6 @@ play:
         work_on: 'À travailler'
     hello: 'Bonjour %name%'
     title: 'Prêt pour un appel ?'
-    ready: 'Prêt ?'
     cta_title: 'Une situation vous attend.'
     cta_text: 'Une annonce repérée, un client furieux, une demande de prix, un suivi de projet… Vous ne savez pas laquelle avant de lancer : comme dans la vraie vie.'
     new_call: 'Nouvel appel'
@@ -423,8 +414,6 @@ play:
     drawing: 'On vous prépare un appel…'
     drawing_text: 'La situation est tirée et écrite pour vous, avec les dossiers du client : quelques secondes.'
     draw_failed: 'L''appel n''a pas pu être préparé (le modèle est injoignable) : réessayez.'
-    calls: '{0} aucun appel|{1} 1 appel|]1,Inf[ %count% appels'
-    average: 'moyenne'
     current:
         live: 'Appel en cours'
         debrief: 'Appel à débriefer'
@@ -518,10 +507,7 @@ progress:
     weakest: 'à travailler'
     by_situation: 'Par situation'
     situation: 'Situation'
-    date: 'Date'
-    call: 'Appel'
     status: 'Statut'
-    score: 'Note'
     scores_aria: 'Graphique de vos %count% dernières notes ; la dernière est %last%.'
     scores_member: 'Les notes'
     recent_member: 'Derniers appels'
@@ -605,4 +591,3 @@ steps:
         site: 'Lecture de %site%'
         offer: 'Rédaction de la fiche d’offre'
         situations: 'Rédaction des situations d’appel'
-    start: 'Démarrage'

@@ -23,7 +23,7 @@ const pref = (key, fallback) => { try { return localStorage.getItem('decroche-' 
 const keep = (key, value) => { try { localStorage.setItem('decroche-' + key, value); } catch { /* private mode */ } };
 
 export default class extends Controller {
-    static targets = ['state', 'since', 'clock', 'caption', 'hint', 'keypad', 'input', 'keys', 'pickup', 'finish', 'sheet', 'dot', 'avatar', 'barge', 'voiceNote'];
+    static targets = ['state', 'since', 'clock', 'caption', 'hint', 'keypad', 'input', 'keys', 'pickup', 'finish', 'sheet', 'dot', 'barge', 'browserVoice', 'voiceNote'];
     static values = {
         talkUrl: String,
         token: String,
@@ -38,7 +38,6 @@ export default class extends Controller {
         openingAudio: String,
         sampleAudio: String,
         edgeVoice: String,
-        autostart: Boolean,
         labels: Object,
     };
 
@@ -51,6 +50,8 @@ export default class extends Controller {
         this.speaker = pref('speaker', '1') === '1';
         this.subs = pref('subs', '0') === '1';
         this.bargeTarget.checked = pref('barge', '1') === '1';
+        if (this.hasBrowserVoiceTarget) this.browserVoiceTarget.checked = pref('browser-voice', '0') === '1';
+        this.timers = new Set();
         this.tick = setInterval(() => this.second(), 1000);
         this.clockTarget.textContent = mmss(this.left);
         this.toggleKey('subs', this.subs);
@@ -58,14 +59,26 @@ export default class extends Controller {
         this.setSheet(window.innerWidth >= 900);
         if (this.resumedValue) this.stateTarget.textContent = this.label('resume');
         this.voiceNoteTarget.textContent = this.serverVoice() ? this.label('voice_server', { '%voice%': this.edgeVoiceValue.replace(/^[a-z]{2}-[A-Z]{2}-|Neural$/g, '') }) : this.label('voice_browser');
-        if (this.autostartValue) this.pickUp();
     }
 
+    // Leaving the page ends everything: the microphone, the reply being streamed, the pending timers.
     disconnect() {
         clearInterval(this.tick);
         this.over = true;
         this.stopListening();
+        this.unwatch();
+        this.abortTurn?.();
         this.hush();
+        this.timers.forEach(clearTimeout);
+        this.timers.clear();
+    }
+
+    // A timer the page cancels when it is left.
+    later(fn, ms) {
+        const id = setTimeout(() => { this.timers.delete(id); fn(); }, ms);
+        this.timers.add(id);
+
+        return id;
     }
 
     label(key, params = {}) {
@@ -83,6 +96,8 @@ export default class extends Controller {
         if (!this.incomingValue && !this.resumedValue) {
             this.setState('ringing', this.label('ringing'));
             await this.ringback(1600);
+            // Hung up while it rang: nobody picks up.
+            if (this.over) return;
         }
         this.inCall = true;
         this.keysTarget.hidden = false;
@@ -117,7 +132,7 @@ export default class extends Controller {
         this.keysTarget.hidden = true;
         this.keypadTarget.hidden = true;
         this.hintTarget.textContent = this.label('analysing');
-        setTimeout(() => this.finishTarget.requestSubmit(), 1500);
+        this.later(() => this.finishTarget.requestSubmit(), 1500);
     }
 
     // Hanging up sends the call to the coach: the debrief takes some thirty seconds, behind a waiting screen.
@@ -141,7 +156,7 @@ export default class extends Controller {
         this.wasCut = false;
         const abort = new AbortController();
         this.abortTurn = () => abort.abort();
-        setTimeout(() => { if (this.sending) this.watch(); }, 300);
+        this.later(() => { if (this.sending) this.watch(); }, 300);
         this.show(text, 'me sent');
         this.setState('thinking', '');
         let chain = Promise.resolve(), result = null, first = true;
@@ -153,7 +168,7 @@ export default class extends Controller {
                 body: JSON.stringify({ message: text, voiceMs, interrupted }),
             });
             if (!response.ok) {
-                const data = await response.json();
+                const data = await response.json().catch(() => ({ error: this.label('crackled', { '%name%': this.who }) }));
                 this.show('⚠️ ' + data.error, 'warn');
                 if (data.ended) this.end(this.label('ended'));
                 return;
@@ -196,7 +211,7 @@ export default class extends Controller {
             const seed = this.barged || '';
             this.barged = null;
             if (seed) this.wasCut = true;
-            if (!this.over) setTimeout(() => this.listen(seed), seed ? 150 : 0);
+            if (!this.over) this.later(() => this.listen(seed), seed ? 150 : 0);
         }
     }
 
@@ -319,7 +334,7 @@ export default class extends Controller {
         };
         rec.onend = () => {
             this.listening = false;
-            if (!this.sending && !this.over && !this.muted && this.inCall && !this.sendingVoice) setTimeout(() => this.listen(), 200);
+            if (!this.sending && !this.over && !this.muted && this.inCall && !this.sendingVoice) this.later(() => this.listen(), 200);
         };
         try {
             rec.start();
@@ -377,7 +392,7 @@ export default class extends Controller {
             text = text.trim();
             if (text.split(/\s+/).length >= 4 && !this.echo(text)) this.bargeIn(text);
         };
-        rec.onend = () => { this.watching = false; if (this.sending && !this.over && !this.barged) setTimeout(() => this.watch(), 150); };
+        rec.onend = () => { this.watching = false; if (this.sending && !this.over && !this.barged) this.later(() => this.watch(), 150); };
         try { rec.start(); } catch { this.watching = false; }
     }
 
@@ -463,9 +478,10 @@ export default class extends Controller {
 
     // ── Helpers ─────────────────────────────────────────────────────────────────────────────────────────────────────
 
+    // The state line is a live region: it is only written when it changes, so a screen reader says it once.
     setState(state, text) {
         this.element.dataset.state = state;
-        this.stateTarget.textContent = text;
+        if (this.stateTarget.textContent !== text) this.stateTarget.textContent = text;
     }
 
     show(text, cls = '') {

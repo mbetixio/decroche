@@ -66,7 +66,7 @@ final class CallController extends AbstractController
             return $this->redirectToRoute('call_briefing', ['id' => $scenario->id]);
         }
 
-        return $this->redirectToRoute('call_show', ['id' => $call->id, 'pickup' => 1]);
+        return $this->redirectToRoute('call_show', ['id' => $call->id]);
     }
 
     /**
@@ -218,7 +218,7 @@ final class CallController extends AbstractController
             return $this->redirectToRoute('call_show', ['id' => $call->id]);
         }
 
-        return $this->redirectToRoute('call_show', ['id' => $replay->id, 'pickup' => 1]);
+        return $this->redirectToRoute('call_show', ['id' => $replay->id]);
     }
 
     /**

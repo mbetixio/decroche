@@ -38,7 +38,7 @@
     </header>
 
     <div class="cs-who">
-        <button type="button" class="avatar cs-avatar" data-call-target="avatar" data-action="call#interrupt" aria-label="{{ 'call.interrupt'|trans }}">{{ persona.initials }}</button>
+        <button type="button" class="avatar cs-avatar" data-action="call#interrupt" aria-label="{{ 'call.interrupt'|trans }}">{{ persona.initials }}</button>
         <h1 class="cs-name">{{ persona.name }}</h1>
         <p class="cs-sub">{{ persona.role }} · {{ persona.company }}</p>
         <p class="cs-status" role="status"><span class="cs-since" data-call-target="since" hidden>00:00</span><span class="cs-state" data-call-target="state">{{ (incoming ? 'call.state.incoming' : 'call.state.ready')|trans }}</span></p>
@@ -86,7 +86,7 @@
             {% endif %}
             <div class="cs-options">
                 <label class="check"><input type="checkbox" data-call-target="barge" data-action="call#toggleBarge"> <span>{{ 'call.sheet.barge'|trans }}</span></label>
-                {% if voice %}<label class="check"><input type="checkbox" data-action="call#toggleBrowserVoice"> <span>{{ 'call.sheet.browser_voice'|trans }}</span></label>{% endif %}
+                {% if voice %}<label class="check"><input type="checkbox" data-call-target="browserVoice" data-action="call#toggleBrowserVoice"> <span>{{ 'call.sheet.browser_voice'|trans }}</span></label>{% endif %}
                 <div><button type="button" class="btn sm" data-action="call#testVoice"><twig:Icon name="volume" />{{ 'call.sheet.test_voice'|trans }}</button></div>
                 <p class="tiny faint" data-call-target="voiceNote"></p>
             </div>
