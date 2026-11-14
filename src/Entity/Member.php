@@ -75,6 +75,14 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         return $key;
     }
 
+    /**
+     * The MCP key stops working (the password changed: whoever held the old one must not keep a way in).
+     */
+    public function forgetMcpKey(): void
+    {
+        $this->mcpKeyHash = null;
+    }
+
     public function initials(): string
     {
         $words = preg_split('/[\s-]+/', trim($this->name)) ?: [];

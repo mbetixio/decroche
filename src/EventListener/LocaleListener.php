@@ -25,6 +25,9 @@ final readonly class LocaleListener
 
     public function __invoke(RequestEvent $event): void
     {
+        if (!$event->isMainRequest()) {
+            return;
+        }
         $request = $event->getRequest();
         if (str_starts_with($request->getPathInfo(), '/_')) {
             return;

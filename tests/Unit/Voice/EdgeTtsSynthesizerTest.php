@@ -35,7 +35,7 @@ final class EdgeTtsSynthesizerTest extends TestCase
             while [ $# -gt 0 ]; do
                 case "$1" in
                     --write-media) out="$2"; shift ;;
-                    --text) text="$2"; shift ;;
+                    --text=*) text="${1#--text=}" ;;
                 esac
                 shift
             done
@@ -67,6 +67,10 @@ final class EdgeTtsSynthesizerTest extends TestCase
         self::assertTrue($again->isDone());
         self::assertSame('MP3 Hello there.', $again->audio());
         self::assertSame('MP3 Hello there.', $tts->speak('Hello there.', 'en-US-AvaNeural', new Prosody()));
+
+        // A line that starts with a dash is still text, not an option.
+        $this->mode('ok');
+        self::assertSame('MP3 - Tuesday works.', $tts->speak('- Tuesday works.', 'en-US-AvaNeural', new Prosody()));
     }
 
     public function testAFailedOrEmptySynthesisGivesNoAudio(): void

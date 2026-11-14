@@ -70,7 +70,7 @@ final readonly class EdgeTtsSynthesizer implements SpeechSynthesizer
             @mkdir($this->cache, 0o775, true);
         }
         $part = $file.'.'.bin2hex(random_bytes(3)).'.part';
-        $process = new Process([$this->binary, '--voice', $voice, '--rate='.$prosody->rate, '--pitch='.$prosody->pitch, '--text', $text, '--write-media', $part]);
+        $process = new Process([$this->binary, '--voice', $voice, '--rate='.$prosody->rate, '--pitch='.$prosody->pitch, '--text='.$text, '--write-media', $part]);
         $process->setTimeout(30);
         $process->start();
 

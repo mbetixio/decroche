@@ -55,7 +55,7 @@ final class CoachPromptTest extends TestCase
         $scenario->setObjectives(['Understand the need', 'Get a meeting']);
         $scenario->setSituation(self::situation());
         $call = self::call($scenario);
-        $call->say(Speaker::Seller, 'What is your budget?', self::at('2026-11-13 10:01:00'));
+        $call->say(Speaker::Seller, "What is your\nbudget?", self::at('2026-11-13 10:01:00'));
         $call->say(Speaker::Persona, 'About 50k.', self::at('2026-11-13 10:01:10'));
         $call->reveal(BriefSection::Budget);
         $call->stop(CallEnd::Clock, self::at('2026-11-13 10:04:00'));
@@ -69,6 +69,7 @@ final class CoachPromptTest extends TestCase
         self::assertStringContainsString("The situation from the client's side: On the train", $prompt);
         self::assertStringContainsString('- [budget] Real budget: 50k (the client gave it away)', $prompt);
         self::assertStringContainsString("- [pain] Real pain: Lead dev leaving\n", $prompt);
+        // A line break typed by the seller stays inside their line: it cannot start a fake client line.
         self::assertStringContainsString("CLIENT: Hello, Claire speaking.\nSELLER: What is your budget?\nCLIENT: About 50k.", $prompt);
         self::assertStringContainsString('(4 min out of 10)', $prompt);
         self::assertStringContainsString($figures->describe(), $prompt);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Company\TeamManager;
 use App\Repository\MemberRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -21,6 +22,7 @@ final class AccountTest extends FunctionalTestCase
 
     public function testThePasswordIsChanged(): void
     {
+        $this->service(TeamManager::class)->newMcpKey($this->service(MemberRepository::class)->findOneByEmail('seller@decroche.test') ?? self::fail());
         $crawler = $this->client->request('GET', '/account');
         $this->client->submit($crawler->selectButton('Change the password')->form(), ['change_password[current]' => 'wrong-password', 'change_password[password]' => 'a-new-password']);
         self::assertSelectorTextContains('main', 'This is not your current password.');
@@ -30,6 +32,7 @@ final class AccountTest extends FunctionalTestCase
         self::assertResponseRedirects('/account');
         $member = $this->service(MemberRepository::class)->findOneByEmail('seller@decroche.test');
         self::assertTrue($this->service(UserPasswordHasherInterface::class)->isPasswordValid($member, 'a-new-password'));
+        self::assertNull($member->mcpKeyHash, 'A new password closes the MCP address too.');
     }
 
     public function testThePersonalMcpAddressIsShownOnceAndCanBeReplaced(): void

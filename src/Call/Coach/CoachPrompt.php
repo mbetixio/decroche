@@ -78,7 +78,8 @@ final readonly class CoachPrompt
                 $brief .= "- [{$section->value}] {$section->describe()}: {$text}".($call->isRevealed($section) ? ' (the client gave it away)' : '')."\n";
             }
         }
-        $transcript = implode("\n", array_map(static fn (Line $l): string => ($l->isSeller() ? 'SELLER' : 'CLIENT').': '.$l->text, $call->lines()));
+        // One line per turn: a line break typed in a seller's line cannot pass for a client's line.
+        $transcript = implode("\n", array_map(static fn (Line $l): string => ($l->isSeller() ? 'SELLER' : 'CLIENT').': '.preg_replace('/\s+/u', ' ', $l->text), $call->lines()));
         $end = match ($call->endedBy) {
             CallEnd::Clock => 'The clock ended the meeting (maximum length reached).',
             CallEnd::Persona => 'The client ended the meeting.',

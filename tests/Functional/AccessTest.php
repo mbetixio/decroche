@@ -40,6 +40,11 @@ final class AccessTest extends FunctionalTestCase
         $this->submit('Sign in', ['_username' => 'seller@decroche.test', '_password' => 'wrong']);
         $this->client->followRedirect();
         self::assertSelectorExists('.flash.error');
+        // Never framed by another site, never sniffed, no address leaked.
+        self::assertResponseHeaderSame('X-Frame-Options', 'DENY');
+        self::assertResponseHeaderSame('X-Content-Type-Options', 'nosniff');
+        self::assertResponseHeaderSame('Referrer-Policy', 'same-origin');
+        self::assertStringContainsString("frame-ancestors 'none'", (string) $this->client->getResponse()->headers->get('Content-Security-Policy'));
     }
 
     public function testRepeatedWrongPasswordsLockTheAccountForAWhile(): void

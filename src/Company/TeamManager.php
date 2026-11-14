@@ -117,6 +117,8 @@ final readonly class TeamManager
     public function changePassword(Member $member, string $password): void
     {
         $member->setPassword($this->hasher->hashPassword($member, $password));
+        // A new password closes every other way in: the MCP key has to be created again.
+        $member->forgetMcpKey();
         $this->em->flush();
     }
 
