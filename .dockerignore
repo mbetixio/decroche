@@ -6,7 +6,6 @@
 # Every local env file stays out of the image (.env copy.local included); only the committed defaults go in.
 .env*
 !.env
-!.env.dev
 var/
 vendor/
 tests/
