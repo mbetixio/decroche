@@ -55,7 +55,7 @@ final class CallFlowTest extends FunctionalTestCase
         // The seller talks; the persona answers as a stream of JSON lines, revealing their budget.
         $this->client->request('POST', '/calls/'.$call->id.'/talk', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/x-ndjson', 'HTTP_X_CSRF_TOKEN' => $token], content: json_encode(['message' => 'What budget have you set aside?', 'voiceMs' => 2400]));
         self::assertResponseIsSuccessful();
-        $events = $this->events();
+        $events = $this->lines();
         self::assertSame('say', $events[0]['t']);
         self::assertStringContainsString('thirty thousand euros', implode(' ', array_column(array_filter($events, static fn (array $e): bool => 'say' === $e['t']), 'text')));
         self::assertStringNotContainsString('[devoiler', (string) $this->client->getInternalResponse()->getContent());
@@ -119,7 +119,7 @@ final class CallFlowTest extends FunctionalTestCase
         $call = $this->pickUp();
         $token = $this->client->getCrawler()->filter('[data-controller=call]')->attr('data-call-token-value');
         $this->client->request('POST', '/calls/'.$call->id.'/talk', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => $token], content: json_encode(['message' => 'Alright, goodbye.']));
-        $events = $this->events();
+        $events = $this->lines();
         $done = end($events);
         self::assertTrue($done['ended']);
         self::assertSame('persona', $done['endedBy']);
@@ -208,18 +208,6 @@ final class CallFlowTest extends FunctionalTestCase
     {
         $crawler = $this->client->request('GET', '/calls/'.$call->id);
         $this->client->submit($crawler->filter('form[action$="/finish"]')->form());
-    }
-
-    /**
-     * The events of the last streamed reply.
-     *
-     * @return list<array<string, mixed>>
-     */
-    private function events(): array
-    {
-        $lines = array_values(array_filter(explode("\n", (string) $this->client->getInternalResponse()->getContent())));
-
-        return array_map(static fn (string $line): array => json_decode($line, true, flags: \JSON_THROW_ON_ERROR), $lines);
     }
 
     private function call(int $id): Call

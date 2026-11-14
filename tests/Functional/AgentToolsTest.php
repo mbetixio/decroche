@@ -13,9 +13,6 @@ use App\Agent\ReadOffer;
 use App\Call\CallManager;
 use App\Entity\Call;
 use App\Entity\Member;
-use App\Scenario\SurpriseCalls;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Clock\ClockInterface;
 
 /**
  * The agents' tools at work: the persona checks their calendar, books a meeting, looks a ticket up and remembers an
@@ -34,7 +31,7 @@ final class AgentToolsTest extends FunctionalTestCase
 
     public function testThePersonaUsesTheirCalendarAndFilesDuringTheCall(): void
     {
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
         $calls = $this->service(CallManager::class);
 
         $turn = $calls->say($call, 'Could we meet on Tuesday?');
@@ -66,12 +63,12 @@ final class AgentToolsTest extends FunctionalTestCase
 
     public function testAnEarlierCallIsRememberedAndItsDebriefRead(): void
     {
-        $first = $this->live();
+        $first = $this->liveCall($this->me);
         $calls = $this->service(CallManager::class);
         $calls->say($first, 'What budget have you set aside?');
         $calls->finish($first);
 
-        $second = $this->live();
+        $second = $this->liveCall($this->me);
         $turn = $calls->say($second, 'As I said last time, we can help.');
         self::assertStringContainsString('thirty-seven orders', $turn->reply, 'The default answer once the tool answered.');
         self::assertSame(['count' => 1], $second->actions()[0]['data']);
@@ -81,7 +78,7 @@ final class AgentToolsTest extends FunctionalTestCase
 
     public function testTheToolsAnswerWhatAModelGetsWrong(): void
     {
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
         $this->service(AgentContext::class)->forCall($call);
 
         self::assertSame('No such file.', $this->service(LookUp::class)('invoices', 'march')['error']);
@@ -104,16 +101,5 @@ final class AgentToolsTest extends FunctionalTestCase
 
         $this->expectException(\LogicException::class);
         $context->call();
-    }
-
-    private function live(): Call
-    {
-        $em = $this->service(EntityManagerInterface::class);
-        $me = $em->find(Member::class, $this->me->id);
-        $call = new Call($me, $this->service(SurpriseCalls::class)->draw($me, 'price_request'), $this->service(ClockInterface::class)->now());
-        $em->persist($call);
-        $em->flush();
-
-        return $call;
     }
 }

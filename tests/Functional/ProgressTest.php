@@ -10,7 +10,6 @@ use App\Enum\Language;
 use App\Enum\Speaker;
 use App\Onboarding\OnboardingStep;
 use App\Repository\CompanyRepository;
-use App\Scenario\SurpriseCalls;
 use App\Tests\Fake\ScriptedModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Clock\ClockInterface;
@@ -125,12 +124,17 @@ final class ProgressTest extends FunctionalTestCase
      *
      * @return array{list<array{t: string, key: string, label: string}>, array<string, mixed>}
      */
+    /**
+     * The steps of the last waiting screen, and how it ended.
+     *
+     * @return array{list<array<string, mixed>>, array<string, mixed>}
+     */
     private function events(): array
     {
-        $lines = array_map(static fn (string $l): array => json_decode($l, true, flags: \JSON_THROW_ON_ERROR), array_values(array_filter(explode("\n", (string) $this->client->getInternalResponse()->getContent()))));
+        $lines = $this->lines();
         $end = array_pop($lines);
 
-        return [$lines, $end];
+        return [$lines, $end ?? []];
     }
 
     /**
@@ -138,12 +142,9 @@ final class ProgressTest extends FunctionalTestCase
      */
     private function live(Member $me): Call
     {
-        $em = $this->service(EntityManagerInterface::class);
-        $me = $em->find(Member::class, $me->id);
-        $call = new Call($me, $this->service(SurpriseCalls::class)->draw($me, 'price_request'), $this->service(ClockInterface::class)->now());
+        $call = $this->liveCall($me);
         $call->say(Speaker::Seller, 'What budget have you set aside?', $this->service(ClockInterface::class)->now());
-        $em->persist($call);
-        $em->flush();
+        $this->service(EntityManagerInterface::class)->flush();
 
         return $call;
     }

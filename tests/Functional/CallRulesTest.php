@@ -60,7 +60,7 @@ final class CallRulesTest extends FunctionalTestCase
 
     public function testTheModelFailingBeforeOrDuringAReply(): void
     {
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
 
         ScriptedModel::$unreachable = true;
         $this->talk($call, 'Hello, Ana.');
@@ -69,18 +69,18 @@ final class CallRulesTest extends FunctionalTestCase
         ScriptedModel::$unreachable = false;
         ScriptedModel::$cutOff = true;
         $this->talk($call, 'Hello again.');
-        $events = $this->events();
+        $events = $this->lines();
         self::assertSame('error', end($events)['t']);
         self::assertNotSame('call.error.line_cut', end($events)['error'], 'The error is translated.');
     }
 
     public function testTheSellerSaysTooMuchOrTooLate(): void
     {
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
         $this->talk($call, str_repeat('word ', 401));
         self::assertResponseStatusCodeSame(400);
 
-        $late = $this->live(new \DateTimeImmutable('-2 hours'));
+        $late = $this->liveCall($this->me, new \DateTimeImmutable('-2 hours'));
         $this->talk($late, 'Are you still there?');
         self::assertResponseStatusCodeSame(400);
         self::assertTrue(json_decode((string) $this->client->getResponse()->getContent(), true)['ended']);
@@ -89,7 +89,7 @@ final class CallRulesTest extends FunctionalTestCase
 
     public function testTheCallStopsAtTheLastTurn(): void
     {
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
         $now = $this->service(ClockInterface::class)->now();
         for ($i = 1; $i < Call::MAX_TURNS; ++$i) {
             $call->say(Speaker::Seller, 'Line '.$i, $now);
@@ -98,7 +98,7 @@ final class CallRulesTest extends FunctionalTestCase
         $this->service(EntityManagerInterface::class)->flush();
 
         $this->talk($call, 'One more question.');
-        $events = $this->events();
+        $events = $this->lines();
         self::assertTrue(end($events)['ended']);
         self::assertSame(CallEnd::Clock, $this->reload($call)->endedBy);
     }
@@ -106,10 +106,10 @@ final class CallRulesTest extends FunctionalTestCase
     public function testThePersonaSpeaksWithAVoice(): void
     {
         SilentSynthesizer::$voiced = true;
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
 
         $this->talk($call, 'Hello, Ana.');
-        $said = array_values(array_filter($this->events(), static fn (array $e): bool => 'say' === $e['t']));
+        $said = array_values(array_filter($this->lines(), static fn (array $e): bool => 'say' === $e['t']));
         self::assertNotEmpty($said);
         self::assertStringStartsWith('MP3:', (string) base64_decode((string) $said[0]['audio'], true));
 
@@ -130,16 +130,16 @@ final class CallRulesTest extends FunctionalTestCase
     public function testThePersonaMayAnswerInAWord(): void
     {
         ScriptedModel::$answers['You are playing a part in a sales training'] = 'Yes?';
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
 
         $this->talk($call, 'Ana?');
-        $said = array_values(array_filter($this->events(), static fn (array $e): bool => 'say' === $e['t']));
+        $said = array_values(array_filter($this->lines(), static fn (array $e): bool => 'say' === $e['t']));
         self::assertSame('Yes?', $said[0]['text'] ?? null);
     }
 
     public function testOnlyALiveCallCanBeAbandoned(): void
     {
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
         $manager = $this->service(CallManager::class);
         $manager->abandon($this->reload($call));
 
@@ -149,7 +149,7 @@ final class CallRulesTest extends FunctionalTestCase
 
     public function testTheCoachFailingKeepsTheCallForLater(): void
     {
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
         $this->talk($call, 'What budget have you set aside?');
         ScriptedModel::$unreachable = true;
 
@@ -161,7 +161,7 @@ final class CallRulesTest extends FunctionalTestCase
 
     public function testReplaysNeedAFinishedCallAndASellerLine(): void
     {
-        $call = $this->live();
+        $call = $this->liveCall($this->me);
         $this->talk($call, 'What budget have you set aside?');
         try {
             $this->service(CallManager::class)->replay($this->reload($call), 1);
@@ -180,7 +180,7 @@ final class CallRulesTest extends FunctionalTestCase
 
     public function testAnArchivedScenarioCannotBeCalledAndANewCallEndsTheLiveOne(): void
     {
-        $first = $this->live();
+        $first = $this->liveCall($this->me);
         $scenario = $this->service(SurpriseCalls::class)->draw($this->service(EntityManagerInterface::class)->find(Member::class, $this->me->id));
 
         $crawler = $this->client->request('GET', '/call/'.$scenario->id);
@@ -201,43 +201,9 @@ final class CallRulesTest extends FunctionalTestCase
         $this->client->request('POST', '/call/new', ['token' => $crawler->filter('form[action="/call/new"] input[name=token]')->attr('value')], server: ['HTTP_ACCEPT' => 'application/json']);
     }
 
-    /**
-     * A live call of the signed-in seller, started at the given time (now by default).
-     */
-    private function live(?\DateTimeImmutable $startedAt = null): Call
-    {
-        // Each request boots the kernel again: the member is read from the current entity manager.
-        $em = $this->service(EntityManagerInterface::class);
-        $me = $em->find(Member::class, $this->me->id);
-        $scenario = $this->service(SurpriseCalls::class)->draw($me, 'price_request');
-        $call = new Call($me, $scenario, $startedAt ?? $this->service(ClockInterface::class)->now());
-        $em->persist($call);
-        $em->flush();
-
-        return $call;
-    }
-
     private function talk(Call $call, string $message): void
     {
         $this->client->request('POST', '/calls/'.$call->id.'/talk', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_CSRF_TOKEN' => $this->callToken($call)], content: (string) json_encode(['message' => $message]));
-    }
-
-    private function callToken(Call $call): string
-    {
-        $crawler = $this->client->request('GET', '/calls/'.$call->id);
-        $node = $crawler->filter('[data-call-token-value]');
-
-        return $node->count() > 0 ? (string) $node->attr('data-call-token-value') : (string) $crawler->filter('form[action$="/abandon"] input[name=_token], form[action$="/finish"] input[name=_token]')->attr('value');
-    }
-
-    /**
-     * @return list<array<string, mixed>>
-     */
-    private function events(): array
-    {
-        $lines = array_values(array_filter(explode("\n", (string) $this->client->getInternalResponse()->getContent())));
-
-        return array_map(static fn (string $line): array => json_decode($line, true, flags: \JSON_THROW_ON_ERROR), $lines);
     }
 
     private function reload(Call $call): Call

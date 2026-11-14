@@ -6,10 +6,12 @@ namespace App\Tests\Functional;
 
 use App\Company\DemoCompany;
 use App\Company\TeamManager;
+use App\Entity\Call;
 use App\Entity\Member;
 use App\Enum\Language;
 use App\Enum\MemberRole;
 use App\Repository\CompanyRepository;
+use App\Scenario\SurpriseCalls;
 use App\Tests\Fake\ScriptedModel;
 use App\Tests\Fake\SilentSynthesizer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +41,8 @@ abstract class FunctionalTestCase extends WebTestCase
         $em->clear();
         ScriptedModel::reset();
         SilentSynthesizer::reset();
+        // Every test starts with the members' model quotas untouched.
+        $this->service('cache.rate_limiter')->clear();
     }
 
     /**
@@ -63,6 +67,44 @@ abstract class FunctionalTestCase extends WebTestCase
     protected function manager(): Member
     {
         return $this->member('manager@decroche.test', MemberRole::Manager, 'Sales manager.');
+    }
+
+    /**
+     * A live call of the member on a freshly written price request, started at the given time (now by default). Each
+     * request boots the kernel again: the member is read from the current entity manager.
+     */
+    protected function liveCall(Member $member, ?\DateTimeImmutable $startedAt = null): Call
+    {
+        $em = $this->service(EntityManagerInterface::class);
+        $member = $em->find(Member::class, $member->id) ?? $member;
+        $call = new Call($member, $this->service(SurpriseCalls::class)->draw($member, 'price_request'), $startedAt ?? $this->service(ClockInterface::class)->now());
+        $em->persist($call);
+        $em->flush();
+
+        return $call;
+    }
+
+    /**
+     * The CSRF token of a call's forms, as its page gives it (the phone screen while live, the hang-up forms after).
+     */
+    protected function callToken(Call $call): string
+    {
+        $crawler = $this->client->request('GET', '/calls/'.$call->id);
+        $node = $crawler->filter('[data-call-token-value]');
+
+        return $node->count() > 0 ? (string) $node->attr('data-call-token-value') : (string) $crawler->filter('form[action$="/abandon"] input[name=_token], form[action$="/finish"] input[name=_token]')->attr('value');
+    }
+
+    /**
+     * The JSON lines of the last streamed answer (a call's exchange, a waiting screen's steps).
+     *
+     * @return list<array<string, mixed>>
+     */
+    protected function lines(): array
+    {
+        $lines = array_values(array_filter(explode("\n", (string) $this->client->getInternalResponse()->getContent())));
+
+        return array_map(static fn (string $line): array => json_decode($line, true, flags: \JSON_THROW_ON_ERROR), $lines);
     }
 
     /**
