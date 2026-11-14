@@ -50,6 +50,10 @@ final class OnboardingTest extends FunctionalTestCase
         $this->client->followRedirect();
         $this->submit('Load the example', ['company[name]' => 'Acme']);
         self::assertResponseRedirects('/welcome/offer');
+        // Finishing from a step before the last one only leads back to it.
+        $this->client->request('POST', '/welcome/finish', ['_token' => $this->csrfToken('onboarding-finish')]);
+        self::assertResponseRedirects('/welcome/offer');
+        self::assertFalse($this->service(CompanyRepository::class)->get()->isOnboarded());
 
         foreach (['situations' => 'Continue', 'scorecard' => 'Continue', 'team' => 'Continue', 'done' => 'Later'] as $next => $button) {
             $this->client->followRedirect();

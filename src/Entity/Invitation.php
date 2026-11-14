@@ -33,7 +33,7 @@ class Invitation
     public function __construct(
         string $email,
         #[ORM\Column(enumType: MemberRole::class, length: 20)]
-        public private(set) MemberRole $role,
+        public MemberRole $role,
         #[ORM\ManyToOne]
         #[ORM\JoinColumn(onDelete: 'SET NULL')]
         public private(set) ?Member $invitedBy,

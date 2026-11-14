@@ -245,6 +245,7 @@ final class McpTest extends FunctionalTestCase
         $calls = [
             ['give_mission', ['email' => 'seller@decroche.test', 'situation' => 'juggling'], 'No situation "juggling"'],
             ['give_mission', ['email' => 'seller@decroche.test', 'situation' => 'price_request', 'due' => '2001-01-01'], 'future date'],
+            ['give_mission', ['email' => 'seller@decroche.test', 'situation' => 'price_request', 'due' => '2099-02-30'], 'future date'],
             ['invite', ['email' => 'not an address'], 'is not an e-mail address'],
             ['invite', ['email' => 'seller@decroche.test'], 'already has an account'],
         ];

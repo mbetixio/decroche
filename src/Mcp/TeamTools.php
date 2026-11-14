@@ -97,7 +97,7 @@ final readonly class TeamTools
             throw new ToolCallException(\sprintf('No situation "%s": the situations tool lists them.', $situation));
         }
         $dueAt = '' !== $due ? \DateTimeImmutable::createFromFormat('!Y-m-d', $due) : null;
-        if (false === $dueAt || (null !== $dueAt && $dueAt < $this->clock->now()->setTime(0, 0))) {
+        if (false === $dueAt || (null !== $dueAt && ($dueAt->format('Y-m-d') !== $due || $dueAt < $this->clock->now()->setTime(0, 0)))) {
             throw new ToolCallException('The deadline must be a future date, as YYYY-MM-DD.');
         }
         $mission = $this->missionManager->give('' !== $email ? $this->member($email) : null, '' !== $situation ? $situation : null, max(1, min(20, $calls)), max(0, min(100, $target)), $dueAt, $note, $manager);

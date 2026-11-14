@@ -38,6 +38,22 @@ final class CommandTest extends FunctionalTestCase
         self::assertFalse($this->service(MemberRepository::class)->hasAny());
     }
 
+    public function testAFailedMigrationStopsTheInstall(): void
+    {
+        // A database the migrations cannot run on: a table already there, under a shape of its own.
+        $connection = $this->service(EntityManagerInterface::class)->getConnection();
+        $schema = new SchemaTool($this->service(EntityManagerInterface::class));
+        $schema->dropSchema($this->service(EntityManagerInterface::class)->getMetadataFactory()->getAllMetadata());
+        $connection->executeStatement('DROP TABLE IF EXISTS doctrine_migration_versions');
+        $connection->executeStatement('CREATE TABLE company (odd TEXT)');
+
+        $tester = $this->command('app:install');
+        $tester->execute(['--demo' => true], ['interactive' => false]);
+
+        self::assertNotSame(0, $tester->getStatusCode());
+        self::assertStringContainsString('could not be migrated', $tester->getDisplay());
+    }
+
     public function testTheDemoInstallLoadsTheCompanyItsTeamAndCalls(): void
     {
         $tester = $this->command('app:install');

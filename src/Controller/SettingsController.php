@@ -115,7 +115,7 @@ final class SettingsController extends AbstractController
     {
         set_time_limit(400);
         try {
-            $analyst->analyze($this->companies->get());
+            $analyst->analyze($this->companies->get(), keep: true);
             $this->em->flush();
             $this->addFlash('success', 'settings.analyzed');
         } catch (\InvalidArgumentException $e) {

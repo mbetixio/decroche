@@ -48,6 +48,9 @@ final readonly class CheckCalendar
     public static function day(string $date, \DateTimeImmutable $now): ?\DateTimeImmutable
     {
         $day = \DateTimeImmutable::createFromFormat('!Y-m-d', trim($date));
+        if (false !== $day && $day->format('Y-m-d') !== trim($date)) {
+            return null;
+        }
         if (false === $day) {
             try {
                 $day = $now->modify(trim($date))->setTime(0, 0);

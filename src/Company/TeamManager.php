@@ -47,7 +47,8 @@ final readonly class TeamManager
     }
 
     /**
-     * Invites someone: a personal link to send them (the pending one, if they were already invited).
+     * Invites someone: a personal link to send them (the pending one, if they were already invited, with the role
+     * asked now).
      *
      * @throws \DomainException when they already have an account
      */
@@ -57,6 +58,9 @@ final readonly class TeamManager
             throw new \DomainException('team.error.email_taken');
         }
         if (null !== $pending = $this->invitations->findPendingByEmail($email)) {
+            $pending->role = $role;
+            $this->em->flush();
+
             return $pending;
         }
         $invitation = new Invitation($email, $role, $by, $this->clock->now());
@@ -76,11 +80,15 @@ final readonly class TeamManager
         if (!$invitation->isPending()) {
             throw new \DomainException('team.error.invitation_used');
         }
-        $member = $this->create($name, $invitation->email, $password, $invitation->role);
-        $invitation->accept($this->clock->now());
-        $this->em->flush();
 
-        return $member;
+        // The account and the used invitation are saved together, or not at all.
+        return $this->em->wrapInTransaction(function () use ($invitation, $name, $password): Member {
+            $member = $this->create($name, $invitation->email, $password, $invitation->role);
+            $invitation->accept($this->clock->now());
+            $this->em->flush();
+
+            return $member;
+        });
     }
 
     public function withdraw(Invitation $invitation): void

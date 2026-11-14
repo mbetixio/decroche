@@ -53,7 +53,17 @@ final readonly class InstallCommand
         // Never asks for a confirmation: the install runs unattended (Docker, CI) as well as by hand.
         $migrate = new ArrayInput(['command' => 'doctrine:migrations:migrate', '--allow-no-migration' => true]);
         $migrate->setInteractive(false);
-        $application->doRun($migrate, $io);
+        try {
+            $code = $application->doRun($migrate, $io);
+        } catch (\Throwable $e) {
+            $io->error($e->getMessage());
+            $code = Command::FAILURE;
+        }
+        if (Command::SUCCESS !== $code) {
+            $io->error('The database could not be migrated: nothing else was installed.');
+
+            return Command::FAILURE;
+        }
 
         if (!$demo) {
             $io->success('Installed. Open the instance in a browser: the onboarding sets it up step by step.');

@@ -141,6 +141,10 @@ final class OnboardingController extends AbstractController
     public function finish(): Response
     {
         $company = $this->companies->get();
+        // Only from the last step, with an offer and situations to draw calls from.
+        if (!$company->hasReached(OnboardingStep::Done) || !$company->isReady()) {
+            return $this->redirectToRoute('onboarding', ['step' => $company->step->value]);
+        }
         $company->completeOnboarding($this->clock->now());
         $this->em->flush();
         $this->addFlash('success', 'onboarding.done.flash');

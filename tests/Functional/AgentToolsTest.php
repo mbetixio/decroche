@@ -85,7 +85,14 @@ final class AgentToolsTest extends FunctionalTestCase
         self::assertSame('Give the day as YYYY-MM-DD.', $this->service(CheckCalendar::class)('2001-01-01')['error']);
         self::assertSame('Give the day as YYYY-MM-DD.', $this->service(CheckCalendar::class)('the day after the storm')['error']);
         self::assertArrayHasKey('free_hours', $this->service(CheckCalendar::class)('next monday'), 'A relative day is understood.');
+        self::assertSame('Give the day as YYYY-MM-DD.', $this->service(CheckCalendar::class)('2030-02-30')['error'], 'A date that does not exist is not rolled over.');
         self::assertFalse($this->service(BookMeeting::class)('next tuesday', 'noonish')['booked']);
+        // Saturday, a Monday before opening, a meeting running past closing time: none is a working slot.
+        foreach ([['next saturday', '10:00', 30], ['next monday', '07:30', 30], ['next monday', '17:30', 60]] as [$day, $time, $minutes]) {
+            $refused = $this->service(BookMeeting::class)($day, $time, $minutes);
+            self::assertFalse($refused['booked'], "{$day} {$time}");
+            self::assertStringContainsString('not a working slot', $refused['reason']);
+        }
         self::assertSame([], $call->bookings());
 
         $offer = $this->service(ReadOffer::class);

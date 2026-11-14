@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Company\TeamManager;
 use App\Entity\Member;
 use App\Enum\MemberRole;
 use App\Repository\InvitationRepository;
@@ -32,6 +33,10 @@ final class TeamTest extends FunctionalTestCase
         self::assertResponseRedirects();
         $invitations = $this->service(InvitationRepository::class)->pending();
         self::assertCount(2, $invitations);
+        // Invited again, as a manager this time: the same link, with the new role.
+        $again = $this->service(TeamManager::class)->invite('camille@decroche.test', MemberRole::Manager, null);
+        self::assertSame(MemberRole::Manager, $again->role);
+        self::assertCount(2, $this->service(InvitationRepository::class)->pending());
 
         $this->client->request('GET', '/logout');
         $this->client->request('GET', '/join/'.$invitations[0]->token);

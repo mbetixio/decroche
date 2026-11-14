@@ -28,14 +28,15 @@ final readonly class OfferAnalyst
     }
 
     /**
-     * The whole analysis (a minute or two), told step by step.
+     * The whole analysis (a minute or two), told step by step. At setup it writes the catalogue of situations; run
+     * again later ($keep), it only adds the situations the catalogue lacks: the manager's own edits stay.
      *
      * @param \Closure|null $step told each step as it starts
      *
      * @throws \InvalidArgumentException when there is neither a readable site nor a description to work from
      * @throws ModelException            when the model's answer is unusable
      */
-    public function analyze(Company $company, ?\Closure $step = null): void
+    public function analyze(Company $company, ?\Closure $step = null, bool $keep = false): void
     {
         $step ??= static function (): void {};
         $step('analysis.site', ['%site%' => $company->website ?? '—']);
@@ -46,7 +47,7 @@ final readonly class OfferAnalyst
         $step('analysis.offer');
         $this->offer($company, $site);
         $step('analysis.situations');
-        $this->situations($company);
+        $this->situations($company, $keep);
         $company->analyzedAt = $this->clock->now();
     }
 
@@ -55,7 +56,7 @@ final readonly class OfferAnalyst
      *
      * @throws ModelException
      */
-    public function offer(Company $company, string $site): void
+    private function offer(Company $company, string $site): void
     {
         $language = $company->language->englishName();
         $system = <<<PROMPT
@@ -89,7 +90,7 @@ final readonly class OfferAnalyst
      *
      * @throws ModelException
      */
-    public function situations(Company $company): void
+    private function situations(Company $company, bool $keep): void
     {
         $canvas = json_encode(array_values(array_map(static fn (Situation $s): array => ['label' => $s->label, 'family' => $s->family->value, 'direction' => $s->direction->value, 'pitch' => $s->pitch], $this->canvas->situations($company->language))), \JSON_UNESCAPED_UNICODE);
         $language = $company->language->englishName();
@@ -118,6 +119,10 @@ final readonly class OfferAnalyst
         if (\count($situations) < 5) {
             throw new ModelException('The catalogue of situations the model wrote is too short.');
         }
-        $company->setSituations($situations);
+        if ($keep) {
+            $company->addMissingSituations($situations);
+        } else {
+            $company->setSituations($situations);
+        }
     }
 }

@@ -40,6 +40,9 @@ final readonly class BookMeeting
         }
         $minutes = max(15, min(240, $minutes));
         $workspace = $call->scenario->workspace();
+        if ($start < $this->clock->now() || !Workspace::isOpen($start, $minutes)) {
+            return ['booked' => false, 'reason' => 'That is not a working slot (past, weekend or outside office hours).', 'free_hours' => $workspace->free($start)];
+        }
         if ($workspace->overlaps($start, $minutes)) {
             return ['booked' => false, 'reason' => 'You are busy then.', 'free_hours' => $workspace->free($start)];
         }

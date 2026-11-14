@@ -169,6 +169,17 @@ final readonly class Workspace
     {
         $moment = \DateTimeImmutable::createFromFormat('!Y-m-d H:i', trim($when));
 
-        return false !== $moment ? $moment : null;
+        // A real moment only: "2026-02-30" does not roll over into March.
+        return false !== $moment && $moment->format('Y-m-d H:i') === trim($when) ? $moment : null;
+    }
+
+    /**
+     * Whether a meeting fits in office hours: a working day, between opening and closing time.
+     */
+    public static function isOpen(\DateTimeImmutable $start, int $minutes): bool
+    {
+        $end = $start->modify("+{$minutes} minutes");
+
+        return (int) $start->format('N') < 6 && (int) $start->format('G') >= self::OPENS && $end <= $start->setTime(self::CLOSES, 0);
     }
 }

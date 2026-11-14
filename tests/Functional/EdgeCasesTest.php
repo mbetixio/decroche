@@ -98,6 +98,11 @@ final class EdgeCasesTest extends FunctionalTestCase
     {
         $this->onboardedCompany();
         $this->signIn($this->manager());
+        // The description is enough to work from: no website is read over the network here.
+        $company = $this->service(CompanyRepository::class)->get();
+        $company->website = null;
+        $before = array_keys($company->situations());
+        $this->service(EntityManagerInterface::class)->flush();
         $analyse = function (): void {
             $crawler = $this->client->request('GET', '/settings');
             $this->client->submit($crawler->filter('form[action="/settings/analyze"]')->form());
@@ -107,7 +112,9 @@ final class EdgeCasesTest extends FunctionalTestCase
 
         $analyse();
         self::assertSelectorTextContains('.flash.success', 'The website was analysed again.');
-        self::assertCount(5, $this->service(CompanyRepository::class)->get()->situations(), 'The scripted catalogue replaced the example one.');
+        $after = array_keys($this->service(CompanyRepository::class)->get()->situations());
+        self::assertSame($before, \array_slice($after, 0, \count($before)), 'The manager\'s situations stay as they were.');
+        self::assertGreaterThan(\count($before), \count($after), 'The situations the catalogue lacked were added.');
 
         ScriptedModel::$unreachable = true;
         $analyse();
@@ -115,7 +122,6 @@ final class EdgeCasesTest extends FunctionalTestCase
 
         ScriptedModel::$unreachable = false;
         $company = $this->service(CompanyRepository::class)->get();
-        $company->website = null;
         $company->about = '';
         $this->service(EntityManagerInterface::class)->flush();
         $analyse();

@@ -61,5 +61,10 @@ final class WorkspaceTest extends TestCase
         self::assertTrue(Workspace::fromArray(null)->isEmpty());
         self::assertFalse($workspace->isEmpty());
         self::assertNull(Workspace::moment('tomorrow at ten'));
+        self::assertNull(Workspace::moment('2026-02-30 10:00'), 'No rolling over into March.');
+        self::assertTrue(Workspace::isOpen(new \DateTimeImmutable('2026-11-17 17:30'), 30));
+        self::assertFalse(Workspace::isOpen(new \DateTimeImmutable('2026-11-17 17:30'), 45));
+        self::assertFalse(Workspace::isOpen(new \DateTimeImmutable('2026-11-17 08:30'), 30));
+        self::assertFalse(Workspace::isOpen(new \DateTimeImmutable('2026-11-21 10:00'), 30));
     }
 }
