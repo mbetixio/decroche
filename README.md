@@ -282,8 +282,9 @@ Manager…) in front of port 7077. Each team runs its own instance with its own 
    connector use them).
 2. `docker compose up -d --build`, then open the instance through an SSH tunnel (`ssh -L 7077:127.0.0.1:7077 server`
    and <http://localhost:7077>) and create the first manager account.
-3. Open it to your proxy: `DECROCHE_BIND=0.0.0.0 docker compose up -d` (or put the proxy on the container's Docker
-   network), and set `TRUSTED_PROXIES` in `.env.docker` to the proxy's address.
+3. Point your proxy at it. A proxy on the same machine reaches `127.0.0.1:7077` as is; a proxy elsewhere (or in
+   another container) needs `DECROCHE_BIND=0.0.0.0 docker compose up -d`. Set `TRUSTED_PROXIES` in `.env.docker` to
+   the proxy's address (`127.0.0.1` for a local one) so that Décroche sees the real scheme and client address.
 
 With Caddy, the whole proxy is `your-domain { reverse_proxy 127.0.0.1:7077 }`: HTTPS included. The replies stream as
 they are written, so a proxy must not buffer the responses (Caddy and Traefik do not; with Nginx, the app already sends
