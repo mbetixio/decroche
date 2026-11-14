@@ -97,5 +97,5 @@
         </div>
     </aside>
 </div>
-{{ include('play/_draw_overlay.html.twig', {id: 'debrief-overlay', title: 'call.analysing'|trans, text: 'call.analysing_text'|trans}) }}
+{{ include('play/_draw_overlay.html.twig', {id: 'debrief-overlay', title: 'call.analysing'|trans, text: 'call.analysing_text'|trans, fallback: 'call.error.debrief_failed'}) }}
 {% endblock %}

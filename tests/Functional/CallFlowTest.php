@@ -39,6 +39,23 @@ final class CallFlowTest extends FunctionalTestCase
         self::assertSelectorTextNotContains('main', 'Orders are lost', 'The hidden brief never shows before the debrief.');
     }
 
+    public function testWithoutJavaScriptADrawLeadsToPages(): void
+    {
+        $crawler = $this->client->request('GET', '/');
+        $token = $crawler->filter('form[action="/call/new"] input[name=token]')->attr('value');
+
+        $this->client->request('POST', '/call/new', ['token' => $token, 'situation' => 'price_request']);
+        self::assertResponseRedirects();
+        self::assertStringStartsWith('/call/', (string) $this->client->getResponse()->headers->get('Location'));
+
+        // The model down: back home, where the failure is said.
+        ScriptedModel::$unreachable = true;
+        $this->client->request('POST', '/call/new', ['token' => $token]);
+        self::assertResponseRedirects('/');
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('.flash.error', 'could not be prepared');
+    }
+
     public function testDrawingACallNeedsAValidToken(): void
     {
         $this->client->request('POST', '/call/new', ['token' => 'forged']);

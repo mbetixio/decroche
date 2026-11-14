@@ -26,5 +26,5 @@
         <p class="small muted">{{ 'prepare.mcp'|trans }}</p>
     </aside>
 </div>
-{{ include('play/_draw_overlay.html.twig', {id: 'prepare-overlay', title: 'prepare.writing'|trans, text: 'prepare.writing_text'|trans}) }}
+{{ include('play/_draw_overlay.html.twig', {id: 'prepare-overlay', title: 'prepare.writing'|trans, text: 'prepare.writing_text'|trans, fallback: 'prepare.failed'}) }}
 {% endblock %}

@@ -1,10 +1,11 @@
 {# A waiting screen for a long piece of work: a call drawn and written (by default), a rehearsal, or the debrief being
-   written, its steps ticked off as they come (draw and follow controllers). id, title and text may be given. #}
-<div class="overlay" id="{{ id ?? 'draw-overlay' }}" role="status" aria-live="polite" hidden>
+   written, its steps ticked off as they come (draw and follow controllers). id, title, text and the fallback error
+   message may be given; the steps list is the only live region, so a screen reader hears each step once. #}
+<div class="overlay" id="{{ id ?? 'draw-overlay' }}" hidden>
     <div class="overlay-panel">
         <span class="loader" aria-hidden="true"><i></i><i></i><i></i></span>
         <h2>{{ title ?? 'play.drawing'|trans }}</h2>
         <p>{{ text ?? 'play.drawing_text'|trans }}</p>
-        {{ include('_steps.html.twig') }}
+        {{ include('_steps.html.twig', {fallback: fallback ?? 'play.draw_failed'}) }}
     </div>
 </div>

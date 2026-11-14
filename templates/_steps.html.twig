@@ -1,4 +1,10 @@
-{# The steps of a long piece of work, filled in as the server reports them (see assets/follow.js), and what went wrong. #}
+{# The steps of a long piece of work, filled in as the server reports them (see assets/follow.js), what went wrong, and
+   a button to close the waiting screen (or, with retry, to send the work again). #}
 <ol class="analysis overlay-steps" data-steps aria-live="polite"></ol>
 <template data-step-template><li class="analysis-step"><span class="dot" aria-hidden="true"><twig:Icon name="check" /></span><span data-step-label></span></li></template>
-<p class="text-bad" data-step-error data-fallback="{{ 'call.error.unreachable'|trans }}" role="alert" hidden></p>
+<p class="text-bad" data-step-error data-fallback="{{ fallback|default('call.error.unreachable')|trans }}" role="alert" hidden></p>
+{% if retry|default(false) %}
+    <button class="btn primary" data-step-close hidden>{{ 'action.retry'|trans }}</button>
+{% else %}
+    <button type="button" class="btn" data-step-close hidden>{{ 'action.close'|trans }}</button>
+{% endif %}

@@ -64,15 +64,23 @@ final class PlayController extends AbstractController
                 static fn (): array => ['error' => $translator->trans('play.draw_failed')],
             );
         }
+        // A script asks for JSON; a form sent without JavaScript gets pages.
+        $json = 'json' === $request->getPreferredFormat();
         try {
             $scenario = $calls->draw($me, $situation, $focus);
-        } catch (CallException $e) {
-            return new JsonResponse(['error' => $translator->trans($e->getMessage())], Response::HTTP_TOO_MANY_REQUESTS);
-        } catch (ModelException|\RuntimeException) {
-            return new JsonResponse(['error' => $translator->trans('play.draw_failed')], Response::HTTP_BAD_GATEWAY);
-        }
+        } catch (CallException|ModelException|\RuntimeException $e) {
+            $message = $e instanceof CallException ? $e->getMessage() : 'play.draw_failed';
+            if (!$json) {
+                $this->addFlash('error', $message);
 
-        return new JsonResponse(['url' => $this->generateUrl('call_briefing', ['id' => $scenario->id])]);
+                return $this->redirectToRoute('home');
+            }
+
+            return new JsonResponse(['error' => $translator->trans($message)], $e instanceof CallException ? Response::HTTP_TOO_MANY_REQUESTS : Response::HTTP_BAD_GATEWAY);
+        }
+        $url = $this->generateUrl('call_briefing', ['id' => $scenario->id]);
+
+        return $json ? new JsonResponse(['url' => $url]) : $this->redirect($url);
     }
 
     /**
