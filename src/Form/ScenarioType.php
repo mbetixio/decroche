@@ -7,7 +7,7 @@ namespace App\Form;
 use App\Enum\BriefSection;
 use App\Enum\Difficulty;
 use App\Enum\MeetingType;
-use App\Form\Model\ScenarioData;
+use App\Form\Data\ScenarioData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;

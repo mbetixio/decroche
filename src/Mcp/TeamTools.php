@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Mcp;
 
-use App\Company\MissionManager;
-use App\Company\TeamManager;
 use App\Entity\Call;
 use App\Entity\Member;
 use App\Enum\MemberRole;
@@ -13,6 +11,8 @@ use App\Progress\MissionTracker;
 use App\Progress\TeamReport;
 use App\Repository\CompanyRepository;
 use App\Repository\MemberRepository;
+use App\Team\MissionManager;
+use App\Team\TeamManager;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
 use Mcp\Schema\ToolAnnotations;

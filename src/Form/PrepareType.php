@@ -6,7 +6,7 @@ namespace App\Form;
 
 use App\Enum\Difficulty;
 use App\Enum\MeetingType;
-use App\Form\Model\PrepareData;
+use App\Form\Data\PrepareData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Form\Model;
+namespace App\Tests\Unit\Form\Data;
 
 use App\Entity\Company;
-use App\Form\Model\SituationData;
-use App\Form\Model\SituationsData;
+use App\Form\Data\SituationData;
+use App\Form\Data\SituationsData;
 use App\Tests\Unit\Fixtures;
 use PHPUnit\Framework\TestCase;
 

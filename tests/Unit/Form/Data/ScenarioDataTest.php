@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Form\Model;
+namespace App\Tests\Unit\Form\Data;
 
 use App\Enum\BriefSection;
 use App\Enum\Difficulty;
 use App\Enum\MeetingType;
 use App\Enum\Tone;
-use App\Form\Model\ScenarioData;
+use App\Form\Data\ScenarioData;
 use App\Scenario\ScenarioFactory;
 use App\Tests\Unit\Fixtures;
 use PHPUnit\Framework\TestCase;

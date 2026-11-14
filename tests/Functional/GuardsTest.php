@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Company\DemoCalls;
 use App\Controller\SecurityController;
+use App\Demo\DemoCalls;
 use App\Entity\Call;
 use App\Entity\Scenario;
 use App\Enum\Language;

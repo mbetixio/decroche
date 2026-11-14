@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Member;
-use App\Form\Model\MissionData;
+use App\Form\Data\MissionData;
 use App\Model\Situation;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\EntityRepository;

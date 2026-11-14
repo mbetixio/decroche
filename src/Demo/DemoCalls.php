@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Company;
+namespace App\Demo;
 
 use App\Entity\Call;
 use App\Entity\Member;

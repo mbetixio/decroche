@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Model;
+namespace App\Form\Data;
 
 use App\Company\SiteReader;
 use App\Entity\Company;

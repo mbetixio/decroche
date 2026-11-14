@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Company\MissionManager;
-use App\Company\TeamManager;
 use App\Entity\Invitation;
 use App\Entity\Member;
 use App\Entity\Mission;
+use App\Form\Data\InvitationsData;
+use App\Form\Data\MissionData;
 use App\Form\InvitationsType;
 use App\Form\MissionType;
-use App\Form\Model\InvitationsData;
-use App\Form\Model\MissionData;
 use App\Progress\MissionTracker;
 use App\Progress\ProgressReport;
 use App\Progress\TeamReport;
 use App\Repository\CallRepository;
 use App\Repository\InvitationRepository;
+use App\Team\MissionManager;
+use App\Team\TeamManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;

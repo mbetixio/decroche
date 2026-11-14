@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Company;
+namespace App\Team;
 
 use App\Entity\Member;
 use App\Entity\Mission;

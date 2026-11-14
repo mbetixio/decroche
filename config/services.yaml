@@ -20,7 +20,7 @@ services:
             - '../src/Enum/'
             - '../src/Model/'
             - '../src/Ai/Output/'
-            - '../src/Form/Model/'
+            - '../src/Form/Data/'
             - '../src/Kernel.php'
 
 

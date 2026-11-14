@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Company\TeamManager;
 use App\Entity\Member;
 use App\Enum\MemberRole;
 use App\Repository\InvitationRepository;
 use App\Repository\MemberRepository;
 use App\Repository\MissionRepository;
 use App\Repository\ScenarioRepository;
+use App\Team\TeamManager;
 
 /**
  * The managers' side: invitations and joining, roles, missions, the library and the company settings.

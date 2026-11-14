@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Form\Model;
+namespace App\Tests\Unit\Form\Data;
 
 use App\Entity\Company;
 use App\Enum\Language;
-use App\Form\Model\ScorecardData;
+use App\Form\Data\ScorecardData;
 use App\Model\Criterion;
 use PHPUnit\Framework\TestCase;
 

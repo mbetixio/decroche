@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Company\DemoCompany;
-use App\Company\TeamManager;
+use App\Demo\DemoCompany;
 use App\Entity\Member;
 use App\Entity\Scenario;
 use App\Enum\Language;
+use App\Team\TeamManager;
 use App\Tests\Fake\ScriptedModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;

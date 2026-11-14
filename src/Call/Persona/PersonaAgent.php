@@ -15,7 +15,7 @@ use App\Repository\CompanyRepository;
  * (its files, its calendar, its earlier calls with the seller), then its reply comes piece by piece, cleaned of its tags
  * (see {@see ReplyFilter}).
  */
-final readonly class Persona
+final readonly class PersonaAgent
 {
     public function __construct(
         private LanguageModel $model,

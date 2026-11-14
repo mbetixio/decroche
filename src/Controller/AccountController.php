@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Ai\Data;
-use App\Company\TeamManager;
 use App\Entity\Member;
 use App\Form\ChangePasswordType;
-use App\Form\Model\ProfileData;
+use App\Form\Data\ProfileData;
 use App\Form\ProfileType;
+use App\Team\TeamManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

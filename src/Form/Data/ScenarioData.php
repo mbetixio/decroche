@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Model;
+namespace App\Form\Data;
 
 use App\Entity\Scenario;
 use App\Enum\BriefSection;

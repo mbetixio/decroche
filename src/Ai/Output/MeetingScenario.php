@@ -24,7 +24,7 @@ final class MeetingScenario extends Output
         #[Schema(description: 'The first sentence the client says when greeting the seller')]
         public string $opening,
         public HiddenBrief $brief,
-        public Workspace $workspace,
+        public ClientWorkspace $workspace,
     ) {
     }
 }

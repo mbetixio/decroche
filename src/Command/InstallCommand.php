@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Company\DemoCalls;
-use App\Company\DemoCompany;
-use App\Company\TeamManager;
+use App\Demo\DemoCalls;
+use App\Demo\DemoCompany;
 use App\Enum\Language;
 use App\Enum\MemberRole;
 use App\Repository\CompanyRepository;
 use App\Repository\MemberRepository;
+use App\Team\TeamManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Company\DemoCompany;
-use App\Company\TeamManager;
+use App\Demo\DemoCompany;
 use App\Entity\Call;
 use App\Entity\Member;
 use App\Enum\Language;
 use App\Enum\MemberRole;
 use App\Repository\CompanyRepository;
 use App\Scenario\SurpriseCalls;
+use App\Team\TeamManager;
 use App\Tests\Fake\ScriptedModel;
 use App\Tests\Fake\SilentSynthesizer;
 use Doctrine\ORM\EntityManagerInterface;

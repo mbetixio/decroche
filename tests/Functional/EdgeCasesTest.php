@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Company\DemoCompany;
-use App\Company\TeamManager;
+use App\Demo\DemoCompany;
 use App\Entity\Member;
 use App\Enum\Language;
 use App\Enum\MemberRole;
@@ -13,6 +12,7 @@ use App\Onboarding\OnboardingStep;
 use App\Repository\CompanyRepository;
 use App\Repository\InvitationRepository;
 use App\Repository\MemberRepository;
+use App\Team\TeamManager;
 use App\Tests\Fake\ScriptedModel;
 use Doctrine\ORM\EntityManagerInterface;
 

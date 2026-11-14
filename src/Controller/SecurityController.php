@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Company\TeamManager;
 use App\Entity\Member;
+use App\Form\Data\JoinData;
 use App\Form\JoinType;
-use App\Form\Model\JoinData;
 use App\Repository\InvitationRepository;
 use App\Repository\MemberRepository;
+use App\Team\TeamManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;

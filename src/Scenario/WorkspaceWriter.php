@@ -6,7 +6,7 @@ namespace App\Scenario;
 
 use App\Ai\LanguageModel;
 use App\Ai\ModelException;
-use App\Ai\Output\Workspace as WorkspaceOutput;
+use App\Ai\Output\ClientWorkspace;
 use App\Entity\Scenario;
 use App\Enum\BriefSection;
 use App\Model\Workspace;
@@ -48,7 +48,7 @@ final readonly class WorkspaceWriter
             .(null !== $scenario->material ? "The document the seller has:\n{$scenario->material}\n" : '')
             ."Their hidden brief:\n{$brief}";
 
-        return Workspace::fromArray($this->model->structured($system, $user, WorkspaceOutput::class, 0.8, 'writer')->toArray());
+        return Workspace::fromArray($this->model->structured($system, $user, ClientWorkspace::class, 0.8, 'writer')->toArray());
     }
 
     /**

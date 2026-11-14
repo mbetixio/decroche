@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Form\Model;
+namespace App\Tests\Unit\Form\Data;
 
-use App\Form\Model\InvitationsData;
+use App\Form\Data\InvitationsData;
 use PHPUnit\Framework\TestCase;
 
 /**

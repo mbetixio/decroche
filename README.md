@@ -321,7 +321,9 @@ src/
     Coach/      the coach's prompt, the debrief and its scoring
     Speech/     talk share, questions, filler words, pace
   Scenario/     situation canvas and drawer, scenario and workspace writers, factory, surprise calls
-  Company/      website reader (private networks refused), offer analyst, example company and calls, team and missions
+  Company/      website reader (private networks refused) and offer analyst
+  Demo/         the example company, its library and its replayed calls
+  Team/         members, invitations, MCP keys and missions
   Progress/     a member's figures, the difficulty that follows their scores, the team board, missions
   Voice/        edge-tts synthesis and its cache pruning, voice casting per language, gender and tone
   Mcp/          the MCP tools, prompts and resources, the debrief app, call links
@@ -329,7 +331,7 @@ src/
   Http/         the step-by-step stream of long work (ProgressStream); EventListener/ locale, security headers
   Logging/      the MCP key redacted from the logs
   Onboarding/   the steps and the guard that steers first-boot visitors
-  Controller/   thin controllers; Form/ typed models validated with constraints; Twig/ the CRM-style document
+  Controller/   thin controllers; Form/ types, with Form/Data the typed data they fill; Twig/ the CRM-style document
   Entity/ Enum/ Model/ Repository/  the domain
 templates/      Twig with anonymous Twig components; assets/ Stimulus controllers and one CSS design system (light and dark)
 translations/   English and French; config/decroche/{en,fr}/ the example company, its calls and the situation canvas

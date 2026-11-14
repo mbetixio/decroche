@@ -10,7 +10,7 @@ use Symfony\AI\Platform\Contract\JsonSchema\Attribute\Schema;
  * What the persona has at hand during the call, as their own systems hold it: their calendar and a few sources that
  * fit their job and the situation. They look things up there with their tools; the seller never sees it.
  */
-final class Workspace extends Output
+final class ClientWorkspace extends Output
 {
     /**
      * @param list<CalendarSlot>    $calendar

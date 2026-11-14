@@ -6,7 +6,7 @@ namespace App\Form;
 
 use App\Enum\CallDirection;
 use App\Enum\SituationFamily;
-use App\Form\Model\SituationData;
+use App\Form\Data\SituationData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;

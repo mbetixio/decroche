@@ -6,7 +6,7 @@ namespace App\Call;
 
 use App\Ai\ModelException;
 use App\Call\Coach\Coach;
-use App\Call\Persona\Persona;
+use App\Call\Persona\PersonaAgent;
 use App\Call\Persona\PersonaPrompt;
 use App\Call\Persona\Reply;
 use App\Entity\Call;
@@ -28,7 +28,7 @@ final readonly class CallManager
 {
     public function __construct(
         private CallRepository $calls,
-        private Persona $persona,
+        private PersonaAgent $persona,
         private Coach $coach,
         private ClockInterface $clock,
         private UsageLimits $limits,

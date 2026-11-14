@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Company\DemoCalls;
+use App\Demo\DemoCalls;
 use App\Enum\CallStatus;
 use App\Enum\Language;
 use App\Repository\CallRepository;
