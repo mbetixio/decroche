@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http;
 
+use App\Call\CallException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
@@ -59,7 +60,12 @@ final readonly class ProgressStream
                 $url = $work(static fn (string $key, array $params = []) => $send(['t' => 'step', 'key' => $key, 'label' => $translator->trans('steps.'.$key, $params)]));
                 $send(['t' => 'done', 'url' => $url]);
             } catch (\Throwable $e) {
-                $send(['t' => 'error'] + $error($e));
+                $failure = $error($e);
+                // A refusal the user can act on (a spent quota, an abandoned call) is said as is, not as a failure.
+                if ($e instanceof CallException) {
+                    $failure['error'] = $translator->trans($e->getMessage());
+                }
+                $send(['t' => 'error'] + $failure);
             }
         }, StreamedResponse::HTTP_OK, ['Content-Type' => self::TYPE.'; charset=utf-8', 'Cache-Control' => 'no-cache', 'X-Accel-Buffering' => 'no']);
     }

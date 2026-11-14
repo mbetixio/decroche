@@ -251,6 +251,8 @@ call:
         line_cut: 'La ligne a coupé : l''interlocuteur n''a pas pu finir sa réponse.'
         unreachable: 'L''interlocuteur n''a pas pu répondre (le modèle est injoignable) : répétez.'
         debrief_failed: 'Le débrief n''a pas pu être rédigé (le modèle est injoignable) : réessayez.'
+        limit: 'Vous allez vite : le modèle a besoin d’une pause. Réessayez dans quelques minutes.'
+        abandoned: 'Cet appel a été abandonné : il n’a pas de débrief noté.'
     title: 'Appel avec %name%'
     replay: 'Reprise'
     left: 'reste'

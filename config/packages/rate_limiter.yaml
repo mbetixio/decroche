@@ -1,0 +1,16 @@
+# Each member's share of the model (see App\Security\UsageLimits): far above what training takes (a call lasts 5 to 12
+# minutes, a line comes every few seconds), too tight for a script or a stolen key to run up the bill.
+framework:
+    rate_limiter:
+        ai_writing:
+            policy: sliding_window
+            limit: '%env(int:AI_LIMIT_CALLS_PER_HOUR)%'
+            interval: '1 hour'
+        ai_talking:
+            policy: sliding_window
+            limit: '%env(int:AI_LIMIT_LINES_PER_MINUTE)%'
+            interval: '1 minute'
+        ai_coaching:
+            policy: sliding_window
+            limit: '%env(int:AI_LIMIT_CALLS_PER_HOUR)%'
+            interval: '1 hour'

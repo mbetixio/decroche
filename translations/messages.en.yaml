@@ -251,6 +251,8 @@ call:
         line_cut: 'The line dropped: the persona could not finish their reply.'
         unreachable: 'The persona could not answer (the model is unreachable): say it again.'
         debrief_failed: 'The debrief could not be written (the model is unreachable): try again.'
+        limit: 'You are going fast: the model needs a break. Try again in a few minutes.'
+        abandoned: 'This call was abandoned: it has no graded debrief.'
     title: 'Call with %name%'
     replay: 'Replay'
     left: 'left'

@@ -23,6 +23,9 @@ services:
       AI_WRITER_MODEL: ${AI_WRITER_MODEL:-openai/gpt-oss-120b}
       AI_WRITER_REASONING: ${AI_WRITER_REASONING:-low}
       AI_HEADERS: ${AI_HEADERS:-{}}
+      # Each member's share of the model (see .env).
+      AI_LIMIT_CALLS_PER_HOUR: ${AI_LIMIT_CALLS_PER_HOUR:-20}
+      AI_LIMIT_LINES_PER_MINUTE: ${AI_LIMIT_LINES_PER_MINUTE:-40}
       # The public address of the instance, for the links it generates (call links, invitations).
       DEFAULT_URI: ${DEFAULT_URI:-http://localhost:7077}
       MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-localhost,127.0.0.1}

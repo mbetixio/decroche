@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Call;
 
+use App\Ai\ModelException;
 use App\Call\Coach\Coach;
 use App\Call\Persona\Persona;
 use App\Call\Persona\PersonaPrompt;
@@ -12,8 +13,11 @@ use App\Entity\Call;
 use App\Entity\Member;
 use App\Entity\Scenario;
 use App\Enum\CallEnd;
+use App\Enum\CallStatus;
 use App\Enum\Speaker;
 use App\Repository\CallRepository;
+use App\Security\Usage;
+use App\Security\UsageLimits;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -27,6 +31,7 @@ final readonly class CallManager
         private Persona $persona,
         private Coach $coach,
         private ClockInterface $clock,
+        private UsageLimits $limits,
     ) {
     }
 
@@ -55,7 +60,7 @@ final readonly class CallManager
      *
      * @return \Generator<int, string, mixed, Turn> the pieces of the persona's reply; the turn's outcome when done
      *
-     * @throws CallException when the line is empty or too long, or the call is over
+     * @throws CallException when the line is empty or too long, the call is over, or the member talks too fast
      */
     public function talk(Call $call, string $text, ?int $voiceMs = null, bool $interrupted = false): \Generator
     {
@@ -70,6 +75,7 @@ final readonly class CallManager
         if (!$call->isLive()) {
             throw new CallException('call.error.over');
         }
+        $this->limits->consume($call->member, Usage::Talking);
         $call->say(Speaker::Seller, $text, $this->clock->now(), $voiceMs);
         $this->calls->save($call);
 
@@ -125,9 +131,15 @@ final readonly class CallManager
      * Hangs up (if still live) and has the coach debrief the call.
      *
      * @param \Closure|null $step told each step of the debrief
+     *
+     * @throws CallException  when the call was abandoned (never graded), or the member asked for too many debriefs
+     * @throws ModelException when the coach's answer cannot make a debrief
      */
     public function finish(Call $call, ?\Closure $step = null): Call
     {
+        if (CallStatus::Abandoned === $call->status) {
+            throw new CallException('call.error.abandoned');
+        }
         $this->expire($call);
         if ($call->isLive()) {
             $call->stop(CallEnd::Seller, $this->clock->now());
@@ -135,6 +147,7 @@ final readonly class CallManager
             $this->calls->save($call);
         }
         if (!$call->isDone()) {
+            $this->limits->consume($call->member, Usage::Coaching);
             $result = $this->coach->debrief($call, $this->clock->now(), $step);
             $call->close($result['debrief']->toArray(), $result['score']);
             $this->calls->save($call);

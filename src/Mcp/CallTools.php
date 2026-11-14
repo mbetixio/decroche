@@ -72,6 +72,8 @@ final readonly class CallTools
         $member = $this->me->member();
         try {
             $scenario = $this->surpriseCalls->draw($member, '' !== $situation ? $situation : null, '' !== $focus ? $focus : null);
+        } catch (CallException $e) {
+            throw $this->refused($e);
         } catch (ModelException|\RuntimeException $e) {
             // An unreachable model's error (an address, a response body) stays on the server.
             throw new ToolCallException($e instanceof ModelException ? 'The call could not be written ('.$e->getMessage().'). Try again.' : 'The model could not be reached. Try again in a moment.');
@@ -95,6 +97,8 @@ final readonly class CallTools
         $member = $this->me->member();
         try {
             $scenario = $this->writer->prepare($prospect, $member, MeetingType::tryFrom($type), Difficulty::tryFrom($difficulty) ?? Difficulty::Demanding, max(3, min(30, $minutes)));
+        } catch (CallException $e) {
+            throw $this->refused($e);
         } catch (ModelException $e) {
             throw new ToolCallException('The rehearsal could not be written ('.$e->getMessage().'). Try again.');
         } catch (\InvalidArgumentException $e) {
@@ -148,9 +152,7 @@ final readonly class CallTools
         } catch (CallException $e) {
             // What to do next depends on where the call stands: waiting for its debrief, or already closed.
             throw new ToolCallException($this->translator->trans($e->getMessage(), domain: 'messages', locale: 'en').match ($current->status) {
-                CallStatus::Live => '',
-                CallStatus::Debriefing => ' Debrief it with hang_up.',
-                CallStatus::Done, CallStatus::Abandoned => ' Start another one with new_call.',
+                CallStatus::Live => '', CallStatus::Debriefing => ' Debrief it with hang_up.', CallStatus::Done, CallStatus::Abandoned => ' Start another one with new_call.',
             });
         }
 
@@ -178,11 +180,22 @@ final readonly class CallTools
 
             return ['call' => $current->id, 'status' => $current->status->value, 'brief' => self::brief($current)];
         }
-        if (CallStatus::Abandoned === $current->status) {
-            throw new ToolCallException('This call was abandoned: it has no graded debrief.');
+        try {
+            return self::summary($this->calls->finish($current));
+        } catch (CallException $e) {
+            throw $this->refused($e);
+        } catch (ModelException|\RuntimeException) {
+            // The call stays hung up: the debrief is written on the next try.
+            throw new ToolCallException('The debrief could not be written (the model is unreachable). Try hang_up again in a moment.');
         }
+    }
 
-        return self::summary($this->calls->finish($current));
+    /**
+     * A refusal the seller can act on (a spent quota, an abandoned call), in the client model's language.
+     */
+    private function refused(CallException $e): ToolCallException
+    {
+        return new ToolCallException($this->translator->trans($e->getMessage(), domain: 'messages', locale: 'en'));
     }
 
     /**

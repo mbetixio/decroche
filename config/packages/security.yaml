@@ -26,6 +26,10 @@ security:
                 check_path: login
                 default_target_path: home
                 enable_csrf: true
+            # A few wrong passwords, then a pause: a password cannot be guessed by trying them all.
+            login_throttling:
+                max_attempts: 5
+                interval: '15 minutes'
             # The call links handed out over MCP sign the member in: signed (a changed email or password voids them),
             # short-lived, usable a few times.
             login_link:

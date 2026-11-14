@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Scenario;
 
 use App\Ai\ModelException;
+use App\Call\CallException;
 use App\Entity\Member;
 use App\Entity\Scenario;
 use App\Progress\ProgressReport;
 use App\Repository\CompanyRepository;
 use App\Repository\ScenarioRepository;
+use App\Security\Usage;
+use App\Security\UsageLimits;
 
 /**
  * The game: a surprise call drawn and written for a member, at the difficulty their recent scores call for, avoiding what they just played.
@@ -22,6 +25,7 @@ final readonly class SurpriseCalls
         private CompanyRepository $companies,
         private ScenarioRepository $scenarios,
         private ProgressReport $progress,
+        private UsageLimits $limits,
     ) {
     }
 
@@ -34,9 +38,11 @@ final readonly class SurpriseCalls
      * @param \Closure|null $step      told each step of the drawing and writing
      *
      * @throws ModelException when the model fails twice
+     * @throws CallException  when the member's writing quota is spent for now
      */
     public function draw(Member $member, ?string $situation = null, ?string $focus = null, ?\Closure $step = null): Scenario
     {
+        $this->limits->consume($member, Usage::Writing);
         $company = $this->companies->get();
         $criterion = null !== $focus ? ($company->scorecard()[$focus] ?? null) : null;
         $target = $this->progress->of($member)->challenge->difficulty;

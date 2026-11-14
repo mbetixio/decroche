@@ -9,6 +9,7 @@ use App\Ai\LanguageModel;
 use App\Ai\ModelException;
 use App\Ai\Output\CallScenario;
 use App\Ai\Output\MeetingScenario;
+use App\Call\CallException;
 use App\Entity\Company;
 use App\Entity\Member;
 use App\Entity\Scenario;
@@ -18,6 +19,8 @@ use App\Enum\MeetingType;
 use App\Model\Criterion;
 use App\Model\Situation;
 use App\Repository\CompanyRepository;
+use App\Security\Usage;
+use App\Security\UsageLimits;
 use Psr\Clock\ClockInterface;
 
 /**
@@ -35,6 +38,7 @@ final readonly class ScenarioWriter
         private ClockInterface $clock,
         private AgentContext $context,
         private WorkspaceWriter $workspaces,
+        private UsageLimits $limits,
     ) {
     }
 
@@ -107,6 +111,7 @@ final readonly class ScenarioWriter
      *
      * @throws \InvalidArgumentException when the text is too short to work from
      * @throws ModelException            when the model's answer cannot make a scenario
+     * @throws CallException             when the author's writing quota is spent for now
      */
     public function prepare(string $text, Member $author, ?MeetingType $type = null, Difficulty $difficulty = Difficulty::Demanding, int $minutes = 12, bool $fromCall = false, ?\Closure $step = null): Scenario
     {
@@ -114,6 +119,7 @@ final readonly class ScenarioWriter
         if (mb_strlen($text) < 15) {
             throw new \InvalidArgumentException('scenario.error.too_short');
         }
+        $this->limits->consume($author, Usage::Writing);
         $company = $this->companies->get();
         $language = $company->language->englishName();
         $types = implode(', ', array_map(static fn (MeetingType $t): string => "{$t->value} ({$t->describe()})", MeetingType::cases()));

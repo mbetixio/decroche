@@ -42,6 +42,21 @@ final class AccessTest extends FunctionalTestCase
         self::assertSelectorExists('.flash.error');
     }
 
+    public function testRepeatedWrongPasswordsLockTheAccountForAWhile(): void
+    {
+        $this->onboardedCompany();
+        $this->member();
+        for ($i = 0; $i < 5; ++$i) {
+            $this->client->request('GET', '/login');
+            $this->submit('Sign in', ['_username' => 'seller@decroche.test', '_password' => 'wrong']);
+        }
+        // Even the right password waits now.
+        $this->client->request('GET', '/login');
+        $this->submit('Sign in', ['_username' => 'seller@decroche.test', '_password' => 'password-123']);
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('.flash.error', 'Too many failed login attempts');
+    }
+
     public function testSellersCannotOpenTheManagersPages(): void
     {
         $this->onboardedCompany();

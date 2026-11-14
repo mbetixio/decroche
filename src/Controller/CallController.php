@@ -178,6 +178,8 @@ final class CallController extends AbstractController
         }
         try {
             $this->calls->finish($call);
+        } catch (CallException $e) {
+            $this->addFlash('error', $e->getMessage());
         } catch (ModelException|\RuntimeException) {
             $this->addFlash('error', 'call.error.debrief_failed');
         }

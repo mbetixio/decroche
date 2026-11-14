@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Ai\ModelException;
+use App\Call\CallException;
 use App\Entity\Member;
 use App\Entity\Scenario;
 use App\Enum\MeetingType;
@@ -162,7 +163,7 @@ final class LibraryController extends AbstractController
                 $this->scenarios->save($scenario);
 
                 return $this->redirectToRoute('call_briefing', ['id' => $scenario->id]);
-            } catch (ModelException|\InvalidArgumentException $e) {
+            } catch (ModelException|\InvalidArgumentException|CallException $e) {
                 $this->addFlash('error', $e instanceof ModelException ? 'prepare.failed' : $e->getMessage());
             }
         }

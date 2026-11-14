@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Ai\ModelException;
+use App\Call\CallException;
 use App\Entity\Member;
 use App\Entity\Scenario;
 use App\Http\ProgressStream;
@@ -65,6 +66,8 @@ final class PlayController extends AbstractController
         }
         try {
             $scenario = $calls->draw($me, $situation, $focus);
+        } catch (CallException $e) {
+            return new JsonResponse(['error' => $translator->trans($e->getMessage())], Response::HTTP_TOO_MANY_REQUESTS);
         } catch (ModelException|\RuntimeException) {
             return new JsonResponse(['error' => $translator->trans('play.draw_failed')], Response::HTTP_BAD_GATEWAY);
         }
