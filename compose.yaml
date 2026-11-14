@@ -1,46 +1,27 @@
 # Décroche in one container, over plain HTTP on one port (put your own HTTPS reverse proxy in front for a public
-# domain). The model's key comes from your environment or a .env file next to this one, never from the repository:
-#   AI_API_KEY=… docker compose up -d --build        then open http://localhost:7077
+# domain). Your settings, starting with the model's key, go in .env.docker (copy .env.docker.dist), never in the
+# repository:
+#   cp .env.docker.dist .env.docker      then put your key in it
+#   docker compose up -d --build         then open http://localhost:7077
 services:
   decroche:
     build: .
     image: decroche:latest
     restart: unless-stopped
     # Reachable from this machine only by default: until the first manager signs up, whoever opens the instance first
-    # becomes its manager. Set DECROCHE_BIND=0.0.0.0 (behind your HTTPS proxy) once you have created that account.
+    # becomes its manager. Once that account exists, open it to your proxy: DECROCHE_BIND=0.0.0.0 docker compose up -d
+    # (DECROCHE_PORT for another port).
     ports:
       - "${DECROCHE_BIND:-127.0.0.1}:${DECROCHE_PORT:-7077}:80"
-    environment:
-      # Hugging Face Inference Providers by default (a token hf_…); any OpenAI-compatible API works (see the README).
-      AI_API_KEY: ${AI_API_KEY:?Set AI_API_KEY to a Hugging Face token (hf_…) or another provider key}
-      AI_BASE_URL: ${AI_BASE_URL:-https://router.huggingface.co/v1}
-      AI_COMPLETIONS_PATH: ${AI_COMPLETIONS_PATH:-/chat/completions}
-      # The client on the phone, the coach and the writer (see .env): the same model several times is fine.
-      AI_PERSONA_MODEL: ${AI_PERSONA_MODEL:-deepseek-ai/DeepSeek-V4.1-Flash}
-      AI_PERSONA_REASONING: ${AI_PERSONA_REASONING:-low}
-      AI_COACH_MODEL: ${AI_COACH_MODEL:-deepseek-ai/DeepSeek-V4.1-Flash}
-      AI_COACH_REASONING: ${AI_COACH_REASONING:-low}
-      AI_WRITER_MODEL: ${AI_WRITER_MODEL:-openai/gpt-oss-120b}
-      AI_WRITER_REASONING: ${AI_WRITER_REASONING:-low}
-      AI_HEADERS: ${AI_HEADERS:-{}}
-      # Each member's share of the model (see .env).
-      AI_LIMIT_CALLS_PER_HOUR: ${AI_LIMIT_CALLS_PER_HOUR:-20}
-      AI_LIMIT_LINES_PER_MINUTE: ${AI_LIMIT_LINES_PER_MINUTE:-40}
-      # The public address of the instance, for the links it generates (call links, invitations).
-      DEFAULT_URI: ${DEFAULT_URI:-http://localhost:7077}
-      MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-localhost,127.0.0.1}
-      # The reverse proxy in front, if any (e.g. private_ranges): left empty, forwarded headers are not trusted.
-      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-}
-      APP_TIMEZONE: ${APP_TIMEZONE:-Europe/Paris}
-      # Where your users can get the source code (AGPL-3.0): your fork, if you modify Décroche.
-      SOURCE_URL: ${SOURCE_URL:-https://github.com/mbetixio/decroche}
-      # 1: skip the onboarding and load the example company (with a manager printed in the logs).
-      DECROCHE_DEMO: ${DECROCHE_DEMO:-0}
-      DECROCHE_LANGUAGE: ${DECROCHE_LANGUAGE:-en}
+    # Every setting of the app comes from this file, as is (see .env.docker.dist): nothing is read from the repository's
+    # own .env, which is the development defaults.
+    env_file:
+      - path: .env.docker
+        required: true
     volumes:
       - decroche:/var/decroche
     healthcheck:
-      test: ["CMD", "php", "-r", "exit(@fsockopen('127.0.0.1', 80) ? 0 : 1);"]
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/login') === false ? 1 : 0);"]
       interval: 30s
       timeout: 5s
       start_period: 30s

@@ -13,8 +13,10 @@ set -a
 . /var/decroche/secrets.env
 set +a
 
+# Without a model, nothing works: say so plainly and stop, instead of an instance whose every call fails.
 if [ -z "${AI_API_KEY:-}" ]; then
-    echo "Warning: AI_API_KEY is empty, the personas cannot answer. Set it in your environment or .env file." >&2
+    echo "AI_API_KEY is empty: put your Hugging Face token (hf_…) in .env.docker, then run docker compose up -d again." >&2
+    exit 1
 fi
 
 if [ "${DECROCHE_DEMO:-0}" = "1" ]; then

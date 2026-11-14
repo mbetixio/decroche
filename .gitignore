@@ -35,6 +35,7 @@
 # Local copies of environment files, which may hold keys.
 /.env*
 !/.env
+!/.env.docker.dist
 !/.env.dev
 !/.env.test
 

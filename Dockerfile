@@ -21,7 +21,10 @@ ENV APP_ENV=prod \
     DATABASE_URL=sqlite:////var/decroche/data.db \
     SESSION_SAVE_PATH=/var/decroche/sessions \
     VOICES_DIR=/var/decroche/voices \
-    SERVER_NAME=:80
+    SERVER_NAME=:80 \
+    DEFAULT_URI=http://localhost:7077 \
+    MCP_ALLOWED_HOSTS=localhost,127.0.0.1 \
+    TRUSTED_PROXIES=
 
 # The dependencies first (a layer cached as long as composer.lock does not change), then the code.
 COPY composer.json composer.lock symfony.lock ./
