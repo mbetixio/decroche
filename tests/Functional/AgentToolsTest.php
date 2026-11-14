@@ -13,6 +13,7 @@ use App\Agent\ReadOffer;
 use App\Call\CallManager;
 use App\Entity\Call;
 use App\Entity\Member;
+use Symfony\Component\Clock\Clock;
 
 /**
  * The agents' tools at work: the persona checks their calendar, books a meeting, looks a ticket up and remembers an
@@ -48,7 +49,7 @@ final class AgentToolsTest extends FunctionalTestCase
         self::assertStringContainsString('we have spoken before', $turn->reply);
 
         self::assertSame(['check_calendar', 'book_meeting', 'look_up', 'previous_calls'], array_values(array_unique(array_column($call->actions(), 'tool'))));
-        self::assertSame([['date' => new \DateTimeImmutable('next tuesday')->format('Y-m-d'), 'time' => '11:00', 'minutes' => 30, 'subject' => 'Workshop']], $call->bookings());
+        self::assertSame([['date' => \Symfony\Component\Clock\now()->modify('next tuesday')->format('Y-m-d'), 'time' => '11:00', 'minutes' => 30, 'subject' => 'Workshop']], $call->bookings());
         $this->service(AgentContext::class)->forCall($call);
         self::assertSame(['meetings_booked' => $call->bookings()], $this->service(ClientActions::class)(meetingsOnly: true), 'The coach may ask for the meetings only.');
         // The debrief shows what Ana did, and her files.
@@ -67,6 +68,8 @@ final class AgentToolsTest extends FunctionalTestCase
         $calls = $this->service(CallManager::class);
         $calls->say($first, 'What budget have you set aside?');
         $calls->finish($first);
+        // A day later.
+        Clock::get()->sleep(86400);
 
         $second = $this->liveCall($this->me);
         $turn = $calls->say($second, 'As I said last time, we can help.');

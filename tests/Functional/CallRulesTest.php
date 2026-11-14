@@ -80,7 +80,7 @@ final class CallRulesTest extends FunctionalTestCase
         $this->talk($call, str_repeat('word ', 401));
         self::assertResponseStatusCodeSame(400);
 
-        $late = $this->liveCall($this->me, new \DateTimeImmutable('-2 hours'));
+        $late = $this->liveCall($this->me, \Symfony\Component\Clock\now()->modify('-2 hours'));
         $this->talk($late, 'Are you still there?');
         self::assertResponseStatusCodeSame(400);
         self::assertTrue(json_decode((string) $this->client->getResponse()->getContent(), true)['ended']);

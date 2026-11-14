@@ -117,7 +117,7 @@ final class ScriptedModel
             return $stream ? new StreamResult(self::stream($reply)) : new TextResult($reply);
         }
         $seller = mb_strtolower((string) (\is_array($last) ? json_encode($last['content'] ?? '', \JSON_UNESCAPED_UNICODE) : ''));
-        $tuesday = new \DateTimeImmutable('next tuesday');
+        $tuesday = \Symfony\Component\Clock\now()->modify('next tuesday');
         $tool = match (true) {
             str_contains($seller, 'book') => $call('book_meeting', ['date' => $tuesday->format('Y-m-d'), 'time' => str_contains($seller, 'ten') ? '10:00' : '11:00', 'minutes' => 30, 'subject' => 'Workshop']),
             str_contains($seller, 'tuesday') => $call('check_calendar', ['date' => $tuesday->format('Y-m-d')]),
@@ -205,7 +205,7 @@ final class ScriptedModel
      */
     public static function workspace(): array
     {
-        $tuesday = new \DateTimeImmutable('next tuesday');
+        $tuesday = \Symfony\Component\Clock\now()->modify('next tuesday');
 
         return [
             'calendar' => [

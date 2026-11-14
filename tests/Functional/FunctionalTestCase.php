@@ -19,12 +19,17 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
 
 /**
  * A fresh database for every test, and helpers to set up the instance: the example company, members, sign-in.
  */
 abstract class FunctionalTestCase extends WebTestCase
 {
+    /** The moment every test runs at (see tests/bootstrap.php). */
+    public const string NOW = '2026-11-16 10:00:00';
+
     protected KernelBrowser $client;
 
     protected function setUp(): void
@@ -41,6 +46,8 @@ abstract class FunctionalTestCase extends WebTestCase
         $em->clear();
         ScriptedModel::reset();
         SilentSynthesizer::reset();
+        // The clock starts again at the same Monday morning (a test may have moved it on).
+        Clock::set(new MockClock(self::NOW, 'Europe/Paris'));
         // Every test starts with the members' model quotas untouched.
         $this->service('cache.rate_limiter')->clear();
     }
