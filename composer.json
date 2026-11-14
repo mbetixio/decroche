@@ -93,6 +93,29 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "test": "phpunit",
+        "coverage": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --coverage-clover var/coverage.xml --coverage-text",
+            "@php bin/coverage-check var/coverage.xml"
+        ],
+        "stan": [
+            "@php bin/console cache:warmup --env=dev",
+            "phpstan analyse --memory-limit=1G"
+        ],
+        "cs": "php-cs-fixer fix --dry-run --diff",
+        "lint": [
+            "@php bin/console lint:container",
+            "@php bin/console lint:yaml config translations",
+            "@php bin/console lint:twig templates",
+            "@php bin/console doctrine:schema:validate --skip-sync"
+        ],
+        "check": [
+            "@lint",
+            "@cs",
+            "@stan",
+            "@coverage"
         ]
     },
     "conflict": {
@@ -114,5 +137,13 @@
         "symfony/browser-kit": "8.1.*",
         "symfony/maker-bundle": "^1.68",
         "symfony/phpunit-bridge": "^8.1"
+    },
+    "scripts-descriptions": {
+        "test": "Runs the test suite (offline, random order).",
+        "coverage": "Runs the suite with coverage and fails below 100 % of the lines.",
+        "stan": "PHPStan at level max.",
+        "cs": "Checks the coding standard.",
+        "lint": "Lints the container, YAML, Twig and the Doctrine mapping.",
+        "check": "Everything CI runs."
     }
 }

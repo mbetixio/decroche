@@ -340,10 +340,11 @@ translations/   English and French; config/decroche/{en,fr}/ the example company
 ## Quality
 
 ```bash
-php vendor/bin/phpunit                    # about 430 unit and functional tests, offline, in about half a minute
-php vendor/bin/phpunit --coverage-text    # 100 % of the classes, methods and lines (needs pcov or Xdebug)
-vendor/bin/phpstan analyse --memory-limit=1G   # level max, with the Symfony and Doctrine extensions
-vendor/bin/php-cs-fixer fix --dry-run     # Symfony coding standard, strict types everywhere
+composer test        # about 430 unit and functional tests, offline, in random order, at a frozen moment
+composer coverage    # the same with coverage: fails below 100 % of the lines (needs pcov or Xdebug)
+composer stan        # PHPStan at level max, with the Symfony and Doctrine extensions
+composer cs          # Symfony coding standard, strict types everywhere
+composer check       # all of the above and the lints, as the CI runs them on every push (.github/workflows/ci.yml)
 ```
 
 Accessible (WCAG AA contrasts, keyboard, reduced motion, screen-reader announcements kept to what changes),
