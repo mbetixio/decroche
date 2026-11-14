@@ -23,7 +23,7 @@ const pref = (key, fallback) => { try { return localStorage.getItem('decroche-' 
 const keep = (key, value) => { try { localStorage.setItem('decroche-' + key, value); } catch { /* private mode */ } };
 
 export default class extends Controller {
-    static targets = ['state', 'since', 'clock', 'caption', 'hint', 'keypad', 'input', 'keys', 'pickup', 'finish', 'sheet', 'dot', 'barge', 'browserVoice', 'voiceNote'];
+    static targets = ['state', 'since', 'clock', 'caption', 'hint', 'keypad', 'input', 'keys', 'pickup', 'finish', 'sheet', 'dot', 'dots', 'barge', 'browserVoice', 'voiceNote'];
     static values = {
         talkUrl: String,
         token: String,
@@ -198,6 +198,7 @@ export default class extends Controller {
             if (result) {
                 this.left = result.secondsLeft;
                 this.dotTargets.forEach((dot, i) => dot.classList.toggle('on', i < result.revealed));
+                this.dotsTarget.setAttribute('aria-label', this.dotsTarget.getAttribute('aria-label').replace(/\d+ \//, result.revealed + ' /'));
             }
             await chain;
             if (result?.ended) this.end(result.endedBy === 'persona' ? this.label('hung_up', { '%name%': this.who }) : this.label('time_up'));

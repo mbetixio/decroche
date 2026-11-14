@@ -78,7 +78,7 @@
             </div>
             <div class="block">
                 <p class="label" id="uncovered-label">{{ 'call.sheet.uncovered'|trans }}</p>
-                <div class="brief-dots" role="img" aria-labelledby="uncovered-label">{% for section in call.briefSheet %}<i data-call-target="dot" class="{{ section.found ? 'on' }}"></i>{% endfor %}</div>
+                <div class="brief-dots" role="img" data-call-target="dots" aria-label="{{ 'call.sheet.uncovered'|trans }} — {{ call.revealedCount }} / {{ call.briefSheet|length }}">{% for section in call.briefSheet %}<i data-call-target="dot" class="{{ section.found ? 'on' }}"></i>{% endfor %}</div>
             </div>
             <details class="block" open><summary>{{ 'call.sheet.context'|trans }}</summary><p class="small">{{ scenario.context }}</p></details>
             {% if scenario.material %}

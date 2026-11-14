@@ -29,6 +29,8 @@ const show = (result) => {
   reportSize();
 };
 window.addEventListener('message', (event) => {
+  // Only the host that shows this app speaks to it.
+  if (event.source !== window.parent) return;
   let msg = event.data;
   if (typeof msg === 'string') { try { msg = JSON.parse(msg); } catch { return; } }
   if (!msg || typeof msg !== 'object') return;
