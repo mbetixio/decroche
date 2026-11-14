@@ -45,10 +45,18 @@ final class ScorecardDataTest extends TestCase
     public function testRoundTripThroughTheCompany(): void
     {
         $data = new ScorecardData();
-        $data->criteria = [['label' => 'Rapport', 'hint' => 'trust'], ['label' => 'Closing', 'hint' => 'next step']];
+        $data->criteria = [['key' => 'rapport', 'label' => 'Rapport', 'hint' => 'trust'], ['key' => 'closing', 'label' => 'Closing', 'hint' => 'next step']];
         $company = new Company();
         $company->setScorecard($data->toCriteria());
 
         self::assertSame($data->criteria, ScorecardData::of($company)->criteria);
+    }
+
+    public function testARenamedCriterionKeepsItsKey(): void
+    {
+        $data = new ScorecardData();
+        $data->criteria = [['key' => 'closing', 'label' => 'Getting the next step', 'hint' => ''], ['key' => '', 'label' => 'Rapport', 'hint' => '']];
+
+        self::assertSame(['closing', 'rapport'], array_map(static fn (Criterion $c): string => $c->key, $data->toCriteria()));
     }
 }

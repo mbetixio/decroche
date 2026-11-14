@@ -3,14 +3,14 @@
     <div class="stack" data-collection-target="list">
         {% for criterion in form.criteria %}
             <div class="criterion-row">
-                {{ form_row(criterion.label) }}{{ form_row(criterion.hint) }}
+                {{ form_widget(criterion.key) }}{{ form_row(criterion.label) }}{{ form_row(criterion.hint) }}
                 <button type="button" class="btn ghost icon" data-action="collection#remove" aria-label="{{ 'action.remove'|trans }}" title="{{ 'action.remove'|trans }}"><twig:Icon name="trash" /></button>
             </div>
         {% endfor %}
     </div>
     <template data-collection-target="template">
         <div class="criterion-row">
-            {{ form_row(form.criteria.vars.prototype.label) }}{{ form_row(form.criteria.vars.prototype.hint) }}
+            {{ form_widget(form.criteria.vars.prototype.key) }}{{ form_row(form.criteria.vars.prototype.label) }}{{ form_row(form.criteria.vars.prototype.hint) }}
             <button type="button" class="btn ghost icon" data-action="collection#remove" aria-label="{{ 'action.remove'|trans }}" title="{{ 'action.remove'|trans }}"><twig:Icon name="trash" /></button>
         </div>
     </template>
