@@ -166,8 +166,8 @@ Open <http://localhost:7077>. The instance only answers on this machine until yo
 
   The onboarding is skipped: an example company (a software services firm), its 24 situations, a library of 7
   scenarios, and a small team are created. You sign in as its manager, Alex Morgan, who already has four debriefed
-  calls (scores climbing from 14 to 65 in English, 31 to 74 in French, the coach naming the flaw that keeps coming
-  back, the client checking their calendar and booking a meeting in the best ones) next to a junior seller's two, so
+  calls (scores climbing from 36 to 62 in English, 12 to 62 in French, the coach naming the flaw that keeps coming
+  back, the client looking up their files, checking their calendar and booking a meeting) next to a junior seller's two, so
   the home page, the progress, the team board and the MCP statistics are full from the start. Every scenario comes
   with its client's files.
 
