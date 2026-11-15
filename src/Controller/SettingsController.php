@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Ai\ModelException;
+use App\Company\InstanceReset;
 use App\Company\OfferAnalyst;
 use App\Form\CompanyType;
 use App\Form\Data\CompanyData;
@@ -20,12 +21,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * The company settings, for managers: its identity, the offer sheet, the catalogue of situations, the scorecard, and a
- * new analysis of the website. The same forms as the onboarding, on tabs.
+ * The company settings, for managers: its identity, the offer sheet, the catalogue of situations, the scorecard, a new
+ * analysis of the website, and a reset of the whole instance. The same forms as the onboarding, on tabs.
  */
 #[Route('/settings')]
 #[IsGranted('ROLE_MANAGER')]
@@ -34,6 +37,7 @@ final class SettingsController extends AbstractController
     public function __construct(
         private readonly CompanyRepository $companies,
         private readonly EntityManagerInterface $em,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -125,5 +129,25 @@ final class SettingsController extends AbstractController
         }
 
         return $this->redirectToRoute('settings', ['_fragment' => 'offer']);
+    }
+
+    /**
+     * Empties the instance and starts the onboarding again: everything goes, so the manager types a word to confirm.
+     */
+    #[Route('/reset', name: 'settings_reset', methods: ['POST'])]
+    #[IsCsrfTokenValid('settings-reset')]
+    public function reset(Request $request, InstanceReset $instance, TokenStorageInterface $tokens): Response
+    {
+        $typed = mb_strtoupper(trim($request->request->getString('confirm')));
+        if ($typed !== mb_strtoupper($this->translator->trans('settings.reset.word'))) {
+            $this->addFlash('error', 'settings.reset.unconfirmed');
+
+            return $this->redirectToRoute('settings', ['_fragment' => 'reset']);
+        }
+        $instance->reset();
+        $tokens->setToken(null);
+        $request->getSession()->invalidate();
+
+        return $this->redirectToRoute('onboarding');
     }
 }

@@ -24,4 +24,17 @@
         </form>
     </section>
 </div>
+{# Start again from nothing: the onboarding, as on first boot. #}
+<section id="reset" class="panel mt-l" aria-labelledby="reset-title">
+    <form method="post" action="{{ path('settings_reset') }}" class="row between">
+        <div class="grow">
+            <h2 id="reset-title" class="list-title">{{ 'settings.reset.title'|trans }}</h2>
+            <p class="small muted">{{ 'settings.reset.help'|trans({'%word%': 'settings.reset.word'|trans}) }}</p>
+        </div>
+        <input type="hidden" name="_token" value="{{ csrf_token('settings-reset') }}">
+        <label class="visually-hidden" for="reset-confirm">{{ 'settings.reset.confirm'|trans({'%word%': 'settings.reset.word'|trans}) }}</label>
+        <input id="reset-confirm" name="confirm" autocomplete="off" required placeholder="{{ 'settings.reset.word'|trans }}" style="width: 16em">
+        <button class="btn danger"><twig:Icon name="refresh" />{{ 'settings.reset.button'|trans }}</button>
+    </form>
+</section>
 {% endblock %}

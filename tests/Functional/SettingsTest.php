@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Repository\CallRepository;
 use App\Repository\CompanyRepository;
+use App\Repository\MemberRepository;
 use App\Repository\ScenarioRepository;
 use App\Tests\Fake\ScriptedModel;
 
 /**
- * What a manager changes after the onboarding: the company, its situations and scorecard, a library scenario, and
- * the rehearsal of a real meeting any member can write.
+ * What a manager changes after the onboarding: the company, its situations and scorecard, a library scenario, the
+ * rehearsal of a real meeting any member can write, and a reset of the whole instance.
  */
 final class SettingsTest extends FunctionalTestCase
 {
@@ -27,6 +29,30 @@ final class SettingsTest extends FunctionalTestCase
         $this->client->submit($crawler->filter('form[name=company]')->form(), ['company[name]' => 'Acme Retail']);
         self::assertResponseRedirects('/settings');
         self::assertSame('Acme Retail', $this->service(CompanyRepository::class)->get()->name);
+    }
+
+    public function testTheInstanceIsResetOnlyOnceConfirmed(): void
+    {
+        $this->liveCall($this->service(MemberRepository::class)->findOneBy([]) ?? self::fail('no member'));
+
+        $crawler = $this->client->request('GET', '/settings');
+        $this->client->submit($crawler->filter('form[action="/settings/reset"]')->form(), ['confirm' => 'reset me']);
+        self::assertResponseRedirects('/settings#reset');
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('.flashes', 'Nothing was deleted');
+        self::assertTrue($this->service(MemberRepository::class)->hasAny());
+
+        $crawler = $this->client->request('GET', '/settings');
+        $this->client->submit($crawler->filter('form[action="/settings/reset"]')->form(), ['confirm' => ' reset ']);
+        self::assertResponseRedirects('/welcome');
+        self::assertFalse($this->service(MemberRepository::class)->hasAny());
+        self::assertSame([], $this->service(CallRepository::class)->all());
+        self::assertFalse($this->service(CompanyRepository::class)->get()->isOnboarded());
+
+        // Signed out: the onboarding starts again, as on first boot.
+        $this->client->followRedirect();
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('form [name="language[language]"]');
     }
 
     public function testTheSituationsAreEditedButNeverAllRemoved(): void

@@ -529,6 +529,13 @@ settings:
     reanalyze_button: 'Analyser'
     analyzed_at: 'Dernière analyse : %date%.'
     analyzed: 'Le site a été analysé à nouveau.'
+    reset:
+        title: 'Réinitialiser l''instance'
+        help: 'Supprime la société, l''équipe, tous les appels et débriefs, et relance l''onboarding. C''est définitif : tapez %word% pour confirmer.'
+        confirm: 'Tapez %word% pour confirmer'
+        word: 'RÉINITIALISER'
+        button: 'Tout réinitialiser'
+        unconfirmed: 'Rien n''a été supprimé : tapez exactement le mot de confirmation.'
     tab:
         company: 'Société et offre'
         situations: 'Situations'

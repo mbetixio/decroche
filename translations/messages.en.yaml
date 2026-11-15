@@ -529,6 +529,13 @@ settings:
     reanalyze_button: 'Analyse'
     analyzed_at: 'Last analysis: %date%.'
     analyzed: 'The website was analysed again.'
+    reset:
+        title: 'Reset the instance'
+        help: 'Deletes the company, the team, every call and debrief, and starts the onboarding again. It cannot be undone: type %word% to confirm.'
+        confirm: 'Type %word% to confirm'
+        word: 'RESET'
+        button: 'Reset everything'
+        unconfirmed: 'Nothing was deleted: type the confirmation word exactly.'
     tab:
         company: 'Company and offer'
         situations: 'Situations'
