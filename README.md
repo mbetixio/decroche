@@ -10,9 +10,24 @@
 
 <p align="center">By Mathieu Bernard · <a href="https://etixio.com">Etixio</a></p>
 
-<p align="center"><a href="https://mbetixio.github.io/decroche/">Website</a> · Open source (AGPL-3.0) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
+<p align="center"><a href="docs/demo.mp4"><b>▶ Décroche in 90 seconds</b></a> · <a href="https://mbetixio.github.io/decroche/">Website</a> · Open source (AGPL-3.0) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
 
 <p align="center"><img src="docs/screenshots/phone.png" alt="The phone screen during a practice call" width="900"></p>
+
+---
+
+**Try it in five minutes** — with Docker and a [Hugging Face token](#1-get-a-hugging-face-token-2-minutes), on the
+example company with its team and debriefed calls:
+
+```bash
+git clone https://github.com/mbetixio/decroche.git && cd decroche
+cp .env.docker.dist .env.docker     # paste your hf_… token after AI_API_KEY=, and set DECROCHE_DEMO=1
+docker compose up -d --build        # about three minutes the first time
+docker compose logs decroche | grep -A1 Manager    # the demo manager's e-mail and password
+```
+
+Then open <http://localhost:7077>, sign in and press **New call** (allow the microphone, or use the keypad). Leave
+`DECROCHE_DEMO=0` for a real instance set up from your own website: see [Run it](#run-it).
 
 ---
 
