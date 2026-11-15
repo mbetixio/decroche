@@ -351,8 +351,8 @@
                 <p class="eyebrow"><span lang="en">Run it</span><span lang="fr">L’installer</span></p>
                 <h2 style="font-size:clamp(32px,4.2vw,52px);margin:14px 0 18px"><span lang="en">Your own instance in two minutes.</span><span lang="fr">Votre instance en deux minutes.</span></h2>
                 <ol>
-                    <li><span lang="en">Create a free Hugging Face token with the “Inference Providers” permission.</span><span lang="fr">Créez un jeton Hugging Face gratuit avec la permission « Inference Providers ».</span></li>
-                    <li><span lang="en">Start the container. With the demo, an example company and its team are already there.</span><span lang="fr">Lancez le conteneur. Avec la démo, une entreprise d’exemple et son équipe sont déjà là.</span></li>
+                    <li><span lang="en">Create a free Hugging Face token with the “Inference Providers” permission, or bring the key of any OpenAI-compatible API (OpenAI, DeepSeek, Mistral, your own Ollama).</span><span lang="fr">Créez un jeton Hugging Face gratuit avec la permission « Inference Providers », ou prenez la clé de n’importe quelle API compatible OpenAI (OpenAI, DeepSeek, Mistral, votre propre Ollama).</span></li>
+                    <li><span lang="en">Start the container. The onboarding reads your website and writes your calls; with the demo, an example company and its team are already there.</span><span lang="fr">Lancez le conteneur. L’onboarding lit votre site et écrit vos appels ; avec la démo, une entreprise d’exemple et son équipe sont déjà là.</span></li>
                     <li><span lang="en">Open the page, sign in, take your first call.</span><span lang="fr">Ouvrez la page, connectez-vous, passez votre premier appel.</span></li>
                 </ol>
             </div>
@@ -360,8 +360,9 @@
 git clone https://github.com/mbetixio/decroche.git
 cd decroche
 
-<span class="c"># your Hugging Face token, and the demo data</span>
+<span class="c"># your model's key (Hugging Face, or any OpenAI-compatible API)</span>
 echo "AI_API_KEY=hf_your_token" &gt; .env.docker
+<span class="c"># optional: the example company instead of the onboarding</span>
 echo "DECROCHE_DEMO=1" &gt;&gt; .env.docker
 
 <span class="c"># start, then open http://localhost:7077</span>

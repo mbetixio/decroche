@@ -34,7 +34,9 @@ keypad there). Two ways to start:
   `.env.docker` before the first start, then sign in with the demo manager's e-mail and password:
   `docker compose logs decroche | grep -A1 Manager`.
 
-More in [Run it](#run-it): without Docker, in French, on a server.
+Hugging Face is the default, for the hackathon, but the model is yours to choose: any OpenAI-compatible API works
+(OpenAI, DeepSeek, Mistral, a local Ollama or vLLM…). Set `AI_BASE_URL`, its key and the three models in
+`.env.docker`: see [Configuration](#configuration). More in [Run it](#run-it): without Docker, in French, on a server.
 
 ---
 
@@ -50,8 +52,9 @@ the website, a furious client, a CTO who is about to leave, a renewal with a dis
 gives it away to the right questions. When the seller hangs up, a coach grades the call against the company's own
 scorecard, reveals the brief, quotes the best and worst lines, and lets them replay any moment.
 
-Décroche is open source, built with Symfony AI for the hackathon: clone it, run it on open models (the voices
-included, offline on your server), adapt it.
+Décroche is open source, built with Symfony AI for the hackathon: clone it, run it on the model you choose (open
+models on Hugging Face by default, or any OpenAI-compatible API, your own server included), with the voices generated
+offline on your server, and adapt it.
 
 One instance per company: on first boot, a step-by-step onboarding reads the company's website and writes its offer
 sheet and 14–18 call situations specific to its business, in English or French.
