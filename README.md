@@ -16,19 +16,25 @@
 
 ---
 
-**Try it in five minutes** — with Docker and a [Hugging Face token](#1-get-a-hugging-face-token-2-minutes), on the
-example company with its team and debriefed calls:
+**Try it in five minutes** — with Docker and a [Hugging Face token](#1-get-a-hugging-face-token-2-minutes):
 
 ```bash
 git clone https://github.com/mbetixio/decroche.git && cd decroche
-cp .env.docker.dist .env.docker     # paste your hf_… token after AI_API_KEY=, and set DECROCHE_DEMO=1
+cp .env.docker.dist .env.docker     # paste your hf_… token after AI_API_KEY=
 docker compose up -d --build        # about three minutes the first time
-docker compose logs decroche | grep -A1 Manager    # the demo manager's e-mail and password
 ```
 
 Then open <http://localhost:7077> in Chrome, Edge or Safari (Firefox has no speech recognition: you type on the
-keypad there), sign in and press **New call**, and allow the microphone. Leave
-`DECROCHE_DEMO=0` for a real instance set up from your own website: see [Run it](#run-it).
+keypad there). Two ways to start:
+
+- **For your own company** (the default): the onboarding starts. Pick the language, create the manager account, give
+  your website: Décroche reads it and writes your offer sheet and 14–18 call situations in a minute or two. Review
+  them, then press **New call** and allow the microphone.
+- **On the example company**, with its team and debriefed calls already there: set `DECROCHE_DEMO=1` in
+  `.env.docker` before the first start, then sign in with the demo manager's e-mail and password:
+  `docker compose logs decroche | grep -A1 Manager`.
+
+More in [Run it](#run-it): without Docker, in French, on a server.
 
 ---
 
