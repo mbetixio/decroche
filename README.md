@@ -26,7 +26,8 @@ docker compose up -d --build        # about three minutes the first time
 docker compose logs decroche | grep -A1 Manager    # the demo manager's e-mail and password
 ```
 
-Then open <http://localhost:7077>, sign in and press **New call** (allow the microphone, or use the keypad). Leave
+Then open <http://localhost:7077> in Chrome, Edge or Safari (Firefox has no speech recognition: you type on the
+keypad there), sign in and press **New call**, and allow the microphone. Leave
 `DECROCHE_DEMO=0` for a real instance set up from your own website: see [Run it](#run-it).
 
 ---
