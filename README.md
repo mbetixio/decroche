@@ -6,7 +6,7 @@
 
 <p align="center"><b>Rehearse your sales calls out loud, against an AI client who knows things you don't —<br>including the real client meeting you have tomorrow, straight from its e-mail thread in Claude.<br>Then get graded by a coach, and follow your progress.</b></p>
 
-<p align="center">Symfony 8.1 · Symfony AI · MCP · Hugging Face Inference Providers · PHP 8.5</p>
+<p align="center">Symfony 8.1 · Symfony AI · MCP · Hugging Face Inference Providers · Kyutai Pocket TTS · PHP 8.5</p>
 
 <p align="center">By Mathieu Bernard · <a href="https://etixio.com">Etixio</a></p>
 
@@ -37,12 +37,15 @@ keypad there), sign in and press **New call**, and allow the microphone. Leave
 Sales people learn on real prospects. Every fumbled discovery question, every price given too early, every
 "let me send you a brochure" costs a deal — and nobody tells them what went wrong.
 
-**Décroche is a flight simulator for sales calls.** A seller picks up the phone (a real phone screen, with a voice,
+**Décroche is an open-source platform to train sales reps on realistic calls.** A seller picks up the phone (a real phone screen, with a voice,
 not a chatbot) and talks to an AI client built from *their own company's* offer and situations: a price request from
 the website, a furious client, a CTO who is about to leave, a renewal with a discount request… The client has a
 **hidden brief** — their real budget, their real pain, who decides, their objections, what would get a yes — and only
 gives it away to the right questions. When the seller hangs up, a coach grades the call against the company's own
 scorecard, reveals the brief, quotes the best and worst lines, and lets them replay any moment.
+
+AI role-play for sales already exists, as closed software priced per seat. Décroche is the open version, built with
+Symfony AI for the hackathon: clone it, run it on open models (the voices included, offline on your server), adapt it.
 
 One instance per company: on first boot, a step-by-step onboarding reads the company's website and writes its offer
 sheet and 14–18 call situations specific to its business, in English or French.
