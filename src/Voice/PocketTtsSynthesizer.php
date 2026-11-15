@@ -82,6 +82,8 @@ final class PocketTtsSynthesizer implements SpeechSynthesizer, ResetInterface
         if (!$this->isAvailable()) {
             throw new SynthesisException('The Pocket TTS server is not running (see the README).');
         }
+        // Pocket TTS reads the text as written: numbers and symbols are said in words first.
+        $text = new SpokenText(str_contains($m[1], '/') ? substr($m[1], 0, 2) : 'en')->of($text);
         $file = \sprintf('%s/%s.wav', $this->cache, sha1($voice."\n".$text));
         if (is_file($file) && filesize($file) > 0) {
             // Heard again: the pruner keeps it.
