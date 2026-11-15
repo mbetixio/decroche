@@ -791,7 +791,7 @@ td.num, th.num { text-align: right; }
 .steps a:hover { text-decoration: underline; }
 .onboarding-aside blockquote { margin-top: auto; font: 500 var(--text-m)/1.5 var(--font-display); color: var(--ink-2); }
 
-.onboarding-main { display: grid; justify-items: center; align-content: start; padding: var(--s-8) clamp(var(--s-4), 5vw, var(--s-8)); }
+.onboarding-main { display: grid; justify-items: center; align-content: start; padding: var(--s-6) clamp(var(--s-4), 5vw, var(--s-8)); }
 .onboarding-panel { width: min(760px, 100%); display: grid; gap: var(--s-6); animation: rise .4s var(--ease); }
 .onboarding-head { display: grid; gap: var(--s-3); }
 .onboarding-foot { display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); padding-top: var(--s-5); border-top: 1px solid var(--line); }
@@ -799,6 +799,17 @@ td.num, th.num { text-align: right; }
 .onboarding-foot .ob-progress .bar { width: 120px; }
 @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
 
+/* The welcome step: on a wide screen, the call log beside the language, the start button and the features. */
+.onboarding-panel:has(.welcome) { width: min(1120px, 100%); }
+.onboarding-panel:has(.welcome) .lead { max-width: 70ch; }
+.welcome { display: grid; gap: var(--s-6); }
+@media (min-width: 1100px) {
+    .welcome { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; }
+    .welcome .call-log { max-width: none; }
+    .welcome .ob-progress { display: none; }
+    .welcome .features { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+}
+.welcome-side { display: grid; gap: var(--s-6); }
 .features { display: grid; gap: var(--s-5); grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .features h2 { margin-bottom: 4px; }
 .features p { font-size: 15px; color: var(--ink-2); }
