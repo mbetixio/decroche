@@ -203,8 +203,9 @@ in `.env.docker`: change it, then `docker compose up -d` again. The database, th
 voice models and the instance's own secrets live in the `decroche` volume.
 
 **The voices.** The personas speak with [Kyutai's Pocket TTS](https://github.com/kyutai-labs/pocket-tts), an open model
-that runs on the CPU, offline, in the container: once the onboarding has set the instance's language, its server starts
-for that language only and downloads its model into the volume (about 450 MB, no token, a few seconds). It needs about
+that runs on the CPU, offline, in the container: as soon as the onboarding's first step has set the instance's
+language, its server starts for that language only and downloads its model into the volume (no token, a few seconds),
+while the rest of the onboarding goes on. It needs about
 700 MB of memory and voices a sentence in under a second. Until then, or if it stops, Microsoft Edge's voices take over
 (edge-tts), and the browser's own voice after that.
 

@@ -37,7 +37,7 @@ final class CommandTest extends FunctionalTestCase
         self::assertStringContainsString('the onboarding sets it up', $tester->getDisplay());
         self::assertFalse($this->service(MemberRepository::class)->hasAny());
 
-        // No language yet: the Pocket TTS server waits for the onboarding.
+        // No language chosen yet: the Pocket TTS server waits for the onboarding's first step.
         $language = $this->command('app:language');
         $language->execute([]);
         self::assertSame(1, $language->getStatusCode());
