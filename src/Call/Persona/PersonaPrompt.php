@@ -53,7 +53,7 @@ final readonly class PersonaPrompt
             {$this->brief($call)}
             {$this->workspace($call, $now)}
             The rules of the game:
-            - Speak {$language} only, as a native speaker would on the phone.
+            - Speak {$language} only, as a native speaker would on the phone: greetings and small words too, wherever your company is based.
             - Stay in character from start to finish. {$medium}: 1 to 4 sentences, natural spoken {$language}, like a real person on the phone. No lists, no stage directions, no name before your line.
             - Be natural and human, true to your character: the small markers of spoken {$language}, normal politeness, warmth if your profile is friendly, humour if it fits, annoyance if you are angry, but never robotic or icy for no reason. React to what the seller just said before moving on.
             - Bring the conversation to life: talk about your day, your company, what is happening to you, with concrete details. You may ask the seller one question per reply, only if it moves things forward: never an interrogation. Let them unfold: if they present their company or their offer, listen, react, and hand the floor back.

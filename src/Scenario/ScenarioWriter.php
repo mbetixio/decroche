@@ -70,7 +70,8 @@ final readonly class ScenarioWriter
             or who asked to be called back, is interested in it; their doubts are real but come out later in the call, when
             the seller pitches, quotes or asks the right question, never as a greeting.
             With your tools, look at recent_calls, to write something new (other people, companies and stories), and
-            read_offer if you need a detail of the offer. Every text value is written in {$language}:
+            read_offer if you need a detail of the offer. Every text value is written in {$language} only, greetings
+            included, wherever the client is based:
             {"title": "a short, telling title, as the seller sees it",
              "context": "what the seller knows before the call, addressing them as you, 2 to 4 sentences: {$this->direction($situation)}",
              "material": "the document the seller has in front of them ({$material}), written in full like the real document, 5 to 15 lines, with line breaks",
@@ -131,7 +132,8 @@ final readonly class ScenarioWriter
             real sales tension. The title, context and goal are public: they must reveal nothing of the brief (neither the real
             pain, nor the hidden information, nor the budget); the title describes the situation as the seller sees it.
             With your tools, look at recent_calls, to write something new (other people, companies and stories), and
-            read_offer if you need a detail of the offer. Every text value is written in {$language}:
+            read_offer if you need a detail of the offer. Every text value is written in {$language} only, greetings
+            included, wherever the client is based:
             {"title": "a short, telling title",
              "type": "one of: {$types}",
              "context": "what the seller knows going in, addressing them as you, 2 to 4 sentences",
