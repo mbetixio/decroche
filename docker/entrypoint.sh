@@ -3,7 +3,7 @@
 # migrated, then the server. The first visit opens the onboarding; DECROCHE_DEMO=1 loads the example company instead.
 set -e
 
-mkdir -p /var/decroche/sessions /var/decroche/voices
+mkdir -p /var/decroche/sessions /var/decroche/voices /var/decroche/hf
 
 if [ ! -f /var/decroche/secrets.env ]; then
     printf 'APP_SECRET=%s\nMCP_STATE_KEY=%s\n' "$(php -r 'echo bin2hex(random_bytes(16));')" "$(php -r 'echo bin2hex(random_bytes(24));')" > /var/decroche/secrets.env
@@ -27,5 +27,10 @@ fi
 
 # The cached voices not heard for 30 days go (they are also pruned now and then while the app runs).
 php bin/console app:prune-voices --no-interaction || true
+
+# Kyutai's Pocket TTS, the personas' open voices, in the background.
+if [ -x "${POCKET_TTS:-}" ]; then
+    /app/docker/pocket-tts.sh &
+fi
 
 exec docker-php-entrypoint "$@"

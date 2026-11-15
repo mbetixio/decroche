@@ -2,7 +2,10 @@
 parameters:
     # edge-tts, which synthesizes Edge's neural voices (EDGE_TTS for another path).
     edge_tts_default: '%kernel.project_dir%/var/edge-tts/bin/edge-tts'
-    # Lines already said, kept as MP3 (VOICES_DIR for another directory, a Docker volume for instance).
+    # Where the Pocket TTS server fetches the French voices, this app's public/voices/ (POCKET_VOICES_URL; the server
+    # itself is POCKET_TTS_URL, unset by default: edge-tts speaks then).
+    pocket_voices_default: 'http://127.0.0.1/voices'
+    # Lines already said, kept as MP3 or WAV (VOICES_DIR for another directory, a Docker volume for instance).
     voices_dir: '%kernel.project_dir%/var/voices'
     # Sessions in production (SESSION_SAVE_PATH for another directory).
     sessions_dir: '%kernel.project_dir%/var/sessions/%kernel.environment%'

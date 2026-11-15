@@ -52,7 +52,7 @@ sheet and 14–18 call situations specific to its business, in English or French
 | | |
 |---|---|
 | 🎲 **Calls drawn from your own business** | The onboarding analyses your website into an offer sheet and a catalogue of situations. Each *New call* draws one at random and writes a unique scenario around it: a person, a company, the document you have in front of you (laid out like a CRM record), three objectives, and a hidden brief. |
-| 📞 **A real call, out loud** | Speech recognition in the browser, neural voices generated server-side, the reply streamed and voiced sentence by sentence, interruptions (barge-in), a timer. No text box unless you want the keypad. |
+| 📞 **A real call, out loud** | Speech recognition in the browser, open voices generated server-side and offline (Kyutai's Pocket TTS: 14 French and 19 English voices), the reply streamed and voiced sentence by sentence, interruptions (barge-in), a timer. No text box unless you want the keypad. |
 | 🗂️ **A client with their own files** | The client is a Symfony AI agent with tools. Each call comes with their workspace, written for their business: a calendar and two to four sources (support tickets, stock levels, suppliers, orders, e-mails, contracts… whatever fits). Ask about an incident and they say *"let me check…"* and quote their own records; propose a meeting and they open their calendar, then book it if they are free; mention last week's call and they remember it. The debrief shows what they did and what their files held. |
 | 🎯 **A debrief that teaches** | A score out of 100 on your scorecard, the call's objectives judged one by one, the hidden brief revealed with what you missed and *the question that would have found it*, your best and worst lines quoted word for word with a better alternative, three tips, talk share and filler words. Replay the call from any of your lines, or *train on this point*: a new call built to test your weakest criterion. |
 | 📈 **Progress that means something** | No XP or badges: the difficulty of your next calls follows your last five scores, and the home page tells you why, your trend, and the one criterion to work on. |
@@ -199,18 +199,32 @@ Open <http://localhost:7077>. The instance only answers on this machine until yo
 
 **If it does not start**: `docker compose ps` shows *Restarting* and the logs say *AI_API_KEY is empty* when the key
 is missing from `.env.docker`; *env file .env.docker not found* means the copy step was skipped. Every setting lives
-in `.env.docker`: change it, then `docker compose up -d` again. The database, the sessions, the synthesized voices and
-the instance's own secrets live in the `decroche` volume.
+in `.env.docker`: change it, then `docker compose up -d` again. The database, the sessions, the synthesized voices, the
+voice models and the instance's own secrets live in the `decroche` volume.
+
+**The voices.** The personas speak with [Kyutai's Pocket TTS](https://github.com/kyutai-labs/pocket-tts), an open model
+that runs on the CPU, offline, in the container: once the onboarding has set the instance's language, its server starts
+for that language only and downloads its model into the volume (about 450 MB, no token, a few seconds). It needs about
+700 MB of memory and voices a sentence in under a second. Until then, or if it stops, Microsoft Edge's voices take over
+(edge-tts), and the browser's own voice after that.
 
 ### 2b. Without Docker
 
-Requires PHP 8.5 with `pdo_sqlite` and `intl`, [Composer](https://getcomposer.org), and Python 3 for the voices.
+Requires PHP 8.5 with `pdo_sqlite` and `intl` and [Composer](https://getcomposer.org); the voices are optional.
 
 ```bash
 git clone https://github.com/mbetixio/decroche.git && cd decroche
 composer install
 printf 'AI_API_KEY=hf_your_token\nAPP_SECRET=%s\nMCP_STATE_KEY=%s\n' "$(openssl rand -hex 16)" "$(openssl rand -hex 32)" > .env.local   # never committed
-python3 -m venv var/edge-tts && var/edge-tts/bin/pip install edge-tts==7.3.1   # optional: neural voices
+python3 -m venv var/edge-tts && var/edge-tts/bin/pip install edge-tts==7.3.1   # optional: Edge's voices
+```
+
+For the open voices, run a [Pocket TTS](https://github.com/kyutai-labs/pocket-tts/releases) server (a single binary)
+in the instance's language, and tell the app where it and the French voices are:
+
+```bash
+pocket-tts serve --port 8100 --language english     # or french
+printf 'POCKET_TTS_URL=http://127.0.0.1:8100\nPOCKET_VOICES_URL=http://127.0.0.1:8000/voices\n' >> .env.local
 ```
 
 Then either the onboarding:
@@ -233,7 +247,7 @@ symfony serve        # or: PHP_CLI_SERVER_WORKERS=4 php -S 127.0.0.1:8000 -t pub
 ```
 
 **Use Chrome, Edge or Safari** (speech recognition) and allow the microphone. Without a microphone, the keypad on the
-phone screen lets you type your lines. Without edge-tts, the browser's own voice speaks.
+phone screen lets you type your lines. Without Pocket TTS or edge-tts, the browser's own voice speaks.
 
 ## Configuration
 
@@ -260,7 +274,8 @@ only `AI_API_KEY` is required: the container generates the instance's own secret
 | `SOURCE_URL` | this repository | Where your users can get the source code, linked at the foot of every page (AGPL-3.0): point it at your fork if you modify Décroche. |
 | `DECROCHE_DEMO`, `DECROCHE_LANGUAGE` | `0`, `en` | Docker only, in `.env.docker`: load the demo data instead of the onboarding. |
 | `DECROCHE_PORT`, `DECROCHE_BIND` | `7077`, `127.0.0.1` | Docker only, given to `docker compose` itself (`DECROCHE_BIND=0.0.0.0 docker compose up -d`): the port, and the interface it listens on (`0.0.0.0` behind your proxy, once the first manager exists). |
-| `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | The neural voices and their cache. |
+| `POCKET_TTS_URL`, `POCKET_VOICES_URL` | set in Docker | The Pocket TTS server, and this app's `public/voices/` as that server reaches it. |
+| `EDGE_TTS`, `VOICES_DIR` | `var/edge-tts/bin/edge-tts`, `var/voices` | Edge's voices (the fallback), and the cache of synthesized lines. |
 
 **Choosing a model.** The persona answers in one to four sentences and must start *fast* (it is a phone call); the
 coach reads the whole call against the offer and must be precise. We compared three set-ups on six real calls, with
@@ -332,8 +347,8 @@ publish it with GitHub Pages: *Settings → Pages → Deploy from a branch → `
   since every company writes its own scorecard.
 - **Streaming end to end.** The persona's reply is a stream of `TextDelta`s (`Persona::reply()`), filtered of its
   control markers (`[devoiler:budget]` when a brief section is given away, `[fin]` when the persona hangs up), cut into
-  sentences (`SentenceSplitter`), each voiced in parallel by edge-tts (`TurnStreamer`) and sent to the browser as NDJSON
-  as soon as its voice is ready.
+  sentences (`SentenceSplitter`), each voiced in parallel by Pocket TTS (`TurnStreamer`, asynchronous HTTP requests to
+  its server) and sent to the browser as NDJSON as soon as its voice is ready.
 - **MCP tools, prompts and resources as plain Symfony services.** `src/Mcp/*Tools.php` methods carry `#[McpTool]`,
   `Prompts` `#[McpPrompt]` and `CompanyResources` `#[McpResource]`; schemas come from the signatures. A stateless firewall authenticates each member by a personal key (`McpKeyAuthenticator`), redacted from
   the logs.
@@ -365,7 +380,7 @@ src/
   Demo/         the example company, its library and its replayed calls
   Team/         members, invitations, MCP keys and missions
   Progress/     a member's figures, the difficulty that follows their scores, the team board, missions
-  Voice/        edge-tts synthesis and its cache pruning, voice casting per language, gender and tone
+  Voice/        Pocket TTS and edge-tts synthesis, their cache pruning, voice casting per language and gender
   Mcp/          the MCP tools, prompts and resources, the debrief app, call links
   Security/     the MCP key authenticator, the voters, each member's share of the model
   Http/         the step-by-step stream of long work (ProgressStream); EventListener/ locale, security headers
@@ -407,6 +422,14 @@ rehearsing tomorrow's client meeting from its e-mail thread.
 
 It was made by **Mathieu Bernard**, CTO and AI expert at [Etixio](https://etixio.com), a software services company whose sellers
 needed somewhere to practise before the real call.
+
+## Voices
+
+The personas' voices come from [Kyutai's Pocket TTS](https://github.com/kyutai-labs/pocket-tts) (code under MIT, model
+under CC-BY-4.0). The English ones are its built-in voices. The French ones, in `public/voices/fr/`, were exported with
+Pocket TTS from recordings of the [CML-TTS dataset](https://openslr.org/146/) (CC-BY-4.0), as selected and cleaned by
+Kyutai in [kyutai/tts-voices](https://huggingface.co/kyutai/tts-voices); each file is named after its CML-TTS
+recording.
 
 ## License
 

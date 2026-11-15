@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Voice;
 
-use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Process\Process;
 
 /**
  * Microsoft Edge's neural voices (Denise, Henri…), synthesized server-side by edge-tts, the reference library for
  * Edge's read-aloud service: the seller's browser no longer needs good voices of its own. The MP3s are cached, so a
- * line already said is never synthesized twice; lines not heard for a while are pruned.
+ * line already said is never synthesized twice; lines not heard for a while are pruned. Used when Pocket TTS is not
+ * running, and for the Quebec accent, which Pocket TTS does not have.
  *
  * The read-aloud service is not a documented public API: Microsoft changes its access token now and then, and
  * "pip install -U edge-tts" follows. When it fails, the browser's own voice takes over.
  */
-#[AsAlias(SpeechSynthesizer::class)]
 final readonly class EdgeTtsSynthesizer implements SpeechSynthesizer
 {
     public function __construct(

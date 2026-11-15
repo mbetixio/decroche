@@ -36,6 +36,12 @@ final class CommandTest extends FunctionalTestCase
         $tester->assertCommandIsSuccessful();
         self::assertStringContainsString('the onboarding sets it up', $tester->getDisplay());
         self::assertFalse($this->service(MemberRepository::class)->hasAny());
+
+        // No language yet: the Pocket TTS server waits for the onboarding.
+        $language = $this->command('app:language');
+        $language->execute([]);
+        self::assertSame(1, $language->getStatusCode());
+        self::assertSame('', $language->getDisplay());
     }
 
     public function testAFailedMigrationStopsTheInstall(): void
@@ -65,6 +71,10 @@ final class CommandTest extends FunctionalTestCase
         self::assertStringContainsString('6 debriefed calls', $display);
         self::assertTrue($this->service(CompanyRepository::class)->get()->isOnboarded());
         self::assertCount(6, $this->service(CallRepository::class)->all());
+        $language = $this->command('app:language');
+        $language->execute([]);
+        $language->assertCommandIsSuccessful();
+        self::assertSame("fr\n", $language->getDisplay());
 
         // Run again: the demo is not loaded twice.
         $again = $this->command('app:install');

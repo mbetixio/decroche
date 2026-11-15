@@ -31,13 +31,14 @@ final class VoiceCachePrunerTest extends TestCase
         $now = new \DateTimeImmutable('2026-11-13 12:00:00');
         $this->file('recent.mp3', $now->modify('-2 days'));
         $this->file('old.mp3', $now->modify('-45 days'));
+        $this->file('old.wav', $now->modify('-45 days'));
         $this->file('old.mp3.ab12cd.part', $now->modify('-2 hours'));
         $this->file('fresh.mp3.ab12cd.part', $now->modify('-5 minutes'));
         $this->file('notes.txt', $now->modify('-90 days'));
 
         $deleted = new VoiceCachePruner($this->dir)->prune(30, $now);
 
-        self::assertSame(2, $deleted['files']);
+        self::assertSame(3, $deleted['files']);
         self::assertSame(['fresh.mp3.ab12cd.part', 'notes.txt', 'recent.mp3'], array_map(basename(...), glob($this->dir.'/*') ?: []));
     }
 

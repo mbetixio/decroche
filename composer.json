@@ -34,6 +34,7 @@
         "symfony/flex": "^2",
         "symfony/form": "8.1.*",
         "symfony/framework-bundle": "8.1.*",
+        "symfony/http-client": "8.1.*",
         "symfony/mcp-bundle": "^1.0@beta",
         "symfony/monolog-bundle": "^4.1",
         "symfony/process": "8.1.*",

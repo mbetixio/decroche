@@ -153,7 +153,7 @@ final class CallController extends AbstractController
             return new Response('', Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        return new Response($audio, Response::HTTP_OK, ['Content-Type' => 'audio/mpeg', 'Cache-Control' => 'private, max-age=86400']);
+        return new Response($audio, Response::HTTP_OK, ['Content-Type' => str_starts_with($audio, 'RIFF') ? 'audio/wav' : 'audio/mpeg', 'Cache-Control' => 'private, max-age=86400']);
     }
 
     /**

@@ -40,7 +40,7 @@ final readonly class VoiceCachePruner
             }
             $stale = match (true) {
                 str_ends_with($file->getFilename(), '.part') => $file->getMTime() < $partLimit,
-                str_ends_with($file->getFilename(), '.mp3') => $file->getMTime() < $limit,
+                str_ends_with($file->getFilename(), '.mp3'), str_ends_with($file->getFilename(), '.wav') => $file->getMTime() < $limit,
                 default => false,
             };
             if ($stale) {

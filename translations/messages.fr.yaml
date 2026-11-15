@@ -308,6 +308,7 @@ call:
         test_voice: 'Écouter la voix'
     voice:
         server: 'Voix neuronale Microsoft (%voice%), générée par le serveur : la même sur tous les navigateurs.'
+        pocket: 'Voix ouverte (Kyutai Pocket TTS), générée par le serveur, hors ligne : la même sur tous les navigateurs.'
         browser: 'Voix du navigateur : pour la plus naturelle, jouez dans Microsoft Edge.'
         sample: 'Bonjour, %name% à l''appareil. Je vous écoute.'
     dial_name: 'Appeler %name%'

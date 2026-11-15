@@ -58,7 +58,10 @@ export default class extends Controller {
         this.renderSpeaker();
         this.setSheet(window.innerWidth >= 900);
         if (this.resumedValue) this.stateTarget.textContent = this.label('resume');
-        this.voiceNoteTarget.textContent = this.serverVoice() ? this.label('voice_server', { '%voice%': this.edgeVoiceValue.replace(/^[a-z]{2}-[A-Z]{2}-|Neural$/g, '') }) : this.label('voice_browser');
+        this.pocket = this.edgeVoiceValue.startsWith('pocket:');
+        this.voiceNoteTarget.textContent = !this.serverVoice() ? this.label('voice_browser')
+            : this.pocket ? this.label('voice_pocket')
+            : this.label('voice_server', { '%voice%': this.edgeVoiceValue.replace(/^[a-z]{2}-[A-Z]{2}-|Neural$/g, '') });
     }
 
     // Leaving the page ends everything: the microphone, the reply being streamed, the pending timers.
@@ -241,7 +244,7 @@ export default class extends Controller {
         this.setState('speaking', this.label('speaking', { '%name%': this.who }));
         if (audio && this.serverVoice()) {
             const bytes = Uint8Array.from(atob(audio), (c) => c.charCodeAt(0));
-            const src = URL.createObjectURL(new Blob([bytes], { type: 'audio/mpeg' }));
+            const src = URL.createObjectURL(new Blob([bytes], { type: this.pocket ? 'audio/wav' : 'audio/mpeg' }));
             try { await this.play(src); return; } catch { /* fall back on the browser's voice */ } finally { URL.revokeObjectURL(src); }
         }
         await this.browserSpeak(text);
@@ -250,6 +253,8 @@ export default class extends Controller {
     play(url) {
         return new Promise((resolve, reject) => {
             const audio = new Audio(url);
+            // Pocket TTS's voices are a little slow: played faster, at the same pitch.
+            if (this.pocket) audio.playbackRate = 1.1;
             this.audio = audio;
             this.stopAudio = () => { audio.pause(); this.audio = null; resolve(); };
             audio.onended = () => { this.audio = null; resolve(); };
