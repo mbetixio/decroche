@@ -64,7 +64,8 @@
     html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
-    img { display: block; max-width: 100%; height: auto; }
+    img, video { display: block; max-width: 100%; height: auto; }
+    .shot video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #000; }
     a { color: inherit; }
     h1, h2, h3 { font-family: var(--font-display); letter-spacing: -.025em; line-height: 1.08; margin: 0; text-wrap: balance; }
     p { margin: 0; }
@@ -224,8 +225,8 @@
             <a class="btn primary" href="#run"><span lang="en">Try the demo</span><span lang="fr">Essayer la démo</span></a>
             <a class="btn" href="#claude"><span lang="en">See it in Claude</span><span lang="fr">Voir dans Claude</span></a>
         </div>
-        <p class="note"><span lang="en">Self-hosted in two minutes with Docker. English and French.</span><span lang="fr">Installé en deux minutes avec Docker. En français et en anglais.</span></p>
-        <div class="shot"><img src="screenshots/phone.png" width="1440" height="900" alt="The phone screen during a practice call: the client's line, the timer, and the seller's sheet"></div>
+        <p class="note"><span lang="en">Décroche in 90 seconds, below. Self-hosted in five minutes with Docker. English and French.</span><span lang="fr">Décroche en 90 secondes, ci-dessous. Installé en cinq minutes avec Docker. En français et en anglais.</span></p>
+        <div class="shot"><video src="demo.mp4" poster="demo-poster.jpg" width="1920" height="1080" controls preload="none" playsinline aria-label="Décroche in 90 seconds: the demo video"></video></div>
     </div>
 
     <div class="wrap">
@@ -233,7 +234,7 @@
             <div><b>1.5 s</b><span lang="en">before the client answers you</span><span lang="fr">avant que le client vous réponde</span></div>
             <div><b>14–18</b><span lang="en">call situations written from your website</span><span lang="fr">situations d’appel écrites depuis votre site</span></div>
             <div><b>6</b><span lang="en">criteria graded, on a scorecard you can rewrite</span><span lang="fr">critères notés, sur une grille modifiable</span></div>
-            <div><b>2 min</b><span lang="en">to run your own instance</span><span lang="fr">pour lancer votre instance</span></div>
+            <div><b>5 min</b><span lang="en">to run your own instance</span><span lang="fr">pour lancer votre instance</span></div>
         </div>
     </div>
 
