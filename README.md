@@ -44,8 +44,8 @@ the website, a furious client, a CTO who is about to leave, a renewal with a dis
 gives it away to the right questions. When the seller hangs up, a coach grades the call against the company's own
 scorecard, reveals the brief, quotes the best and worst lines, and lets them replay any moment.
 
-AI role-play for sales already exists, as closed software priced per seat. Décroche is the open version, built with
-Symfony AI for the hackathon: clone it, run it on open models (the voices included, offline on your server), adapt it.
+Décroche is open source, built with Symfony AI for the hackathon: clone it, run it on open models (the voices
+included, offline on your server), adapt it.
 
 One instance per company: on first boot, a step-by-step onboarding reads the company's website and writes its offer
 sheet and 14–18 call situations specific to its business, in English or French.
