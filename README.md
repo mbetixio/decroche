@@ -150,8 +150,32 @@ abandoned): the client's model cannot whisper the answers.
 **Connect it.** In Décroche, open *My account → Train from Claude → Create my MCP address*, then in Claude add a
 custom connector with that address (`https://your-instance/mcp?key=pcl_…`; clients that can send headers may pass the
 key as `Authorization: Bearer pcl_…` instead, which keeps it out of proxy logs). The key is stored hashed, redacted
-from the logs, and closed when the member's password changes. The MCP endpoint needs a public HTTPS address for Claude
-to reach it (see [Deploy](#deploy-on-a-server)).
+from the logs, and closed when the member's password changes.
+
+Where the instance runs decides how Claude reaches it:
+
+- **On a server** (claude.ai, Claude Desktop and mobile connectors): connectors are reached from Anthropic's servers,
+  so they need a public HTTPS address; a `localhost` one is refused. See [Deploy on a server](#deploy-on-a-server).
+- **On your machine, with Claude Code**: it connects from your machine, so `localhost` works as is:
+
+  ```bash
+  claude mcp add --transport http decroche "http://localhost:7077/mcp?key=pcl_…"
+  ```
+
+- **On your machine, with Claude Desktop**: add it as a local server through the `mcp-remote` bridge, in
+  `claude_desktop_config.json` (*Settings → Developer → Edit Config*), then restart Claude Desktop:
+
+  ```json
+  { "mcpServers": { "decroche": { "command": "npx", "args": ["mcp-remote", "http://localhost:7077/mcp?key=pcl_…"] } } }
+  ```
+
+- **On your machine, from claude.ai, for a demo**: open a temporary tunnel, then add the address it prints as the
+  connector (`https://….trycloudflare.com/mcp?key=pcl_…`). While it runs, the whole instance is on the internet,
+  behind its sign-in and the key: stop it (Ctrl+C) when you are done. The address changes each time.
+
+  ```bash
+  cloudflared tunnel --url http://localhost:7077
+  ```
 
 ## Run it
 
