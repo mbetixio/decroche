@@ -10,6 +10,7 @@ use App\Voice\SynthesisException;
 use App\Voice\VoiceCachePruner;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\Exception\TimeoutException;
 use Symfony\Component\HttpClient\Exception\TransportException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -110,6 +111,14 @@ final class PocketTtsSynthesizerTest extends TestCase
 
         $this->expectExceptionMessage('not running');
         $down->start('Hello.', 'pocket:jane', new Prosody());
+    }
+
+    public function testAServerBusySayingACallStillRuns(): void
+    {
+        // Late to answer while it speaks: the call keeps its voice rather than switch to Edge's in the middle.
+        $busy = new PocketTtsSynthesizer(new MockHttpClient(static fn (): never => throw new TimeoutException('Idle timeout reached.')), 'http://pocket:8100', 'http://app/voices', $this->dir.'/voices', new VoiceCachePruner($this->dir.'/voices'));
+
+        self::assertTrue($busy->isAvailable());
     }
 
     public function testTheServerIsAskedAgainForEachRequest(): void

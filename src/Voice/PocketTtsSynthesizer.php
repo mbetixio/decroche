@@ -6,6 +6,7 @@ namespace App\Voice;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TimeoutExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Service\ResetInterface;
 
@@ -44,8 +45,14 @@ final class PocketTtsSynthesizer implements SpeechSynthesizer, ResetInterface
         if ('' === $this->url) {
             return false;
         }
+        if (null !== $this->up) {
+            return $this->up;
+        }
         try {
-            return $this->up ??= 200 === $this->http->request('GET', rtrim($this->url, '/').'/health', ['timeout' => 1])->getStatusCode();
+            return $this->up = 200 === $this->http->request('GET', rtrim($this->url, '/').'/health', ['timeout' => 2])->getStatusCode();
+        } catch (TimeoutExceptionInterface) {
+            // Busy saying the lines of a call, it answers late: it runs, and a call keeps its voice to the end.
+            return $this->up = true;
         } catch (ExceptionInterface) {
             return $this->up = false;
         }
