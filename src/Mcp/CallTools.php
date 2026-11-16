@@ -20,7 +20,12 @@ use App\Scenario\ScenarioWriter;
 use App\Scenario\SurpriseCalls;
 use Mcp\Capability\Attribute\McpTool;
 use Mcp\Exception\ToolCallException;
+use Mcp\Schema\Elicitation\ElicitationSchema;
+use Mcp\Schema\Elicitation\NumberSchemaDefinition;
+use Mcp\Schema\Elicitation\StringSchemaDefinition;
+use Mcp\Schema\Elicitation\TitledEnumSchemaDefinition;
 use Mcp\Schema\ToolAnnotations;
+use Mcp\Server\ClientGateway;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -88,15 +93,32 @@ final readonly class CallTools
      * @param int    $difficulty 1 (approachable), 2 (demanding) or 3 (tough)
      * @param int    $minutes    the call's maximum length
      * @param string $mode       "link" (default) or "chat", as for new_call
+     * @param string $goal       what the seller wants from the meeting, if known
      *
      * @return array<string, mixed>
      */
-    #[McpTool(name: 'prepare_call', title: 'Rehearse a real meeting', description: 'Writes a rehearsal of a real meeting from a prospect sheet or a described situation: a persona, a context, a goal and a credible hidden brief the seller will have to uncover (it is not shown to you). Takes about a minute. Returns a call link (mode "link") or starts the call here (mode "chat").')]
-    public function prepareCall(string $prospect, string $type = '', int $difficulty = 2, int $minutes = 12, string $mode = 'link'): array
+    #[McpTool(name: 'prepare_call', title: 'Rehearse a real meeting', description: 'Writes a rehearsal of a real meeting from a prospect sheet or a described situation: a persona, a context, a goal and a credible hidden brief the seller will have to uncover (it is not shown to you). Takes about a minute. If your client can show forms, the seller first confirms their goal, the difficulty and the length (pass your best guesses). Returns a call link (mode "link") or starts the call here (mode "chat").')]
+    public function prepareCall(ClientGateway $client, string $prospect, string $type = '', int $difficulty = 2, int $minutes = 12, string $mode = 'link', string $goal = ''): array
     {
         $member = $this->me->member();
+        $level = Difficulty::tryFrom($difficulty) ?? Difficulty::Demanding;
+        $minutes = max(3, min(30, $minutes));
+        // The seller, not their AI, says what they want from the meeting: asked before a minute of writing.
+        $answers = Ask::form($client, 'Before I write the rehearsal of this meeting (about a minute): what do you want from it, and how tough should the client be?', new ElicitationSchema([
+            'goal' => new StringSchemaDefinition('Your goal for this meeting', 'What would make it a success? The coach grades the call on it.', default: $goal, maxLength: 300),
+            'difficulty' => new TitledEnumSchemaDefinition('How tough the client is', array_map(fn (Difficulty $d): array => ['const' => (string) $d->value, 'title' => $this->translator->trans('enum.difficulty.'.$d->value, locale: 'en')], Difficulty::cases()), default: (string) $level->value),
+            'minutes' => new NumberSchemaDefinition('Length of the call, in minutes', integerOnly: true, default: $minutes, minimum: 3, maximum: 30),
+        ]));
+        if (null !== $answers) {
+            $goal = \is_string($answers['goal'] ?? null) ? trim($answers['goal']) : $goal;
+            $level = \is_numeric($answers['difficulty'] ?? null) ? Difficulty::tryFrom((int) $answers['difficulty']) ?? $level : $level;
+            $minutes = \is_numeric($answers['minutes'] ?? null) ? max(3, min(30, (int) $answers['minutes'])) : $minutes;
+        }
+        if ('' !== trim($goal)) {
+            $prospect .= "\n\nThe seller's own goal for this meeting: ".trim($goal);
+        }
         try {
-            $scenario = $this->writer->prepare($prospect, $member, MeetingType::tryFrom($type), Difficulty::tryFrom($difficulty) ?? Difficulty::Demanding, max(3, min(30, $minutes)));
+            $scenario = $this->writer->prepare($prospect, $member, MeetingType::tryFrom($type), $level, $minutes);
         } catch (CallException $e) {
             throw $this->refused($e);
         } catch (ModelException $e) {
