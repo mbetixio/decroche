@@ -10,7 +10,9 @@
 
 <p align="center">By Mathieu Bernard · <a href="https://etixio.com">Etixio</a></p>
 
-<p align="center"><a href="docs/demo.mp4"><b>▶ Décroche in 90 seconds</b></a> · <a href="https://mbetixio.github.io/decroche/">Website</a> · Open source (AGPL-3.0) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
+<p align="center"><a href="https://github.com/mbetixio/decroche/actions/workflows/ci.yml"><img src="https://github.com/mbetixio/decroche/actions/workflows/ci.yml/badge.svg" alt="CI"></a></p>
+
+<p align="center"><a href="https://youtu.be/L0BOpKbvOtI"><b>▶ Décroche in 90 seconds</b></a> · <a href="docs/judges.md"><b>For judges</b></a> · <a href="https://mbetixio.github.io/decroche/">Website</a> · Open source (AGPL-3.0) · built for the <a href="https://symfony.com/hackathon">Symfony AI &amp; MCP Hackathon</a> 2026</p>
 
 <p align="center"><img src="docs/screenshots/phone.png" alt="The phone screen during a practice call" width="900"></p>
 
@@ -45,8 +47,8 @@ Hugging Face is the default, for the hackathon, but the model is yours to choose
 Sales people learn on real prospects. Every fumbled discovery question, every price given too early, every
 "let me send you a brochure" costs a deal — and nobody tells them what went wrong.
 
-**Décroche is an open-source platform to train sales reps on realistic calls.** A seller picks up the phone (a real phone screen, with a voice,
-not a chatbot) and talks to an AI client built from *their own company's* offer and situations: a price request from
+**Décroche is an open-source platform to train sales reps on realistic calls.** A seller picks up the phone (a real phone screen, with a
+voice) and talks to an AI client built from *their own company's* offer and situations: a price request from
 the website, a furious client, a CTO who is about to leave, a renewal with a discount request… The client has a
 **hidden brief** — their real budget, their real pain, who decides, their objections, what would get a yes — and only
 gives it away to the right questions. When the seller hangs up, a coach grades the call against the company's own
@@ -389,6 +391,12 @@ publish it with GitHub Pages: *Settings → Pages → Deploy from a branch → `
 - **MCP tools, prompts and resources as plain Symfony services.** `src/Mcp/*Tools.php` methods carry `#[McpTool]`,
   `Prompts` `#[McpPrompt]` and `CompanyResources` `#[McpResource]`; schemas come from the signatures. A stateless firewall authenticates each member by a personal key (`McpKeyAuthenticator`), redacted from
   the logs.
+- **The person decides, not their AI (MCP elicitation).** Before `prepare_call` writes a rehearsal, and before
+  `invite` or `give_mission` change the team, the tool shows the person a form through their client, already filled
+  in by the AI from the conversation: the goal of the meeting, the difficulty and the length; the address and the
+  role; the calls, the score and the deadline. Nothing is done until they accept (`Ask`). Over the stateless
+  2026-07-28 revision, the form travels in the result and the client sends the call again with the answers; a client
+  that cannot show forms is not asked.
 - **Every step shown.** A call written, a debrief, the website's analysis: the agents' work is streamed to the browser
   as NDJSON steps (`ProgressStream`), one per tool the agent really calls ("checking your latest calls", "checking
   your lines word for word"…), ticked off on the waiting screen. Each agent's tool rounds are capped in `ai.yaml`
