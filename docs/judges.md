@@ -90,3 +90,19 @@ composer install && composer coverage    # 463 tests, 100 % of the lines
 
 The checks that CI runs on every push: `composer lint`, `composer cs`, `composer stan` (PHPStan at level max) and
 `composer coverage` (fails below 100 % of the lines).
+
+## What we ran into with Symfony AI
+
+We built on the 1.0.0-BETA1 pre-release. Four things got in the way. Each time, we worked around the problem in the
+app, then went looking upstream: all four had already been raised by others, so we added our case where it was
+still open.
+
+| What happened | What we did | Upstream |
+|---|---|---|
+| An agent cannot use its tools and a structured answer at once: on Hugging Face, gpt-oss refuses the request (`"tools" is incompatible with "response_format"`) and DeepSeek answers the schema without ever calling a tool. | The coach and the writer work in two steps: the agent investigates with its tools and writes notes, then a second call, without tools, writes the structured answer (`LanguageModel::work()`). One extra request, reliable on every provider we tried. | [symfony/ai#2852](https://github.com/symfony/ai/issues/2852), raised for Ollama: [we added the Hugging Face case](https://github.com/symfony/ai/issues/2852#issuecomment-6916090561) and our solution. |
+| `getModel()` works in prod but fails in dev and in the tests: there, the bundle wraps each agent in a `TraceableAgent` that does not forward it. | The model names are read from the environment, next to `ai.yaml` (`LanguageModel`). | [symfony/ai#2164](https://github.com/symfony/ai/issues/2164): [we added our case](https://github.com/symfony/ai/issues/2164#issuecomment-6916091088). |
+| A tool without parameters is refused by Hugging Face: no `parameters` block is sent for it. | Each tool declares at least one parameter (`RecentCalls::__invoke(int $limit = 12)`). | [symfony/ai#2846](https://github.com/symfony/ai/issues/2846), fixed by [#2848](https://github.com/symfony/ai/pull/2848) after the BETA1. |
+| A Hugging Face error only said "Bad Request": the generic platform did not read the provider's `message`. | We relayed the raw answer while debugging to see the real error. | [symfony/ai#2847](https://github.com/symfony/ai/issues/2847), fixed by [#2849](https://github.com/symfony/ai/pull/2849). |
+
+The PHP MCP SDK needed no workaround: tools, prompts, resources, the MCP App, HTTP sessions and the forms
+(elicitation) all worked as documented.
